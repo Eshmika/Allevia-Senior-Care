@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <meta charset="utf-8">
+    <title>Care Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+      :root { --primary: #65c027; --primary-dark: #4da018; }
+      body { background-color: #f3f4f6; font-family: 'Segoe UI', sans-serif; color: #374151; }
+      
+      .text-brand { color: var(--primary); }
+      .bg-brand { background-color: var(--primary); }
+      .hover-bg-brand:hover { background-color: var(--primary-dark); }
+      .border-brand { border-color: var(--primary); }
+      
+      .nav-item { cursor: pointer; user-select: none; border-left: 4px solid transparent; }
+      .nav-item.active { background-color: #eef9e8; color: var(--primary-dark); border-left: 4px solid var(--primary); font-weight: 600; }
+      
+      /* Form Label */
+      label.lbl { display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #6b7280; margin-bottom: 0.25rem; }
+      /* Input */
+      .inp { width: 100%; padding: 0.5rem; border: 1px solid #d1d5db; border-radius: 0.375rem; transition: all 0.2s; font-size: 0.9rem; }
+      .inp:focus { border-color: var(--primary); outline: none; ring: 1px solid var(--primary); }
+      /* Section Header */
+      .sec-head { font-size: 1.125rem; font-weight: 700; color: #374151; padding-bottom: 0.5rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 1rem; display: flex; align-items: center; }
+      
+      /* Table Styles */
+      .table-header { background-color: #f9fafb; color: #6b7280; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; padding: 0.75rem 1rem; text-align: left; }
+      .table-row { border-bottom: 1px solid #e5e7eb; transition: background 0.1s; cursor: pointer; }
+      .table-row:hover { background-color: #f0fdf4; }
+      .table-cell { padding: 0.75rem 1rem; font-size: 0.9rem; color: #374151; }
+
+      #loading-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.8); z-index: 50; align-items: center; justify-content: center; }
+      .spinner { border: 4px solid #eee; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+  </head>
+  <body class="flex h-screen overflow-hidden">
+
+    <div id="loading-overlay"><div class="spinner"></div></div>
+
+    <!-- SIDEBAR -->
+    <aside class="w-64 bg-white shadow-xl z-20 flex flex-col justify-between overflow-y-auto shrink-0">
+      <div>
+        <div class="h-16 flex items-center px-6 border-b border-gray-100">
+          <div class="w-8 h-8 bg-brand rounded-md flex items-center justify-center text-white font-bold mr-3">A</div>
+          <span class="font-bold text-gray-800 text-lg">AdminPanel</span>
+        </div>
+        <nav class="mt-4 space-y-1">
+          <div onclick="showPage('dashboard')" id="nav-dashboard" class="nav-item active flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition">
+            <i class="ph ph-squares-four text-xl mr-3"></i> Dashboard
+          </div>
+          <div onclick="showPage('add')" id="nav-add" class="nav-item flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition">
+            <i class="ph ph-user-plus text-xl mr-3"></i> Add Client
+          </div>
+          <div onclick="showPage('directory')" id="nav-directory" class="nav-item flex items-center px-6 py-3 text-gray-600 hover:bg-gray-50 transition">
+            <i class="ph ph-users text-xl mr-3"></i> Directory
+          </div>
+        </nav>
+      </div>
+      <div class="p-4 border-t border-gray-100">
+        <div class="flex items-center">
+          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center"><i class="ph ph-user text-gray-500"></i></div>
+          <div class="ml-3"><p class="text-sm font-medium text-gray-800">Admin</p></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="flex-1 overflow-y-auto relative p-8">
+      
+      <!-- PAGE: DASHBOARD -->
+      <div id="page-dashboard">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+            <div><p class="text-xs font-bold text-gray-400 uppercase">Total Clients</p><h3 class="text-3xl font-bold text-gray-800 mt-1" id="stat-total">-</h3></div>
+            <div class="p-3 bg-blue-50 text-blue-600 rounded-lg"><i class="ph ph-users text-2xl"></i></div>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+            <div><p class="text-xs font-bold text-gray-400 uppercase">Active</p><h3 class="text-3xl font-bold text-brand mt-1" id="stat-active">-</h3></div>
+            <div class="p-3 bg-green-50 text-brand rounded-lg"><i class="ph ph-check-circle text-2xl"></i></div>
+          </div>
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex justify-between items-center">
+            <div><p class="text-xs font-bold text-gray-400 uppercase">Pending</p><h3 class="text-3xl font-bold text-orange-500 mt-1" id="stat-pending">-</h3></div>
+            <div class="p-3 bg-orange-50 text-orange-500 rounded-lg"><i class="ph ph-file-text text-2xl"></i></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: DIRECTORY -->
+      <div id="page-directory" class="hidden">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Client Directory</h1>
+
+        <!-- Search & Filters -->
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-wrap gap-4 items-center">
+           <div class="flex-1 min-w-[200px] relative">
+             <i class="ph ph-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
+             <input type="text" id="dir-search" placeholder="Search by name or code..." class="inp pl-10" onkeyup="debounceSearch()">
+           </div>
+           <div class="w-48">
+             <select id="dir-status" class="inp" onchange="loadDirectory(1)">
+               <option value="">All Statuses</option>
+               <option value="Active">Active</option>
+               <option value="Deceased">Deceased</option>
+               <option value="Cancelled service">Cancelled</option>
+               <option value="Temporary hospital stay">Hospital</option>
+             </select>
+           </div>
+           <div class="w-48">
+             <select id="dir-pay" class="inp" onchange="loadDirectory(1)">
+               <option value="">All Payment Types</option>
+               <option value="Private pay">Private pay</option>
+               <option value="Zelle">Zelle</option>
+               <option value="Check">Check</option>
+               <option value="VA">VA</option>
+               <option value="Medicaid">Medicaid</option>
+               <option value="Lead agency">Lead agency</option>
+               <option value="LTCI">LTCI</option>
+             </select>
+           </div>
+           <button onclick="loadDirectory(1)" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700"><i class="ph ph-arrow-clockwise"></i></button>
+        </div>
+
+        <!-- Table -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <table class="w-full">
+            <thead>
+              <tr>
+                <th class="table-header">Code</th>
+                <th class="table-header">Client Name</th>
+                <th class="table-header">Status</th>
+                <th class="table-header">Payment</th>
+                <th class="table-header">Phone</th>
+                <th class="table-header">Email</th>
+                <th class="table-header w-10"></th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- Rows inserted via JS -->
+            </tbody>
+          </table>
+          <!-- Pagination -->
+          <div class="p-4 border-t flex justify-between items-center">
+            <span class="text-sm text-gray-500" id="page-info">Showing 0 of 0</span>
+            <div class="flex space-x-2">
+              <button onclick="changePage(-1)" class="px-3 py-1 border rounded hover:bg-gray-50" id="btn-prev">Prev</button>
+              <button onclick="changePage(1)" class="px-3 py-1 border rounded hover:bg-gray-50" id="btn-next">Next</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: ADD/EDIT CLIENT FORM -->
+      <!-- We reuse the ID 'page-form' but map it to Nav ID 'add' for UI purposes -->
+      <div id="page-form" class="hidden">
+        <div class="flex justify-between items-center mb-6">
+           <h1 class="text-2xl font-bold text-gray-800" id="form-title">Add Client Details</h1>
+           <button onclick="showPage('directory')" class="text-sm text-gray-500 hover:text-brand flex items-center"><i class="ph ph-arrow-left mr-1"></i> Back to Directory</button>
+        </div>
+        
+        <form id="clientForm" onsubmit="submitForm(event)" class="space-y-6 max-w-5xl mx-auto">
+          <!-- Hidden Code for Updates -->
+          <input type="hidden" name="clientCode" id="clientCode">
+
+          <!-- PAGE 1: MAIN INFO -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="sec-head"><i class="ph ph-identification-card text-brand mr-2"></i> Main Information</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+               <div class="md:col-span-4"><label class="lbl">Photo URL</label><input type="text" name="photoUrl" class="inp" placeholder="https://..."></div>
+               <div><label class="lbl">First Name</label><input type="text" name="firstName" required class="inp"></div>
+               <div><label class="lbl">Middle Name</label><input type="text" name="middleName" class="inp"></div>
+               <div><label class="lbl">Last Name</label><input type="text" name="lastName" required class="inp"></div>
+               <div><label class="lbl">Primary Language</label><input type="text" name="primaryLang" class="inp"></div>
+               
+               <div><label class="lbl">Birthday</label><input type="date" name="dob" id="dob" onchange="calcAge()" class="inp"></div>
+               <div><label class="lbl">Age</label><input type="text" name="age" id="age" readonly class="inp bg-gray-50"></div>
+               <div><label class="lbl">SSN</label><input type="text" name="ssn" class="inp"></div>
+               
+               <div>
+                 <label class="lbl">Gender</label>
+                 <select name="gender" class="inp"><option>Male</option><option>Female</option></select>
+               </div>
+               <div>
+                 <label class="lbl">Marital Status</label>
+                 <select name="maritalStatus" class="inp"><option>Single</option><option>Married</option><option>Divorced</option><option>Separate</option><option>Widowed</option><option>Unknown</option></select>
+               </div>
+               
+               <div>
+                  <label class="lbl">Status</label>
+                  <select name="status" class="inp font-bold text-brand bg-green-50"><option>Active</option><option>Deceased</option><option>Cancelled service</option><option>Temporary hospital stay</option></select>
+               </div>
+               <div><label class="lbl">Active Date</label><input type="date" name="activeDate" id="activeDate" class="inp"></div>
+               <div><label class="lbl">Deactive Date</label><input type="date" name="deactiveDate" class="inp"></div>
+               
+               <div>
+                 <label class="lbl">Payment Type</label>
+                 <select name="paymentType" class="inp">
+                   <option>Private pay</option><option>Zelle</option><option>Check</option><option>VA</option><option>Medicaid</option><option>Lead agency</option><option>LTCI</option>
+                 </select>
+               </div>
+               <div class="md:col-span-2">
+                 <label class="lbl">Agreement Status</label>
+                 <select name="agreementStatus" class="inp"><option>Needs agreement to be signed</option><option>Signed</option><option>Signed paper agreement</option></select>
+               </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t">
+              <div><label class="lbl">Email 1</label><input type="email" name="email" class="inp"></div>
+              <div><label class="lbl">Email 2</label><input type="email" name="email2" class="inp"></div>
+              <div><label class="lbl">Cell Phone</label><input type="tel" name="cellPhone" class="inp"></div>
+              <div><label class="lbl">Home Phone</label><input type="tel" name="homePhone" class="inp"></div>
+            </div>
+          </div>
+
+          <!-- PAGE 1: ADDRESSES -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+             <h2 class="sec-head"><i class="ph ph-map-pin text-brand mr-2"></i> Addresses</h2>
+             
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+               <div class="bg-gray-50 p-4 rounded-lg">
+                 <h3 class="font-bold text-gray-700 mb-2">Living Address</h3>
+                 <div class="space-y-2">
+                   <input type="text" name="livingAddress" placeholder="Street Address" class="inp bg-white">
+                   <div class="grid grid-cols-3 gap-2">
+                     <input type="text" name="livingCity" placeholder="City" class="inp bg-white col-span-1">
+                     <input type="text" name="livingState" placeholder="State" class="inp bg-white col-span-1">
+                     <input type="text" name="livingZip" placeholder="Zip" class="inp bg-white col-span-1">
+                   </div>
+                 </div>
+               </div>
+               <div class="bg-gray-50 p-4 rounded-lg">
+                 <div class="flex justify-between items-center mb-2">
+                   <h3 class="font-bold text-gray-700">Billing Address</h3>
+                   <label class="flex items-center text-xs text-gray-500 cursor-pointer"><input type="checkbox" name="billingSame" value="true" class="mr-1"> Same as Living</label>
+                 </div>
+                 <div class="space-y-2">
+                   <input type="text" name="billingAddress" placeholder="Street Address" class="inp bg-white">
+                   <div class="grid grid-cols-3 gap-2">
+                     <input type="text" name="billingCity" placeholder="City" class="inp bg-white col-span-1">
+                     <input type="text" name="billingState" placeholder="State" class="inp bg-white col-span-1">
+                     <input type="text" name="billingZip" placeholder="Zip" class="inp bg-white col-span-1">
+                   </div>
+                 </div>
+               </div>
+             </div>
+          </div>
+
+          <!-- PAGE 2: CONTACTS -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+            <h2 class="sec-head"><i class="ph ph-address-book text-brand mr-2"></i> Additional Contacts</h2>
+            <div class="mb-6 pb-6 border-b border-dashed">
+              <h3 class="text-sm font-bold text-brand uppercase mb-3">Second Contact</h3>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                <input type="text" name="con2FirstName" placeholder="First Name" class="inp"><input type="text" name="con2MiddleName" placeholder="Middle" class="inp"><input type="text" name="con2LastName" placeholder="Last Name" class="inp">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                 <input type="email" name="con2Email" placeholder="Email" class="inp"><input type="tel" name="con2Cell" placeholder="Cell Phone" class="inp"><input type="tel" name="con2Home" placeholder="Home Phone" class="inp">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                 <input type="text" name="con2Addr" placeholder="Address" class="inp md:col-span-4"><input type="text" name="con2City" placeholder="City" class="inp"><input type="text" name="con2State" placeholder="State" class="inp"><input type="text" name="con2Zip" placeholder="Zip" class="inp">
+              </div>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-red-500 uppercase mb-3">Emergency Contact</h3>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
+                <input type="text" name="emergRelation" placeholder="Relationship" class="inp"><input type="text" name="emergFirstName" placeholder="First Name" class="inp"><input type="text" name="emergLastName" placeholder="Last Name" class="inp"><input type="email" name="emergEmail" placeholder="Email" class="inp">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                 <input type="tel" name="emergPhone1" placeholder="Phone 1" class="inp"><input type="tel" name="emergPhone2" placeholder="Phone 2" class="inp">
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                 <input type="text" name="emergAddr" placeholder="Address" class="inp md:col-span-4"><input type="text" name="emergCity" placeholder="City" class="inp"><input type="text" name="emergState" placeholder="State" class="inp"><input type="text" name="emergZip" placeholder="Zip" class="inp">
+              </div>
+            </div>
+          </div>
+
+          <!-- PAGE 3: CARE -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+             <h2 class="sec-head"><i class="ph ph-heartbeat text-brand mr-2"></i> Care & Living Assessment</h2>
+             <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+               <div><label class="lbl">Assess Date</label><input type="date" name="assessDate" class="inp"></div>
+               <div><label class="lbl">Height</label><input type="text" name="height" class="inp"></div>
+               <div><label class="lbl">Weight</label><input type="text" name="weight" class="inp"></div>
+               <div><label class="lbl">Mental Status</label><select name="mentalStatus" class="inp"><option>Alert</option><option>Alzheimer's / Dementia</option><option>Confused</option><option>Forgetful</option><option>Other</option></select></div>
+               <div class="md:col-span-4"><label class="lbl">Diagnosis</label><textarea name="diagnosis" rows="1" class="inp"></textarea></div>
+               <div class="md:col-span-2"><label class="lbl">Service Needs</label><textarea name="serviceNeeds" rows="1" class="inp"></textarea></div>
+               <div class="md:col-span-2"><label class="lbl">Goals</label><textarea name="goals" rows="1" class="inp"></textarea></div>
+             </div>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded mb-6">
+               <div class="flex items-start space-x-2"><div class="w-1/3"><label class="lbl">Living Alone?</label><select name="livingAlone" class="inp"><option>No</option><option>Yes</option></select></div><div class="w-2/3"><label class="lbl">Note</label><input type="text" name="livingAloneNote" class="inp"></div></div>
+               <div class="flex items-start space-x-2"><div class="w-1/3"><label class="lbl">Pets?</label><select name="pets" class="inp"><option>No</option><option>Yes</option></select></div><div class="w-2/3"><label class="lbl">Note</label><input type="text" name="petsNote" class="inp"></div></div>
+               <div class="flex items-start space-x-2"><div class="w-1/3"><label class="lbl">Smoke?</label><select name="smoke" class="inp"><option>No</option><option>Yes</option></select></div><div class="w-2/3"><label class="lbl">Note</label><input type="text" name="smokeNote" class="inp"></div></div>
+               <div class="flex items-start space-x-2"><div class="w-1/3"><label class="lbl">Drink?</label><select name="drink" class="inp"><option>No</option><option>Yes</option></select></div><div class="w-2/3"><label class="lbl">Note</label><input type="text" name="drinkNote" class="inp"></div></div>
+             </div>
+             <div class="mb-6">
+                <h3 class="text-sm font-bold text-gray-600 uppercase mb-2">Medication</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div><label class="lbl">Can Direct Care?</label><select name="canDirect" class="inp"><option>Yes</option><option>No</option></select></div>
+                  <div><label class="lbl">Self Admin?</label><select name="selfAdmin" class="inp"><option>Yes</option><option>No</option><option>Remind</option><option>Assist</option></select></div>
+                  <div><label class="lbl">Taking Meds?</label><select name="takingMeds" class="inp"><option>Yes</option><option>No</option></select></div>
+                  <div><label class="lbl">Allergies?</label><select name="allergies" class="inp"><option>No</option><option>Yes</option></select></div>
+                  <div class="md:col-span-1"><label class="lbl">Overseeing Required?</label><select name="overseeingResp" class="inp"><option>No</option><option>Yes</option></select></div>
+                  <div class="md:col-span-3"><label class="lbl">Who oversees (Note)</label><input type="text" name="overseeingNote" class="inp"></div>
+                </div>
+             </div>
+          </div>
+
+          <!-- PAGE 4: OVERVIEW -->
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+             <h2 class="sec-head"><i class="ph ph-first-aid text-brand mr-2"></i> Medical Overview</h2>
+             <div class="space-y-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+                   <div class="md:col-span-4"><label class="lbl">Primary Doctor Name</label><input type="text" name="drName" class="inp"></div><div class="md:col-span-5"><label class="lbl">Location</label><input type="text" name="drLoc" class="inp"></div><div class="md:col-span-3"><label class="lbl">Phone</label><input type="text" name="drPhone" class="inp"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+                   <div class="md:col-span-4"><label class="lbl">Pharmacy Name</label><input type="text" name="pharmName" class="inp"></div><div class="md:col-span-5"><label class="lbl">Location</label><input type="text" name="pharmLoc" class="inp"></div><div class="md:col-span-3"><label class="lbl">Phone</label><input type="text" name="pharmPhone" class="inp"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-2">
+                   <div class="md:col-span-4"><label class="lbl">Hospital Name</label><input type="text" name="hospName" class="inp"></div><div class="md:col-span-5"><label class="lbl">Location</label><input type="text" name="hospLoc" class="inp"></div><div class="md:col-span-3"><label class="lbl">Phone</label><input type="text" name="hospPhone" class="inp"></div>
+                </div>
+             </div>
+             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+               <div><label class="lbl">Covid Vaccination</label><input type="text" name="vaxCovid" class="inp"></div><div><label class="lbl">Flu/Cold Vaccination</label><input type="text" name="vaxFlu" class="inp"></div>
+             </div>
+             <div class="mb-4">
+               <label class="lbl">Languages Spoken</label>
+               <div class="grid grid-cols-3 gap-4">
+                 <input type="text" name="lang1" class="inp"><input type="text" name="lang2" class="inp"><input type="text" name="lang3" class="inp">
+               </div>
+             </div>
+             <div>
+               <label class="lbl">Skills / Interests</label>
+               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                 <input type="text" name="skill1" class="inp"><input type="text" name="skill2" class="inp"><input type="text" name="skill3" class="inp"><input type="text" name="skill4" class="inp"><input type="text" name="skill5" class="inp"><input type="text" name="skill6" class="inp">
+               </div>
+             </div>
+          </div>
+
+          <div class="flex justify-end py-6">
+             <button type="submit" class="bg-brand hover-bg-brand text-white font-bold py-3 px-10 rounded-lg shadow-lg flex items-center transform active:scale-95 transition">
+               <i class="ph ph-check text-xl mr-2"></i> Save Profile
+             </button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      let currentPage = 1;
+      let totalItems = 0;
+      const PAGE_SIZE = 10;
+      let searchTimeout;
+
+      // --- NAV LOGIC ---
+      function showPage(pageId) {
+        document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        if(pageId === 'add') {
+          // Add New Mode
+          document.getElementById('page-form').classList.remove('hidden');
+          document.getElementById('nav-add').classList.add('active');
+          document.getElementById('form-title').innerText = 'Add Client Details';
+          document.getElementById('clientForm').reset();
+          document.getElementById('clientCode').value = ''; // Clear ID
+          document.getElementById('activeDate').valueAsDate = new Date();
+        } else if (pageId === 'directory') {
+          document.getElementById('page-directory').classList.remove('hidden');
+          document.getElementById('nav-directory').classList.add('active');
+          loadDirectory(1);
+        } else {
+          document.getElementById('page-' + pageId).classList.remove('hidden');
+          document.getElementById('nav-' + pageId).classList.add('active');
+          if(pageId === 'dashboard') loadStats();
+        }
+      }
+
+      // --- DIRECTORY LOGIC ---
+      function debounceSearch() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => loadDirectory(1), 400);
+      }
+
+      function loadDirectory(page) {
+        currentPage = page;
+        const search = document.getElementById('dir-search').value;
+        const status = document.getElementById('dir-status').value;
+        const pay = document.getElementById('dir-pay').value;
+        
+        loading(true);
+        google.script.run
+          .withSuccessHandler(renderTable)
+          .withFailureHandler(err => { loading(false); alert('Error: ' + err); })
+          .getClients(page, PAGE_SIZE, search, status, pay);
+      }
+
+      function renderTable(data) {
+        loading(false);
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+        totalItems = data.total;
+        
+        // Render Rows
+        if(data.clients.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-400">No clients found.</td></tr>`;
+        } else {
+          data.clients.forEach(c => {
+             const row = document.createElement('tr');
+             row.className = 'table-row';
+             row.onclick = () => openClientDetails(c.code);
+             
+             // Status Colors
+             let statusColor = 'text-gray-600 bg-gray-100';
+             if(c.status === 'Active') statusColor = 'text-green-700 bg-green-50';
+             if(c.status === 'Deceased') statusColor = 'text-red-700 bg-red-50';
+             
+             row.innerHTML = `
+               <td class="table-cell font-mono text-xs">${c.code}</td>
+               <td class="table-cell font-bold">${c.name}</td>
+               <td class="table-cell"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${c.status}</span></td>
+               <td class="table-cell">${c.payment}</td>
+               <td class="table-cell text-xs">${c.phone}</td>
+               <td class="table-cell text-xs text-gray-500">${c.email}</td>
+               <td class="table-cell text-right"><i class="ph ph-caret-right text-gray-400"></i></td>
+             `;
+             tbody.appendChild(row);
+          });
+        }
+        
+        // Update Pagination UI
+        const start = (currentPage - 1) * PAGE_SIZE + 1;
+        const end = Math.min(start + PAGE_SIZE - 1, totalItems);
+        document.getElementById('page-info').innerText = totalItems > 0 ? `Showing ${start}-${end} of ${totalItems}` : 'No data';
+        document.getElementById('btn-prev').disabled = currentPage === 1;
+        document.getElementById('btn-next').disabled = end >= totalItems;
+        document.getElementById('btn-prev').classList.toggle('opacity-50', currentPage === 1);
+        document.getElementById('btn-next').classList.toggle('opacity-50', end >= totalItems);
+      }
+
+      function changePage(dir) {
+        loadDirectory(currentPage + dir);
+      }
+
+      // --- EDIT/VIEW LOGIC ---
+      function openClientDetails(code) {
+        loading(true);
+        google.script.run
+          .withSuccessHandler(data => {
+            loading(false);
+            if(!data) return alert('Client not found');
+            
+            // Switch to Form View
+            document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById('page-form').classList.remove('hidden');
+            document.getElementById('form-title').innerText = 'Edit Client: ' + data.firstName;
+            
+            // Populate Form
+            const form = document.getElementById('clientForm');
+            Object.keys(data).forEach(key => {
+               const input = form.elements[key];
+               if(input) {
+                 if(input.type === 'checkbox') input.checked = data[key] === 'true' || data[key] === true;
+                 else input.value = data[key];
+               }
+            });
+          })
+          .getClientDetails(code);
+      }
+
+      function submitForm(e) {
+        e.preventDefault();
+        loading(true);
+        const form = document.getElementById('clientForm');
+        const formData = {};
+        new FormData(form).forEach((v,k) => formData[k] = v);
+        
+        google.script.run.withSuccessHandler(res => {
+           loading(false);
+           alert(res.message);
+           if(res.success) showPage('directory');
+        }).saveClientData(formData);
+      }
+
+      function loading(show) {
+        document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+      }
+
+      // --- INIT ---
+      function calcAge() {
+        const d = document.getElementById('dob').value;
+        if(d) document.getElementById('age').value = Math.abs(new Date(Date.now() - new Date(d).getTime()).getUTCFullYear() - 1970);
+      }
+      function loadStats() {
+        google.script.run.withSuccessHandler(s => {
+           document.getElementById('stat-total').innerText = s.total;
+           document.getElementById('stat-active').innerText = s.active;
+           document.getElementById('stat-pending').innerText = s.pending;
+        }).getDashboardStats();
+      }
+
+      window.onload = function() { loadStats(); };
+    </script>
+  </body>
+</html>
