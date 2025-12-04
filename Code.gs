@@ -228,3 +228,145 @@ function getDashboardStats() {
   });
   return { total: data.length, active, pending };
 }
+
+// --- EXPORT PDF ---
+function exportClientToPdf(clientCode) {
+  const c = getClientDetails(clientCode);
+  if (!c) throw new Error("Client not found");
+
+  const html = `
+    <html>
+      <head>
+        <style>
+          body { font-family: 'Helvetica', sans-serif; font-size: 11px; padding: 20px; color: #333; }
+          .header { text-align: center; margin-bottom: 20px; border-bottom: 2px solid #65c027; padding-bottom: 10px; }
+          .header h1 { color: #65c027; font-size: 18px; margin: 0; }
+          .header p { color: #666; font-size: 10px; margin: 5px 0 0; }
+          
+          .section { margin-bottom: 15px; border: 1px solid #ddd; padding: 10px; border-radius: 4px; }
+          .section-title { font-size: 12px; font-weight: bold; color: #fff; background: #65c027; padding: 5px 10px; margin: -10px -10px 10px -10px; border-top-left-radius: 3px; border-top-right-radius: 3px; }
+          
+          .grid { display: table; width: 100%; border-spacing: 5px; }
+          .row { display: table-row; }
+          .col { display: table-cell; vertical-align: top; width: 25%; }
+          .col-half { display: table-cell; vertical-align: top; width: 50%; }
+          
+          .label { font-weight: bold; color: #555; display: block; font-size: 9px; margin-bottom: 2px; text-transform: uppercase; }
+          .val { margin-bottom: 8px; font-size: 11px; color: #000; min-height: 14px; }
+          
+          .note { font-style: italic; color: #666; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Client Profile</h1>
+          <p>Generated on ${new Date().toLocaleDateString()}</p>
+        </div>
+
+        <!-- 1. Main Info -->
+        <div class="section">
+          <div class="section-title">Main Information</div>
+          <div class="grid">
+            <div class="row">
+               <div class="col"><span class="label">Code</span><div class="val">${c.clientCode}</div></div>
+               <div class="col"><span class="label">Name</span><div class="val">${c.firstName} ${c.middleName} ${c.lastName}</div></div>
+               <div class="col"><span class="label">Status</span><div class="val">${c.status}</div></div>
+               <div class="col"><span class="label">DOB (Age)</span><div class="val">${c.dob} (${c.age})</div></div>
+            </div>
+            <div class="row">
+               <div class="col"><span class="label">SSN</span><div class="val">${c.ssn}</div></div>
+               <div class="col"><span class="label">Gender</span><div class="val">${c.gender}</div></div>
+               <div class="col"><span class="label">Marital</span><div class="val">${c.maritalStatus}</div></div>
+               <div class="col"><span class="label">Language</span><div class="val">${c.primaryLang}</div></div>
+            </div>
+            <div class="row">
+               <div class="col"><span class="label">Active Date</span><div class="val">${c.activeDate}</div></div>
+               <div class="col"><span class="label">Deactive</span><div class="val">${c.deactiveDate || '-'}</div></div>
+               <div class="col"><span class="label">Payment</span><div class="val">${c.paymentType}</div></div>
+               <div class="col"><span class="label">Agreement</span><div class="val">${c.agreementStatus}</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Contacts -->
+        <div class="section">
+          <div class="section-title">Contact & Addresses</div>
+          <div class="grid">
+            <div class="row">
+               <div class="col"><span class="label">Email 1</span><div class="val">${c.email}</div></div>
+               <div class="col"><span class="label">Email 2</span><div class="val">${c.email2}</div></div>
+               <div class="col"><span class="label">Cell</span><div class="val">${c.cellPhone}</div></div>
+               <div class="col"><span class="label">Home</span><div class="val">${c.homePhone}</div></div>
+            </div>
+          </div>
+          <div style="margin-top:5px; border-top:1px dashed #ccc; padding-top:5px;">
+             <div class="grid">
+                <div class="row">
+                   <div class="col-half">
+                      <span class="label">Living Address</span>
+                      <div class="val">${c.livingAddress}, ${c.livingCity}, ${c.livingState} ${c.livingZip}</div>
+                   </div>
+                   <div class="col-half">
+                      <span class="label">Billing Address</span>
+                      <div class="val">${c.billingAddress}, ${c.billingCity}, ${c.billingState} ${c.billingZip}</div>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </div>
+        
+        <!-- 3. Care -->
+        <div class="section">
+          <div class="section-title">Care Assessment</div>
+          <div class="grid">
+             <div class="row">
+                <div class="col"><span class="label">Date</span><div class="val">${c.assessDate}</div></div>
+                <div class="col"><span class="label">Height/Weight</span><div class="val">${c.height} / ${c.weight} lbs</div></div>
+                <div class="col"><span class="label">Mental Status</span><div class="val">${c.mentalStatus}</div></div>
+             </div>
+          </div>
+          <div style="margin-top:5px;">
+             <span class="label">Diagnosis</span><div class="val">${c.diagnosis}</div>
+             <span class="label">Service Needs</span><div class="val">${c.serviceNeeds}</div>
+             <span class="label">Goals</span><div class="val">${c.goals}</div>
+          </div>
+          <div style="margin-top:5px; border-top:1px dashed #ccc; padding-top:5px;">
+             <div class="grid">
+                <div class="row">
+                   <div class="col"><span class="label">Alone?</span><div class="val">${c.livingAlone} <span class="note">${c.livingAloneNote}</span></div></div>
+                   <div class="col"><span class="label">Pets?</span><div class="val">${c.pets} <span class="note">${c.petsNote}</span></div></div>
+                   <div class="col"><span class="label">Smoke?</span><div class="val">${c.smoke} <span class="note">${c.smokeNote}</span></div></div>
+                   <div class="col"><span class="label">Drink?</span><div class="val">${c.drink} <span class="note">${c.drinkNote}</span></div></div>
+                </div>
+             </div>
+          </div>
+        </div>
+
+        <!-- 4. Medical -->
+        <div class="section">
+          <div class="section-title">Medical Overview</div>
+          <div class="grid">
+             <div class="row">
+                <div class="col"><span class="label">Doctor</span><div class="val">${c.drName}<br>${c.drPhone}</div></div>
+                <div class="col"><span class="label">Pharmacy</span><div class="val">${c.pharmName}<br>${c.pharmPhone}</div></div>
+                <div class="col"><span class="label">Hospital</span><div class="val">${c.hospName}<br>${c.hospPhone}</div></div>
+             </div>
+             <div class="row">
+                <div class="col"><span class="label">Meds Control</span><div class="val">${c.selfAdmin}</div></div>
+                <div class="col"><span class="label">Overseeing</span><div class="val">${c.overseeingResp} <span class="note">${c.overseeingNote}</span></div></div>
+                <div class="col"><span class="label">Allergies</span><div class="val">${c.allergies}</div></div>
+             </div>
+          </div>
+        </div>
+        
+        <div style="text-align:center; margin-top:20px; color:#999; font-size:10px;">
+           End of Report - ${c.clientCode}
+        </div>
+      </body>
+    </html>
+  `;
+  
+  const blob = Utilities.newBlob(html, MimeType.HTML).getAs(MimeType.PDF);
+  blob.setName(`${c.firstName}_${c.lastName}_Profile.pdf`);
+  return { base64: Utilities.base64Encode(blob.getBytes()), name: blob.getName() };
+}

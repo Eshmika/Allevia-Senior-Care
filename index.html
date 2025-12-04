@@ -154,11 +154,17 @@
       </div>
 
       <!-- PAGE: ADD/EDIT CLIENT FORM -->
-      <!-- We reuse the ID 'page-form' but map it to Nav ID 'add' for UI purposes -->
       <div id="page-form" class="hidden">
         <div class="flex justify-between items-center mb-6">
-           <h1 class="text-2xl font-bold text-gray-800" id="form-title">Add Client Details</h1>
-           <button onclick="showPage('directory')" class="text-sm text-gray-500 hover:text-brand flex items-center"><i class="ph ph-arrow-left mr-1"></i> Back to Directory</button>
+           <div class="flex items-center space-x-3">
+             <button onclick="showPage('directory')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full"><i class="ph ph-arrow-left"></i></button>
+             <h1 class="text-2xl font-bold text-gray-800" id="form-title">Add Client Details</h1>
+           </div>
+           
+           <!-- NEW: EXPORT PDF BUTTON -->
+           <button id="btn-export-pdf" onclick="downloadPdf()" class="hidden bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow flex items-center">
+             <i class="ph ph-file-pdf text-lg mr-2"></i> Export PDF
+           </button>
         </div>
         
         <form id="clientForm" onsubmit="submitForm(event)" class="space-y-6 max-w-5xl mx-auto">
@@ -365,9 +371,15 @@
           document.getElementById('page-form').classList.remove('hidden');
           document.getElementById('nav-add').classList.add('active');
           document.getElementById('form-title').innerText = 'Add Client Details';
+          
+          // Reset UI for New Client
           document.getElementById('clientForm').reset();
-          document.getElementById('clientCode').value = ''; // Clear ID
+          document.getElementById('clientCode').value = ''; 
           document.getElementById('activeDate').valueAsDate = new Date();
+          
+          // HIDE PDF Button since it's a new client
+          document.getElementById('btn-export-pdf').classList.add('hidden');
+
         } else if (pageId === 'directory') {
           document.getElementById('page-directory').classList.remove('hidden');
           document.getElementById('nav-directory').classList.add('active');
@@ -404,7 +416,6 @@
         tbody.innerHTML = '';
         totalItems = data.total;
         
-        // Render Rows
         if(data.clients.length === 0) {
           tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-400">No clients found.</td></tr>`;
         } else {
@@ -413,7 +424,6 @@
              row.className = 'table-row';
              row.onclick = () => openClientDetails(c.code);
              
-             // Status Colors
              let statusColor = 'text-gray-600 bg-gray-100';
              if(c.status === 'Active') statusColor = 'text-green-700 bg-green-50';
              if(c.status === 'Deceased') statusColor = 'text-red-700 bg-red-50';
@@ -431,7 +441,6 @@
           });
         }
         
-        // Update Pagination UI
         const start = (currentPage - 1) * PAGE_SIZE + 1;
         const end = Math.min(start + PAGE_SIZE - 1, totalItems);
         document.getElementById('page-info').innerText = totalItems > 0 ? `Showing ${start}-${end} of ${totalItems}` : 'No data';
@@ -458,6 +467,9 @@
             document.getElementById('page-form').classList.remove('hidden');
             document.getElementById('form-title').innerText = 'Edit Client: ' + data.firstName;
             
+            // SHOW PDF Button since we have a code
+            document.getElementById('btn-export-pdf').classList.remove('hidden');
+
             // Populate Form
             const form = document.getElementById('clientForm');
             Object.keys(data).forEach(key => {
@@ -469,6 +481,30 @@
             });
           })
           .getClientDetails(code);
+      }
+      
+      // --- EXPORT PDF ---
+      function downloadPdf() {
+         const code = document.getElementById('clientCode').value;
+         if(!code) return alert('Please save the client first.');
+         
+         loading(true);
+         google.script.run
+           .withSuccessHandler(function(pdf) {
+              loading(false);
+              // Create a temporary link to download
+              const link = document.createElement('a');
+              link.href = 'data:application/pdf;base64,' + pdf.base64;
+              link.download = pdf.name;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+           })
+           .withFailureHandler(function(err) {
+              loading(false);
+              alert('Error creating PDF: ' + err);
+           })
+           .exportClientToPdf(code);
       }
 
       function submitForm(e) {
