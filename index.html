@@ -23,7 +23,11 @@
           <div onclick="showPage('page-dashboard')" id="nav-dashboard" class="nav-item active flex items-center px-6 py-2 text-gray-600 hover:bg-gray-50 transition">
             <i class="ph ph-squares-four text-xl mr-3"></i> Dashboard
           </div>
-          
+
+          <p class="px-6 text-xs font-bold text-gray-400 uppercase mt-4 mb-2">Shift Management</p>
+          <div onclick="showPage('page-shift-add')" id="nav-shift-add" class="nav-item flex items-center px-6 py-2 text-gray-600 hover:bg-gray-50 transition">
+            <i class="ph ph-calendar-plus text-xl mr-3"></i> Schedule Shift
+          </div>          
           <p class="px-6 text-xs font-bold text-gray-400 uppercase mt-4 mb-2">Clients</p>
           <div onclick="showPage('page-client-add')" id="nav-client-add" class="nav-item flex items-center px-6 py-2 text-gray-600 hover:bg-gray-50 transition">
             <i class="ph ph-user-plus text-xl mr-3"></i> Add Client
@@ -70,6 +74,9 @@
           </div>
         </div>
       </div>
+
+      <!-- INCLUDE SHIFT PAGE -->
+      <?!= include('shift_pages'); ?>
 
       <!-- INCLUDE CLIENT PAGES (Directory & Form) -->
       <?!= include('client_pages'); ?>

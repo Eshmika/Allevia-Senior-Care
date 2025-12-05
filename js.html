@@ -4,6 +4,9 @@
   const PAGE_SIZE = 10;
   let searchTimeout;
 
+  // Shift Data Store
+  let shiftData = { clients: [], caregivers: [] };
+
   // --- CONSTANTS ---
   const LANGUAGES = ["ENGLISH", "ARABIC", "FRENCH", "ARMENIAN", "CHINESE", "CREOLE", "GEORGIAN", "GERMAN", "GREEK", "HINDI", "ITALIAN", "RUSSIAN", "SIGN LANGUAGE", "SPANISH", "SWAHILI", "TWI", "UKRAINIAN", "OTHER"];
   const SKILLS = ["Ambulation", "Bathing – Bed", "Bathing-Shower", "Catheter Care", "Companion Care", "Dressing", "Feeding", "Homemaker Services", "Hygiene – Hair Care", "Hygiene-Mouth Care", "Incontinence Care", "Meal Preparation", "Medication Reminders", "Ostomy Care", "Respite Care (General)", "Respite Care (Skilled Nursing)", "Safety Supervision", "Shave", "Toileting", "Transportation", "Turning & Repositioning", "Wound Care"];
@@ -46,6 +49,11 @@
        document.getElementById('nav-dashboard').classList.add('active');
        loadStats();
     }
+    // Shift Page Logic
+    if(pageId === 'page-shift-add') {
+       document.getElementById('nav-shift-add').classList.add('active');
+       initShiftPage();
+    }
     // CLIENT PAGES
     else if(pageId === 'page-client-add') {
        document.getElementById('nav-client-add').classList.add('active');
@@ -64,6 +72,178 @@
        document.getElementById('nav-cg-dir').classList.add('active');
        loadCgDir(1);
     }
+  }
+
+  //  SHIFT & MATCHING LOGIC
+  function initShiftPage() {
+    // 1. Reset Form
+    document.getElementById('shiftForm').reset();
+    document.getElementById('match-message-box').className = "mt-4 p-4 rounded text-center font-bold text-sm bg-gray-50 text-gray-500";
+    document.getElementById('match-message-box').innerText = "Select both Client and Caregiver to check compatibility.";
+    
+    // Clear Match Table
+    ['pets', 'smoke', 'drink'].forEach(k => {
+       document.getElementById(`match-client-${k}`).innerText = '-';
+       document.getElementById(`match-cg-${k}`).innerText = '-';
+       document.getElementById(`res-${k}`).innerHTML = '<span class="text-gray-300">--</span>';
+    });
+
+    // 2. Fetch Data
+    loading(true);
+    google.script.run.withSuccessHandler(data => {
+       loading(false);
+       shiftData = data; // Store globally
+       
+       // Populate Selectors
+       const cSelect = document.getElementById('shiftClientSelect');
+       cSelect.innerHTML = '<option value="">Select Client...</option>';
+       data.clients.forEach((c, i) => cSelect.innerHTML += `<option value="${i}">${c.name} (${c.code})</option>`);
+
+       const cgSelect = document.getElementById('shiftCgSelect');
+       cgSelect.innerHTML = '<option value="">Select Caregiver...</option>';
+       data.caregivers.forEach((c, i) => cgSelect.innerHTML += `<option value="${i}">${c.name} (${c.code})</option>`);
+       
+       // Set Invoice
+       document.getElementById('invoiceId').value = data.nextInvoice;
+
+    }).getShiftDropdownData();
+  }
+
+  function onShiftClientSelect() {
+    const idx = document.getElementById('shiftClientSelect').value;
+    if(idx === "") return;
+    const c = shiftData.clients[idx];
+    
+    document.getElementById('dispClientCode').value = c.code;
+    document.getElementById('dispClientFirst').value = c.firstName;
+    document.getElementById('dispClientLast').value = c.lastName;
+    document.getElementById('hClientName').value = c.name;
+    
+    // Fill Match Table
+    document.getElementById('match-client-pets').innerText = c.pets || 'No';
+    document.getElementById('match-client-smoke').innerText = c.smoke || 'No';
+    document.getElementById('match-client-drink').innerText = c.drink || 'No';
+    
+    checkMatching();
+  }
+
+  function onShiftCgSelect() {
+    const idx = document.getElementById('shiftCgSelect').value;
+    if(idx === "") return;
+    const c = shiftData.caregivers[idx];
+    
+    document.getElementById('dispCgCode').value = c.code;
+    document.getElementById('dispCgFirst').value = c.firstName;
+    document.getElementById('dispCgLast').value = c.lastName;
+    document.getElementById('hCgName').value = c.name;
+
+    // Fill Match Table
+    document.getElementById('match-cg-pets').innerText = c.pets || 'No'; // This is 'Pets Pref'
+    document.getElementById('match-cg-smoke').innerText = c.smoke || 'No';
+    document.getElementById('match-cg-drink').innerText = c.drink || 'No';
+    
+    checkMatching();
+  }
+
+  function checkMatching() {
+    const idxC = document.getElementById('shiftClientSelect').value;
+    const idxG = document.getElementById('shiftCgSelect').value;
+    
+    if(idxC === "" || idxG === "") return;
+
+    const client = shiftData.clients[idxC];
+    const cg = shiftData.caregivers[idxG];
+    
+    let isMatch = true;
+    
+    const compare = (cVal, gVal, id) => {
+       // Normalize
+       const c = (cVal || '').toLowerCase();
+       const g = (gVal || '').toLowerCase();
+       
+       let rowMatch = true;    
+       
+       if (c === 'yes' && g === 'no') rowMatch = false;
+       
+       const cell = document.getElementById(id);
+       if(rowMatch) {
+         cell.innerHTML = '<i class="ph ph-check-circle text-green-500 text-xl"></i>';
+       } else {
+         cell.innerHTML = '<i class="ph ph-x-circle text-red-500 text-xl"></i>';
+         isMatch = false;
+       }
+    };
+
+    compare(client.pets, cg.pets, 'res-pets');
+    compare(client.smoke, cg.smoke, 'res-smoke');
+    compare(client.drink, cg.drink, 'res-drink');
+
+    const msgBox = document.getElementById('match-message-box');
+    const msgInput = document.getElementById('matchNotes');
+    
+    if(isMatch) {
+      msgBox.className = "mt-4 p-4 rounded text-center font-bold text-sm bg-green-100 text-green-700 border border-green-200";
+      msgBox.innerHTML = "<i class='ph ph-thumbs-up mr-2'></i> They are matching!";
+      msgInput.value = "Matching";
+    } else {
+      msgBox.className = "mt-4 p-4 rounded text-center font-bold text-sm bg-red-100 text-red-700 border border-red-200";
+      msgBox.innerHTML = "<i class='ph ph-warning mr-2'></i> Please search other caregiver.";
+      msgInput.value = "Not Matching";
+    }
+  }
+
+  function calcShiftHours() {
+    const inTime = document.getElementById('clockIn').value;
+    const outTime = document.getElementById('clockOut').value;
+    
+    if(inTime && outTime) {
+      const d1 = new Date("01/01/2000 " + inTime);
+      const d2 = new Date("01/01/2000 " + outTime);
+      
+      let diff = (d2 - d1) / 1000 / 60 / 60; // Hours
+      if (diff < 0) diff += 24; // Handle overnight
+      
+      document.getElementById('totalHours').value = diff.toFixed(2);
+      calcFinancials();
+    }
+  }
+
+  function calcFinancials() {
+    const rateType = document.querySelector('input[name="rateType"]:checked').value;
+    const hours = parseFloat(document.getElementById('totalHours').value) || 0;
+    const cRate = parseFloat(document.getElementById('clientRate').value) || 0;
+    const gRate = parseFloat(document.getElementById('cgRate').value) || 0;
+    
+    let totalC = 0;
+    let totalG = 0;
+
+    if (rateType === 'Fixed') {
+      totalC = cRate;
+      totalG = gRate;
+    } else {
+      totalC = cRate * hours;
+      totalG = gRate * hours;
+    }
+
+    document.getElementById('totalClientAmt').value = totalC.toFixed(2);
+    document.getElementById('totalCgAmt').value = totalG.toFixed(2);
+    document.getElementById('profit').value = (totalC - totalG).toFixed(2);
+  }
+
+  function submitShiftForm(e) {
+    e.preventDefault();
+    loading(true);
+    const form = document.getElementById('shiftForm');
+    const fd = {};
+    new FormData(form).forEach((v,k) => fd[k] = v);
+    
+    google.script.run.withSuccessHandler(res => {
+       loading(false);
+       alert(res.message);
+       if(res.success) {
+         initShiftPage(); // Reset for next
+       }
+    }).saveShiftData(fd);
   }
 
   // --- CLIENT LOGIC ---
