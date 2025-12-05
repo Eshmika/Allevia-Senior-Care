@@ -4,7 +4,7 @@
   const PAGE_SIZE = 10;
   let searchTimeout;
 
-  // --- DATA LISTS ---
+  // --- 1. CONSTANTS (Data Lists) ---
   const LANGUAGES = [
     "ENGLISH", "ARABIC", "FRENCH", "ARMENIAN", "CHINESE", "CREOLE", 
     "GEORGIAN", "GERMAN", "GREEK", "HINDI", "ITALIAN", "RUSSIAN", 
@@ -21,169 +21,142 @@
     "Turning & Repositioning", "Wound Care"
   ];
 
-  // --- POPULATE DROPDOWNS ON LOAD ---
-  function populateDropdowns() {
-    // Populate Language Dropdowns (1, 2, 3)
-    ['lang1', 'lang2', 'lang3'].forEach(id => {
-      const select = document.getElementsByName(id)[0];
-      if (select) {
-        let html = '<option value="">Select Language...</option>';
-        LANGUAGES.forEach(lang => {
-          html += `<option value="${lang}">${lang}</option>`;
-        });
-        select.innerHTML = html;
-      }
-    });
+  // --- 2. INITIALIZATION ---
+  window.onload = function() {
+    populateDropdowns();
+    loadStats();
+    
+    // Caregiver Account Validation Listeners
+    const rptAcc = document.getElementById('repeatAccount');
+    const rptRout = document.getElementById('repeatRouting');
+    if(rptAcc) rptAcc.addEventListener('input', validateBank);
+    if(rptRout) rptRout.addEventListener('input', validateBank);
+  };
 
-    // Populate Skill Dropdowns (1-6)
-    ['skill1', 'skill2', 'skill3', 'skill4', 'skill5', 'skill6'].forEach(id => {
-      const select = document.getElementsByName(id)[0];
-      if (select) {
-        let html = '<option value="">Select Skill...</option>';
-        SKILLS.forEach(skill => {
-          html += `<option value="${skill}">${skill}</option>`;
+  // Populate Dropdowns for BOTH Forms
+  function populateDropdowns() {
+    const fill = (names, list) => {
+      names.forEach(name => {
+        const els = document.getElementsByName(name); // Returns NodeList (Client & Caregiver inputs)
+        els.forEach(el => {
+          let opts = '<option value="">Select...</option>';
+          list.forEach(item => opts += `<option value="${item}">${item}</option>`);
+          el.innerHTML = opts;
         });
-        select.innerHTML = html;
-      }
-    });
+      });
+    };
+    
+    fill(['lang1', 'lang2', 'lang3'], LANGUAGES);
+    fill(['skill1', 'skill2', 'skill3', 'skill4', 'skill5', 'skill6'], SKILLS);
   }
 
-  // --- NAV LOGIC ---
+  // --- 3. NAVIGATION ---
   function showPage(pageId) {
-    document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
+    // Hide all pages & Reset Nav
+    document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
 
-    if(pageId === 'add') {
-      document.getElementById('page-form').classList.remove('hidden');
-      document.getElementById('nav-add').classList.add('active');
-      document.getElementById('form-title').innerText = 'Add Client Details';
-      
-      document.getElementById('clientForm').reset();
-      document.getElementById('clientCode').value = ''; 
-      document.getElementById('activeDate').valueAsDate = new Date();
-      
-      document.getElementById('btn-export-pdf').classList.add('hidden');
-
-    } else if (pageId === 'directory') {
-      document.getElementById('page-directory').classList.remove('hidden');
-      document.getElementById('nav-directory').classList.add('active');
-      loadDirectory(1);
-    } else {
-      document.getElementById('page-' + pageId).classList.remove('hidden');
-      document.getElementById('nav-' + pageId).classList.add('active');
-      if(pageId === 'dashboard') loadStats();
+    // Show Target Page
+    const page = document.getElementById(pageId);
+    if(page) page.classList.remove('hidden');
+    
+    // Logic per Page Type
+    if(pageId === 'page-dashboard') {
+       document.getElementById('nav-dashboard').classList.add('active');
+       loadStats();
+    }
+    // CLIENT PAGES
+    else if(pageId === 'page-client-add') {
+       document.getElementById('nav-client-add').classList.add('active');
+       resetClientForm();
+    } 
+    else if(pageId === 'page-client-dir') {
+       document.getElementById('nav-client-dir').classList.add('active');
+       loadClientDir(1);
+    }
+    // CAREGIVER PAGES
+    else if(pageId === 'page-cg-add') {
+       document.getElementById('nav-cg-add').classList.add('active');
+       resetCgForm();
+    } 
+    else if(pageId === 'page-cg-dir') {
+       document.getElementById('nav-cg-dir').classList.add('active');
+       loadCgDir(1);
     }
   }
 
-  // --- DIRECTORY LOGIC ---
-  function debounceSearch() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => loadDirectory(1), 400);
-  }
+  // --- 4. CLIENT LOGIC ---
 
-  function loadDirectory(page) {
-    currentPage = page;
-    const search = document.getElementById('dir-search').value;
-    const status = document.getElementById('dir-status').value;
-    const pay = document.getElementById('dir-pay').value;
+  function resetClientForm() {
+    document.getElementById('clientForm').reset();
+    document.getElementById('clientCode').value = '';
+    document.getElementById('client-form-title').innerText = 'Add Client Details';
+    document.getElementById('btn-client-pdf').classList.add('hidden');
     
-    loading(true);
-    google.script.run
-      .withSuccessHandler(renderTable)
-      .withFailureHandler(err => { loading(false); alert('Error: ' + err); })
-      .getClients(page, PAGE_SIZE, search, status, pay);
-  }
-
-  function renderTable(data) {
-    loading(false);
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '';
-    totalItems = data.total;
-    
-    if(data.clients.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-gray-400">No clients found.</td></tr>`;
-    } else {
-      data.clients.forEach(c => {
-         const row = document.createElement('tr');
-         row.className = 'table-row';
-         row.onclick = () => openClientDetails(c.code);
-         
-         let statusColor = 'text-gray-600 bg-gray-100';
-         if(c.status === 'Active') statusColor = 'text-green-700 bg-green-50';
-         if(c.status === 'Deceased') statusColor = 'text-red-700 bg-red-50';
-         
-         row.innerHTML = `
-           <td class="table-cell font-mono text-xs">${c.code}</td>
-           <td class="table-cell font-bold">${c.name}</td>
-           <td class="table-cell"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${c.status}</span></td>
-           <td class="table-cell">${c.payment}</td>
-           <td class="table-cell text-xs">${c.phone}</td>
-           <td class="table-cell text-xs text-gray-500">${c.email}</td>
-           <td class="table-cell text-right"><i class="ph ph-caret-right text-gray-400"></i></td>
-         `;
-         tbody.appendChild(row);
-      });
-    }
-    
-    const start = (currentPage - 1) * PAGE_SIZE + 1;
-    const end = Math.min(start + PAGE_SIZE - 1, totalItems);
-    document.getElementById('page-info').innerText = totalItems > 0 ? `Showing ${start}-${end} of ${totalItems}` : 'No data';
-    document.getElementById('btn-prev').disabled = currentPage === 1;
-    document.getElementById('btn-next').disabled = end >= totalItems;
-    document.getElementById('btn-prev').classList.toggle('opacity-50', currentPage === 1);
-    document.getElementById('btn-next').classList.toggle('opacity-50', end >= totalItems);
-  }
-
-  // --- EDIT/VIEW LOGIC ---
-  function openClientDetails(code) {
-    loading(true);
-    google.script.run
-      .withSuccessHandler(data => {
-        loading(false);
-        if(!data) return alert('Client not found');
-        
-        document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('hidden'));
-        document.getElementById('page-form').classList.remove('hidden');
-        document.getElementById('form-title').innerText = 'Edit Client: ' + data.firstName;
-        
-        document.getElementById('btn-export-pdf').classList.remove('hidden');
-
-        const form = document.getElementById('clientForm');
-        Object.keys(data).forEach(key => {
-           const input = form.elements[key];
-           if(input) {
-             if(input.type === 'checkbox') input.checked = data[key] === 'true' || data[key] === true;
-             else input.value = data[key];
-           }
-        });
-      })
-      .getClientDetails(code);
+    // Set Date to Today
+    const dateEl = document.getElementById('clientActiveDate');
+    if(dateEl) dateEl.valueAsDate = new Date();
   }
   
-  // --- EXPORT PDF ---
-  function downloadPdf() {
-     const code = document.getElementById('clientCode').value;
-     if(!code) return alert('Please save the client first.');
-     
-     loading(true);
-     google.script.run
-       .withSuccessHandler(function(pdf) {
-          loading(false);
-          const link = document.createElement('a');
-          link.href = 'data:application/pdf;base64,' + pdf.base64;
-          link.download = pdf.name;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-       })
-       .withFailureHandler(function(err) {
-          loading(false);
-          alert('Error creating PDF: ' + err);
-       })
-       .exportClientToPdf(code);
+  function loadClientDir(page) {
+    currentPage = page;
+    const search = document.getElementById('client-search').value;
+    loading(true);
+    google.script.run
+      .withSuccessHandler(renderClientTable)
+      .withFailureHandler(handleError)
+      .getClients(page, PAGE_SIZE, search, '', '');
   }
 
-  function submitForm(e) {
+  function renderClientTable(data) {
+     loading(false);
+     const tbody = document.getElementById('client-body');
+     tbody.innerHTML = '';
+     if(data.clients.length === 0) { 
+       tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-400">No clients found.</td></tr>'; 
+       return; 
+     }
+     data.clients.forEach(c => {
+       const tr = document.createElement('tr');
+       tr.className = 'table-row';
+       tr.onclick = () => openClient(c.code);
+       
+       let statusClass = c.status === 'Active' ? 'text-green-700 bg-green-50' : 'text-gray-600';
+       
+       tr.innerHTML = `
+         <td class="table-cell font-mono text-xs">${c.code}</td>
+         <td class="table-cell font-bold">${c.name}</td>
+         <td class="table-cell"><span class="px-2 py-1 rounded text-xs font-bold ${statusClass}">${c.status}</span></td>
+         <td class="table-cell">${c.payment}</td>
+         <td class="table-cell text-xs">${c.phone}</td>
+         <td class="table-cell text-right"><i class="ph ph-caret-right text-gray-400"></i></td>
+       `;
+       tbody.appendChild(tr);
+     });
+  }
+
+  function openClient(code) {
+    loading(true);
+    google.script.run.withSuccessHandler(data => {
+      loading(false);
+      if(!data) return alert('Client not found');
+
+      showPage('page-client-add');
+      document.getElementById('client-form-title').innerText = 'Edit Client: ' + data.firstName;
+      document.getElementById('btn-client-pdf').classList.remove('hidden');
+
+      const form = document.getElementById('clientForm');
+      Object.keys(data).forEach(key => {
+        const input = form.elements[key];
+        if(input) {
+           if(input.type === 'checkbox') input.checked = data[key] === true || data[key] === 'true';
+           else input.value = data[key];
+        }
+      });
+    }).getClientDetails(code);
+  }
+
+  function submitClientForm(e) {
     e.preventDefault();
     loading(true);
     const form = document.getElementById('clientForm');
@@ -191,30 +164,165 @@
     new FormData(form).forEach((v,k) => formData[k] = v);
     
     google.script.run.withSuccessHandler(res => {
-       loading(false);
-       alert(res.message);
-       if(res.success) showPage('directory');
+      loading(false);
+      alert(res.message);
+      if(res.success) showPage('page-client-dir');
     }).saveClientData(formData);
   }
+
+  function downloadClientPdf() {
+     const code = document.getElementById('clientCode').value;
+     if(!code) return alert('Please save before exporting.');
+     loading(true);
+     google.script.run.withSuccessHandler(pdf => {
+        loading(false);
+        const link = document.createElement('a');
+        link.href = 'data:application/pdf;base64,' + pdf.base64;
+        link.download = pdf.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+     }).exportClientToPdf(code);
+  }
+
+  // --- 5. CAREGIVER LOGIC ---
+
+  function resetCgForm() {
+    document.getElementById('cgForm').reset();
+    document.getElementById('cgCode').value = '';
+    document.getElementById('cg-form-title').innerText = 'Add Caregiver Details';
+    document.getElementById('bank-errors').innerHTML = '';
+    
+    const dateEl = document.getElementById('cgActiveDate');
+    if(dateEl) dateEl.valueAsDate = new Date();
+  }
+
+  function validateBank() {
+    const acc = document.getElementsByName('accountNum')[0].value;
+    const rptAcc = document.getElementById('repeatAccount').value;
+    const rout = document.getElementsByName('routingNum')[0].value;
+    const rptRout = document.getElementById('repeatRouting').value;
+    
+    const errDiv = document.getElementById('bank-errors');
+    errDiv.innerHTML = '';
+    
+    if(acc && rptAcc && acc !== rptAcc) errDiv.innerHTML += '<p class="text-red-500 text-xs font-bold">Account Numbers do not match.</p>';
+    if(rout && rptRout && rout !== rptRout) errDiv.innerHTML += '<p class="text-red-500 text-xs font-bold">Routing Numbers do not match.</p>';
+  }
+
+  function submitCgForm(e) {
+    e.preventDefault();
+    
+    // Check Validation
+    const errs = document.getElementById('bank-errors').innerHTML;
+    if(errs !== '') { alert('Please fix bank account errors.'); return; }
+
+    loading(true);
+    const form = document.getElementById('cgForm');
+    const fd = {};
+    new FormData(form).forEach((v,k) => fd[k] = v);
+    
+    google.script.run.withSuccessHandler(res => {
+      loading(false);
+      alert(res.message);
+      if(res.success) showPage('page-cg-dir');
+    }).saveCaregiverData(fd);
+  }
+
+  function loadCgDir(page) {
+    currentPage = page;
+    const search = document.getElementById('cg-search').value;
+    loading(true);
+    google.script.run
+      .withSuccessHandler(renderCgTable)
+      .withFailureHandler(handleError)
+      .getCaregivers(page, PAGE_SIZE, search);
+  }
+
+  function renderCgTable(data) {
+     loading(false);
+     const tbody = document.getElementById('cg-body');
+     tbody.innerHTML = '';
+     if(data.list.length === 0) { 
+       tbody.innerHTML = '<tr><td colspan="6" class="p-4 text-center text-gray-400">No caregivers found.</td></tr>'; 
+       return; 
+     }
+     data.list.forEach(c => {
+       const tr = document.createElement('tr');
+       tr.className = 'table-row';
+       tr.onclick = () => openCg(c.code);
+       
+       let statusClass = c.status === 'Active' ? 'text-green-700 bg-green-50' : 'text-gray-600 bg-gray-50';
+       
+       tr.innerHTML = `
+         <td class="table-cell font-mono text-xs">${c.code}</td>
+         <td class="table-cell font-bold">${c.name}</td>
+         <td class="table-cell text-xs uppercase text-gray-500 font-bold">${c.title}</td>
+         <td class="table-cell"><span class="px-2 py-1 rounded text-xs font-bold ${statusClass}">${c.status}</span></td>
+         <td class="table-cell text-xs">${c.phone}</td>
+         <td class="table-cell text-right"><i class="ph ph-caret-right text-gray-400"></i></td>
+       `;
+       tbody.appendChild(tr);
+     });
+  }
+
+  function openCg(code) {
+    loading(true);
+    google.script.run.withSuccessHandler(data => {
+      loading(false);
+      if(!data) return alert('Caregiver not found');
+      
+      showPage('page-cg-add');
+      document.getElementById('cg-form-title').innerText = 'Edit Caregiver: ' + data.firstName;
+      
+      const form = document.getElementById('cgForm');
+      Object.keys(data).forEach(k => {
+        if(form.elements[k]) {
+          // Fill inputs
+          if(form.elements[k].type === 'checkbox') form.elements[k].checked = data[k] === true;
+          else form.elements[k].value = data[k];
+          
+          // Fill Repeat Fields for UI consistency
+          if(k === 'accountNum') document.getElementById('repeatAccount').value = data[k];
+          if(k === 'routingNum') document.getElementById('repeatRouting').value = data[k];
+        }
+      });
+    }).getCaregiverDetails(code);
+  }
+
+  // --- 6. SHARED UTILS ---
 
   function loading(show) {
     document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
   }
 
-  function calcAge() {
-    const d = document.getElementById('dob').value;
-    if(d) document.getElementById('age').value = Math.abs(new Date(Date.now() - new Date(d).getTime()).getUTCFullYear() - 1970);
-  }
-  function loadStats() {
-    google.script.run.withSuccessHandler(s => {
-       document.getElementById('stat-total').innerText = s.total;
-       document.getElementById('stat-active').innerText = s.active;
-       document.getElementById('stat-pending').innerText = s.pending;
-    }).getDashboardStats();
+  function handleError(err) {
+    loading(false);
+    console.error(err);
+    alert('An error occurred: ' + err);
   }
 
-  window.onload = function() { 
-    populateDropdowns(); 
-    loadStats(); 
-  };
+  function calcAge(dobId, ageId) {
+    // If IDs not provided, default to Client form IDs
+    if(!dobId) dobId = 'dob';
+    if(!ageId) ageId = 'age';
+    
+    const d = document.getElementById(dobId).value;
+    if(d) {
+      const diff = Date.now() - new Date(d).getTime();
+      document.getElementById(ageId).value = Math.abs(new Date(diff).getUTCFullYear() - 1970);
+    }
+  }
+
+  function loadStats() {
+    google.script.run.withSuccessHandler(s => {
+       // Check if elements exist before setting (dashboard might be hidden)
+       const totalEl = document.getElementById('stat-total');
+       if(totalEl) {
+         totalEl.innerText = s.total;
+         document.getElementById('stat-active').innerText = s.active;
+         document.getElementById('stat-pending').innerText = s.pending;
+       }
+    }).getDashboardStats();
+  }
 </script>
