@@ -1,5 +1,17 @@
 // ClientRepository.gs - Database interactions
 
+function getSheet() {
+  const SHEET_NAME = 'Clients';
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(SHEET_NAME);
+  
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    // Headers are added in saveClientData if row count is 0
+  }
+  return sheet;
+}
+
 function getNextClientCode() {
   const sheet = getSheet();
   const lastRow = sheet.getLastRow();

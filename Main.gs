@@ -14,15 +14,9 @@ function include(filename) {
 }
 
 // Shared Helper: Get the Sheet
-function getSheet() {
-  const SHEET_NAME = 'Clients';
+function getSheet(name) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  let sheet = ss.getSheetByName(SHEET_NAME);
-  
-  if (!sheet) {
-    sheet = ss.insertSheet(SHEET_NAME);
-    // Add Headers logic can remain here or be moved to a setup script
-    // For brevity, assuming headers exist or are created on first save
-  }
+  let sheet = ss.getSheetByName(name);
+  // Basic check, creation logic handled in Repositories
   return sheet;
 }
