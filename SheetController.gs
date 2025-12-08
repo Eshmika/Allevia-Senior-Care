@@ -67,11 +67,7 @@ function getOrCreateSheet() {
   return sheet;
 }
 
-// Helper to normalize IDs (removes spaces, makes lowercase)
-function normalizeId(id) {
-  return String(id).toLowerCase().replace(/\s+/g, "");
-}
-
+// 1. CREATE
 function handleCaregiverSubmission(data) {
   const sheet = getOrCreateSheet();
   const lastRow = sheet.getLastRow();
@@ -82,9 +78,7 @@ function handleCaregiverSubmission(data) {
     const parts = lastIdStr.split("-");
     if (parts.length > 1) {
       const lastNum = parseInt(parts[1]);
-      if (!isNaN(lastNum)) {
-        newId = "CG-" + (lastNum + 1);
-      }
+      if (!isNaN(lastNum)) newId = "CG-" + (lastNum + 1);
     }
   }
 
@@ -104,19 +98,24 @@ function handleCaregiverSubmission(data) {
   return { success: true, message: "Sent!", id: newId };
 }
 
+// 2. UPDATE (Public Form)
 function submitFullApplication(form) {
   try {
     const sheet = getOrCreateSheet();
-    const targetId = normalizeId(form.caregiverId); // Use Normalizer
+    const targetId = String(form.caregiverId).trim().toUpperCase(); // Force Upper
 
-    const data = sheet.getDataRange().getValues();
-    // Use Normalizer to find row
-    const rowIndex = data.findIndex((r) => normalizeId(r[0]) === targetId);
+    // Get ALL data as Strings (DisplayValues) to match exactly what is seen
+    const data = sheet.getDataRange().getDisplayValues();
 
-    if (rowIndex === -1) return { success: false, message: "ID not found" };
+    // Find Row
+    const rowIndex = data.findIndex(
+      (r) => String(r[0]).trim().toUpperCase() === targetId
+    );
+
+    if (rowIndex === -1)
+      return { success: false, message: "ID not found in DB" };
     const r = rowIndex + 1;
 
-    // (Helper functions unchanged)
     const join = (arr) => (Array.isArray(arr) ? arr.join(", ") : arr || "");
     const empStr = (e) =>
       e ? `${e.company || ""} ${e.title ? "(" + e.title + ")" : ""}` : "";
@@ -180,20 +179,21 @@ function submitFullApplication(form) {
   }
 }
 
+// 3. GET LIST (For Table)
 function getCaregiverList() {
   const sheet = getOrCreateSheet();
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return [];
 
-  // Get all data
+  // Use getDisplayValues to treat everything as String (prevents number/string mismatch)
   const data = sheet
     .getRange(2, 1, lastRow - 1, sheet.getLastColumn())
-    .getValues();
+    .getDisplayValues();
 
   return data
-    .filter((row) => row[0] !== "" && row[0] !== null) // Safety check for empty rows
+    .filter((row) => row[0] !== "") // Filter ghosts
     .map((row) => ({
-      id: String(row[0]), // Send exact ID from sheet
+      id: row[0].trim(), // Exact text ID
       name: row[1] + " " + row[2],
       phone: row[3],
       email: row[4],
@@ -204,33 +204,27 @@ function getCaregiverList() {
     .reverse();
 }
 
-// --- FIXED FUNCTION ---
+// 4. GET DETAILS (Robust Search)
 function getCaregiverDetails(id) {
   const sheet = getOrCreateSheet();
-  const data = sheet.getDataRange().getValues();
+
+  // Get all data as text
+  const data = sheet.getDataRange().getDisplayValues();
   const headers = data[0];
 
-  // 1. Normalize the ID we are looking for (remove spaces, lowercase)
-  const searchId = normalizeId(id);
+  const searchId = String(id).trim().toUpperCase();
 
-  console.log("Searching for: " + searchId); // Log for debugging
-
-  // 2. Find row by normalizing the sheet data too
+  // Find row
   const row = data.find((r, i) => {
-    if (i === 0) return false; // Skip header
-    const sheetId = normalizeId(r[0]);
-    return sheetId === searchId;
+    if (i === 0) return false;
+    return String(r[0]).trim().toUpperCase() === searchId;
   });
 
-  if (!row) {
-    console.log("Error: ID not found.");
-    return null;
-  }
+  if (!row) return null;
 
   let caregiver = {};
   headers.forEach((header, index) => {
-    caregiver[header] =
-      row[index] === "" || row[index] === undefined ? "" : row[index];
+    caregiver[header] = row[index];
   });
 
   return caregiver;
@@ -242,7 +236,6 @@ function getDashboardStats() {
     return { total: 0, completed: 0, active: 0, inactive: 0, stna: 0 };
 
   const data = sheet.getRange(2, 6, sheet.getLastRow() - 1, 4).getValues();
-
   let stats = {
     total: data.length,
     completed: 0,
@@ -250,13 +243,11 @@ function getDashboardStats() {
     inactive: 0,
     stna: 0,
   };
-
   data.forEach((row) => {
     if (row[1] === "Active") stats.active++;
     if (row[1] === "Inactive") stats.inactive++;
     if (row[0] === "STNA") stats.stna++;
     if (row[3] === "Application Completed") stats.completed++;
   });
-
   return stats;
 }

@@ -1,14 +1,13 @@
 <script>
-  // -- Global State for Caregivers --
+  // -- Global State --
   let cgData = [];
   let cgFiltered = [];
   let cgCurrentPage = 1;
   const cgRowsPerPage = 5;
 
-  // -- Navigation Extension --
+  // -- Navigation --
   const originalNavigate = window.navigate || function () {};
   window.navigate = function (viewName) {
-    // Standard nav logic
     document
       .querySelectorAll(".nav-item")
       .forEach((el) => el.classList.remove("active"));
@@ -16,62 +15,59 @@
       .querySelectorAll(".view-section")
       .forEach((el) => el.classList.remove("active"));
 
-    // Add active class (Hack for simple demo, use ID match in real app)
+    // Active Tab Style
     const btn = document.querySelector(
       `button[onclick="navigate('${viewName}')"]`
     );
     if (btn) btn.classList.add("active");
 
+    // Show View
     const target = document.getElementById("view-" + viewName);
     if (target) target.classList.add("active");
 
-    // Load data if entering caregivers
     if (viewName === "caregivers") {
       loadCaregiverList();
-      switchCgView("list"); // Default to list
+      switchCgView("list");
     } else if (viewName === "dashboard") {
       loadDashboardStats();
     }
   };
 
-  // -- Caregiver Sub-View Switching --
   function switchCgView(subView) {
     document.getElementById("cg-subview-list").classList.add("hidden");
     document.getElementById("cg-subview-add").classList.add("hidden");
     document.getElementById("cg-subview-profile").classList.add("hidden");
-
     document.getElementById("cg-subview-" + subView).classList.remove("hidden");
   }
 
-  // -- Data Loading --
+  // -- 1. Load List --
   function loadCaregiverList() {
     document.getElementById("cgTableBody").innerHTML =
-      '<tr><td colspan="6" class="p-4 text-center text-gray-400">Loading...</td></tr>';
+      '<tr><td colspan="6" class="p-4 text-center text-gray-400">Loading list...</td></tr>';
     google.script.run
       .withSuccessHandler((data) => {
+        console.log("Loaded List:", data); // Debug
         cgData = data;
         renderCgTable();
       })
       .getCaregiverList();
   }
 
-  // -- Table Rendering Logic --
+  // -- 2. Render Table --
   function renderCgTable() {
     const search = document.getElementById("cgSearch").value.toLowerCase();
     const statusFilter = document.getElementById("cgFilterStatus").value;
 
-    // Filter
     cgFiltered = cgData.filter((item) => {
       const matchSearch =
         item.name.toLowerCase().includes(search) ||
         item.email.toLowerCase().includes(search) ||
-        item.id.toLowerCase().includes(search);
+        String(item.id).toLowerCase().includes(search);
       const matchStatus =
         statusFilter === "All" || item.status === statusFilter;
       return matchSearch && matchStatus;
     });
 
-    // Pagination
     const totalPages = Math.ceil(cgFiltered.length / cgRowsPerPage);
     if (cgCurrentPage > totalPages) cgCurrentPage = 1;
 
@@ -79,7 +75,6 @@
     const end = start + cgRowsPerPage;
     const pageData = cgFiltered.slice(start, end);
 
-    // Build HTML
     const tbody = document.getElementById("cgTableBody");
     tbody.innerHTML = "";
 
@@ -91,9 +86,12 @@
         const tr = document.createElement("tr");
         tr.className =
           "hover:bg-gray-50 transition-colors cursor-pointer group";
-        tr.onclick = () => loadProfile(row.id);
 
-        // Status Badge Color
+        // IMPORTANT: Pass ID exactly as string
+        tr.onclick = function () {
+          loadProfile(row.id);
+        };
+
         let statusColor = "bg-gray-100 text-gray-600";
         if (row.status === "Active")
           statusColor = "bg-green-100 text-green-700";
@@ -132,7 +130,6 @@
       });
     }
 
-    // Update Controls
     document.getElementById("cgPageInfo").textContent = `Showing ${
       pageData.length > 0 ? start + 1 : 0
     }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
@@ -146,31 +143,37 @@
     renderCgTable();
   }
 
-  // -- Profile Logic --
+  // -- 3. Load Profile --
   function loadProfile(id) {
+    console.log("Fetching profile for ID:", id); // Debug
+
     switchCgView("profile");
     document.getElementById("profileLoading").classList.remove("hidden");
     document.getElementById("profileContent").classList.add("hidden");
 
     google.script.run
       .withSuccessHandler((data) => {
+        console.log("Profile Data Recieved:", data); // Debug
+
         if (!data) {
-          Swal.fire("Error", "Caregiver not found", "error");
+          Swal.fire(
+            "Error",
+            "Caregiver details not found in database.",
+            "error"
+          );
           switchCgView("list");
           return;
         }
 
-        // Populate Fields (Helper to safe set text)
         const set = (id, val) =>
           (document.getElementById(id).textContent = val || "--");
 
         set("p-name", data["First Name"] + " " + data["Last Name"]);
-        set("p-initials", data["First Name"].charAt(0));
+        set("p-initials", (data["First Name"] || "U").charAt(0));
         set("p-title", data["Title"]);
         set("p-id", data["Caregiver ID"]);
         set("p-app-status", data["App Status"]);
 
-        // Status
         const badge = document.getElementById("p-status-badge");
         badge.textContent = data["Status"];
         badge.className = `px-3 py-1 rounded-full text-xs font-bold ${
@@ -188,36 +191,36 @@
             data["City"] || ""
           } ${data["Zip"] || ""}`
         );
-        set(
-          "p-dob",
-          `${
-            data["DOB"] ? new Date(data["DOB"]).toLocaleDateString() : "--"
-          } (${data["Gender"] || "--"})`
-        );
+        set("p-dob", `${data["DOB"] || "--"} (${data["Gender"] || "--"})`);
         set(
           "p-transport",
           `License: ${data["Driver License?"]} | Car: ${data["Has Car?"]}`
         );
 
-        // Skills/Tags
         const makeTags = (containerId, str) => {
           const div = document.getElementById(containerId);
           div.innerHTML = "";
           if (!str) return;
-          str.split(",").forEach((s) => {
-            const span = document.createElement("span");
-            span.className =
-              "bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200";
-            span.textContent = s.trim();
-            div.appendChild(span);
-          });
+          str
+            .toString()
+            .split(",")
+            .forEach((s) => {
+              const span = document.createElement("span");
+              span.className =
+                "bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200";
+              span.textContent = s.trim();
+              div.appendChild(span);
+            });
         };
         makeTags("p-certs", data["Certifications"]);
         makeTags("p-days", data["Schedule Desired"]);
 
         set("p-skills", data["Skills Checklist"]);
         set("p-langs", data["Languages"]);
-        set("p-edu", data["High School"] || data["College"]);
+        set(
+          "p-edu",
+          data["High School"] || data["College"] || data["Other Edu"]
+        );
         set("p-emp", data["Employer 1"]);
 
         set("p-hours", data["Hours Avail"]);
@@ -239,14 +242,12 @@
       .getCaregiverDetails(id);
   }
 
-  // -- Form Submission Logic --
   function submitForm(e) {
     e.preventDefault();
     const btn = document.getElementById("submitBtn");
     btn.disabled = true;
     btn.textContent = "Processing...";
 
-    // ... (Collect data logic same as before) ...
     const form = document.getElementById("caregiverForm");
     const formData = new FormData(form);
     const data = {};
@@ -260,7 +261,7 @@
           Swal.fire("Success", "Caregiver Added", "success");
           form.reset();
           switchCgView("list");
-          loadCaregiverList(); // Refresh table
+          loadCaregiverList();
         } else {
           Swal.fire("Error", res.message, "error");
         }
@@ -268,7 +269,6 @@
       .handleCaregiverSubmission(data);
   }
 
-  // -- Dashboard Stats Logic --
   function loadDashboardStats() {
     google.script.run
       .withSuccessHandler((stats) => {
@@ -280,7 +280,6 @@
       .getDashboardStats();
   }
 
-  // Initial Load
   window.onload = function () {
     loadDashboardStats();
   };
