@@ -4,6 +4,7 @@
   let cgFiltered = [];
   let cgCurrentPage = 1;
   const cgRowsPerPage = 5;
+  let currentProfileId = null;
 
   // -- Navigation --
   const originalNavigate = window.navigate || function () {};
@@ -149,19 +150,19 @@
     const btn = document.getElementById(btnId);
     const text = document.getElementById(textId);
 
-    // Safety check: if icon missing (HTML mismatch), stop here
     if (!icon) return;
 
     if (
-      status === "Done" ||
       status === "Yes" ||
-      status === "Application Completed"
+      status === "Application Completed" ||
+      status === "Done"
     ) {
+      // SUCCESS
       icon.className =
         "w-12 h-12 rounded-full bg-[#65c027] text-white flex items-center justify-center text-xl font-bold border-4 border-white transition-colors shadow-lg";
       icon.innerHTML = '<i class="ph ph-check"></i>';
       if (btn) {
-        btn.textContent = "Completed";
+        btn.textContent = "Passed";
         btn.disabled = true;
         btn.className =
           "mt-1 text-xs px-2 py-1 rounded bg-green-50 text-green-600 font-bold";
@@ -170,7 +171,19 @@
         text.textContent = "Completed";
         text.className = "text-xs text-green-600 font-bold";
       }
+    } else if (status === "No") {
+      // FAILED / NO
+      icon.className =
+        "w-12 h-12 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-xl font-bold border-4 border-white transition-colors";
+      icon.innerHTML = '<i class="ph ph-x"></i>';
+      if (btn) {
+        btn.textContent = "Failed";
+        btn.disabled = false;
+        btn.className =
+          "mt-1 text-xs px-2 py-1 rounded bg-red-50 text-red-600 font-bold hover:bg-red-100 cursor-pointer";
+      }
     } else if (status === "Missing") {
+      // MISSING
       icon.className =
         "w-12 h-12 rounded-full bg-red-500 text-white flex items-center justify-center text-xl font-bold border-4 border-white transition-colors shadow-lg";
       icon.innerHTML = '<i class="ph ph-warning"></i>';
@@ -179,6 +192,7 @@
         text.className = "text-xs text-red-500 font-bold";
       }
     } else {
+      // PENDING
       if (btn) {
         btn.textContent = label;
         btn.disabled = false;
@@ -201,33 +215,54 @@
   function advanceStage(stageNum) {
     if (!currentProfileId) return;
 
+    let title = "";
     let field = "";
-    let val = "";
 
     if (stageNum === 2) {
+      title = "Interview Passed?";
       field = "Interview";
-      val = "Yes";
     }
     if (stageNum === 3) {
+      title = "Background Check Passed?";
       field = "Background";
-      val = "Yes";
     }
     if (stageNum === 4) {
+      title = "Activate Caregiver?";
       field = "Active";
-      val = "Active";
     }
 
-    google.script.run
-      .withSuccessHandler((res) => {
-        if (res.success) {
-          loadProfile(currentProfileId);
-          if (stageNum === 4)
-            Swal.fire("Great!", "Caregiver is now Active!", "success");
-        } else {
-          Swal.fire("Error", res.message, "error");
-        }
-      })
-      .updateCaregiverStage(currentProfileId, field, val);
+    // POPUP FOR YES / NO
+    Swal.fire({
+      title: title,
+      icon: "question",
+      showDenyButton: true,
+      confirmButtonText: "Yes",
+      denyButtonText: "No",
+      confirmButtonColor: "#65c027",
+      denyButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isDismissed) return; // Clicked outside
+
+      let val = result.isConfirmed ? "Yes" : "No";
+
+      // Special logic for Activation
+      if (stageNum === 4) {
+        val = result.isConfirmed ? "Active" : "Inactive";
+      }
+
+      google.script.run
+        .withSuccessHandler((res) => {
+          if (res.success) {
+            loadProfile(currentProfileId);
+            if (stageNum === 4 && val === "Active") {
+              Swal.fire("Success", "Caregiver is now Active!", "success");
+            }
+          } else {
+            Swal.fire("Error", res.message, "error");
+          }
+        })
+        .updateCaregiverStage(currentProfileId, field, val);
+    });
   }
 
   // -- 3. Load Profile --
@@ -256,6 +291,14 @@
         set("p-initials", (data["First Name"] || "U").charAt(0));
         set("p-title", data["Title"]);
         set("p-id", data["Caregiver ID"]);
+
+        // HIDE PIPELINE IF ACTIVE
+        const pipelinePanel = document.getElementById("pipeline-panel");
+        if (data["Status"] === "Active") {
+          if (pipelinePanel) pipelinePanel.classList.add("hidden");
+        } else {
+          if (pipelinePanel) pipelinePanel.classList.remove("hidden");
+        }
 
         const badge = document.getElementById("p-status-badge");
         if (badge) {
@@ -299,7 +342,7 @@
           null,
           "stage-btn-2",
           "stage-icon-2",
-          "Mark Done"
+          "Update"
         );
         updateStageUI(
           3,
@@ -307,10 +350,16 @@
           null,
           "stage-btn-3",
           "stage-icon-3",
-          "Mark Passed"
+          "Update"
         );
 
-        const activeState = data["Status"] === "Active" ? "Done" : "Pending";
+        // Last stage button logic
+        const activeState =
+          data["Status"] === "Active"
+            ? "Done"
+            : data["Status"] === "Inactive"
+            ? "No"
+            : "Pending";
         updateStageUI(
           4,
           activeState,
