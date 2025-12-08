@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <base target="_top">
+    <base target="_top" />
     <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
@@ -12,13 +12,13 @@
     <?!= include('styles'); ?>
   </head>
   <body class="bg-gray-50 text-gray-800 antialiased font-sans">
-
     <!-- Flex Container -->
     <div class="flex h-screen overflow-hidden">
-      
       <!-- Sidebar -->
       <aside class="w-64 bg-white shadow-xl hidden md:flex flex-col z-10">
-        <div class="h-20 flex items-center justify-center border-b border-gray-100">
+        <div
+          class="h-20 flex items-center justify-center border-b border-gray-100"
+        >
           <div class="flex items-center gap-2 text-[#65c027] font-bold text-xl">
             <i class="ph ph-heart-beat text-3xl"></i>
             <span>Allevia Senior Care</span>
@@ -26,24 +26,20 @@
         </div>
 
         <nav class="flex-1 px-4 py-6 space-y-2">
-          <button onclick="navigate('dashboard')" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium">
+          <button
+            onclick="navigate('dashboard')"
+            class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium"
+          >
             <i class="ph ph-squares-four text-xl"></i>
             Dashboard
           </button>
-          
-          <button onclick="navigate('recruitment')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium">
-            <i class="ph ph-user-plus text-xl"></i>
-            Caregiver
-          </button>
-          
-          <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium hover:bg-gray-50">
-            <i class="ph ph-users text-xl"></i>
-            Staff List
-          </button>
-          
-          <button class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium hover:bg-gray-50">
-            <i class="ph ph-gear text-xl"></i>
-            Settings
+
+          <button
+            onclick="navigate('caregivers')"
+            class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium"
+          >
+            <i class="ph ph-users-three text-xl"></i>
+            Caregivers
           </button>
         </nav>
 
@@ -62,19 +58,19 @@
 
       <!-- Main Content -->
       <main class="flex-1 overflow-y-auto bg-gray-50 p-8 relative">
-        
         <!-- Mobile Header -->
         <div class="md:hidden flex items-center justify-between mb-6">
           <span class="text-[#65c027] font-bold text-lg">CareAdmin</span>
-          <button class="p-2 text-gray-600"><i class="ph ph-list text-2xl"></i></button>
+          <button class="p-2 text-gray-600">
+            <i class="ph ph-list text-2xl"></i>
+          </button>
         </div>
 
         <!-- VIEWS -->
         <div id="content-area">
-           <?!= include('page-dashboard'); ?>
-           <?!= include('page-recruitment'); ?>
+          <?!= include('page-dashboard'); ?>
+          <?!= include('page-caregivers'); ?>
         </div>
-
       </main>
     </div>
 

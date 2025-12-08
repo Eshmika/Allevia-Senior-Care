@@ -1,89 +1,287 @@
 <script>
-  // -- Navigation Logic --
-  function navigate(viewName) {
-    // 1. Update Navigation Styles
-    document.querySelectorAll('.nav-item').forEach(el => {
-      el.classList.remove('active');
+  // -- Global State for Caregivers --
+  let cgData = [];
+  let cgFiltered = [];
+  let cgCurrentPage = 1;
+  const cgRowsPerPage = 5;
+
+  // -- Navigation Extension --
+  const originalNavigate = window.navigate || function () {};
+  window.navigate = function (viewName) {
+    // Standard nav logic
+    document
+      .querySelectorAll(".nav-item")
+      .forEach((el) => el.classList.remove("active"));
+    document
+      .querySelectorAll(".view-section")
+      .forEach((el) => el.classList.remove("active"));
+
+    // Add active class (Hack for simple demo, use ID match in real app)
+    const btn = document.querySelector(
+      `button[onclick="navigate('${viewName}')"]`
+    );
+    if (btn) btn.classList.add("active");
+
+    const target = document.getElementById("view-" + viewName);
+    if (target) target.classList.add("active");
+
+    // Load data if entering caregivers
+    if (viewName === "caregivers") {
+      loadCaregiverList();
+      switchCgView("list"); // Default to list
+    } else if (viewName === "dashboard") {
+      loadDashboardStats();
+    }
+  };
+
+  // -- Caregiver Sub-View Switching --
+  function switchCgView(subView) {
+    document.getElementById("cg-subview-list").classList.add("hidden");
+    document.getElementById("cg-subview-add").classList.add("hidden");
+    document.getElementById("cg-subview-profile").classList.add("hidden");
+
+    document.getElementById("cg-subview-" + subView).classList.remove("hidden");
+  }
+
+  // -- Data Loading --
+  function loadCaregiverList() {
+    document.getElementById("cgTableBody").innerHTML =
+      '<tr><td colspan="6" class="p-4 text-center text-gray-400">Loading...</td></tr>';
+    google.script.run
+      .withSuccessHandler((data) => {
+        cgData = data;
+        renderCgTable();
+      })
+      .getCaregiverList();
+  }
+
+  // -- Table Rendering Logic --
+  function renderCgTable() {
+    const search = document.getElementById("cgSearch").value.toLowerCase();
+    const statusFilter = document.getElementById("cgFilterStatus").value;
+
+    // Filter
+    cgFiltered = cgData.filter((item) => {
+      const matchSearch =
+        item.name.toLowerCase().includes(search) ||
+        item.email.toLowerCase().includes(search) ||
+        item.id.toLowerCase().includes(search);
+      const matchStatus =
+        statusFilter === "All" || item.status === statusFilter;
+      return matchSearch && matchStatus;
     });
-    // Add active class based on index (simplified)
-    const btnMap = {'dashboard': 0, 'recruitment': 1};
-    document.querySelectorAll('.nav-item')[btnMap[viewName]].classList.add('active');
 
-    // 2. Hide all views
-    document.querySelectorAll('.view-section').forEach(el => {
-      el.classList.remove('active');
-    });
+    // Pagination
+    const totalPages = Math.ceil(cgFiltered.length / cgRowsPerPage);
+    if (cgCurrentPage > totalPages) cgCurrentPage = 1;
 
-    // 3. Show target view
-    document.getElementById('view-' + viewName).classList.add('active');
+    const start = (cgCurrentPage - 1) * cgRowsPerPage;
+    const end = start + cgRowsPerPage;
+    const pageData = cgFiltered.slice(start, end);
 
-    // 4. Refresh data if needed
-    if(viewName === 'dashboard') loadDashboardStats();
+    // Build HTML
+    const tbody = document.getElementById("cgTableBody");
+    tbody.innerHTML = "";
+
+    if (pageData.length === 0) {
+      tbody.innerHTML =
+        '<tr><td colspan="6" class="p-8 text-center text-gray-400">No caregivers found.</td></tr>';
+    } else {
+      pageData.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.className =
+          "hover:bg-gray-50 transition-colors cursor-pointer group";
+        tr.onclick = () => loadProfile(row.id);
+
+        // Status Badge Color
+        let statusColor = "bg-gray-100 text-gray-600";
+        if (row.status === "Active")
+          statusColor = "bg-green-100 text-green-700";
+        if (row.status === "Inactive") statusColor = "bg-red-100 text-red-700";
+        if (row.status === "Vacation")
+          statusColor = "bg-orange-100 text-orange-700";
+
+        tr.innerHTML = `
+          <td class="p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-500">
+                ${row.name.charAt(0)}
+              </div>
+              <div>
+                <p class="font-bold text-gray-800">${row.name}</p>
+                <p class="text-xs text-gray-400">${row.id}</p>
+              </div>
+            </div>
+          </td>
+          <td class="p-4 text-gray-600">${row.title}</td>
+          <td class="p-4">
+             <div class="text-xs text-gray-500">${row.email}</div>
+             <div class="text-xs text-gray-400">${row.phone}</div>
+          </td>
+          <td class="p-4 text-gray-600">${row.city}</td>
+          <td class="p-4">
+            <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
+          row.status
+        }</span>
+          </td>
+          <td class="p-4 text-right">
+             <i class="ph ph-caret-right text-gray-300 group-hover:text-[#65c027]"></i>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Update Controls
+    document.getElementById("cgPageInfo").textContent = `Showing ${
+      pageData.length > 0 ? start + 1 : 0
+    }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
+    document.getElementById("btnPrev").disabled = cgCurrentPage === 1;
+    document.getElementById("btnNext").disabled =
+      cgCurrentPage >= totalPages || totalPages === 0;
+  }
+
+  function changeCgPage(dir) {
+    cgCurrentPage += dir;
+    renderCgTable();
+  }
+
+  // -- Profile Logic --
+  function loadProfile(id) {
+    switchCgView("profile");
+    document.getElementById("profileLoading").classList.remove("hidden");
+    document.getElementById("profileContent").classList.add("hidden");
+
+    google.script.run
+      .withSuccessHandler((data) => {
+        if (!data) {
+          Swal.fire("Error", "Caregiver not found", "error");
+          switchCgView("list");
+          return;
+        }
+
+        // Populate Fields (Helper to safe set text)
+        const set = (id, val) =>
+          (document.getElementById(id).textContent = val || "--");
+
+        set("p-name", data["First Name"] + " " + data["Last Name"]);
+        set("p-initials", data["First Name"].charAt(0));
+        set("p-title", data["Title"]);
+        set("p-id", data["Caregiver ID"]);
+        set("p-app-status", data["App Status"]);
+
+        // Status
+        const badge = document.getElementById("p-status-badge");
+        badge.textContent = data["Status"];
+        badge.className = `px-3 py-1 rounded-full text-xs font-bold ${
+          data["Status"] === "Active"
+            ? "bg-green-100 text-green-700"
+            : "bg-gray-100 text-gray-600"
+        }`;
+
+        document.getElementById("p-email-btn").href = "mailto:" + data["Email"];
+        set("p-email", data["Email"]);
+        set("p-phone", data["Phone"]);
+        set(
+          "p-address",
+          `${data["Address"] || ""} ${data["Apt"] || ""}, ${
+            data["City"] || ""
+          } ${data["Zip"] || ""}`
+        );
+        set(
+          "p-dob",
+          `${
+            data["DOB"] ? new Date(data["DOB"]).toLocaleDateString() : "--"
+          } (${data["Gender"] || "--"})`
+        );
+        set(
+          "p-transport",
+          `License: ${data["Driver License?"]} | Car: ${data["Has Car?"]}`
+        );
+
+        // Skills/Tags
+        const makeTags = (containerId, str) => {
+          const div = document.getElementById(containerId);
+          div.innerHTML = "";
+          if (!str) return;
+          str.split(",").forEach((s) => {
+            const span = document.createElement("span");
+            span.className =
+              "bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200";
+            span.textContent = s.trim();
+            div.appendChild(span);
+          });
+        };
+        makeTags("p-certs", data["Certifications"]);
+        makeTags("p-days", data["Schedule Desired"]);
+
+        set("p-skills", data["Skills Checklist"]);
+        set("p-langs", data["Languages"]);
+        set("p-edu", data["High School"] || data["College"]);
+        set("p-emp", data["Employer 1"]);
+
+        set("p-hours", data["Hours Avail"]);
+        set("p-times", data["Times Avail"]);
+        set(
+          "p-extra-avail",
+          `Emerg: ${data["Emergency Avail?"]} | Live-In: ${data["Live-in Avail?"]}`
+        );
+
+        set("p-emergency-name", data["Emergency Contact"]);
+        set(
+          "p-emergency-contact",
+          `${data["Emerg. Relation"]} - ${data["Emerg. Phone"]}`
+        );
+
+        document.getElementById("profileLoading").classList.add("hidden");
+        document.getElementById("profileContent").classList.remove("hidden");
+      })
+      .getCaregiverDetails(id);
   }
 
   // -- Form Submission Logic --
   function submitForm(e) {
     e.preventDefault();
-    
-    const form = document.getElementById('caregiverForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const btnText = document.getElementById('btnText');
-    const btnSpinner = document.getElementById('btnSpinner');
+    const btn = document.getElementById("submitBtn");
+    btn.disabled = true;
+    btn.textContent = "Processing...";
 
-    // Collect Data
+    // ... (Collect data logic same as before) ...
+    const form = document.getElementById("caregiverForm");
     const formData = new FormData(form);
     const data = {};
-    formData.forEach((value, key) => data[key] = value);
+    formData.forEach((value, key) => (data[key] = value));
 
-    // UI Loading State
-    submitBtn.disabled = true;
-    btnText.textContent = "Processing...";
-    btnSpinner.classList.remove('hidden');
-
-    // Call Backend
     google.script.run
-      .withSuccessHandler(response => {
-        submitBtn.disabled = false;
-        btnText.textContent = "Create & Send";
-        btnSpinner.classList.add('hidden');
-
-        if (response.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: `Caregiver created with ID: ${response.id}. Email sent!`,
-            confirmButtonColor: '#65c027'
-          });
+      .withSuccessHandler((res) => {
+        btn.disabled = false;
+        btn.textContent = "Create & Send";
+        if (res.success) {
+          Swal.fire("Success", "Caregiver Added", "success");
           form.reset();
+          switchCgView("list");
+          loadCaregiverList(); // Refresh table
         } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.message
-          });
+          Swal.fire("Error", res.message, "error");
         }
-      })
-      .withFailureHandler(err => {
-        submitBtn.disabled = false;
-        btnText.textContent = "Create & Send";
-        btnSpinner.classList.add('hidden');
-        Swal.fire('Error', 'Server connection failed.', 'error');
       })
       .handleCaregiverSubmission(data);
   }
 
   // -- Dashboard Stats Logic --
   function loadDashboardStats() {
-    google.script.run.withSuccessHandler(stats => {
-      document.getElementById('stat-total').textContent = stats.total;
-      document.getElementById('stat-active').textContent = stats.active;
-      document.getElementById('stat-inactive').textContent = stats.inactive;
-      document.getElementById('stat-stna').textContent = stats.stna;
-    }).getDashboardStats();
+    google.script.run
+      .withSuccessHandler((stats) => {
+        document.getElementById("stat-total").textContent = stats.total;
+        document.getElementById("stat-active").textContent = stats.active;
+        document.getElementById("stat-inactive").textContent = stats.inactive;
+        document.getElementById("stat-stna").textContent = stats.stna;
+      })
+      .getDashboardStats();
   }
 
   // Initial Load
-  window.onload = function() {
+  window.onload = function () {
     loadDashboardStats();
   };
 </script>
