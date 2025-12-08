@@ -7,9 +7,7 @@ function getOrCreateSheet() {
 
   if (!sheet) {
     sheet = ss.insertSheet(SHEET_NAME);
-    // Huge header list based on PDF
     const headers = [
-      // 1. Admin Basics
       "Caregiver ID",
       "First Name",
       "Last Name",
@@ -19,8 +17,6 @@ function getOrCreateSheet() {
       "Status",
       "Created At",
       "App Status",
-
-      // 2. Personal & Legal
       "Middle Int",
       "DOB",
       "Gender",
@@ -32,69 +28,50 @@ function getOrCreateSheet() {
       "Zip",
       "US Eligible?",
       "US Citizen?",
-
-      // 3. Transportation
       "Driver License?",
       "License State",
       "License #",
       "Has Car?",
       "Car Make/Model",
       "Has Insurance?",
-
-      // 4. Position & Availability
       "Hours Avail",
       "Schedule Desired",
       "Times Avail",
       "Emergency Avail?",
       "Live-in Avail?",
-
-      // 5. Certs & Skills
       "Certifications",
       "Skills Checklist",
       "Languages",
-
-      // 6. Education
       "High School",
       "HS Degree",
       "College",
       "College Degree",
       "Other Edu",
       "Other Degree",
-
-      // 7. Employment History (JSON String for simplicity or summary)
       "Employer 1",
       "Employer 2",
       "Employer 3",
-
-      // 8. References & Emergency
       "Reference 1",
       "Reference 2",
       "Emergency Contact",
       "Emerg. Phone",
       "Emerg. Relation",
-
-      // 9. Legal & Signature
       "Criminal Conviction?",
       "Conviction Details",
       "Signature Name",
       "Signature Date",
       "Agreed to Terms",
     ];
-
-    const range = sheet.getRange(1, 1, 1, headers.length);
-    range.setValues([headers]);
-    range
-      .setBackground(PRIMARY_COLOR)
-      .setFontColor("white")
-      .setFontWeight("bold")
-      .setWrapStrategy(SpreadsheetApp.WrapStrategy.WRAP);
-    sheet.setFrozenRows(1);
-    sheet.setFrozenColumns(1);
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   }
   return sheet;
 }
 
-// ADMIN CREATES CAREGIVER
+// Helper to normalize IDs (removes spaces, makes lowercase)
+function normalizeId(id) {
+  return String(id).toLowerCase().replace(/\s+/g, "");
+}
+
 function handleCaregiverSubmission(data) {
   const sheet = getOrCreateSheet();
   const lastRow = sheet.getLastRow();
@@ -127,20 +104,19 @@ function handleCaregiverSubmission(data) {
   return { success: true, message: "Sent!", id: newId };
 }
 
-// CAREGIVER FILLS APPLICATION
 function submitFullApplication(form) {
   try {
     const sheet = getOrCreateSheet();
-    const id = String(form.caregiverId).trim();
+    const targetId = normalizeId(form.caregiverId); // Use Normalizer
 
-    // Improved Row Finding
     const data = sheet.getDataRange().getValues();
-    // Find index where column 0 matches ID
-    const rowIndex = data.findIndex((r) => String(r[0]).trim() === id);
+    // Use Normalizer to find row
+    const rowIndex = data.findIndex((r) => normalizeId(r[0]) === targetId);
 
     if (rowIndex === -1) return { success: false, message: "ID not found" };
-    const r = rowIndex + 1; // Convert 0-based array index to 1-based Sheet row
+    const r = rowIndex + 1;
 
+    // (Helper functions unchanged)
     const join = (arr) => (Array.isArray(arr) ? arr.join(", ") : arr || "");
     const empStr = (e) =>
       e ? `${e.company || ""} ${e.title ? "(" + e.title + ")" : ""}` : "";
@@ -160,103 +136,101 @@ function submitFullApplication(form) {
         form.zip || "",
         form.usEligible || "No",
         form.usCitizen || "No",
-
         form.hasLicense || "No",
         form.licenseState || "",
         form.licenseNum || "",
         form.hasCar || "No",
         form.carModel || "",
         form.hasInsurance || "No",
-
         join(form.hoursAvail),
         join(form.scheduleDays),
         join(form.timesAvail),
         form.emergencyAvail || "No",
         form.liveInAvail || "No",
-
         join(form.certs),
         join(form.skills),
         join(form.languages),
-
-        `${form.hsName} - ${form.hsCity}`,
+        `${form.hsName || ""} ${form.hsCity ? "- " + form.hsCity : ""}`,
         form.hsDegree,
-        `${form.colName} - ${form.colCity}`,
+        `${form.colName || ""} ${form.colCity ? "- " + form.colCity : ""}`,
         form.colDegree,
         form.otherEdu,
         form.otherDegree,
-
         empStr(form.emp1),
         empStr(form.emp2),
         empStr(form.emp3),
-
         refStr(form.ref1),
         refStr(form.ref2),
         form.emName,
         form.emPhone,
         form.emRel,
-
         form.criminalHistory || "No",
         form.criminalExplain || "",
         form.signName,
-        new Date(), // Sign Date
+        new Date(),
         "Yes",
       ],
     ];
 
-    // 1. Update Application Status (Col 9)
     sheet.getRange(r, 9).setValue("Application Completed");
-
-    // 2. Update Rest of Data (Col 10 onwards)
     sheet.getRange(r, 10, 1, dataToUpdate[0].length).setValues(dataToUpdate);
-
     return { success: true };
   } catch (e) {
     return { success: false, message: e.toString() };
   }
 }
 
-/**
- * Fetches summary list for the table
- */
 function getCaregiverList() {
   const sheet = getOrCreateSheet();
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return [];
 
+  // Get all data
   const data = sheet
     .getRange(2, 1, lastRow - 1, sheet.getLastColumn())
     .getValues();
 
   return data
+    .filter((row) => row[0] !== "" && row[0] !== null) // Safety check for empty rows
     .map((row) => ({
-      id: String(row[0]),
+      id: String(row[0]), // Send exact ID from sheet
       name: row[1] + " " + row[2],
       phone: row[3],
       email: row[4],
       title: row[5],
       status: row[6],
-      city: row[15] || "N/A",
+      city: row[15] || "--",
     }))
     .reverse();
 }
 
-/**
- * Fetches full details for a single caregiver
- */
+// --- FIXED FUNCTION ---
 function getCaregiverDetails(id) {
   const sheet = getOrCreateSheet();
   const data = sheet.getDataRange().getValues();
   const headers = data[0];
 
-  const searchId = String(id).trim();
+  // 1. Normalize the ID we are looking for (remove spaces, lowercase)
+  const searchId = normalizeId(id);
 
-  const row = data.find((r) => String(r[0]).trim() === searchId);
+  console.log("Searching for: " + searchId); // Log for debugging
 
-  if (!row) return null;
+  // 2. Find row by normalizing the sheet data too
+  const row = data.find((r, i) => {
+    if (i === 0) return false; // Skip header
+    const sheetId = normalizeId(r[0]);
+    return sheetId === searchId;
+  });
+
+  if (!row) {
+    console.log("Error: ID not found.");
+    return null;
+  }
 
   let caregiver = {};
   headers.forEach((header, index) => {
-    caregiver[header] = row[index];
+    caregiver[header] =
+      row[index] === "" || row[index] === undefined ? "" : row[index];
   });
 
   return caregiver;
@@ -267,7 +241,7 @@ function getDashboardStats() {
   if (sheet.getLastRow() <= 1)
     return { total: 0, completed: 0, active: 0, inactive: 0, stna: 0 };
 
-  const data = sheet.getRange(2, 6, sheet.getLastRow() - 1, 4).getValues(); // Get Title(6), Status(7), ... App Status(9)
+  const data = sheet.getRange(2, 6, sheet.getLastRow() - 1, 4).getValues();
 
   let stats = {
     total: data.length,
@@ -278,14 +252,10 @@ function getDashboardStats() {
   };
 
   data.forEach((row) => {
-    const title = row[0];
-    const status = row[1];
-    const appStatus = row[3];
-
-    if (status === "Active") stats.active++;
-    if (status === "Inactive") stats.inactive++;
-    if (title === "STNA") stats.stna++;
-    if (appStatus === "Application Completed") stats.completed++;
+    if (row[1] === "Active") stats.active++;
+    if (row[1] === "Inactive") stats.inactive++;
+    if (row[0] === "STNA") stats.stna++;
+    if (row[3] === "Application Completed") stats.completed++;
   });
 
   return stats;
