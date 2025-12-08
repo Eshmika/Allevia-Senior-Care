@@ -101,12 +101,16 @@ function handleCaregiverSubmission(data) {
   let newId = "CG-1001";
 
   if (lastRow > 1) {
-    const lastIdStr = sheet.getRange(lastRow, 1).getValue();
-    const lastNum = parseInt(lastIdStr.split("-")[1] || "1000");
-    newId = "CG-" + (lastNum + 1);
+    const lastIdStr = sheet.getRange(lastRow, 1).getValue().toString();
+    const parts = lastIdStr.split("-");
+    if (parts.length > 1) {
+      const lastNum = parseInt(parts[1]);
+      if (!isNaN(lastNum)) {
+        newId = "CG-" + (lastNum + 1);
+      }
+    }
   }
 
-  // Save basic info
   sheet.appendRow([
     newId,
     data.firstName,
@@ -123,28 +127,26 @@ function handleCaregiverSubmission(data) {
   return { success: true, message: "Sent!", id: newId };
 }
 
-// CAREGIVER FILLS APPLICATION (UPDATES ROW)
+// CAREGIVER FILLS APPLICATION
 function submitFullApplication(form) {
   try {
     const sheet = getOrCreateSheet();
-    const id = form.caregiverId;
+    const id = String(form.caregiverId).trim();
 
-    const ids = sheet
-      .getRange(2, 1, sheet.getLastRow() - 1, 1)
-      .getValues()
-      .flat();
-    const rowIndex = ids.indexOf(id);
+    // Improved Row Finding
+    const data = sheet.getDataRange().getValues();
+    // Find index where column 0 matches ID
+    const rowIndex = data.findIndex((r) => String(r[0]).trim() === id);
 
     if (rowIndex === -1) return { success: false, message: "ID not found" };
-    const r = rowIndex + 2;
+    const r = rowIndex + 1; // Convert 0-based array index to 1-based Sheet row
 
-    // Helper to join arrays if they exist
     const join = (arr) => (Array.isArray(arr) ? arr.join(", ") : arr || "");
-    const empStr = (e) => (e ? `${e.company} (${e.title})` : "");
-    const refStr = (r) => (r ? `${r.name} - ${r.phone}` : "");
+    const empStr = (e) =>
+      e ? `${e.company || ""} ${e.title ? "(" + e.title + ")" : ""}` : "";
+    const refStr = (r) =>
+      r ? `${r.name || ""} ${r.phone ? "- " + r.phone : ""}` : "";
 
-    // Map form data to columns starting at Col 10 (Middle Int)
-    // Be very careful with order matching headers above
     const dataToUpdate = [
       [
         form.middleName || "",
@@ -227,7 +229,7 @@ function getCaregiverList() {
 
   return data
     .map((row) => ({
-      id: row[0],
+      id: String(row[0]),
       name: row[1] + " " + row[2],
       phone: row[3],
       email: row[4],
@@ -246,11 +248,12 @@ function getCaregiverDetails(id) {
   const data = sheet.getDataRange().getValues();
   const headers = data[0];
 
-  // Find row
-  const row = data.find((r) => r[0] === id);
+  const searchId = String(id).trim();
+
+  const row = data.find((r) => String(r[0]).trim() === searchId);
+
   if (!row) return null;
 
-  // Convert array to object key-value based on headers
   let caregiver = {};
   headers.forEach((header, index) => {
     caregiver[header] = row[index];
