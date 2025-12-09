@@ -626,6 +626,15 @@
               <option value="PCA">PCA</option>
             </select>
           </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Status</label
+            ><select name="status" id="edit-status" class="input-field">
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="No Call">No Call</option>
+              <option value="Vacation">Vacation</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -645,6 +654,28 @@
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700"
+              >License State</label
+            >
+            <input
+              type="text"
+              name="licenseState"
+              id="edit-licenseState"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >License #</label
+            >
+            <input
+              type="text"
+              name="licenseNumber"
+              id="edit-licenseNumber"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
               >Has Car?</label
             ><select name="hasCar" id="edit-hasCar" class="input-field">
               <option value="Yes">Yes</option>
@@ -660,6 +691,14 @@
               id="edit-carModel"
               class="input-field"
             />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Has Insurance?</label
+            ><select name="hasInsurance" id="edit-hasInsurance" class="input-field">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
           </div>
         </div>
       </div>
@@ -742,6 +781,18 @@
                 Overnights</label
               >
             </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Emergency Avail?</label
+            ><select
+              name="emergencyAvail"
+              id="edit-emergencyAvail"
+              class="input-field"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700"
