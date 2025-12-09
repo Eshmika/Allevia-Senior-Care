@@ -165,15 +165,7 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >Status</label
-            >
-            <select name="status" required class="input-field bg-white">
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="NoCall">No Call / No Show</option>
-              <option value="Vacation">Vacation</option>
-            </select>
+            <input type="hidden" name="status" value="Inactive" />
           </div>
         </div>
         <div
@@ -197,14 +189,24 @@
 
   <!-- SUB-VIEW: PROFILE -->
   <div id="cg-subview-profile" class="hidden">
-    <div class="mb-6 flex items-center gap-4">
+    <div class="mb-6 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <button
+          onclick="switchCgView('list')"
+          class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
+        >
+          <i class="ph ph-arrow-left text-xl"></i>
+        </button>
+        <h1 class="text-2xl font-bold text-gray-800">Caregiver Profile</h1>
+      </div>
+      <!-- EDIT BUTTON (Hidden by default, shown via JS) -->
       <button
-        onclick="switchCgView('list')"
-        class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
+        id="btn-edit-profile"
+        onclick="openEditMode()"
+        class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition flex items-center gap-2"
       >
-        <i class="ph ph-arrow-left text-xl"></i>
+        <i class="ph ph-pencil-simple"></i> Edit Profile
       </button>
-      <h1 class="text-2xl font-bold text-gray-800">Caregiver Profile</h1>
     </div>
 
     <div id="profileLoading" class="text-center py-20 text-gray-400">
@@ -445,5 +447,524 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- NEW: EDIT PROFILE VIEW -->
+  <div id="cg-subview-edit" class="hidden">
+    <div class="mb-6 flex items-center gap-4">
+      <button
+        onclick="cancelEdit()"
+        class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
+      >
+        <i class="ph ph-x text-xl"></i>
+      </button>
+      <h1 class="text-2xl font-bold text-gray-800">Edit Profile</h1>
+    </div>
+
+    <form
+      id="editProfileForm"
+      onsubmit="submitEditProfile(event)"
+      class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-8"
+    >
+      <input type="hidden" name="caregiverId" id="edit-id" />
+      <input type="hidden" name="signName" value="Admin Edit" />
+      <!-- Bypass signature -->
+
+      <!-- 1. General Info -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          General Info
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >First Name</label
+            ><input
+              type="text"
+              name="firstName"
+              id="edit-firstName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Middle Initial</label
+            ><input
+              type="text"
+              name="middleName"
+              id="edit-middleName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Last Name</label
+            ><input
+              type="text"
+              name="lastName"
+              id="edit-lastName"
+              class="input-field"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">DOB</label
+            ><input type="date" name="dob" id="edit-dob" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Gender</label
+            ><select name="gender" id="edit-gender" class="input-field">
+              <option value="F">Female</option>
+              <option value="M">Male</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">SSN #</label
+            ><input type="text" name="ssn" id="edit-ssn" class="input-field" />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700"
+              >Address</label
+            ><input
+              type="text"
+              name="address"
+              id="edit-address"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Apt</label
+            ><input type="text" name="apt" id="edit-apt" class="input-field" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">City</label
+            ><input
+              type="text"
+              name="city"
+              id="edit-city"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">State</label
+            ><input
+              type="text"
+              name="state"
+              id="edit-state"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Zip</label
+            ><input type="text" name="zip" id="edit-zip" class="input-field" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Phone</label
+            ><input
+              type="tel"
+              name="phone"
+              id="edit-phone"
+              class="input-field"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Email</label
+            ><input
+              type="email"
+              name="email"
+              id="edit-email"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Transportation -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Transportation
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Has License?</label
+            ><select name="hasLicense" id="edit-hasLicense" class="input-field">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Has Car?</label
+            ><select name="hasCar" id="edit-hasCar" class="input-field">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Car Model</label
+            ><input
+              type="text"
+              name="carModel"
+              id="edit-carModel"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Availability -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Availability
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Hours</label>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <label
+                ><input type="checkbox" name="hoursAvail" value="1-4 hours" />
+                1-4</label
+              >
+              <label
+                ><input type="checkbox" name="hoursAvail" value="5-8 hours" />
+                5-8</label
+              >
+              <label
+                ><input type="checkbox" name="hoursAvail" value="9-12 hours" />
+                9-12</label
+              >
+              <label
+                ><input type="checkbox" name="hoursAvail" value="More" />
+                More</label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Schedule Days</label
+            >
+            <div class="flex flex-wrap gap-2 mt-2">
+              <label
+                ><input type="checkbox" name="scheduleDays" value="MON" />
+                M</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="TUE" />
+                T</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="WED" />
+                W</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="THU" />
+                Th</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="FRI" />
+                F</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="SAT" />
+                S</label
+              >
+              <label
+                ><input type="checkbox" name="scheduleDays" value="SUN" />
+                Su</label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Times</label>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <label
+                ><input type="checkbox" name="timesAvail" value="Mornings" />
+                Mornings</label
+              >
+              <label
+                ><input type="checkbox" name="timesAvail" value="Evenings" />
+                Evenings</label
+              >
+              <label
+                ><input type="checkbox" name="timesAvail" value="Overnights" />
+                Overnights</label
+              >
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Live-in Avail?</label
+            ><select
+              name="liveInAvail"
+              id="edit-liveInAvail"
+              class="input-field"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Skills & Certs -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Skills & Certifications
+        </h2>
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Certifications</label
+        >
+        <div class="flex flex-wrap gap-4 mb-4">
+          <label
+            ><input type="checkbox" name="certs" value="CPR & First Aid" /> CPR
+            & First Aid</label
+          >
+          <label
+            ><input type="checkbox" name="certs" value="Geriatric Aide" />
+            Geriatric Aide</label
+          >
+          <label
+            ><input type="checkbox" name="certs" value="Medication Aide" />
+            Medication Aide</label
+          >
+          <label
+            ><input type="checkbox" name="certs" value="PCT" /> Patient Care
+            Tech (PCT)</label
+          >
+          <label><input type="checkbox" name="certs" value="CNA" /> CNA</label>
+          <label><input type="checkbox" name="certs" value="HHA" /> HHA</label>
+          <label
+            ><input type="checkbox" name="certs" value="LPN" /> Licensed
+            Practical Nurse (LPN)</label
+          >
+          <label><input type="checkbox" name="certs" value="RN" /> RN</label>
+        </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Skills</label
+        >
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <label
+            ><input type="checkbox" name="skills" value="Bathing" />
+            Bathing/Showering</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Ambulating" />
+            Ambulating</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Food Prep" /> Food
+            Preparation</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Meds" /> Medication
+            Assist</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Bed-bath" />
+            Bed-bath</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Transferring" />
+            Transferring</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Meal Planning" /> Meal
+            Planning</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Combative" />
+            Combative</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Oral Hygiene" /> Oral
+            Hygiene</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Transportation" />
+            Transportation</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Nutrition Training" />
+            Nutrition Training</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Nutrition Training" />
+            Nutrition Training</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Bed-bound" />
+            Bed-bound</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Dressing" />
+            Dressing</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Eating Assistance" />
+            Eating Assistance</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Eating Assistance" />
+            Eating Assistance</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Dementia" />
+            Dementia</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Toileting" />
+            Toileting</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Parkinson’s" />
+            Parkinson’s</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Bedpan" />
+            Bedpan</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Hospital Bed" />
+            Hospital Bed</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Bed Linen Change" />
+            Bed Linen Change</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Paralyzed" />
+            Paralyzed</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Foley Catheter care" />
+            Foley Catheter care</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Shower Chair" /> Shower
+            Chair</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="skills"
+              value="Linen Change (person in bed)"
+            />
+            Linen Change (person in bed)</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="skills"
+              value="Stroke / Heart Attack"
+            />
+            Stroke / Heart Attack</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Skin Care" /> Skin
+            Care</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Wheelchair" />
+            Wheelchair</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Laundry" />
+            Laundry</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Diabetes" />
+            Diabetes</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Shaving" />
+            Shaving</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Shaving" />
+            Shaving</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Hoyer Lift" /> Hoyer
+            Lift</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Dusting / Vacuuming" />
+            Dusting / Vacuuming</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Cancers" />
+            Cancers</label
+          >
+          <label
+            ><input type="checkbox" name="skills" value="Gait Belt" /> Gait
+            Belt</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              name="skills"
+              value="Light Housework / Cleaning"
+            />
+            Light Housework / Cleaning</label
+          >
+        </div>
+      </div>
+
+      <!-- 5. Emergency -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Emergency Contact
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Name</label
+            ><input
+              type="text"
+              name="emName"
+              id="edit-emName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Phone</label
+            ><input
+              type="text"
+              name="emPhone"
+              id="edit-emPhone"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Relation</label
+            ><input
+              type="text"
+              name="emRel"
+              id="edit-emRel"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
+        <button type="submit" id="saveProfileBtn" class="flex-1 btn-primary">
+          Save Changes
+        </button>
+        <button
+          type="button"
+          onclick="cancelEdit()"
+          class="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
   </div>
 </div>

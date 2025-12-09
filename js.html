@@ -5,6 +5,7 @@
   let cgCurrentPage = 1;
   const cgRowsPerPage = 5;
   let currentProfileId = null;
+  let currentProfileData = null;
 
   // -- Navigation --
   const originalNavigate = window.navigate || function () {};
@@ -38,6 +39,7 @@
     document.getElementById("cg-subview-list").classList.add("hidden");
     document.getElementById("cg-subview-add").classList.add("hidden");
     document.getElementById("cg-subview-profile").classList.add("hidden");
+    document.getElementById("cg-subview-edit").classList.add("hidden");
     document.getElementById("cg-subview-" + subView).classList.remove("hidden");
   }
 
@@ -142,6 +144,114 @@
   function changeCgPage(dir) {
     cgCurrentPage += dir;
     renderCgTable();
+  }
+
+  // --- EDIT PROFILE LOGIC (NEW) ---
+
+  function openEditMode() {
+    if (!currentProfileData) return;
+    switchCgView("edit");
+    const d = currentProfileData;
+
+    // 1. Fill Text Inputs (Map Sheet Keys to Input IDs)
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val || "";
+    };
+
+    setVal("edit-id", d["Caregiver ID"]);
+    setVal("edit-firstName", d["First Name"]);
+    setVal("edit-lastName", d["Last Name"]);
+    setVal("edit-middleName", d["Middle Int"]);
+
+    // Date Handling
+    if (d["DOB"]) {
+      const date = new Date(d["DOB"]);
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, "0");
+      const dd = String(date.getDate()).padStart(2, "0");
+      setVal("edit-dob", `${yyyy}-${mm}-${dd}`);
+    }
+
+    setVal("edit-gender", d["Gender"]);
+    setVal("edit-ssn", d["SSN"]);
+    setVal("edit-address", d["Address"]);
+    setVal("edit-apt", d["Apt"]);
+    setVal("edit-city", d["City"]);
+    setVal("edit-state", d["State"]);
+    setVal("edit-zip", d["Zip"]);
+    setVal("edit-phone", d["Phone"]);
+    setVal("edit-email", d["Email"]);
+
+    setVal("edit-hasLicense", d["Driver License?"]);
+    setVal("edit-hasCar", d["Has Car?"]);
+    setVal("edit-carModel", d["Car Make/Model"]);
+    setVal("edit-liveInAvail", d["Live-in Avail?"]);
+
+    setVal("edit-emName", d["Emergency Contact"]);
+    setVal("edit-emPhone", d["Emerg. Phone"]);
+    setVal("edit-emRel", d["Emerg. Relation"]);
+
+    // 2. Checkboxes (Skills, Certs, Days, etc)
+    const checkBoxes = (name, str) => {
+      const arr = str ? str.split(",").map((s) => s.trim()) : [];
+      document.querySelectorAll(`input[name="${name}"]`).forEach((cb) => {
+        cb.checked = arr.includes(cb.value);
+      });
+    };
+
+    checkBoxes("hoursAvail", d["Hours Avail"]);
+    checkBoxes("scheduleDays", d["Schedule Desired"]);
+    checkBoxes("timesAvail", d["Times Avail"]);
+    checkBoxes("certs", d["Certifications"]);
+    checkBoxes("skills", d["Skills Checklist"]);
+  }
+
+  function cancelEdit() {
+    switchCgView("profile");
+  }
+
+  function submitEditProfile(e) {
+    e.preventDefault();
+    const btn = document.getElementById("saveProfileBtn");
+    btn.textContent = "Saving...";
+    btn.disabled = true;
+
+    // Manual extraction to handle checkboxes correctly
+    const form = document.getElementById("editProfileForm");
+    const obj = {};
+    const formData = new FormData(form);
+
+    // Helper to get arrays
+    const getChecks = (name) =>
+      Array.from(
+        document.querySelectorAll(`input[name="${name}"]:checked`)
+      ).map((c) => c.value);
+
+    // Base fields
+    for (let [key, value] of formData.entries()) {
+      obj[key] = value;
+    }
+
+    // Array fields
+    obj.skills = getChecks("skills");
+    obj.certs = getChecks("certs");
+    obj.hoursAvail = getChecks("hoursAvail");
+    obj.scheduleDays = getChecks("scheduleDays");
+    obj.timesAvail = getChecks("timesAvail");
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        btn.textContent = "Save Changes";
+        btn.disabled = false;
+        if (res.success) {
+          Swal.fire("Success", "Profile Updated", "success");
+          loadProfile(currentProfileId); // Reload to show changes
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
+      })
+      .submitFullApplication(obj); // Reuses the public submission logic!
   }
 
   // --- STAGE LOGIC ---
@@ -281,6 +391,8 @@
           return;
         }
 
+        currentProfileData = data; // SAVE DATA FOR EDIT MODE
+
         // CRITICAL FIX: Safety Check Set Function
         const set = (id, val) => {
           const el = document.getElementById(id);
@@ -292,10 +404,13 @@
         set("p-title", data["Title"]);
         set("p-id", data["Caregiver ID"]);
 
-        // HIDE PIPELINE IF ACTIVE
         const pipelinePanel = document.getElementById("pipeline-panel");
         if (data["Status"] === "Active") {
           if (pipelinePanel) pipelinePanel.classList.add("hidden");
+          // SHOW EDIT BUTTON IF ACTIVE
+          document
+            .getElementById("btn-edit-profile")
+            .classList.remove("hidden");
         } else {
           if (pipelinePanel) pipelinePanel.classList.remove("hidden");
         }
