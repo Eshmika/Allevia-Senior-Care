@@ -506,7 +506,6 @@
     >
       <input type="hidden" name="caregiverId" id="edit-id" />
       <input type="hidden" name="signName" value="Admin Edit" />
-      <!-- Bypass signature -->
 
       <!-- 1. General Info -->
       <div>
@@ -554,6 +553,7 @@
             ><select name="gender" id="edit-gender" class="input-field">
               <option value="F">Female</option>
               <option value="M">Male</option>
+              <option value="Other">Other</option>
             </select>
           </div>
           <div>
@@ -617,23 +617,31 @@
               class="input-field"
             />
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Title</label
-            ><select name="title" id="edit-title" class="input-field">
-              <option value="STNA">STNA</option>
-              <option value="CNA">CNA</option>
-              <option value="HHA">HHA</option>
-              <option value="PCA">PCA</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Status</label
-            ><select name="status" id="edit-status" class="input-field">
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="No Call">No Call</option>
-              <option value="Vacation">Vacation</option>
-            </select>
+
+          <!-- NEW: Legal Status -->
+          <div
+            class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg mt-4"
+          >
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Eligible to work in US?</label
+              ><select
+                name="usEligible"
+                id="edit-usEligible"
+                class="input-field"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Legal US Citizen?</label
+              ><select name="usCitizen" id="edit-usCitizen" class="input-field">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -655,8 +663,7 @@
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >License State</label
-            >
-            <input
+            ><input
               type="text"
               name="licenseState"
               id="edit-licenseState"
@@ -666,14 +673,14 @@
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >License #</label
-            >
-            <input
+            ><input
               type="text"
-              name="licenseNumber"
-              id="edit-licenseNumber"
+              name="licenseNum"
+              id="edit-licenseNum"
               class="input-field"
             />
           </div>
+
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >Has Car?</label
@@ -695,7 +702,11 @@
           <div>
             <label class="block text-sm font-medium text-gray-700"
               >Has Insurance?</label
-            ><select name="hasInsurance" id="edit-hasInsurance" class="input-field">
+            ><select
+              name="hasInsurance"
+              id="edit-hasInsurance"
+              class="input-field"
+            >
               <option value="Yes">Yes</option>
               <option value="No">No</option>
             </select>
@@ -782,38 +793,41 @@
               >
             </div>
           </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Emergency Avail?</label
-            ><select
-              name="emergencyAvail"
-              id="edit-emergencyAvail"
-              class="input-field"
-            >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Live-in Avail?</label
-            ><select
-              name="liveInAvail"
-              id="edit-liveInAvail"
-              class="input-field"
-            >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Emergency?</label
+              ><select
+                name="emergencyAvail"
+                id="edit-emergencyAvail"
+                class="input-field"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Live-in?</label
+              ><select
+                name="liveInAvail"
+                id="edit-liveInAvail"
+                class="input-field"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 4. Skills & Certs -->
+      <!-- 4. Skills & Certs (Expanded) -->
       <div>
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Skills & Certifications
+          Skills, Certs & Languages
         </h2>
+
         <label class="block text-sm font-medium text-gray-700 mb-2"
           >Certifications</label
         >
@@ -834,19 +848,28 @@
             ><input type="checkbox" name="certs" value="PCT" /> Patient Care
             Tech (PCT)</label
           >
-          <label><input type="checkbox" name="certs" value="CNA" /> CNA</label>
-          <label><input type="checkbox" name="certs" value="HHA" /> HHA</label>
+          <label
+            ><input type="checkbox" name="certs" value="CNA" /> Certified
+            Nursing Assistant (CNA)</label
+          >
+          <label
+            ><input type="checkbox" name="certs" value="HHA" /> Home Health Aide
+            (HHA)</label
+          >
           <label
             ><input type="checkbox" name="certs" value="LPN" /> Licensed
             Practical Nurse (LPN)</label
           >
-          <label><input type="checkbox" name="certs" value="RN" /> RN</label>
+          <label
+            ><input type="checkbox" name="certs" value="RN" /> Registered Nurse
+            (RN)</label
+          >
         </div>
 
         <label class="block text-sm font-medium text-gray-700 mb-2"
           >Skills</label
         >
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
           <label
             ><input type="checkbox" name="skills" value="Bathing" />
             Bathing/Showering</label
@@ -1012,9 +1035,217 @@
             Light Housework / Cleaning</label
           >
         </div>
+
+        <label class="block text-sm font-medium text-gray-700 mb-2"
+          >Languages</label
+        >
+        <div class="grid grid-cols-3 gap-2">
+          <label
+            ><input type="checkbox" name="languages" value="English" />
+            English</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Spanish" />
+            Spanish</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="French" />
+            French</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Arabic" />
+            Arabic</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Mandrin" />
+            Mandrin</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Hindi" />
+            Hindi</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Portuguese" />
+            Portuguese</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Russian" />
+            Russian</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Japanese" />
+            Japanese</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="German" />
+            German</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Turkish" />
+            Turkish</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Swahili" />
+            Swahili</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Somali" />
+            Somali</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Chinese" />
+            Chinese</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Bengali" />
+            Bengali</label
+          >
+          <label
+            ><input type="checkbox" name="languages" value="Other" />
+            Other</label
+          >
+        </div>
       </div>
 
-      <!-- 5. Emergency -->
+      <!-- 5. Education (NEW) -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Education
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >High School (Name & City)</label
+            ><input
+              type="text"
+              name="hsName"
+              id="edit-hsName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >HS Degree/Year</label
+            ><input
+              type="text"
+              name="hsDegree"
+              id="edit-hsDegree"
+              class="input-field"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >College (Name & City)</label
+            ><input
+              type="text"
+              name="colName"
+              id="edit-colName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >College Degree</label
+            ><input
+              type="text"
+              name="colDegree"
+              id="edit-colDegree"
+              class="input-field"
+            />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Other Edu</label
+            ><input
+              type="text"
+              name="otherEdu"
+              id="edit-otherEdu"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Degree</label
+            ><input
+              type="text"
+              name="otherDegree"
+              id="edit-otherDegree"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Employment History (NEW) -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          Employment History
+        </h2>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Employer 1 (Company & Title)</label
+            ><input
+              type="text"
+              name="emp1_full"
+              id="edit-emp1"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Employer 2 (Company & Title)</label
+            ><input
+              type="text"
+              name="emp2_full"
+              id="edit-emp2"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Employer 3 (Company & Title)</label
+            ><input
+              type="text"
+              name="emp3_full"
+              id="edit-emp3"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. References (NEW) -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          References
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Reference 1 (Name & Phone)</label
+            ><input
+              type="text"
+              name="ref1_full"
+              id="edit-ref1"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Reference 2 (Name & Phone)</label
+            ><input
+              type="text"
+              name="ref2_full"
+              id="edit-ref2"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Emergency Contact -->
       <div>
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
           Emergency Contact
@@ -1045,6 +1276,35 @@
               type="text"
               name="emRel"
               id="edit-emRel"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Criminal History (NEW) -->
+      <div class="bg-red-50 p-4 rounded-lg">
+        <h2 class="text-lg font-bold text-red-800 mb-2">Legal History</h2>
+        <div class="grid grid-cols-1 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-red-700"
+              >Criminal Conviction?</label
+            ><select
+              name="criminalHistory"
+              id="edit-criminalHistory"
+              class="input-field"
+            >
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-red-700"
+              >Details (if any)</label
+            ><input
+              type="text"
+              name="criminalExplain"
+              id="edit-criminalExplain"
               class="input-field"
             />
           </div>

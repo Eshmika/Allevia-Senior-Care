@@ -153,7 +153,7 @@
     switchCgView("edit");
     const d = currentProfileData;
 
-    // 1. Fill Text Inputs (Map Sheet Keys to Input IDs)
+    // 1. Fill Text Inputs
     const setVal = (id, val) => {
       const el = document.getElementById(id);
       if (el) el.value = val || "";
@@ -164,7 +164,6 @@
     setVal("edit-lastName", d["Last Name"]);
     setVal("edit-middleName", d["Middle Int"]);
 
-    // Date Handling
     if (d["DOB"]) {
       const date = new Date(d["DOB"]);
       const yyyy = date.getFullYear();
@@ -173,7 +172,7 @@
       setVal("edit-dob", `${yyyy}-${mm}-${dd}`);
     }
 
-    setVal("edit-gender", d["Gender"]);          
+    setVal("edit-gender", d["Gender"]);
     setVal("edit-ssn", d["SSN"]);
     setVal("edit-address", d["Address"]);
     setVal("edit-apt", d["Apt"]);
@@ -182,23 +181,41 @@
     setVal("edit-zip", d["Zip"]);
     setVal("edit-phone", d["Phone"]);
     setVal("edit-email", d["Email"]);
-    setVal("edit-title", d["Title"]); 
-    setVal("edit-status", d["Status"]); 
 
     setVal("edit-hasLicense", d["Driver License?"]);
     setVal("edit-licenseState", d["License State"]);
-    setVal("edit-licenseNumber", d["License #"]);
+    setVal("edit-licenseNum", d["License #"]);
     setVal("edit-hasCar", d["Has Car?"]);
     setVal("edit-carModel", d["Car Make/Model"]);
     setVal("edit-hasInsurance", d["Has Insurance?"]);
     setVal("edit-emergencyAvail", d["Emergency Avail?"]);
     setVal("edit-liveInAvail", d["Live-in Avail?"]);
+    setVal("edit-usEligible", d["US Eligible?"]);
+    setVal("edit-usCitizen", d["US Citizen?"]);
 
     setVal("edit-emName", d["Emergency Contact"]);
     setVal("edit-emPhone", d["Emerg. Phone"]);
     setVal("edit-emRel", d["Emerg. Relation"]);
 
-    // 2. Checkboxes (Skills, Certs, Days, etc)
+    // New Sections Mapped
+    setVal("edit-hsName", d["High School"]);
+    setVal("edit-hsDegree", d["HS Degree"]);
+    setVal("edit-colName", d["College"]);
+    setVal("edit-colDegree", d["College Degree"]);
+    setVal("edit-otherEdu", d["Other Edu"]);
+    setVal("edit-otherDegree", d["Other Degree"]);
+
+    setVal("edit-emp1", d["Employer 1"]);
+    setVal("edit-emp2", d["Employer 2"]);
+    setVal("edit-emp3", d["Employer 3"]);
+
+    setVal("edit-ref1", d["Reference 1"]);
+    setVal("edit-ref2", d["Reference 2"]);
+
+    setVal("edit-criminalHistory", d["Criminal Conviction?"]);
+    setVal("edit-criminalExplain", d["Conviction Details"]);
+
+    // 2. Checkboxes
     const checkBoxes = (name, str) => {
       const arr = str ? str.split(",").map((s) => s.trim()) : [];
       document.querySelectorAll(`input[name="${name}"]`).forEach((cb) => {
@@ -211,6 +228,7 @@
     checkBoxes("timesAvail", d["Times Avail"]);
     checkBoxes("certs", d["Certifications"]);
     checkBoxes("skills", d["Skills Checklist"]);
+    checkBoxes("languages", d["Languages"]);
   }
 
   function cancelEdit() {
@@ -223,28 +241,35 @@
     btn.textContent = "Saving...";
     btn.disabled = true;
 
-    // Manual extraction to handle checkboxes correctly
     const form = document.getElementById("editProfileForm");
     const obj = {};
     const formData = new FormData(form);
 
-    // Helper to get arrays
+    // Checkboxes
     const getChecks = (name) =>
       Array.from(
         document.querySelectorAll(`input[name="${name}"]:checked`)
       ).map((c) => c.value);
 
-    // Base fields
     for (let [key, value] of formData.entries()) {
       obj[key] = value;
     }
 
-    // Array fields
     obj.skills = getChecks("skills");
     obj.certs = getChecks("certs");
+    obj.languages = getChecks("languages");
     obj.hoursAvail = getChecks("hoursAvail");
     obj.scheduleDays = getChecks("scheduleDays");
     obj.timesAvail = getChecks("timesAvail");
+
+    // SPECIAL MAPPING for SheetController compat
+    // The controller expects objects for these, so we mock them to match the string value
+    obj.emp1 = { company: obj.emp1_full || "", title: "" };
+    obj.emp2 = { company: obj.emp2_full || "", title: "" };
+    obj.emp3 = { company: obj.emp3_full || "", title: "" };
+
+    obj.ref1 = { name: obj.ref1_full || "", phone: "" };
+    obj.ref2 = { name: obj.ref2_full || "", phone: "" };
 
     google.script.run
       .withSuccessHandler((res) => {
@@ -252,12 +277,12 @@
         btn.disabled = false;
         if (res.success) {
           Swal.fire("Success", "Profile Updated", "success");
-          loadProfile(currentProfileId); // Reload to show changes
+          loadProfile(currentProfileId);
         } else {
           Swal.fire("Error", res.message, "error");
         }
       })
-      .submitFullApplication(obj); // Reuses the public submission logic!
+      .submitFullApplication(obj);
   }
 
   // --- STAGE LOGIC ---

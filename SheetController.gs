@@ -118,6 +118,14 @@ function submitFullApplication(form) {
       return { success: false, message: "ID not found in DB" };
     const r = rowIndex + 1;
 
+    // Update Basic Info (Cols 2-6) if provided (Edit Mode)
+    if (form.title) sheet.getRange(r, 6).setValue(form.title);
+    if (form.firstName) sheet.getRange(r, 2).setValue(form.firstName);
+    if (form.lastName) sheet.getRange(r, 3).setValue(form.lastName);
+    if (form.phone) sheet.getRange(r, 4).setValue(form.phone);
+    if (form.email) sheet.getRange(r, 5).setValue(form.email);
+    if (form.status) sheet.getRange(r, 7).setValue(form.status);
+
     const join = (arr) => (Array.isArray(arr) ? arr.join(", ") : arr || "");
     const empStr = (e) =>
       e ? `${e.company || ""} ${e.title ? "(" + e.title + ")" : ""}` : "";
