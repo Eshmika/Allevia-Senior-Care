@@ -903,15 +903,13 @@
 
     cgData.forEach(cg => {
         // Stage 1: New Application
-        // Condition: App Status is Pending OR (Completed but no Interview Status yet)
-        if (cg.appStatus === "Pending Application" || (cg.appStatus === "Application Completed" && !cg.interviewStatus)) {
+        // Condition: App Status is Pending
+        if (cg.appStatus === "Pending Application") {
             stages.new.push(cg);
         }
-        // Stage 2: Interview Completed
-        // Condition: Interview Status exists (Scheduled/Passed/Failed) AND Background Check is empty
-        // Note: If Interview Failed, they stay here until moved or status changed manually? 
-        // For now, if Interview Status is set, they are in this bucket unless Background is set.
-        else if (cg.interviewStatus && !cg.backgroundCheck) {
+        // Stage 2: Interview Completed (Ready for Interview / In Interview Process)
+        // Condition: App Status is Completed AND Background Check is empty
+        else if (cg.appStatus === "Application Completed" && !cg.backgroundCheck) {
             stages.interview.push(cg);
         }
         // Stage 3: Passed Background Check
@@ -949,7 +947,7 @@
     list.forEach(cg => {
         let actionHtml = "";
         if (stage === "new") {
-            actionHtml = `<button onclick="updateStageStatus('${cg.id}', 'Interview', 'Scheduled')" class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-200 font-bold">Move to Interview</button>`;
+            actionHtml = `<span class="text-xs text-gray-400 italic">Waiting for application submission...</span>`;
         } else if (stage === "interview") {
             // If already passed/failed, show status, else show buttons
             if (cg.interviewStatus === "Passed") {
