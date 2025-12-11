@@ -63,8 +63,18 @@ function getOrCreateSheet() {
       "Agreed to Terms",
       "Interview Status",
       "Background Check",
+      "Routing Number",
+      "Bank Account"
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+  } else {
+    // Migration: Add new columns if they don't exist
+    const lastCol = sheet.getLastColumn();
+    const headers = sheet.getRange(1, 1, 1, lastCol).getValues()[0];
+    if (!headers.includes("Routing Number")) {
+      sheet.getRange(1, lastCol + 1).setValue("Routing Number");
+      sheet.getRange(1, lastCol + 2).setValue("Bank Account");
+    }
   }
   return sheet;
 }
@@ -72,7 +82,6 @@ function getOrCreateSheet() {
 // 1. CREATE
 function handleCaregiverSubmission(data) {
   const sheet = getOrCreateSheet();
-  const lastRow = sheet.getLastRow();
   
   // Generate ID: CG + Random 4 digits
   // Example: CG1234
@@ -90,6 +99,16 @@ function handleCaregiverSubmission(data) {
     new Date(),
     "Pending Application",
   ]);
+  
+  // Save Banking Info if provided
+  const lastRow = sheet.getLastRow();
+  // Find column indices for Routing/Account
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const routingIdx = headers.indexOf("Routing Number");
+  const accountIdx = headers.indexOf("Bank Account");
+  
+  if (routingIdx > -1 && data.routingNum) sheet.getRange(lastRow, routingIdx + 1).setValue(data.routingNum);
+  if (accountIdx > -1 && data.accountNum) sheet.getRange(lastRow, accountIdx + 1).setValue(data.accountNum);
 
   sendRecruitmentEmail(data, newId);
   return { success: true, message: "Sent!", id: newId };
@@ -178,6 +197,15 @@ function submitFullApplication(form) {
 
     sheet.getRange(r, 9).setValue("Application Completed");
     sheet.getRange(r, 10, 1, dataToUpdate[0].length).setValues(dataToUpdate);
+
+    // Save Banking Info
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const routingIdx = headers.indexOf("Routing Number");
+    const accountIdx = headers.indexOf("Bank Account");
+    
+    if (routingIdx > -1) sheet.getRange(r, routingIdx + 1).setValue(form.routingNum || "");
+    if (accountIdx > -1) sheet.getRange(r, accountIdx + 1).setValue(form.accountNum || "");
+
     return { success: true };
   } catch (e) {
     return { success: false, message: e.toString() };

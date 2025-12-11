@@ -35,6 +35,10 @@
     attach('#edit-ssn', 'ssn');
     attach('#edit-phone', 'phone');
     attach('#edit-zip', 'zip');
+    attach('input[name="routingNum"]', 'routing');
+    attach('input[name="accountNum"]', 'account');
+    attach('#edit-routingNum', 'routing');
+    attach('#edit-accountNum', 'account');
     attach('#ce-phone', 'phone');
     attach('#ce-zip', 'zip');
   }
@@ -69,6 +73,16 @@
     else if (type === 'zip') {
       // Max 5 digits
       if (val.length > 5) val = val.substring(0, 5);
+      e.target.value = val;
+    }
+    else if (type === 'routing') {
+      // Max 9 digits
+      if (val.length > 9) val = val.substring(0, 9);
+      e.target.value = val;
+    }
+    else if (type === 'account') {
+      // Max 12 digits
+      if (val.length > 12) val = val.substring(0, 12);
       e.target.value = val;
     }
   }
@@ -340,6 +354,8 @@
 
     setVal("edit-gender", d["Gender"]);
     setVal("edit-ssn", d["SSN"]);
+    setVal("edit-routingNum", d["Routing Number"]);
+    setVal("edit-accountNum", d["Bank Account"]);
     setVal("edit-status", d["Status"]); 
     setVal("edit-address", d["Address"]);
     setVal("edit-apt", d["Apt"]);
@@ -643,6 +659,10 @@
         );
         set("p-dob", `${data["DOB"] || "--"} (${data["Gender"] || "--"})`);
         set("p-ssn", data["SSN"]);
+        set(
+          "p-banking",
+          `Routing: ${data["Routing Number"] || "--"} | Account: ${data["Bank Account"] || "--"}`
+        );
         set(
           "p-license",
           `Driver License: ${data["Driver License?"]} | License State: ${data["License State"]} | License #: ${data["License #"]}`

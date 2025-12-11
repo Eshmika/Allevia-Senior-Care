@@ -164,7 +164,7 @@
               <option value="HHA">HHA</option>
               <option value="PCA">PCA</option>
             </select>
-          </div>
+          </div>         
           <div>
             <input type="hidden" name="status" value="Applicant" />
           </div>
@@ -292,6 +292,10 @@
             <div>
               <p class="text-xs text-gray-400 uppercase">SSN</p>
               <p class="text-sm font-medium" id="p-ssn">--</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Banking</p>
+              <p class="text-sm font-medium" id="p-banking">--</p>
             </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">License</p>
@@ -466,6 +470,14 @@
           <div>
             <label class="block text-sm font-medium text-gray-700">SSN #</label
             ><input type="text" name="ssn" id="edit-ssn" maxlength="11" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Routing #</label
+            ><input type="text" name="routingNum" id="edit-routingNum" maxlength="9" class="input-field" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Account #</label
+            ><input type="text" name="accountNum" id="edit-accountNum" maxlength="12" class="input-field" />
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700">Status</label>
