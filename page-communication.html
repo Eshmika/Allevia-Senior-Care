@@ -1,0 +1,55 @@
+<!-- COMMUNICATION VIEW -->
+<div id="view-communication" class="view-section">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Communication Center</h1>
+    <p class="text-gray-500">Send emails to Caregivers or Clients.</p>
+  </div>
+
+  <div class="max-w-3xl bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+    <form id="commForm" onsubmit="sendCommunication(event)">
+      
+      <!-- Recipient Type -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Recipient Type</label>
+        <div class="flex gap-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="recipientType" value="caregiver" checked onchange="loadRecipientList()" class="w-4 h-4 text-[#65c027] focus:ring-[#65c027]">
+            <span>Caregiver</span>
+          </label>
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="radio" name="recipientType" value="client" onchange="loadRecipientList()" class="w-4 h-4 text-[#65c027] focus:ring-[#65c027]">
+            <span>Client</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Recipient Select -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Recipient</label>
+        <select id="commRecipient" name="recipientId" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]" required>
+          <option value="">Loading...</option>
+        </select>
+      </div>
+
+      <!-- Subject -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+        <input type="text" name="subject" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]" placeholder="Email Subject" required>
+      </div>
+
+      <!-- Message -->
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+        <textarea name="message" rows="6" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]" placeholder="Type your message here..." required></textarea>
+      </div>
+
+      <!-- Submit -->
+      <div class="flex justify-end">
+        <button type="submit" id="btnSendComm" class="btn-primary flex items-center gap-2">
+          <i class="ph ph-paper-plane-right"></i> Send Email
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

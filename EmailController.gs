@@ -125,6 +125,64 @@ function sendOnboardingEmail(caregiverId) {
   }
 }
 
+function sendCustomEmail(type, recipientId, subject, message) {
+  try {
+    let recipients = [];
+
+    // 1. Fetch List based on Type
+    if (type === "caregiver") {
+      const list = getCaregiverList();
+      if (recipientId === "all") {
+        recipients = list.filter(c => c.email && c.email.includes("@"));
+      } else {
+        const person = list.find(c => c.id === recipientId);
+        if (person) recipients.push(person);
+      }
+    } else {
+      const list = getClientList();
+      if (recipientId === "all") {
+        recipients = list.filter(c => c.email && c.email.includes("@"));
+      } else {
+        const person = list.find(c => c.id === recipientId);
+        if (person) recipients.push(person);
+      }
+    }
+
+    if (recipients.length === 0) return { success: false, message: "No valid recipients found." };
+
+    // 2. Send Emails
+    // Note: For "All", this might hit quotas. For production, consider batching or BCC.
+    // For now, we loop.
+    let count = 0;
+    recipients.forEach(r => {
+      try {
+        const htmlBody = `
+          <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+            <p>${message.replace(/\n/g, "<br>")}</p>
+            <br>
+            <hr style="border: 0; border-top: 1px solid #eee;">
+            <p style="font-size: 12px; color: #888;">Allevia Senior Care Communication</p>
+          </div>
+        `;
+        
+        MailApp.sendEmail({
+          to: r.email,
+          subject: subject,
+          htmlBody: htmlBody
+        });
+        count++;
+      } catch (err) {
+        console.error(`Failed to send to ${r.email}: ${err.message}`);
+      }
+    });
+
+    return { success: true, message: `Sent to ${count} recipient(s).` };
+
+  } catch (e) {
+    return { success: false, message: e.toString() };
+  }
+}
+
 function resendCaregiverEmail(caregiverId) {
   try {
     const details = getCaregiverDetails(caregiverId);

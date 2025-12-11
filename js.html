@@ -203,6 +203,8 @@
       switchClView("list");
     } else if (viewName === "dashboard") {
       loadDashboardStats();
+    } else if (viewName === "communication") {
+      loadCommunicationView();
     }
   };
 
@@ -1242,5 +1244,72 @@
         }
       })
       .sendOnboardingEmail(id);
+  }
+
+  // -- Communication Logic --
+  function loadCommunicationView() {
+    loadRecipientList();
+  }
+
+  function loadRecipientList() {
+    const type = document.querySelector('input[name="recipientType"]:checked').value;
+    const select = document.getElementById("commRecipient");
+    select.innerHTML = '<option value="">Loading...</option>';
+
+    if (type === "caregiver") {
+      google.script.run.withSuccessHandler(populateRecipients).getCaregiverList();
+    } else {
+      google.script.run.withSuccessHandler(populateRecipients).getClientList();
+    }
+  }
+
+  function populateRecipients(data) {
+    const select = document.getElementById("commRecipient");
+    const type = document.querySelector('input[name="recipientType"]:checked').value;
+    const label = type === "caregiver" ? "Caregivers" : "Clients";
+    
+    let html = `<option value="">Select Recipient...</option>`;
+    html += `<option value="all">All ${label}</option>`;
+    
+    data.forEach(item => {
+      html += `<option value="${item.id}">${item.name} (${item.email})</option>`;
+    });
+    
+    select.innerHTML = html;
+  }
+
+  function sendCommunication(e) {
+    e.preventDefault();
+    const btn = document.getElementById("btnSendComm");
+    const originalText = btn.innerHTML;
+    
+    const form = document.getElementById("commForm");
+    const formData = new FormData(form);
+    const type = formData.get("recipientType");
+    const id = formData.get("recipientId");
+    const subject = formData.get("subject");
+    const message = formData.get("message");
+
+    if (!id) {
+      Swal.fire("Error", "Please select a recipient", "warning");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Sending...';
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+        if (res.success) {
+          Swal.fire("Success", "Email(s) sent successfully!", "success");
+          form.reset();
+          loadRecipientList(); // Reset dropdown
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
+      })
+      .sendCustomEmail(type, id, subject, message);
   }
 </script>
