@@ -30,6 +30,7 @@ function getOrCreateClientSheet() {
       "Living Alone",
       "Languages",
       "Created At",
+      "Last Reviewed"
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
     sheet
@@ -38,6 +39,12 @@ function getOrCreateClientSheet() {
       .setFontColor("white")
       .setFontWeight("bold");
     sheet.setFrozenRows(1);
+  } else {
+    // Migration: Add Last Reviewed if missing
+    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (!headers.includes("Last Reviewed")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Last Reviewed");
+    }
   }
   return sheet;
 }
@@ -76,6 +83,7 @@ function handleClientSubmission(data) {
     data.livingAlone,
     data.languages,
     new Date(),
+    new Date() // Initial Last Reviewed
   ];
 
   sheet.appendRow(rowData);
@@ -96,6 +104,9 @@ function getClientList() {
     .getRange(2, 1, lastRow - 1, sheet.getLastColumn())
     .getDisplayValues();
 
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const reviewIdx = headers.indexOf("Last Reviewed");
+
   return data
     .filter((row) => row[0] !== "")
     .map((row) => ({
@@ -107,6 +118,7 @@ function getClientList() {
       type: row[9],
       city: row[11],
       zip: row[12],
+      lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--"
     }))
     .reverse();
 }
@@ -189,6 +201,13 @@ function updateClient(data) {
   ];
 
   sheet.getRange(rowNum, 2, 1, rowData.length).setValues([rowData]);
+
+  // Update Last Reviewed
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowNum, reviewIdx + 1).setValue(new Date());
+  }
 
   return { success: true, message: "Client updated successfully!" };
 }

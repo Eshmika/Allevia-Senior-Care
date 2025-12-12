@@ -881,7 +881,7 @@
 
     if (filtered.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="7" class="p-8 text-center text-gray-400">No clients found.</td></tr>';
+        '<tr><td colspan="8" class="p-8 text-center text-gray-400">No clients found.</td></tr>';
       return;
     }
 
@@ -905,6 +905,7 @@
           </td>
           <td class="p-4 text-sm text-gray-600">${row.type}</td>
           <td class="p-4 text-sm text-gray-600">${row.city} / ${row.zip || ""}</td>
+          <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
           <td class="p-4 text-sm text-gray-500">${row.id}</td>
           <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${row.status}</span></td>
           <td class="p-4 text-right">
