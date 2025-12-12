@@ -125,27 +125,22 @@ function sendOnboardingEmail(caregiverId) {
   }
 }
 
-function sendCustomEmail(type, recipientId, subject, message) {
+function sendCustomEmail(cgIds, clIds, subject, message) {
   try {
     let recipients = [];
 
-    // 1. Fetch List based on Type
-    if (type === "caregiver") {
+    // 1. Fetch Caregivers if needed
+    if (cgIds && cgIds.length > 0) {
       const list = getCaregiverList();
-      if (recipientId === "all") {
-        recipients = list.filter(c => c.email && c.email.includes("@"));
-      } else {
-        const person = list.find(c => c.id === recipientId);
-        if (person) recipients.push(person);
-      }
-    } else {
+      const selected = list.filter(c => cgIds.includes(c.id) && c.email && c.email.includes("@"));
+      recipients = recipients.concat(selected);
+    }
+
+    // 2. Fetch Clients if needed
+    if (clIds && clIds.length > 0) {
       const list = getClientList();
-      if (recipientId === "all") {
-        recipients = list.filter(c => c.email && c.email.includes("@"));
-      } else {
-        const person = list.find(c => c.id === recipientId);
-        if (person) recipients.push(person);
-      }
+      const selected = list.filter(c => clIds.includes(c.id) && c.email && c.email.includes("@"));
+      recipients = recipients.concat(selected);
     }
 
     if (recipients.length === 0) return { success: false, message: "No valid recipients found." };

@@ -8,27 +8,37 @@
   <div class="max-w-3xl bg-white rounded-xl shadow-sm border border-gray-100 p-8">
     <form id="commForm" onsubmit="sendCommunication(event)">
       
-      <!-- Recipient Type -->
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Recipient Type</label>
-        <div class="flex gap-4">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="recipientType" value="caregiver" checked onchange="loadRecipientList()" class="w-4 h-4 text-[#65c027] focus:ring-[#65c027]">
-            <span>Caregiver</span>
+      <!-- Recipients Selection -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        
+        <!-- Caregivers List -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2 flex justify-between">
+            <span>Select Caregivers</span>
+            <button type="button" onclick="toggleAll('comm-cg-list')" class="text-xs text-[#65c027] hover:underline">Select All</button>
           </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="recipientType" value="client" onchange="loadRecipientList()" class="w-4 h-4 text-[#65c027] focus:ring-[#65c027]">
-            <span>Client</span>
-          </label>
+          <div class="relative">
+            <input type="text" onkeyup="filterCommList(this, 'comm-cg-list')" placeholder="Search caregivers..." class="w-full mb-2 p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]">
+            <div id="comm-cg-list" class="h-48 overflow-y-auto border border-gray-200 rounded-lg p-2 bg-gray-50 space-y-1">
+              <div class="text-xs text-gray-400 text-center py-4">Loading...</div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Recipient Select -->
-      <div class="mb-6">
-        <label class="block text-sm font-medium text-gray-700 mb-2">Recipient</label>
-        <select id="commRecipient" name="recipientId" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]" required>
-          <option value="">Loading...</option>
-        </select>
+        <!-- Clients List -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2 flex justify-between">
+            <span>Select Clients</span>
+            <button type="button" onclick="toggleAll('comm-cl-list')" class="text-xs text-[#65c027] hover:underline">Select All</button>
+          </label>
+          <div class="relative">
+            <input type="text" onkeyup="filterCommList(this, 'comm-cl-list')" placeholder="Search clients..." class="w-full mb-2 p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#65c027]">
+            <div id="comm-cl-list" class="h-48 overflow-y-auto border border-gray-200 rounded-lg p-2 bg-gray-50 space-y-1">
+              <div class="text-xs text-gray-400 text-center py-4">Loading...</div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Subject -->
