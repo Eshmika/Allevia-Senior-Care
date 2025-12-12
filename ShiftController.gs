@@ -24,6 +24,8 @@ function getOrCreateShiftSheet() {
       "Softcare Share",
       "Total Client Price",
       "Total Caregiver Price",
+      "Total Agency Price",
+      "Total Softcare Price",
       "Notes",
       "Created At"
     ];
@@ -105,6 +107,8 @@ function saveShift(data) {
       data.softcareShare,
       data.totalClientPrice,
       data.totalCaregiverPrice,
+      data.totalAgencyPrice,
+      data.totalSoftcarePrice,
       data.notes,
       timestamp
     ];

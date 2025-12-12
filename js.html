@@ -1397,18 +1397,26 @@
     // Calculate Totals
     let totalClient = 0;
     let totalCaregiver = 0;
+    let totalAgency = 0;
+    let totalSoftcare = 0;
 
     if (billingType === "Hourly") {
       totalClient = clientRate * hours;
       totalCaregiver = caregiverRate * hours;
+      totalAgency = agency * hours;
+      totalSoftcare = softcare * hours;
     } else {
       // Fixed Rate
       totalClient = clientRate;
       totalCaregiver = caregiverRate;
+      totalAgency = agency;
+      totalSoftcare = softcare;
     }
 
     document.getElementById("totalClientPrice").value = "$" + totalClient.toFixed(2);
     document.getElementById("totalCaregiverPrice").value = "$" + totalCaregiver.toFixed(2);
+    document.getElementById("totalAgencyPrice").value = "$" + totalAgency.toFixed(2);
+    document.getElementById("totalSoftcarePrice").value = "$" + totalSoftcare.toFixed(2);
   }
 
   function submitShift(e) {
@@ -1425,6 +1433,8 @@
     data.softcareShare = document.getElementById("softcareShare").value;
     data.totalClientPrice = document.getElementById("totalClientPrice").value.replace('$','');
     data.totalCaregiverPrice = document.getElementById("totalCaregiverPrice").value.replace('$','');
+    data.totalAgencyPrice = document.getElementById("totalAgencyPrice").value.replace('$','');
+    data.totalSoftcarePrice = document.getElementById("totalSoftcarePrice").value.replace('$','');
 
     btn.disabled = true;
     btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
@@ -1435,6 +1445,8 @@
         form.reset();
         document.getElementById("totalClientPrice").value = "$0.00";
         document.getElementById("totalCaregiverPrice").value = "$0.00";
+        document.getElementById("totalAgencyPrice").value = "$0.00";
+        document.getElementById("totalSoftcarePrice").value = "$0.00";
         btn.disabled = false;
         btn.innerHTML = originalText;
       })
