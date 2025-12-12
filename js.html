@@ -267,7 +267,7 @@
 
     if (pageData.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" class="p-8 text-center text-gray-400">No caregivers found.</td></tr>';
+        '<tr><td colspan="7" class="p-8 text-center text-gray-400">No caregivers found.</td></tr>';
     } else {
       pageData.forEach((row) => {
         const tr = document.createElement("tr");
@@ -304,6 +304,7 @@
              <div class="text-xs text-gray-400">${row.phone}</div>
           </td>
           <td class="p-4 text-gray-600">${row.city} / ${row.zip}</td>
+          <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
           <td class="p-4">
             <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
           row.status

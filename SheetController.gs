@@ -64,7 +64,8 @@ function getOrCreateSheet() {
       "Interview Status",
       "Background Check",
       "Routing Number",
-      "Bank Account"
+      "Bank Account",
+      "Last Reviewed"
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   } else {
@@ -74,6 +75,11 @@ function getOrCreateSheet() {
     if (!headers.includes("Routing Number")) {
       sheet.getRange(1, lastCol + 1).setValue("Routing Number");
       sheet.getRange(1, lastCol + 2).setValue("Bank Account");
+    }
+    // Check for Last Reviewed separately as it might be added later
+    const updatedHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    if (!updatedHeaders.includes("Last Reviewed")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Last Reviewed");
     }
   }
   return sheet;
@@ -106,9 +112,11 @@ function handleCaregiverSubmission(data) {
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   const routingIdx = headers.indexOf("Routing Number");
   const accountIdx = headers.indexOf("Bank Account");
+  const reviewIdx = headers.indexOf("Last Reviewed");
   
   if (routingIdx > -1 && data.routingNum) sheet.getRange(lastRow, routingIdx + 1).setValue(data.routingNum);
   if (accountIdx > -1 && data.accountNum) sheet.getRange(lastRow, accountIdx + 1).setValue(data.accountNum);
+  if (reviewIdx > -1) sheet.getRange(lastRow, reviewIdx + 1).setValue(new Date());
 
   sendRecruitmentEmail(data, newId);
   return { success: true, message: "Sent!", id: newId };
@@ -198,13 +206,15 @@ function submitFullApplication(form) {
     sheet.getRange(r, 9).setValue("Application Completed");
     sheet.getRange(r, 10, 1, dataToUpdate[0].length).setValues(dataToUpdate);
 
-    // Save Banking Info
+    // Save Banking Info & Last Reviewed
     const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     const routingIdx = headers.indexOf("Routing Number");
     const accountIdx = headers.indexOf("Bank Account");
+    const reviewIdx = headers.indexOf("Last Reviewed");
     
     if (routingIdx > -1) sheet.getRange(r, routingIdx + 1).setValue(form.routingNum || "");
     if (accountIdx > -1) sheet.getRange(r, accountIdx + 1).setValue(form.accountNum || "");
+    if (reviewIdx > -1) sheet.getRange(r, reviewIdx + 1).setValue(new Date());
 
     return { success: true };
   } catch (e) {
@@ -217,6 +227,9 @@ function getCaregiverList() {
   const sheet = getOrCreateSheet();
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return [];
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const reviewIdx = headers.indexOf("Last Reviewed");
 
   // Use getDisplayValues to treat everything as String (prevents number/string mismatch)
   const data = sheet
@@ -237,6 +250,7 @@ function getCaregiverList() {
       appStatus: row[8], // App Status
       interviewStatus: row[53], // Interview Status (Check index)
       backgroundCheck: row[54], // Background Check (Check index)
+      lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--"
     }))
     .reverse();
 }
