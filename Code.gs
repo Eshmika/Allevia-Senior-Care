@@ -62,9 +62,8 @@ function generateCaregiverPdf(id) {
   const blob = template.evaluate().getBlob();
   const pdf = blob.getAs("application/pdf").setName(`Application_${id}.pdf`);
 
-  // Save to Drive (Root or specific folder)
-  const file = DriveApp.createFile(pdf);
-  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  // Convert to Base64 to avoid DriveApp permissions
+  const base64 = Utilities.base64Encode(pdf.getBytes());
 
-  return { success: true, url: file.getUrl() };
+  return { success: true, base64: base64, filename: `Application_${id}.pdf` };
 }

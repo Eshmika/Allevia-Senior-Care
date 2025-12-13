@@ -602,6 +602,10 @@
   }
 
   // -- 3. Load Profile --
+  function openProfile(id) {
+    loadProfile(id);
+  }
+
   function loadProfile(id) {
     currentProfileId = id;
 
@@ -787,6 +791,15 @@
         set(
           "p-emergency-contact",
           `${data["Emerg. Relation"]} - ${data["Emerg. Phone"]}`
+        );
+
+        // Signature Details
+        set("p-signName", data["Signature Name"]);
+        set(
+          "p-signDate",
+          data["Signature Date"]
+            ? new Date(data["Signature Date"]).toLocaleDateString()
+            : "--"
         );
 
         document.getElementById("profileLoading").classList.add("hidden");
@@ -1188,19 +1201,17 @@
                 </button>
               </div>`;
       } else if (stage === "interview") {
-        const viewAppBtn = `<a href="?page=apply&id=${cg.id}&mode=print" target="_blank" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1 inline-flex no-underline"><i class="ph ph-file-text"></i> View App</a>`;
-        const pdfBtn = `<button onclick="downloadPdf('${cg.id}', this)" class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 font-bold border border-red-200 mr-2 flex items-center gap-1"><i class="ph ph-file-pdf"></i> PDF</button>`;
+        const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1"><i class="ph ph-eye"></i> View Details</button>`;
 
         // If already passed/failed, show status, else show buttons
         if (cg.interviewStatus === "Passed") {
-          actionHtml = `${viewAppBtn}${pdfBtn} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full hover:bg-purple-200 font-bold">Start Background Check</button>`;
+          actionHtml = `${viewDetailsBtn} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full hover:bg-purple-200 font-bold">Start Background Check</button>`;
         } else if (cg.interviewStatus === "Failed") {
-          actionHtml = `${viewAppBtn}${pdfBtn} <span class="text-xs text-red-600 font-bold">Interview Failed</span>`;
+          actionHtml = `${viewDetailsBtn} <span class="text-xs text-red-600 font-bold">Interview Failed</span>`;
         } else {
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
-                        ${viewAppBtn}
-                        ${pdfBtn}
+                        ${viewDetailsBtn}
                         <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
                         <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
                     </div>`;
@@ -1287,7 +1298,13 @@
         btn.disabled = false;
         btn.innerHTML = originalText;
         if (res.success) {
-          window.open(res.url, "_blank");
+          // Create a link and trigger download
+          const link = document.createElement("a");
+          link.href = "data:application/pdf;base64," + res.base64;
+          link.download = res.filename;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         } else {
           Swal.fire("Error", res.message, "error");
         }
