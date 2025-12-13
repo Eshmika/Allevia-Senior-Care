@@ -88,6 +88,30 @@ function getOrCreateSheet() {
 // 1. CREATE
 function handleCaregiverSubmission(data) {
   const sheet = getOrCreateSheet();
+
+  // --- DUPLICATE CHECK ---
+  const lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    // Fetch Phone (Col 4) and Email (Col 5) columns
+    // getRange(row, column, numRows, numColumns)
+    const values = sheet.getRange(2, 4, lastRow - 1, 2).getDisplayValues();
+    
+    const newPhone = String(data.phone || "").replace(/\D/g, "");
+    const newEmail = String(data.email || "").trim().toLowerCase();
+
+    for (let i = 0; i < values.length; i++) {
+      const existingPhone = String(values[i][0]).replace(/\D/g, "");
+      const existingEmail = String(values[i][1]).trim().toLowerCase();
+
+      if (newPhone && existingPhone === newPhone) {
+        return { success: false, message: "Error: This Phone Number is already registered." };
+      }
+      if (newEmail && existingEmail === newEmail) {
+        return { success: false, message: "Error: This Email is already registered." };
+      }
+    }
+  }
+  // -----------------------
   
   // Generate ID: CG + Random 4 digits
   // Example: CG1234
@@ -107,16 +131,16 @@ function handleCaregiverSubmission(data) {
   ]);
   
   // Save Banking Info if provided
-  const lastRow = sheet.getLastRow();
+  const newRow = sheet.getLastRow();
   // Find column indices for Routing/Account
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   const routingIdx = headers.indexOf("Routing Number");
   const accountIdx = headers.indexOf("Bank Account");
   const reviewIdx = headers.indexOf("Last Reviewed");
   
-  if (routingIdx > -1 && data.routingNum) sheet.getRange(lastRow, routingIdx + 1).setValue(data.routingNum);
-  if (accountIdx > -1 && data.accountNum) sheet.getRange(lastRow, accountIdx + 1).setValue(data.accountNum);
-  if (reviewIdx > -1) sheet.getRange(lastRow, reviewIdx + 1).setValue(new Date());
+  if (routingIdx > -1 && data.routingNum) sheet.getRange(newRow, routingIdx + 1).setValue(data.routingNum);
+  if (accountIdx > -1 && data.accountNum) sheet.getRange(newRow, accountIdx + 1).setValue(data.accountNum);
+  if (reviewIdx > -1) sheet.getRange(newRow, reviewIdx + 1).setValue(new Date());
 
   sendRecruitmentEmail(data, newId);
   return { success: true, message: "Sent!", id: newId };
