@@ -259,6 +259,51 @@ function sendClientWelcomeEmail(data, clientId) {
   });
 }
 
+function sendRejectionEmail(caregiverId) {
+  try {
+    const details = getCaregiverDetails(caregiverId);
+    if (!details) return { success: false, message: "Caregiver not found" };
+
+    const subject = `Update on your application with Allevia Senior Care`;
+    
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <div style="background-color: #65c027; padding: 24px; text-align: center;">
+          <h2 style="color: white; margin: 0; font-size: 24px;">Allevia Senior Care</h2>
+        </div>
+        
+        <div style="padding: 30px; background-color: #ffffff;">
+          <p style="margin-top: 0;">Dear <strong>${details["First Name"]}</strong>,</p>
+          
+          <p>Thank you for your interest in working with Allevia Senior Care. While we’ve decided to move forward with another candidate for this particular role, we were impressed by your background and the compassion you bring to caregiving.</p>
+
+          <p>We encourage you to stay connected with us and apply for future opportunities that may be a stronger match. Your dedication to care is valued, and we look forward to the possibility of working together in the future.</p>
+
+          <br>
+          <p style="margin-bottom: 5px;">Warm regards,</p>
+          <p style="margin: 0; font-weight: bold;">Ines k. M & Allevia Teams</p>
+          <p style="margin: 0; color: #666; font-size: 14px;">Managing Director | Allevia Senior Care</p>
+          <p style="margin: 0; color: #666; font-size: 14px;">440-9079599</p>
+        </div>
+
+        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af;">
+          &copy; 2025 Allevia Senior Care. All rights reserved.
+        </div>
+      </div>
+    `;
+
+    MailApp.sendEmail({
+      to: details["Email"],
+      subject: subject,
+      htmlBody: htmlBody,
+    });
+
+    return { success: true };
+  } catch (e) {
+    return { success: false, message: e.toString() };
+  }
+}
+
 // function testEmailPermission() {
 //   MailApp.getRemainingDailyQuota(); // This forces the email permission check
 //   console.log("Permissions granted!");

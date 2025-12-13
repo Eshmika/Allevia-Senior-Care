@@ -1202,6 +1202,7 @@
               </div>`;
       } else if (stage === "interview") {
         const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1"><i class="ph ph-eye"></i> View Details</button>`;
+        const rejectBtn = `<button onclick="sendRejectionEmail('${cg.id}')" class="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 font-bold border border-red-200 mr-2 flex items-center gap-1" title="Send Rejection Email"><i class="ph ph-x-circle"></i> Reject</button>`;
 
         // If already passed/failed, show status, else show buttons
         if (cg.interviewStatus === "Passed") {
@@ -1212,6 +1213,7 @@
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
                         ${viewDetailsBtn}
+                        ${rejectBtn}
                         <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
                         <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
                     </div>`;
@@ -1353,6 +1355,39 @@
         }
       })
       .sendOnboardingEmail(id);
+  }
+
+  function sendRejectionEmail(id) {
+    Swal.fire({
+        title: 'Send Rejection Email?',
+        text: "This will send a rejection email to the caregiver.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, send it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: 'Sending...',
+                text: 'Please wait while we send the email.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            google.script.run
+                .withSuccessHandler((res) => {
+                    if (res.success) {
+                        Swal.fire('Sent!', 'Rejection email has been sent.', 'success');
+                    } else {
+                        Swal.fire('Error', res.message, 'error');
+                    }
+                })
+                .sendRejectionEmail(id);
+        }
+    });
   }
 
   // -- Communication Logic --
