@@ -64,11 +64,12 @@ function sendOnboardingEmail(caregiverId) {
     if (!details) return { success: false, message: "Caregiver not found" };
 
     const subject = `Action Required: On boarding Caregiver Complete sign & review`;
-    
-    // Placeholder links 
-    const linkContract = "https://drive.google.com/file/d/1-akwIVsG1ltUON7vqZJBGLcDCc_E9Emq/view?usp=sharing";
-    const linkW9 = "https://drive.google.com/file/d/11NtPiwoABW1RU0roiuH5zhEhYRqIZ999/view?usp=sharing";
-    const linkBackground = "https://drive.google.com/file/d/1hK-5vAcGZQD_av4eFDaMGv5rfgMVEc67/view?usp=sharing";
+
+    // Dynamic Web App Links
+    const webAppUrl = ScriptApp.getService().getUrl();
+    const linkContract = `${webAppUrl}?page=contract&id=${caregiverId}`;
+    const linkW9 = `${webAppUrl}?page=w9&id=${caregiverId}`;
+    const linkBackground = `${webAppUrl}?page=background&id=${caregiverId}`;
 
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -138,7 +139,7 @@ function sendOnboardingEmail(caregiverId) {
     MailApp.sendEmail({
       to: details["Email"],
       subject: subject,
-      htmlBody: htmlBody
+      htmlBody: htmlBody,
     });
 
     return { success: true, message: "Onboarding email sent!" };
@@ -154,24 +155,29 @@ function sendCustomEmail(cgIds, clIds, subject, message) {
     // 1. Fetch Caregivers if needed
     if (cgIds && cgIds.length > 0) {
       const list = getCaregiverList();
-      const selected = list.filter(c => cgIds.includes(c.id) && c.email && c.email.includes("@"));
+      const selected = list.filter(
+        (c) => cgIds.includes(c.id) && c.email && c.email.includes("@")
+      );
       recipients = recipients.concat(selected);
     }
 
     // 2. Fetch Clients if needed
     if (clIds && clIds.length > 0) {
       const list = getClientList();
-      const selected = list.filter(c => clIds.includes(c.id) && c.email && c.email.includes("@"));
+      const selected = list.filter(
+        (c) => clIds.includes(c.id) && c.email && c.email.includes("@")
+      );
       recipients = recipients.concat(selected);
     }
 
-    if (recipients.length === 0) return { success: false, message: "No valid recipients found." };
+    if (recipients.length === 0)
+      return { success: false, message: "No valid recipients found." };
 
     // 2. Send Emails
     // Note: For "All", this might hit quotas. For production, consider batching or BCC.
     // For now, we loop.
     let count = 0;
-    recipients.forEach(r => {
+    recipients.forEach((r) => {
       try {
         const htmlBody = `
           <div style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
@@ -181,11 +187,11 @@ function sendCustomEmail(cgIds, clIds, subject, message) {
             <p style="font-size: 12px; color: #888;">Allevia Senior Care Communication</p>
           </div>
         `;
-        
+
         MailApp.sendEmail({
           to: r.email,
           subject: subject,
-          htmlBody: htmlBody
+          htmlBody: htmlBody,
         });
         count++;
       } catch (err) {
@@ -194,7 +200,6 @@ function sendCustomEmail(cgIds, clIds, subject, message) {
     });
 
     return { success: true, message: `Sent to ${count} recipient(s).` };
-
   } catch (e) {
     return { success: false, message: e.toString() };
   }
@@ -209,7 +214,7 @@ function resendCaregiverEmail(caregiverId) {
       firstName: details["First Name"],
       lastName: details["Last Name"],
       email: details["Email"],
-      phone: details["Phone"]
+      phone: details["Phone"],
     };
 
     sendRecruitmentEmail(data, caregiverId);
@@ -287,7 +292,7 @@ function sendRejectionEmail(caregiverId) {
     if (!details) return { success: false, message: "Caregiver not found" };
 
     const subject = `Update on your application with Allevia Senior Care`;
-    
+
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         <div style="background-color: #65c027; padding: 24px; text-align: center;">

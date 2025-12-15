@@ -16,7 +16,8 @@ function doGet(e) {
 
       // Check if application is already completed
       if (details && details["App Status"] === "Application Completed") {
-        return HtmlService.createHtmlOutput(`
+        return HtmlService.createHtmlOutput(
+          `
           <div style="font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f3f4f6;">
             <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; max-width: 500px;">
               <div style="width: 80px; height: 80px; background-color: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
@@ -33,10 +34,11 @@ function doGet(e) {
               </p>
             </div>
           </div>
-        `)
-        .setTitle("Application Status - Allevia Senior Care")
-        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
-        .addMetaTag("viewport", "width=device-width, initial-scale=1");
+        `
+        )
+          .setTitle("Application Status - Allevia Senior Care")
+          .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+          .addMetaTag("viewport", "width=device-width, initial-scale=1");
       }
 
       template.caregiverData = details || {};
@@ -50,6 +52,29 @@ function doGet(e) {
     } else {
       return HtmlService.createHtmlOutput(
         "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid or Expired Application Link.</h1>"
+      );
+    }
+  } else if (
+    ["contract", "w9", "background"].includes(e.parameter.page) &&
+    e.parameter.id
+  ) {
+    const isValid = validateCaregiverId(e.parameter.id);
+    if (isValid) {
+      var template = HtmlService.createTemplateFromFile(
+        "page-" + e.parameter.page
+      );
+      template.caregiverId = e.parameter.id;
+      var details = getCaregiverDetails(e.parameter.id);
+      template.caregiverData = details || {};
+
+      return template
+        .evaluate()
+        .setTitle("Onboarding - Allevia Senior Care")
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag("viewport", "width=device-width, initial-scale=1");
+    } else {
+      return HtmlService.createHtmlOutput(
+        "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid Link.</h1>"
       );
     }
   }

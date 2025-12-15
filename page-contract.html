@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 min-h-screen py-10 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
+    >
+      <div class="bg-green-600 px-8 py-6">
+        <h1 class="text-2xl font-bold text-white">
+          Independent Contractor Agreement
+        </h1>
+        <p class="text-green-100 mt-1">Allevia Senior Care</p>
+      </div>
+
+      <div class="p-8">
+        <div class="mb-6 bg-blue-50 border-l-4 border-blue-500 p-4">
+          <p class="text-blue-700">
+            AGREEMENT made this day by and between
+            <strong>Allevia Senior Care</strong> and
+            <span class="font-bold underline"
+              ><?= caregiverData['First Name'] ?>
+              <?= caregiverData['Last Name'] ?></span
+            >
+            (hereinafter referred to as "Contractor").
+          </p>
+        </div>
+
+        <form id="contractForm" class="space-y-6">
+          <div
+            class="prose text-gray-600 text-sm h-64 overflow-y-auto border p-4 rounded bg-gray-50 mb-6"
+          >
+            <h3 class="font-bold text-gray-800">
+              1. INDEPENDENT CONTRACTOR STATUS
+            </h3>
+            <p>
+              Contractor acknowledges that they are an independent contractor
+              and not an employee of Allevia Senior Care...
+            </p>
+            <!-- Add more contract text here -->
+            <p>[... Full Contract Terms Would Go Here ...]</p>
+          </div>
+
+          <div class="flex items-start">
+            <div class="flex items-center h-5">
+              <input
+                id="agree"
+                name="agree"
+                type="checkbox"
+                required
+                class="focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300 rounded"
+              />
+            </div>
+            <div class="ml-3 text-sm">
+              <label for="agree" class="font-medium text-gray-700"
+                >I have read and agree to the terms above.</label
+              >
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Digital Signature</label
+            >
+            <input
+              type="text"
+              name="signature"
+              required
+              placeholder="Type your full name"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+            />
+            <p class="text-xs text-gray-500 mt-1">
+              By typing your name, you are signing this agreement
+              electronically.
+            </p>
+          </div>
+
+          <div class="pt-4">
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              Sign Agreement
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      document
+        .getElementById("contractForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Add submission logic here (google.script.run)
+          alert("Contract Signed! (This is a demo)");
+        });
+    </script>
+  </body>
+</html>
