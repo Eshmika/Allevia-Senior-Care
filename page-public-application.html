@@ -136,15 +136,15 @@
             />
           </div>
         </div>
-        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">
+        <!-- <h1 class="text-3xl font-bold text-gray-900 tracking-tight">
           Allevia Senior Care
-        </h1>
-        <p
+        </h1> -->
+        <!-- <p
           class="text-[#65c027] font-semibold tracking-wide uppercase text-sm mt-1"
         >
           Because Home is Where the Care Is
-        </p>
-        <p class="mt-4 text-gray-500">Employment Application 2025</p>
+        </p> -->
+        <p class="mt-4 text-gray-500">Application</p>
       </div>
     </div>
 
@@ -159,7 +159,8 @@
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Fields matched to PDF -->
             <div>
-              <label class="input-label">First Name</label
+              <label class="input-label"
+                >First Name <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="firstName"
@@ -177,11 +178,11 @@
                 name="middleName"
                 class="input-field"
                 maxlength="5"
-                required
               />
             </div>
             <div>
-              <label class="input-label">Last Name</label
+              <label class="input-label"
+                >Last Name <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="lastName"
@@ -194,11 +195,30 @@
             </div>
 
             <div>
-              <label class="input-label">Date of Birth</label
-              ><input type="date" name="dob" class="input-field" required />
+              <label class="input-label"
+                >Date of Birth <span class="text-red-500">*</span></label
+              ><input
+                type="date"
+                name="dob"
+                class="input-field"
+                required
+                oninput="
+                  this.setCustomValidity('');
+                  if (this.value) {
+                  const dob = new Date(this.value);
+                  const minAgeDate = new Date();
+                  minAgeDate.setFullYear(minAgeDate.getFullYear() - 16);
+                  if (dob > minAgeDate) {
+                    this.setCustomValidity('You must be at least 16 years old.');
+                  }
+                  }
+                "
+              />
             </div>
             <div>
-              <label class="input-label">Gender</label>
+              <label class="input-label"
+                >Gender <span class="text-red-500">*</span></label
+              >
               <select name="gender" class="input-field" required>
                 <option value="">Select...</option>
                 <option value="F">Female</option>
@@ -207,7 +227,8 @@
               </select>
             </div>
             <div>
-              <label class="input-label">SSN #</label
+              <label class="input-label"
+                >SSN # <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="ssn"
@@ -220,7 +241,8 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="input-label">Address</label
+              <label class="input-label"
+                >Address <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="address"
@@ -230,12 +252,13 @@
               />
             </div>
             <div>
-              <label class="input-label">Apt #</label
-              ><input type="text" name="apt" class="input-field" required />
+              <label class="input-label">Apt # </label
+              ><input type="text" name="apt" class="input-field" />
             </div>
 
             <div>
-              <label class="input-label">City</label
+              <label class="input-label"
+                >City <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="city"
@@ -245,7 +268,8 @@
               />
             </div>
             <div>
-              <label class="input-label">State</label
+              <label class="input-label"
+                >State <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="state"
@@ -255,7 +279,8 @@
               />
             </div>
             <div>
-              <label class="input-label">Zip Code</label
+              <label class="input-label"
+                >Zip Code <span class="text-red-500">*</span></label
               ><input
                 type="text"
                 name="zip"
@@ -267,7 +292,8 @@
             </div>
 
             <div>
-              <label class="input-label">Cell Phone</label
+              <label class="input-label"
+                >Cell Phone <span class="text-red-500">*</span></label
               ><input
                 type="tel"
                 name="phone"
@@ -279,36 +305,14 @@
               />
             </div>
             <div class="md:col-span-2">
-              <label class="input-label">Email</label
+              <label class="input-label"
+                >Email <span class="text-red-500">*</span></label
               ><input
                 type="email"
                 name="email"
                 class="input-field bg-gray-100"
                 value="<?= caregiverData['Email'] || '' ?>"
                 readonly
-                required
-              />
-            </div>
-
-            <div>
-              <label class="input-label">Routing Number</label
-              ><input
-                type="text"
-                name="routingNum"
-                class="input-field"
-                maxlength="9"
-                placeholder="9 digits"
-                required
-              />
-            </div>
-            <div class="md:col-span-2">
-              <label class="input-label">Bank Account</label
-              ><input
-                type="text"
-                name="accountNum"
-                class="input-field"
-                maxlength="12"
-                placeholder="Max 12 digits"
                 required
               />
             </div>
@@ -319,7 +323,8 @@
           >
             <div class="flex items-center justify-between">
               <span class="text-sm font-medium text-gray-700"
-                >Eligible to work in the US?</span
+                >Eligible to work in the US?
+                <span class="text-red-500">*</span></span
               >
               <div class="flex gap-4">
                 <label class="flex items-center gap-2"
@@ -333,7 +338,7 @@
             </div>
             <div class="flex items-center justify-between">
               <span class="text-sm font-medium text-gray-700"
-                >Legal US Citizen?</span
+                >Legal US Citizen? <span class="text-red-500">*</span></span
               >
               <div class="flex gap-4">
                 <label class="flex items-center gap-2"
@@ -354,7 +359,8 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="flex flex-col gap-2">
               <label class="input-label"
-                >Do you have a valid Driver's License?</label
+                >Do you have a valid Driver's License?
+                <span class="text-red-500">*</span></label
               >
               <div class="flex gap-4">
                 <label class="flex items-center gap-2"
@@ -370,27 +376,19 @@
 
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="input-label">License State</label
-                ><input
-                  type="text"
-                  name="licenseState"
-                  class="input-field"
-                  required
-                />
+                <label class="input-label">License State </label
+                ><input type="text" name="licenseState" class="input-field" />
               </div>
               <div>
-                <label class="input-label">License #</label
-                ><input
-                  type="text"
-                  name="licenseNum"
-                  class="input-field"
-                  required
-                />
+                <label class="input-label">License # </label
+                ><input type="text" name="licenseNum" class="input-field" />
               </div>
             </div>
 
             <div class="flex flex-col gap-2">
-              <label class="input-label">Do you have a car?</label>
+              <label class="input-label"
+                >Do you have a car? <span class="text-red-500">*</span></label
+              >
               <div class="flex gap-4">
                 <label class="flex items-center gap-2"
                   ><input type="radio" name="hasCar" value="Yes" required />
@@ -405,12 +403,7 @@
 
             <div>
               <label class="input-label">Car Make & Model</label
-              ><input
-                type="text"
-                name="carModel"
-                class="input-field"
-                required
-              />
+              ><input type="text" name="carModel" class="input-field" />
             </div>
 
             <div
@@ -428,7 +421,8 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="input-label"
-                >Hours Available (Select all that apply)</label
+                >Hours Available (Select all that apply)
+                <span class="text-red-500">*</span></label
               >
               <div class="flex flex-col gap-2 mt-2">
                 <label
@@ -455,7 +449,9 @@
             </div>
 
             <div>
-              <label class="input-label">Times Available</label>
+              <label class="input-label"
+                >Times Available <span class="text-red-500">*</span></label
+              >
               <div class="flex flex-col gap-2 mt-2">
                 <label
                   ><input type="checkbox" name="timesAvail" value="Mornings" />
@@ -477,7 +473,10 @@
             </div>
 
             <div class="md:col-span-2">
-              <label class="input-label">Schedule Desired (Days)</label>
+              <label class="input-label"
+                >Schedule Desired (Days)
+                <span class="text-red-500">*</span></label
+              >
               <div class="flex flex-wrap gap-4 mt-2">
                 <label
                   ><input type="checkbox" name="scheduleDays" value="MON" />
@@ -512,27 +511,53 @@
 
             <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="bg-gray-50 p-3 rounded flex justify-between">
-                <span>Available for emergencies?</span>
+                <span
+                  >Available for emergencies?
+                  <span class="text-red-500">*</span></span
+                >
                 <div class="flex gap-3">
                   <label
-                    ><input type="radio" name="emergencyAvail" value="Yes" />
+                    ><input
+                      type="radio"
+                      name="emergencyAvail"
+                      value="Yes"
+                      required
+                    />
                     Yes</label
                   >
                   <label
-                    ><input type="radio" name="emergencyAvail" value="No" />
+                    ><input
+                      type="radio"
+                      name="emergencyAvail"
+                      value="No"
+                      required
+                    />
                     No</label
                   >
                 </div>
               </div>
               <div class="bg-gray-50 p-3 rounded flex justify-between">
-                <span>Available for 24hr live-in?</span>
+                <span
+                  >Available for 24hr live-in?
+                  <span class="text-red-500">*</span></span
+                >
                 <div class="flex gap-3">
                   <label
-                    ><input type="radio" name="liveInAvail" value="Yes" />
+                    ><input
+                      type="radio"
+                      name="liveInAvail"
+                      value="Yes"
+                      required
+                    />
                     Yes</label
                   >
                   <label
-                    ><input type="radio" name="liveInAvail" value="No" />
+                    ><input
+                      type="radio"
+                      name="liveInAvail"
+                      value="No"
+                      required
+                    />
                     No</label
                   >
                 </div>
@@ -545,7 +570,9 @@
         <div class="section-card">
           <h2 class="section-title">Certifications & Skills</h2>
 
-          <label class="input-label mb-3">Certifications Held</label>
+          <label class="input-label mb-3"
+            >Certifications Held <span class="text-red-500">*</span></label
+          >
           <div class="checkbox-grid mb-6">
             <label class="checkbox-item"
               ><input type="checkbox" name="certs" value="CPR & First Aid" />
@@ -579,9 +606,14 @@
               ><input type="checkbox" name="certs" value="RN" /> Registered
               Nurse (RN)</label
             >
+            <label class="checkbox-item"
+              ><input type="checkbox" name="certs" value="None" /> None</label
+            >
           </div>
 
-          <label class="input-label mb-3">Skills Experience</label>
+          <label class="input-label mb-3"
+            >Skills Experience <span class="text-red-500">*</span></label
+          >
           <div class="checkbox-grid">
             <label class="checkbox-item"
               ><input type="checkbox" name="skills" value="Bathing" />
@@ -765,7 +797,9 @@
             >
           </div>
 
-          <label class="input-label mt-6 mb-3">Languages Spoken</label>
+          <label class="input-label mt-6 mb-3"
+            >Languages Spoken <span class="text-red-500">*</span></label
+          >
           <div class="checkbox-grid">
             <label class="checkbox-item"
               ><input type="checkbox" name="languages" value="English" />
@@ -839,11 +873,14 @@
           <h2 class="section-title">Education</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="input-label">High School (City/State)</label
+              <label class="input-label"
+                >High School (City/State)
+                <span class="text-red-500">*</span></label
               ><input type="text" name="hsName" class="input-field" />
             </div>
             <div>
-              <label class="input-label">Degree/Year</label
+              <label class="input-label"
+                >Degree/Year <span class="text-red-500">*</span></label
               ><input type="text" name="hsDegree" class="input-field" />
             </div>
 
@@ -872,32 +909,54 @@
           <h2 class="section-title">Employment History (Last Employer)</h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label class="input-label">Company Name</label
-              ><input type="text" name="emp1[company]" class="input-field" />
+              <label class="input-label"
+                >Company Name <span class="text-red-500">*</span></label
+              ><input
+                type="text"
+                name="emp1[company]"
+                class="input-field"
+                required
+              />
             </div>
             <div>
-              <label class="input-label">Job Title</label
-              ><input type="text" name="emp1[title]" class="input-field" />
+              <label class="input-label"
+                >Job Title <span class="text-red-500">*</span></label
+              ><input
+                type="text"
+                name="emp1[title]"
+                class="input-field"
+                required
+              />
             </div>
             <div>
-              <label class="input-label">Supervisor</label
-              ><input type="text" name="emp1[supervisor]" class="input-field" />
+              <label class="input-label"
+                >Supervisor <span class="text-red-500">*</span></label
+              ><input
+                type="text"
+                name="emp1[supervisor]"
+                class="input-field"
+                required
+              />
             </div>
             <div>
-              <label class="input-label">Phone</label
+              <label class="input-label"
+                >Phone <span class="text-red-500">*</span></label
               ><input
                 type="tel"
                 name="emp1[phone]"
                 class="input-field"
                 maxlength="14"
+                required
               />
             </div>
             <div class="md:col-span-2">
-              <label class="input-label">Duties</label
+              <label class="input-label"
+                >Duties <span class="text-red-500">*</span></label
               ><textarea
                 name="emp1[duties]"
                 class="input-field"
                 rows="2"
+                required
               ></textarea>
             </div>
           </div>
@@ -908,7 +967,7 @@
           <h2 class="section-title">References</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div class="md:col-span-3 font-semibold text-gray-500 text-sm">
-              Reference 1
+              Reference 1 <span class="text-red-500">*</span>
             </div>
             <div>
               <input
@@ -916,6 +975,7 @@
                 name="ref1[name]"
                 placeholder="Name"
                 class="input-field"
+                required
               />
             </div>
             <div>
@@ -925,6 +985,7 @@
                 placeholder="Phone"
                 class="input-field"
                 maxlength="14"
+                required
               />
             </div>
             <div>
@@ -933,6 +994,7 @@
                 name="ref1[relation]"
                 placeholder="Relationship"
                 class="input-field"
+                required
               />
             </div>
           </div>
@@ -973,11 +1035,13 @@
           <h2 class="section-title">Emergency Contact</h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <label class="input-label">Name</label
+              <label class="input-label"
+                >Name <span class="text-red-500">*</span></label
               ><input type="text" name="emName" required class="input-field" />
             </div>
             <div>
-              <label class="input-label">Cell Phone</label
+              <label class="input-label"
+                >Cell Phone <span class="text-red-500">*</span></label
               ><input
                 type="tel"
                 name="emPhone"
@@ -987,19 +1051,22 @@
               />
             </div>
             <div>
-              <label class="input-label">Relationship</label
+              <label class="input-label"
+                >Relationship <span class="text-red-500">*</span></label
               ><input type="text" name="emRel" required class="input-field" />
             </div>
           </div>
         </div>
 
         <!-- 9. Legal & Signature -->
-        <div class="section-card bg-red-50 border-red-100">
-          <h2 class="section-title text-red-900">Legal & Certification</h2>
+        <!-- 9A. Legal Questions -->
+        <div class="section-card">
+          <h2 class="section-title">Criminal History</h2>
 
           <div class="mb-4">
-            <label class="input-label text-red-900"
-              >Have you ever been convicted of a felony or misdemeanor?</label
+            <label class="input-label"
+              >Have you ever been convicted of a felony or misdemeanor?
+              <span class="text-red-500">*</span></label
             >
             <div class="flex gap-4 mt-2">
               <label
@@ -1028,33 +1095,115 @@
               class="input-field mt-2"
             />
           </div>
+        </div>
+
+        <!-- 9B. Certification & Signature -->
+        <div class="section-card bg-red-50 border-red-100">
+          <h2 class="section-title text-red-900">Sign & Certify</h2>
 
           <div
-            class="text-xs text-gray-600 space-y-2 mt-6 border-t border-red-200 pt-4"
+            class="text-xs text-gray-600 space-y-2 mt-2 border-t border-red-200 pt-4 text-justify"
           >
             <p>
-              I certify the above stated and indicated are true in fact and no
-              misrepresentation of myself has been made.
-            </p>
-            <p>
-              I authorize "Allevia llc" to verify any and all information
-              contained within this application.
-            </p>
-            <p>
-              I understand that the use of illegal drugs is prohibited during
-              employment.
-            </p>
-            <p>
-              <strong>Restrictive Covenant:</strong> I agree not to do business
-              directly with any individual or business entity that Allevia llc
-              has introduced to me.
+              Allevia llc dba: Allevia Senior Care does not discriminate in
+              their hiring practices or in any other decision on the basis of
+              race, color, sex, sexual orientation, citizenship, national
+              origin, veteran status, age and/or physical or mental disability
+              unrelated to the ability to perform the work required. No question
+              on this application is intended to secure information to be used
+              for such discrimination.
             </p>
           </div>
 
-          <div class="mt-6 flex flex-col md:flex-row gap-4 items-end">
+          <div
+            class="text-xs text-gray-600 space-y-4 mt-2 border-t border-red-200 pt-4 text-justify"
+          >
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeCertify"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span>
+                I certify the above stated and indicated are true in fact and no
+                misrepresentation of myself has been made. I understand that any
+                false information, omissions or misrepresentation of facts will
+                result in rejection of this application and/or discharge at any
+                time during employment. I understand that Allevia llc is under
+                no obligation to consider or reconsider this application at any
+                time, and that acceptance of this application does not
+                constitute an offer of employment.
+              </span>
+            </label>
+
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeAuthorize"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span>
+                I authorize “Allevia llc”. to verify any and all information
+                contained within this application, educators, employers,
+                references, consumer credit, private or government agencies and
+                any other individuals who may have knowledge of me or my work
+                experience. I authorize all persons, schools, companies & law
+                enforcement authorities to release any information concerning my
+                background & hereby release any said persons, schools, companies
+                & law enforcement authorities from any liability for any damage
+                whatsoever for issuing this information. I agree to cooperate
+                with such an investigation and release all parties from any and
+                all liability, claims or damages, directly or indirectly,
+                resulting from furnishing such information. I also understand
+                that the use of illegal drugs is prohibited during employment
+                and that I am willing to submit to drug testing at any time to
+                detect the use of illegal drugs prior to or during employment.
+              </span>
+            </label>
+
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeCovenant"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span>
+                <strong>Restrictive Covenant:</strong> I agree not to do
+                business directly with any individual or business entity that
+                Allevia llc. has introduced to me or by entering into employment
+                with such individuals or businesses.
+              </span>
+            </label>
+          </div>
+
+          <div
+            class="text-xs text-gray-600 space-y-2 mt-2 border-t border-red-200 pt-4"
+          >
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeEsign"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span class="italic">
+                By electronically typing or signing my name below, I acknowledge
+                and agree that this electronic representation of my name
+                constitutes my legal signature. This electronic signature has
+                the same validity, force, and effect as a handwritten signature
+                under applicable state and federal law, including the ESIGN Act
+                and the Uniform Electronic Transactions Act.
+              </span>
+            </label>
+          </div>
+          <div class="mt-3 flex flex-col md:flex-row gap-4 items-end">
             <div class="flex-1 w-full">
               <label class="input-label"
-                >Digital Signature (Type Full Name)</label
+                >Digital Signature (Type Full Name)
+                <span class="text-red-500">*</span></label
               >
               <input
                 type="text"
@@ -1065,7 +1214,9 @@
               />
             </div>
             <div class="w-full md:w-48">
-              <label class="input-label">Date</label>
+              <label class="input-label"
+                >Date <span class="text-red-500">*</span></label
+              >
               <input type="date" required class="input-field" />
             </div>
           </div>
@@ -1248,6 +1399,25 @@
         // Simple Validation
         if (!form.signName.value) {
           Swal.fire("Error", "Please sign the application.", "warning");
+          return;
+        }
+
+        // Validate Signature matches Name
+        const fName = form.firstName.value.trim();
+        const mName = form.middleName.value.trim();
+        const lName = form.lastName.value.trim();
+        const signName = form.signName.value.trim();
+
+        const fullName = mName
+          ? `${fName} ${mName} ${lName}`
+          : `${fName} ${lName}`;
+
+        if (signName.toLowerCase() !== fullName.toLowerCase()) {
+          Swal.fire(
+            "Signature Mismatch",
+            `Digital Signature must match your full name: "${fullName}"`,
+            "warning"
+          );
           return;
         }
 
