@@ -389,6 +389,11 @@
           </div>
 
           <div>
+            <input
+              type="hidden"
+              name="caregiverId"
+              value="<?= caregiverId ?>"
+            />
             <label class="input-label"
               >Full Name <span class="text-red-500">*</span></label
             ><input
@@ -411,6 +416,7 @@
               name="signature"
               required
               placeholder="Type your full name"
+              value="<?= caregiverData['Signature'] || '' ?>"
               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
             />
 
@@ -421,6 +427,7 @@
               type="date"
               name="signDate"
               required
+              value="<?= caregiverData['SignDate'] || '' ?>"
               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
             />
           </div>
@@ -464,7 +471,30 @@
             return;
           }
 
-          alert("Independent Contractor Agreement Signed!");
+          // Show loading state
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerText;
+          btn.innerText = "Signing & Uploading...";
+          btn.disabled = true;
+
+          google.script.run
+            .withSuccessHandler(function (response) {
+              if (response.success) {
+                alert("Agreement Signed and Uploaded Successfully!");
+                // Optional: Redirect or disable form
+                btn.innerText = "Signed";
+              } else {
+                alert("Error: " + response.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+              }
+            })
+            .withFailureHandler(function (err) {
+              alert("Error: " + err);
+              btn.innerText = originalText;
+              btn.disabled = false;
+            })
+            .submitContract(document.getElementById("contractForm"));
         });
     </script>
   </body>

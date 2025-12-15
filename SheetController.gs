@@ -65,7 +65,7 @@ function getOrCreateSheet() {
       "Background Check",
       "Routing Number",
       "Bank Account",
-      "Last Reviewed"
+      "Last Reviewed",
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   } else {
@@ -77,12 +77,52 @@ function getOrCreateSheet() {
       sheet.getRange(1, lastCol + 2).setValue("Bank Account");
     }
     // Check for Last Reviewed separately as it might be added later
-    const updatedHeaders = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const updatedHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
     if (!updatedHeaders.includes("Last Reviewed")) {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Last Reviewed");
     }
+
+    // Add Document Link Columns
+    const finalHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!finalHeaders.includes("Contract Link")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Contract Link");
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("W9 Link");
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Background Link");
+    }
   }
   return sheet;
+}
+
+function saveDocumentLink(caregiverId, docType, fileUrl) {
+  const sheet = getOrCreateSheet();
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0];
+
+  // Map docType to Header Name
+  const headerMap = {
+    contract: "Contract Link",
+    w9: "W9 Link",
+    background: "Background Link",
+  };
+
+  const targetHeader = headerMap[docType];
+  if (!targetHeader) return false;
+
+  const colIndex = headers.indexOf(targetHeader);
+  if (colIndex === -1) return false; // Column not found
+
+  // Find row by Caregiver ID (Column 0)
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === caregiverId) {
+      sheet.getRange(i + 1, colIndex + 1).setValue(fileUrl);
+      return true;
+    }
+  }
+  return false;
 }
 
 // 1. CREATE
@@ -95,24 +135,32 @@ function handleCaregiverSubmission(data) {
     // Fetch Phone (Col 4) and Email (Col 5) columns
     // getRange(row, column, numRows, numColumns)
     const values = sheet.getRange(2, 4, lastRow - 1, 2).getDisplayValues();
-    
+
     const newPhone = String(data.phone || "").replace(/\D/g, "");
-    const newEmail = String(data.email || "").trim().toLowerCase();
+    const newEmail = String(data.email || "")
+      .trim()
+      .toLowerCase();
 
     for (let i = 0; i < values.length; i++) {
       const existingPhone = String(values[i][0]).replace(/\D/g, "");
       const existingEmail = String(values[i][1]).trim().toLowerCase();
 
       if (newPhone && existingPhone === newPhone) {
-        return { success: false, message: "Error: This Phone Number is already registered." };
+        return {
+          success: false,
+          message: "Error: This Phone Number is already registered.",
+        };
       }
       if (newEmail && existingEmail === newEmail) {
-        return { success: false, message: "Error: This Email is already registered." };
+        return {
+          success: false,
+          message: "Error: This Email is already registered.",
+        };
       }
     }
   }
   // -----------------------
-  
+
   // Generate ID: CG + Random 4 digits
   // Example: CG1234
   const randomPart = Math.floor(1000 + Math.random() * 9000); // 4 digit random
@@ -129,7 +177,7 @@ function handleCaregiverSubmission(data) {
     new Date(),
     "Pending Application",
   ]);
-  
+
   // Save Banking Info if provided
   const newRow = sheet.getLastRow();
   // Find column indices for Routing/Account
@@ -137,10 +185,13 @@ function handleCaregiverSubmission(data) {
   const routingIdx = headers.indexOf("Routing Number");
   const accountIdx = headers.indexOf("Bank Account");
   const reviewIdx = headers.indexOf("Last Reviewed");
-  
-  if (routingIdx > -1 && data.routingNum) sheet.getRange(newRow, routingIdx + 1).setValue(data.routingNum);
-  if (accountIdx > -1 && data.accountNum) sheet.getRange(newRow, accountIdx + 1).setValue(data.accountNum);
-  if (reviewIdx > -1) sheet.getRange(newRow, reviewIdx + 1).setValue(new Date());
+
+  if (routingIdx > -1 && data.routingNum)
+    sheet.getRange(newRow, routingIdx + 1).setValue(data.routingNum);
+  if (accountIdx > -1 && data.accountNum)
+    sheet.getRange(newRow, accountIdx + 1).setValue(data.accountNum);
+  if (reviewIdx > -1)
+    sheet.getRange(newRow, reviewIdx + 1).setValue(new Date());
 
   sendRecruitmentEmail(data, newId);
   return { success: true, message: "Sent!", id: newId };
@@ -231,13 +282,17 @@ function submitFullApplication(form) {
     sheet.getRange(r, 10, 1, dataToUpdate[0].length).setValues(dataToUpdate);
 
     // Save Banking Info & Last Reviewed
-    const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const headers = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
     const routingIdx = headers.indexOf("Routing Number");
     const accountIdx = headers.indexOf("Bank Account");
     const reviewIdx = headers.indexOf("Last Reviewed");
-    
-    if (routingIdx > -1) sheet.getRange(r, routingIdx + 1).setValue(form.routingNum || "");
-    if (accountIdx > -1) sheet.getRange(r, accountIdx + 1).setValue(form.accountNum || "");
+
+    if (routingIdx > -1)
+      sheet.getRange(r, routingIdx + 1).setValue(form.routingNum || "");
+    if (accountIdx > -1)
+      sheet.getRange(r, accountIdx + 1).setValue(form.accountNum || "");
     if (reviewIdx > -1) sheet.getRange(r, reviewIdx + 1).setValue(new Date());
 
     return { success: true };
@@ -278,7 +333,7 @@ function getCaregiverList() {
       interviewStatus: row[53], // Interview Status (Check index)
       backgroundCheck: row[54], // Background Check (Check index)
       lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
-      lastClientSeen: lastClientMap[row[0].trim()] || "--"
+      lastClientSeen: lastClientMap[row[0].trim()] || "--",
     }))
     .reverse();
 }
@@ -315,7 +370,7 @@ function getAllLastClientsSeen() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const shiftSheet = ss.getSheetByName("Shifts_DB");
   const clientSheet = ss.getSheetByName("Clients_DB");
-  
+
   if (!shiftSheet || !clientSheet) return {};
 
   // Get Clients Map: ID -> Name
@@ -328,25 +383,25 @@ function getAllLastClientsSeen() {
   }
 
   // Get Shifts
-  const shiftData = shiftSheet.getDataRange().getValues(); 
+  const shiftData = shiftSheet.getDataRange().getValues();
   // Shift ID=0, Client ID=1, Caregiver ID=2, Start Date=3
-  
+
   const lastSeenMap = {}; // CaregiverID -> { date, clientName }
 
   for (let i = 1; i < shiftData.length; i++) {
     const row = shiftData[i];
-    const cid = String(row[1]); 
-    const gid = String(row[2]); 
+    const cid = String(row[1]);
+    const gid = String(row[2]);
     const date = new Date(row[3]);
 
     if (!lastSeenMap[gid] || date > lastSeenMap[gid].date) {
       lastSeenMap[gid] = {
         date: date,
-        clientName: clientMap[cid] || cid 
+        clientName: clientMap[cid] || cid,
       };
     }
   }
-  
+
   const result = {};
   for (const key in lastSeenMap) {
     result[key] = lastSeenMap[key].clientName;

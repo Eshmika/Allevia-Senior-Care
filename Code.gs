@@ -118,3 +118,53 @@ function generateCaregiverPdf(id) {
 
   return { success: true, base64: base64, filename: `Application_${id}.pdf` };
 }
+
+function submitContract(form) {
+  try {
+    const id = form.caregiverId;
+    const signature = form.signature;
+    const signDate = form.signDate;
+
+    if (!id) return { success: false, message: "Missing Caregiver ID" };
+
+    // 1. Get Caregiver Details
+    const details = getCaregiverDetails(id);
+    if (!details) return { success: false, message: "Caregiver not found" };
+
+    // 2. Prepare Data for PDF
+    // Add signature and date to details so they appear in the PDF
+    details["Signature"] = signature;
+    details["SignDate"] = signDate;
+
+    // 3. Generate PDF
+    const template = HtmlService.createTemplateFromFile("page-contract");
+    template.caregiverId = id;
+    template.caregiverData = details;
+
+    const pdfBlob = template
+      .evaluate()
+      .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+      .addMetaTag("viewport", "width=device-width, initial-scale=1")
+      .getAs(MimeType.PDF)
+      .setName(
+        `${details["First Name"]} ${details["Last Name"]} Independent Contractor Agreement.pdf`
+      );
+
+    // 4. Upload to Drive
+    const folderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
+    const folder = DriveApp.getFolderById(folderId);
+    const file = folder.createFile(pdfBlob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    // 5. Save Link to Sheet
+    const fileUrl = file.getUrl();
+    const saved = saveDocumentLink(id, "contract", fileUrl);
+
+    if (!saved)
+      return { success: false, message: "Failed to save link to database" };
+
+    return { success: true, url: fileUrl };
+  } catch (e) {
+    return { success: false, message: e.toString() };
+  }
+}
