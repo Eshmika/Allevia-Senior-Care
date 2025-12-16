@@ -13,6 +13,53 @@
       body {
         font-family: "Inter", sans-serif;
       }
+      
+      /* Tailwind Polyfill for PDF Generation */
+      /* These styles ensure the PDF looks correct even if the CDN fails to load in the PDF renderer */
+      .text-center { text-align: center; }
+      .text-justify { text-align: justify; }
+      .font-bold { font-weight: 700; }
+      .font-semibold { font-weight: 600; }
+      .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .underline { text-decoration: underline; }
+      .italic { font-style: italic; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .mt-2 { margin-top: 0.5rem; }
+      .mt-4 { margin-top: 1rem; }
+      .p-8 { padding: 2rem; }
+      .px-8 { padding-left: 2rem; padding-right: 2rem; }
+      .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+      .space-y-2 > * + * { margin-top: 0.5rem; }
+      .list-none { list-style: none; padding: 0; margin: 0; }
+      .w-full { width: 100%; }
+      .border { border-width: 1px; border-style: solid; }
+      .border-gray-300 { border-color: #d1d5db; }
+      .rounded-md { border-radius: 0.375rem; }
+      .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+      .p-2 { padding: 0.5rem; }
+      .block { display: block; }
+      .flex { display: flex; }
+      .gap-3 { gap: 0.75rem; }
+      .items-start { align-items: flex-start; }
+      .text-red-500 { color: #ef4444; }
+      
+      /* PDF Specific Overrides */
+      <? if (isPdf) { ?>
+        body { background-color: white !important; padding: 0 !important; }
+        .shadow-lg { box-shadow: none !important; }
+        .rounded-xl { border-radius: 0 !important; }
+        .no-pdf { display: none !important; }
+        /* Ensure inputs look like text in PDF */
+        .pdf-value { 
+            border: none; 
+            border-bottom: 1px solid #000; 
+            padding: 4px 0; 
+            width: 100%; 
+            display: block;
+            font-family: 'Courier New', Courier, monospace; /* Monospace for signature feel */
+        }
+      <? } ?>
     </style>
   </head>
   <body class="bg-gray-50 min-h-screen py-10 px-4">
@@ -347,35 +394,56 @@
 
         <form id="contractForm" class="space-y-6">
           <div class="space-y-2 mt-2 pt-4">
-            <label class="flex gap-3 items-start cursor-pointer">
-              <input
-                type="checkbox"
-                name="agree"
-                required
-                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
-              />
-              As witnessed herein, the parties have executed this Agreement and
-              intend it to be applicable as of the Effective Date.
-            </label>
+            <? if (isPdf) { ?>
+              <div class="flex gap-3 items-start">
+                 <span style="font-size: 18px; line-height: 1;">☑</span>
+                 <span>As witnessed herein, the parties have executed this Agreement and intend it to be applicable as of the Effective Date.</span>
+              </div>
+            <? } else { ?>
+              <label class="flex gap-3 items-start cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="agree"
+                  required
+                  class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+                />
+                As witnessed herein, the parties have executed this Agreement and
+                intend it to be applicable as of the Effective Date.
+              </label>
+            <? } ?>
           </div>
 
           <div class="space-y-2 mt-2 pt-4">
-            <label class="flex gap-3 items-start cursor-pointer">
-              <input
-                type="checkbox"
-                name="agreeEsign"
-                required
-                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
-              />
-              <span class="italic">
-                By electronically typing or signing my name below, I acknowledge
-                and agree that this electronic representation of my name
-                constitutes my legal signature. This electronic signature has
-                the same validity, force, and effect as a handwritten signature
-                under applicable state and federal law, including the ESIGN Act
-                and the Uniform Electronic Transactions Act.
-              </span>
-            </label>
+            <? if (isPdf) { ?>
+              <div class="flex gap-3 items-start">
+                 <span style="font-size: 18px; line-height: 1;">☑</span>
+                 <span class="italic">
+                    By electronically typing or signing my name below, I acknowledge
+                    and agree that this electronic representation of my name
+                    constitutes my legal signature. This electronic signature has
+                    the same validity, force, and effect as a handwritten signature
+                    under applicable state and federal law, including the ESIGN Act
+                    and the Uniform Electronic Transactions Act.
+                 </span>
+              </div>
+            <? } else { ?>
+              <label class="flex gap-3 items-start cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="agreeEsign"
+                  required
+                  class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+                />
+                <span class="italic">
+                  By electronically typing or signing my name below, I acknowledge
+                  and agree that this electronic representation of my name
+                  constitutes my legal signature. This electronic signature has
+                  the same validity, force, and effect as a handwritten signature
+                  under applicable state and federal law, including the ESIGN Act
+                  and the Uniform Electronic Transactions Act.
+                </span>
+              </label>
+            <? } ?>
           </div>
 
           <div>
@@ -384,45 +452,58 @@
               name="caregiverId"
               value="<?= caregiverId ?>"
             />
-            <label class="input-label"
-              >Full Name <span class="text-red-500">*</span></label
-            ><input
-              type="text"
-              name="fullName"
-              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
-              placeholder="Given Name"
-              value="<?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?>"
-              readonly
-              required
-            />
+            <label class="input-label font-semibold block mb-1"
+              >Full Name <span class="text-red-500 no-pdf">*</span></label
+            >
+            <? if (isPdf) { ?>
+               <div class="w-full border-b border-gray-400 py-2 mb-4"><?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?></div>
+            <? } else { ?>
+              <input
+                type="text"
+                name="fullName"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+                placeholder="Given Name"
+                value="<?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?>"
+                readonly
+                required
+              />
+            <? } ?>
 
-            <label class="input-label"
-              >Digital Signature (Type Full Name)<span class="text-red-500"
+            <label class="input-label font-semibold block mb-1"
+              >Digital Signature (Type Full Name)<span class="text-red-500 no-pdf"
                 >*</span
               ></label
             >
-            <input
-              type="text"
-              name="signature"
-              required
-              placeholder="Type your full name"
-              value="<?= caregiverData['Signature'] || '' ?>"
-              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
-            />
+            <? if (isPdf) { ?>
+               <div class="w-full border-b border-gray-400 py-2 mb-4" style="font-family: 'Courier New', Courier, monospace;"><?= caregiverData['Signature'] || '' ?></div>
+            <? } else { ?>
+              <input
+                type="text"
+                name="signature"
+                required
+                placeholder="Type your full name"
+                value="<?= caregiverData['Signature'] || '' ?>"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+              />
+            <? } ?>
 
-            <label class="input-label mt-4 block"
-              >Date <span class="text-red-500">*</span></label
+            <label class="input-label mt-4 block font-semibold mb-1"
+              >Date <span class="text-red-500 no-pdf">*</span></label
             >
-            <input
-              type="date"
-              name="signDate"
-              required
-              value="<?= caregiverData['SignDate'] || '' ?>"
-              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
-            />
+            <? if (isPdf) { ?>
+               <div class="w-full border-b border-gray-400 py-2 mb-4"><?= caregiverData['SignDate'] || '' ?></div>
+            <? } else { ?>
+              <input
+                type="date"
+                name="signDate"
+                required
+                value="<?= caregiverData['SignDate'] || '' ?>"
+                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+              />
+            <? } ?>
           </div>
 
-          <div class="pt-4">
+          <div class="pt-4 no-pdf">
             <button
               type="submit"
               class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"

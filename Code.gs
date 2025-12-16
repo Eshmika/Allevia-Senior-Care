@@ -66,6 +66,7 @@ function doGet(e) {
       template.caregiverId = e.parameter.id;
       var details = getCaregiverDetails(e.parameter.id);
       template.caregiverData = details || {};
+      template.isPdf = false;
 
       return template
         .evaluate()
@@ -140,6 +141,7 @@ function submitContract(form) {
     const template = HtmlService.createTemplateFromFile("page-contract");
     template.caregiverId = id;
     template.caregiverData = details;
+    template.isPdf = true;
 
     const pdfBlob = template
       .evaluate()
