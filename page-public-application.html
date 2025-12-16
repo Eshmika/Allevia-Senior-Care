@@ -276,6 +276,9 @@
                 id="app-state"
                 class="input-field"
                 required
+                maxlength="14"
+                pattern="[A-Za-z]{1,14}"
+                oninput="this.value = this.value.replace(/[^A-Za-z]/g, '').slice(0,14)"
               />
             </div>
             <div>

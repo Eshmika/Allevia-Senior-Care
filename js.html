@@ -1229,7 +1229,7 @@
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
                         <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1" title="Return to Interview Stage">
-                            <i class="ph ph-arrow-u-up-left"></i> Return
+                            <i class="ph ph-arrow-u-up-left"></i> Undo
                         </button>
                         <button onclick="sendOnboardingEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 transition-colors flex items-center gap-1 mr-2">
                           <i class="ph ph-envelope-simple"></i> Send Consent
@@ -1361,34 +1361,34 @@
 
   function sendRejectionEmail(id) {
     Swal.fire({
-        title: 'Send Rejection Email?',
-        text: "This will send a rejection email to the caregiver.",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, send it!'
+      title: "Send Rejection Email?",
+      text: "This will send a rejection email to the caregiver.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, send it!",
     }).then((result) => {
-        if (result.isConfirmed) {
-            Swal.fire({
-                title: 'Sending...',
-                text: 'Please wait while we send the email.',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Sending...",
+          text: "Please wait while we send the email.",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
 
-            google.script.run
-                .withSuccessHandler((res) => {
-                    if (res.success) {
-                        Swal.fire('Sent!', 'Rejection email has been sent.', 'success');
-                    } else {
-                        Swal.fire('Error', res.message, 'error');
-                    }
-                })
-                .sendRejectionEmail(id);
-        }
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire("Sent!", "Rejection email has been sent.", "success");
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .sendRejectionEmail(id);
+      }
     });
   }
 
@@ -1675,7 +1675,8 @@
 
   function renderWeekCalendar() {
     const grid = document.getElementById("weekGrid");
-    grid.innerHTML = '<div class="col-span-7 text-center p-4 text-gray-400">Loading...</div>';
+    grid.innerHTML =
+      '<div class="col-span-7 text-center p-4 text-gray-400">Loading...</div>';
 
     // Calculate start of week (Sunday)
     const startOfWeek = new Date(currentCalendarDate);
@@ -1687,91 +1688,111 @@
     endOfWeek.setDate(startOfWeek.getDate() + 6);
 
     // Update Label
-    const options = { month: 'short', day: 'numeric' };
-    const label = `${startOfWeek.toLocaleDateString('en-US', options)} - ${endOfWeek.toLocaleDateString('en-US', { ...options, year: 'numeric' })}`;
+    const options = { month: "short", day: "numeric" };
+    const label = `${startOfWeek.toLocaleDateString(
+      "en-US",
+      options
+    )} - ${endOfWeek.toLocaleDateString("en-US", {
+      ...options,
+      year: "numeric",
+    })}`;
     document.getElementById("currentWeekLabel").textContent = label;
 
     // Fetch Shifts
-    const startStr = startOfWeek.toISOString().split('T')[0];
-    const endStr = endOfWeek.toISOString().split('T')[0];
+    const startStr = startOfWeek.toISOString().split("T")[0];
+    const endStr = endOfWeek.toISOString().split("T")[0];
 
-    google.script.run.withSuccessHandler((shifts) => {
-      grid.innerHTML = "";
-      
-      // Generate 7 columns
-      for (let i = 0; i < 7; i++) {
-        const currentDay = new Date(startOfWeek);
-        currentDay.setDate(startOfWeek.getDate() + i);
-        const dateStr = currentDay.toISOString().split('T')[0];
-        
-        const isToday = new Date().toDateString() === currentDay.toDateString();
-        
-        const col = document.createElement("div");
-        col.className = `border-r border-gray-100 min-h-[400px] flex flex-col ${isToday ? 'bg-blue-50/30' : ''}`;
-        
-        // Date Header
-        col.innerHTML = `
-          <div class="p-2 text-center border-b border-gray-100 ${isToday ? 'bg-blue-50 text-blue-600' : ''}">
+    google.script.run
+      .withSuccessHandler((shifts) => {
+        grid.innerHTML = "";
+
+        // Generate 7 columns
+        for (let i = 0; i < 7; i++) {
+          const currentDay = new Date(startOfWeek);
+          currentDay.setDate(startOfWeek.getDate() + i);
+          const dateStr = currentDay.toISOString().split("T")[0];
+
+          const isToday =
+            new Date().toDateString() === currentDay.toDateString();
+
+          const col = document.createElement("div");
+          col.className = `border-r border-gray-100 min-h-[400px] flex flex-col ${
+            isToday ? "bg-blue-50/30" : ""
+          }`;
+
+          // Date Header
+          col.innerHTML = `
+          <div class="p-2 text-center border-b border-gray-100 ${
+            isToday ? "bg-blue-50 text-blue-600" : ""
+          }">
             <span class="text-lg font-bold block">${currentDay.getDate()}</span>
           </div>
           <div class="flex-1 p-2 space-y-2" id="day-${dateStr}"></div>
         `;
-        grid.appendChild(col);
+          grid.appendChild(col);
 
-        // Add Shifts
-        const dayShifts = shifts.filter(s => s.date === dateStr);
-        const container = col.querySelector(`#day-${dateStr}`);
-        
-        dayShifts.forEach(s => {
-           // Find names from global data if available, else use ID
-           const cg = cgData.find(c => c.id === s.caregiverId);
-           const cl = clData.find(c => c.id === s.clientId);
-           const cgName = cg ? cg.name : s.caregiverId;
-           const clName = cl ? cl.firstName + ' ' + cl.lastName : s.clientId;
+          // Add Shifts
+          const dayShifts = shifts.filter((s) => s.date === dateStr);
+          const container = col.querySelector(`#day-${dateStr}`);
 
-           const card = document.createElement("div");
-           card.className = "bg-white p-2 rounded border border-l-4 border-l-[#65c027] shadow-sm text-xs hover:shadow-md transition cursor-pointer";
-           card.innerHTML = `
+          dayShifts.forEach((s) => {
+            // Find names from global data if available, else use ID
+            const cg = cgData.find((c) => c.id === s.caregiverId);
+            const cl = clData.find((c) => c.id === s.clientId);
+            const cgName = cg ? cg.name : s.caregiverId;
+            const clName = cl ? cl.firstName + " " + cl.lastName : s.clientId;
+
+            const card = document.createElement("div");
+            card.className =
+              "bg-white p-2 rounded border border-l-4 border-l-[#65c027] shadow-sm text-xs hover:shadow-md transition cursor-pointer";
+            card.innerHTML = `
              <div class="font-bold text-gray-700 truncate">${clName}</div>
              <div class="text-gray-500 truncate">${cgName}</div>
              <div class="mt-1 flex justify-between text-[10px] text-gray-400">
                <span>${s.clockIn} - ${s.clockOut}</span>
              </div>
            `;
-           container.appendChild(card);
-        });
-      }
-    }).getShifts(startStr, endStr);
+            container.appendChild(card);
+          });
+        }
+      })
+      .getShifts(startStr, endStr);
   }
 
   function renderMiniMonthCalendar() {
     const grid = document.getElementById("miniMonthGrid");
     grid.innerHTML = "";
-    
+
     const year = currentMiniMonthDate.getFullYear();
     const month = currentMiniMonthDate.getMonth();
-    
-    document.getElementById("miniMonthLabel").textContent = currentMiniMonthDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    document.getElementById("miniMonthLabel").textContent =
+      currentMiniMonthDate.toLocaleDateString("en-US", {
+        month: "long",
+        year: "numeric",
+      });
 
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
-    
+
     // Empty cells for start padding
     for (let i = 0; i < firstDay.getDay(); i++) {
       grid.appendChild(document.createElement("div"));
     }
-    
+
     // Days
     for (let i = 1; i <= lastDay.getDate(); i++) {
       const d = new Date(year, month, i);
       const isToday = new Date().toDateString() === d.toDateString();
-      
+
       const cell = document.createElement("div");
-      cell.className = `p-1 rounded-full cursor-pointer hover:bg-gray-100 ${isToday ? 'bg-[#65c027] text-white font-bold' : 'text-gray-700'}`;
+      cell.className = `p-1 rounded-full cursor-pointer hover:bg-gray-100 ${
+        isToday ? "bg-[#65c027] text-white font-bold" : "text-gray-700"
+      }`;
       cell.textContent = i;
       cell.onclick = () => {
-         currentCalendarDate = new Date(year, month, i);
-         renderWeekCalendar();
+        currentCalendarDate = new Date(year, month, i);
+        renderWeekCalendar();
       };
       grid.appendChild(cell);
     }
