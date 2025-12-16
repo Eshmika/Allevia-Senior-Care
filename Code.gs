@@ -149,7 +149,7 @@ function submitContract(form) {
       .addMetaTag("viewport", "width=device-width, initial-scale=1")
       .getAs(MimeType.PDF)
       .setName(
-        `${details["First Name"]} ${details["Last Name"]} Independent Contractor Agreement.pdf`
+        `${details["First Name"]} ${details["Last Name"]} - Independent Contractor Agreement.pdf`
       );
 
     // 4. Upload to Drive
@@ -158,9 +158,12 @@ function submitContract(form) {
     try {
       folder = DriveApp.getFolderById(folderId);
     } catch (err) {
-      return { success: false, message: "Invalid Drive Folder ID or Permissions missing." };
+      return {
+        success: false,
+        message: "Invalid Drive Folder ID or Permissions missing.",
+      };
     }
-    
+
     const file = folder.createFile(pdfBlob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
@@ -177,21 +180,108 @@ function submitContract(form) {
   }
 }
 
+function submitBackground(form) {
+  try {
+    const id = form.caregiverId;
+    // Collect form data
+    const signature = form.signature;
+    const signDate = form.signDate;
+    const reasonFingerprinted = form.reasonFingerprinted;
+    const reasonThisCheck = form.reasonThisCheck;
+    const ssn = form.ssn;
+    const dob = form.dob;
+    const fullName = form.fullName;
+    const street = form.street;
+    const city = form.city;
+    const state = form.state;
+    const zip = form["zip code"]; // Access with bracket notation due to space
+    const phoneNumber = form.phoneNumber;
+
+    if (!id) return { success: false, message: "Missing Caregiver ID" };
+
+    // 1. Get Caregiver Details
+    const details = getCaregiverDetails(id);
+    if (!details) return { success: false, message: "Caregiver not found" };
+
+    // 2. Prepare Data for PDF
+    // Add form data to details object so it's available in the template
+    details["Signature"] = signature;
+    details["SignDate"] = signDate;
+    details["ReasonFingerprinted"] = reasonFingerprinted;
+    details["ReasonThisCheck"] = reasonThisCheck;
+    details["SSN"] = ssn;
+    details["DOB"] = dob;
+    details["FullName"] = fullName;
+    details["Street"] = street;
+    details["City"] = city;
+    details["State"] = state;
+    details["Zip"] = zip;
+    details["PhoneNumber"] = phoneNumber;
+
+    // 3. Generate PDF
+    const template = HtmlService.createTemplateFromFile("page-background");
+    template.caregiverId = id;
+    template.caregiverData = details;
+    template.isPdf = true;
+
+    const pdfBlob = template
+      .evaluate()
+      .setSandboxMode(HtmlService.SandboxMode.IFRAME)
+      .addMetaTag("viewport", "width=device-width, initial-scale=1")
+      .getAs(MimeType.PDF)
+      .setName(
+        `${details["First Name"]} ${details["Last Name"]} - Background Check.pdf`
+      );
+
+    // 4. Upload to Drive
+    const folderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
+    let folder;
+    try {
+      folder = DriveApp.getFolderById(folderId);
+    } catch (err) {
+      return {
+        success: false,
+        message: "Invalid Drive Folder ID or Permissions missing.",
+      };
+    }
+
+    const file = folder.createFile(pdfBlob);
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    // 5. Save Link to Sheet
+    const fileUrl = file.getUrl();
+    // Use "background" as docType to match "Background Link" column
+    const saved = saveDocumentLink(id, "background", fileUrl);
+
+    if (!saved)
+      return { success: false, message: "Failed to save link to database" };
+
+    return { success: true, url: fileUrl };
+  } catch (e) {
+    return { success: false, message: e.toString() };
+  }
+}
+
 /**
- * ⚠️ CRITICAL FIX FOR PERMISSIONS ⚠️ 
+ * ⚠️ CRITICAL FIX FOR PERMISSIONS ⚠️
  */
 function fixDrivePermissions() {
   const folderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
   console.log("Attempting to access folder...");
-  
+
   // 1. Force access to the specific folder
   const folder = DriveApp.getFolderById(folderId);
-  
+
   // 2. Force write permission by creating a temp file
-  const tempFile = folder.createFile("temp_permission_check.txt", "This is a test file to verify permissions. It will be deleted immediately.");
-  
+  const tempFile = folder.createFile(
+    "temp_permission_check.txt",
+    "This is a test file to verify permissions. It will be deleted immediately."
+  );
+
   // 3. Clean up
   tempFile.setTrashed(true);
-  
-  console.log("SUCCESS: Permissions are fully active for Drive and Folder access.");
+
+  console.log(
+    "SUCCESS: Permissions are fully active for Drive and Folder access."
+  );
 }
