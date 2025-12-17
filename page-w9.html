@@ -698,8 +698,7 @@
             .withSuccessHandler(function (response) {
               if (response && response.success) {
                 alert("W-9 Form submitted successfully!");
-                form.reset();
-                // Optional: Redirect or close
+                window.location.reload();
               } else {
                 alert(
                   "Error submitting form: " +

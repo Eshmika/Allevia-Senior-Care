@@ -524,8 +524,7 @@
                 alert(
                   "Background Check Request Signed and Uploaded Successfully!"
                 );
-                // Optional: Redirect or disable form
-                btn.innerText = "Signed";
+                window.location.reload();
               } else {
                 alert("Error: " + response.message);
                 btn.innerText = originalText;

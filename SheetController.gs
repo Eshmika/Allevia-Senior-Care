@@ -309,6 +309,9 @@ function getCaregiverList() {
 
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   const reviewIdx = headers.indexOf("Last Reviewed");
+  const contractIdx = headers.indexOf("Contract Link");
+  const w9Idx = headers.indexOf("W9 Link");
+  const backgroundIdx = headers.indexOf("Background Link");
 
   // Pre-fetch Last Client Seen Map
   const lastClientMap = getAllLastClientsSeen();
@@ -334,6 +337,9 @@ function getCaregiverList() {
       backgroundCheck: row[54], // Background Check (Check index)
       lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
       lastClientSeen: lastClientMap[row[0].trim()] || "--",
+      contractLink: contractIdx > -1 ? row[contractIdx] : "",
+      w9Link: w9Idx > -1 ? row[w9Idx] : "",
+      backgroundLink: backgroundIdx > -1 ? row[backgroundIdx] : "",
     }))
     .reverse();
 }

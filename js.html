@@ -1221,21 +1221,44 @@
                     </div>`;
         }
       } else if (stage === "background") {
+        let docsHtml = "";
+        if (cg.contractLink)
+          docsHtml += `<a href="${cg.contractLink}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View Contract"><i class="ph ph-file-text"></i> Contract</a>`;
+        if (cg.w9Link)
+          docsHtml += `<a href="${cg.w9Link}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View W9"><i class="ph ph-file-text"></i> W9</a>`;
+        if (cg.backgroundLink)
+          docsHtml += `<a href="${cg.backgroundLink}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View Background"><i class="ph ph-file-text"></i> Background</a>`;
+
+        // Hide "Send Consent" if Background Link exists (Consent Form submitted)
+        // or if all docs are submitted. Let's use backgroundLink as the main indicator for "Consent".
+        const showSendConsent = !cg.backgroundLink;
+
         if (cg.backgroundCheck === "Passed") {
-          actionHtml = `<span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Active', 'Active')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Activate Caregiver</button>`;
+          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Active', 'Active')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Activate Caregiver</button></div>`;
         } else if (cg.backgroundCheck === "Failed") {
-          actionHtml = `<span class="text-xs text-red-600 font-bold mr-2">Background Check Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1"><i class="ph ph-arrow-u-up-left"></i> Undo</button>`;
+          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-red-600 font-bold mr-2">Background Check Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1"><i class="ph ph-arrow-u-up-left"></i> Undo</button></div>`;
         } else {
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
-                        <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1" title="Return to Interview Stage">
+                        ${docsHtml}
+                        <button onclick="updateStageStatus('${
+                          cg.id
+                        }', 'Interview', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1" title="Return to Interview Stage">
                             <i class="ph ph-arrow-u-up-left"></i> Undo
                         </button>
-                        <button onclick="sendOnboardingEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 transition-colors flex items-center gap-1 mr-2">
+                        ${
+                          showSendConsent
+                            ? `<button onclick="sendOnboardingEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 transition-colors flex items-center gap-1 mr-2">
                           <i class="ph ph-envelope-simple"></i> Send Consent
-                        </button>
-                        <button onclick="updateStageStatus('${cg.id}', 'Background', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
-                        <button onclick="updateStageStatus('${cg.id}', 'Background', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
+                        </button>`
+                            : ""
+                        }
+                        <button onclick="updateStageStatus('${
+                          cg.id
+                        }', 'Background', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
+                        <button onclick="updateStageStatus('${
+                          cg.id
+                        }', 'Background', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
                     </div>`;
         }
       } else if (stage === "active") {

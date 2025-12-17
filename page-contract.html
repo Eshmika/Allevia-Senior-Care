@@ -13,7 +13,7 @@
       body {
         font-family: "Inter", sans-serif;
       }
-      
+
       /* Tailwind Polyfill for PDF Generation */
       /* These styles ensure the PDF looks correct even if the CDN fails to load in the PDF renderer */
       .text-center { text-align: center; }
@@ -43,7 +43,7 @@
       .gap-3 { gap: 0.75rem; }
       .items-start { align-items: flex-start; }
       .text-red-500 { color: #ef4444; }
-      
+
       /* PDF Specific Overrides */
       <? if (isPdf) { ?>
         body { background-color: white !important; padding: 0 !important; }
@@ -51,11 +51,11 @@
         .rounded-xl { border-radius: 0 !important; }
         .no-pdf { display: none !important; }
         /* Ensure inputs look like text in PDF */
-        .pdf-value { 
-            border: none; 
-            border-bottom: 1px solid #000; 
-            padding: 4px 0; 
-            width: 100%; 
+        .pdf-value {
+            border: none;
+            border-bottom: 1px solid #000;
+            padding: 4px 0;
+            width: 100%;
             display: block;
             font-family: 'Courier New', Courier, monospace; /* Monospace for signature feel */
         }
@@ -66,7 +66,7 @@
     <div
       class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
     >
-      <div class="px-8 py-6">       
+      <div class="px-8 py-6">
         <h1 class="text-2xl font-bold text-center">
           Independent Contractor Agreement
         </h1>
@@ -395,54 +395,57 @@
         <form id="contractForm" class="space-y-6">
           <div class="space-y-2 mt-2 pt-4">
             <? if (isPdf) { ?>
-              <div class="flex gap-3 items-start">
-                 <span style="font-size: 18px; line-height: 1;">☑</span>
-                 <span>As witnessed herein, the parties have executed this Agreement and intend it to be applicable as of the Effective Date.</span>
-              </div>
+            <div class="flex gap-3 items-start">
+              <span style="font-size: 18px; line-height: 1">☑</span>
+              <span
+                >As witnessed herein, the parties have executed this Agreement
+                and intend it to be applicable as of the Effective Date.</span
+              >
+            </div>
             <? } else { ?>
-              <label class="flex gap-3 items-start cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="agree"
-                  required
-                  class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
-                />
-                As witnessed herein, the parties have executed this Agreement and
-                intend it to be applicable as of the Effective Date.
-              </label>
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agree"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              As witnessed herein, the parties have executed this Agreement and
+              intend it to be applicable as of the Effective Date.
+            </label>
             <? } ?>
           </div>
 
           <div class="space-y-2 mt-2 pt-4">
             <? if (isPdf) { ?>
-              <div class="flex gap-3 items-start">
-                 <span style="font-size: 18px; line-height: 1;">☑</span>
-                 <span class="italic">
-                    By electronically typing or signing my name below, I acknowledge
-                    and agree that this electronic representation of my name
-                    constitutes my legal signature. This electronic signature has
-                    the same validity, force, and effect as a handwritten signature
-                    under applicable state and federal law, including the ESIGN Act
-                    and the Uniform Electronic Transactions Act.
-                 </span>
-              </div>
+            <div class="flex gap-3 items-start">
+              <span style="font-size: 18px; line-height: 1">☑</span>
+              <span class="italic">
+                By electronically typing or signing my name below, I acknowledge
+                and agree that this electronic representation of my name
+                constitutes my legal signature. This electronic signature has
+                the same validity, force, and effect as a handwritten signature
+                under applicable state and federal law, including the ESIGN Act
+                and the Uniform Electronic Transactions Act.
+              </span>
+            </div>
             <? } else { ?>
-              <label class="flex gap-3 items-start cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="agreeEsign"
-                  required
-                  class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
-                />
-                <span class="italic">
-                  By electronically typing or signing my name below, I acknowledge
-                  and agree that this electronic representation of my name
-                  constitutes my legal signature. This electronic signature has
-                  the same validity, force, and effect as a handwritten signature
-                  under applicable state and federal law, including the ESIGN Act
-                  and the Uniform Electronic Transactions Act.
-                </span>
-              </label>
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeEsign"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span class="italic">
+                By electronically typing or signing my name below, I acknowledge
+                and agree that this electronic representation of my name
+                constitutes my legal signature. This electronic signature has
+                the same validity, force, and effect as a handwritten signature
+                under applicable state and federal law, including the ESIGN Act
+                and the Uniform Electronic Transactions Act.
+              </span>
+            </label>
             <? } ?>
           </div>
 
@@ -456,50 +459,62 @@
               >Full Name <span class="text-red-500 no-pdf">*</span></label
             >
             <? if (isPdf) { ?>
-               <div class="w-full border-b border-gray-400 py-2 mb-4"><?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?></div>
+            <div class="w-full border-b border-gray-400 py-2 mb-4">
+              <?= caregiverData['First Name'] ?>
+              <?= caregiverData['Middle Int'] ?>
+              <?= caregiverData['Last Name'] ?>
+            </div>
             <? } else { ?>
-              <input
-                type="text"
-                name="fullName"
-                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
-                placeholder="Given Name"
-                value="<?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?>"
-                readonly
-                required
-              />
+            <input
+              type="text"
+              name="fullName"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+              placeholder="Given Name"
+              value="<?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?>"
+              readonly
+              required
+            />
             <? } ?>
 
             <label class="input-label font-semibold block mb-1"
-              >Digital Signature (Type Full Name)<span class="text-red-500 no-pdf"
+              >Digital Signature (Type Full Name)<span
+                class="text-red-500 no-pdf"
                 >*</span
               ></label
             >
             <? if (isPdf) { ?>
-               <div class="w-full border-b border-gray-400 py-2 mb-4" style="font-family: 'Courier New', Courier, monospace;"><?= caregiverData['Signature'] || '' ?></div>
+            <div
+              class="w-full border-b border-gray-400 py-2 mb-4"
+              style="font-family: 'Courier New', Courier, monospace"
+            >
+              <?= caregiverData['Signature'] || '' ?>
+            </div>
             <? } else { ?>
-              <input
-                type="text"
-                name="signature"
-                required
-                placeholder="Type your full name"
-                value="<?= caregiverData['Signature'] || '' ?>"
-                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
-              />
+            <input
+              type="text"
+              name="signature"
+              required
+              placeholder="Type your full name"
+              value="<?= caregiverData['Signature'] || '' ?>"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+            />
             <? } ?>
 
             <label class="input-label mt-4 block font-semibold mb-1"
               >Date <span class="text-red-500 no-pdf">*</span></label
             >
             <? if (isPdf) { ?>
-               <div class="w-full border-b border-gray-400 py-2 mb-4"><?= caregiverData['SignDate'] || '' ?></div>
+            <div class="w-full border-b border-gray-400 py-2 mb-4">
+              <?= caregiverData['SignDate'] || '' ?>
+            </div>
             <? } else { ?>
-              <input
-                type="date"
-                name="signDate"
-                required
-                value="<?= caregiverData['SignDate'] || '' ?>"
-                class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
-              />
+            <input
+              type="date"
+              name="signDate"
+              required
+              value="<?= caregiverData['SignDate'] || '' ?>"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+            />
             <? } ?>
           </div>
 
@@ -552,8 +567,7 @@
             .withSuccessHandler(function (response) {
               if (response.success) {
                 alert("Agreement Signed and Uploaded Successfully!");
-                // Optional: Redirect or disable form
-                btn.innerText = "Signed";
+                window.location.reload();
               } else {
                 alert("Error: " + response.message);
                 btn.innerText = originalText;
