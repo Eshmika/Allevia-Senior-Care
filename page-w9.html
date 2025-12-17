@@ -113,9 +113,7 @@
         </p>
 
         <form id="w9Form" class="space-y-6">
-          <!-- Hidden ID field for linking to existing caregiver record -->
-          <input type="hidden" name="caregiverId" value="" />
-
+          <input type="hidden" name="caregiverId" value="<?= caregiverId ?>" />
           <div class="grid grid-cols-1 gap-6 text-justify">
             <div>
               <label class="input-label block font-semibold mt-2">
@@ -125,13 +123,19 @@
                 2.)<span class="text-red-500 no-pdf">*</span></label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_Name ?></div>
+              <div class="w-full border-b border-gray-400 py-2 mb-4">
+                <?= caregiverData['First Name'] ?>
+                <?= caregiverData['Middle Int'] ?>
+                <?= caregiverData['Last Name'] ?>
+              </div>
               <? } else { ?>
               <input
                 type="text"
                 name="name"
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 border p-2"
+                value="<?= caregiverData['First Name'] ?> <?= caregiverData['Middle Int'] ?> <?= caregiverData['Last Name'] ?>"
                 required
+                readonly
               />
               <? } ?>
             </div>
@@ -142,7 +146,7 @@
                 above.</label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_BusinessName ?></div>
+              <div class="pdf-value"><?= caregiverData.W9_BusinessName ?></div>
               <? } else { ?>
               <input
                 type="text"
@@ -167,51 +171,51 @@
                 <div class="space-y-2">
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'Individual/sole_proprietor' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'Individual/sole_proprietor' ? '☑' : '☐' ?></span
                     >
                     Individual/sole proprietor
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'c_corporation' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'c_corporation' ? '☑' : '☐' ?></span
                     >
                     C corporation
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 's_corporation' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 's_corporation' ? '☑' : '☐' ?></span
                     >
                     S Corporation
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'partnership' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'partnership' ? '☑' : '☐' ?></span
                     >
                     Partnership
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'trust_estate' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'trust_estate' ? '☑' : '☐' ?></span
                     >
                     Trust/estate
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'llc' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'llc' ? '☑' : '☐' ?></span
                     >
                     LLC.
-                    <? if (data.W9_TaxClassification === 'llc') { ?>
+                    <? if (caregiverData.W9_TaxClassification === 'llc') { ?>
                     (Code:
-                    <?= data.W9_TaxLlcClass ?>)
+                    <?= caregiverData.W9_TaxLlcClass ?>)
                     <? } ?>
                   </div>
                   <div>
                     <span class="pdf-check"
-                      ><?= data.W9_TaxClassification === 'other' ? '☑' : '☐' ?></span
+                      ><?= caregiverData.W9_TaxClassification === 'other' ? '☑' : '☐' ?></span
                     >
                     Other
-                    <? if (data.W9_TaxClassification === 'other') { ?>
-                    (<?= data.W9_TaxOtherText ?>)
+                    <? if (caregiverData.W9_TaxClassification === 'other') { ?>
+                    (<?= caregiverData.W9_TaxOtherText ?>)
                     <? } ?>
                   </div>
                 </div>
@@ -361,7 +365,7 @@
               <div class="flex items-start mt-2">
                 <? if (isPdf) { ?>
                 <span class="pdf-check"
-                  ><?= data.W9_HasForeignOwners === 'Yes' ? '☑' : '☐' ?></span
+                  ><?= caregiverData.W9_HasForeignOwners === 'Yes' ? '☑' : '☐' ?></span
                 >
                 <span class="ml-3 text-sm">Check this box if applicable.</span>
                 <? } else { ?>
@@ -389,7 +393,9 @@
                     Exempt payee code (if any)
                   </label>
                   <? if (isPdf) { ?>
-                  <div class="pdf-value"><?= data.W9_ExemptPayeeCode ?></div>
+                  <div class="pdf-value">
+                    <?= caregiverData.W9_ExemptPayeeCode ?>
+                  </div>
                   <? } else { ?>
                   <input
                     type="text"
@@ -404,7 +410,7 @@
                     reporting code (if any)
                   </label>
                   <? if (isPdf) { ?>
-                  <div class="pdf-value"><?= data.W9_FatcaCode ?></div>
+                  <div class="pdf-value"><?= caregiverData.W9_FatcaCode ?></div>
                   <? } else { ?>
                   <input
                     type="text"
@@ -427,7 +433,7 @@
                 Requester’s name and address (optional)</label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_RequesterInfo ?></div>
+              <div class="pdf-value"><?= caregiverData.W9_RequesterInfo ?></div>
               <? } else { ?>
               <input
                 type="text"
@@ -443,7 +449,7 @@
                 instructions.<span class="text-red-500 no-pdf">*</span></label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_Address ?></div>
+              <div class="pdf-value"><?= caregiverData.W9_Address ?></div>
               <? } else { ?>
               <input
                 type="text"
@@ -461,7 +467,7 @@
                 ></label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_CityStateZip ?></div>
+              <div class="pdf-value"><?= caregiverData.W9_CityStateZip ?></div>
               <? } else { ?>
               <input
                 type="text"
@@ -477,7 +483,9 @@
                 7. List account number(s) here (optional)</label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_AccountNumbers ?></div>
+              <div class="pdf-value">
+                <?= caregiverData.W9_AccountNumbers ?>
+              </div>
               <? } else { ?>
               <input
                 type="text"
@@ -506,7 +514,7 @@
                 Social security number</label
               >
               <? if (isPdf) { ?>
-              <div class="pdf-value"><?= data.W9_SSN ?></div>
+              <div class="pdf-value"><?= caregiverData.W9_SSN ?></div>
               <? } else { ?>
               <input
                 type="text"
@@ -586,7 +594,7 @@
                     font-size: 1.2em;
                   "
                 >
-                  <?= data.Signature ?>
+                  <?= caregiverData.Signature ?>
                 </div>
                 <? } else { ?>
                 <input
@@ -603,14 +611,29 @@
                   Date <span class="text-red-500 no-pdf">*</span>
                 </label>
                 <? if (isPdf) { ?>
-                <div class="pdf-value"><?= data.SignDate ?></div>
+                <div class="pdf-value"><?= caregiverData.SignDate ?></div>
                 <? } else { ?>
                 <input
                   type="date"
                   name="signDate"
                   required
                   class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+                  id="signDate"
                 />
+                <script>
+                  (function () {
+                    const el = document.getElementById("signDate");
+                    if (el && !el.value) {
+                      const d = new Date();
+                      const localISO = new Date(
+                        d.getTime() - d.getTimezoneOffset() * 60000
+                      )
+                        .toISOString()
+                        .split("T")[0];
+                      el.value = localISO;
+                    }
+                  })();
+                </script>
                 <? } ?>
               </div>
             </div>
