@@ -108,23 +108,7 @@ function sendOnboardingEmail(caregiverId) {
             </p>
             <a href="https://alleviaseniorcare.com/careers/" style="color: #65c027; font-weight: bold; text-decoration: none;">👉 Go to Careers Page</a>
             </div>
-
-            <!-- Upload documents link -->
-            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: #65c027;">Upload Completed Documents</h3>
-            <p>After completing the steps above, upload your signed Agreement, W‑9, and background check results using the link below:</p>
-            <div style="text-align: center; margin: 20px 0;">
-              <!-- TODO: Replace REPLACE_WITH_UPLOAD_LINK with your actual upload URL -->
-              <a href="REPLACE_WITH_UPLOAD_LINK" style="background-color: #65c027; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">
-              👉 Upload Documents
-              </a>
-            </div>
-            <p style="font-size: 13px; color: #888;">
-              If the button doesn't work, copy this link:<br>
-              <a href="REPLACE_WITH_UPLOAD_LINK" style="color: #65c027;">REPLACE_WITH_UPLOAD_LINK</a>
-            </p>
-            </div>
-
+            
           <p>Once all items are submitted, your application status will be updated to Complete.</p>
           <p>We appreciate your prompt attention to these steps and look forward to welcoming you to our team.</p>
 
