@@ -524,7 +524,12 @@
                 alert(
                   "Background Check Request Signed and Uploaded Successfully!"
                 );
-                window.location.reload();
+                const caregiverId = document.querySelector(
+                  'input[name="caregiverId"]'
+                ).value;
+                window.top.location.href =
+                  "<?= ScriptApp.getService().getUrl() ?>?page=onboarding&id=" +
+                  caregiverId;
               } else {
                 alert("Error: " + response.message);
                 btn.innerText = originalText;

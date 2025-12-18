@@ -722,7 +722,8 @@
             .withSuccessHandler(function (response) {
               if (response && response.success) {
                 alert("W-9 Form submitted successfully!");
-                window.location.reload();
+                const caregiverId = document.querySelector('input[name="caregiverId"]').value;
+                window.top.location.href = "<?= ScriptApp.getService().getUrl() ?>?page=onboarding&id=" + caregiverId;
               } else {
                 alert(
                   "Error submitting form: " +
