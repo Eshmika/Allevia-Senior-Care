@@ -91,38 +91,6 @@
       </div>
 
       <div class="p-8">
-        <div class="mb-6">
-          <p class="text-justify">
-            A request for a copy of a background check may only be submitted if
-            the original background check was processed for an Ohio Revised Code
-            reason that allows for updates and if the new background check is
-            needed for an Ohio Revised Code reason that allows for updates. If
-            you are unsure if you are able to request a copy, please contact the
-            Civilian Identification Dept. toll free at 877-224-0043.
-            <br /><br />The name on the request of copy form must exactly match
-            the name that was submitted with the prior fingerprints.
-            <br /><br />You may only request a copy of the Ohio BCI background
-            check. The FBI result is not permitted to be sent to any address
-            other than what was requested at the time of the original background
-            check. To obtain a new FBI result, a new FBI background check would
-            have to be submitted. <br /><br />If the request for copy is made
-            within 30 days of the original background check there is no fee for
-            processing and the request can be faxed to 866-750-0214.
-            <br /><br />30 days after the original background check the fee is
-            $8 and is payable by money order, certified check, business check or
-            personal check to Treasurer, State of Ohio.
-            <b>No cash will be accepted.</b> The request must be received within
-            11 months of the original fingerprint submission in order to have
-            time to process before the background check expires. <br /><br />The
-            request and payment can be mailed to: BCI, PO Box 365, London Oh
-            43140.<br /><br />
-          </p>
-          <p>
-            Civilian Unit<br />Identification Department<br />Bureau of Criminal
-            Identification & Investigation
-          </p>
-        </div>
-
         <form id="bgForm" class="space-y-6">
           <input type="hidden" name="caregiverId" value="<?= caregiverId ?>" />
           <div>
@@ -256,6 +224,8 @@
               type="text"
               name="fullName"
               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+              value="Allevia LLC dba: Allevia Senior Care"
+              readonly
               required
             />
             <? } ?>
@@ -272,6 +242,8 @@
               type="text"
               name="street"
               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+              value="27300 Center ridge rd"
+              readonly
               required
             />
             <? } ?>
@@ -288,6 +260,8 @@
               type="text"
               name="city"
               class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+              value="Westlake"
+              readonly
               required
             />
             <? } ?>
@@ -307,6 +281,8 @@
                   name="state"
                   class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
                   maxlength="14"
+                  value="OH"
+                  readonly
                   required
                 />
                 <? } ?>
@@ -325,6 +301,8 @@
                   name="zip code"
                   class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
                   maxlength="5"
+                  value="44145"
+                  readonly
                   required
                 />
                 <? } ?>
