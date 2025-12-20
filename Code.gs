@@ -272,8 +272,42 @@ function submitBackground(form) {
     const details = getCaregiverDetails(id);
     if (!details) return { success: false, message: "Caregiver not found" };
 
-    // 2. Prepare Data for PDF
-    // Add form data to details object so it's available in the template
+    // 2. Get/Create Drive Folder (Moved up to handle upload first)
+    const parentFolderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
+    let folder;
+    try {
+      folder = getCaregiverFolder(parentFolderId, details);
+    } catch (err) {
+      return {
+        success: false,
+        message: "Error accessing/creating Drive folder: " + err,
+      };
+    }
+
+    // 3. Handle Optional Upload (Save first to get URL)
+    details["BackgroundLink"] = form.backgroundLink || "";
+
+    const hasUpload =
+      form.backgroundUpload &&
+      form.backgroundUpload.getName &&
+      form.backgroundUpload.getName() !== "";
+
+    if (hasUpload) {
+      const uploadBlob = form.backgroundUpload;
+      const uploadedFile = folder.createFile(uploadBlob);
+      uploadedFile.setName(
+        `UPLOADED - ${details["First Name"]} ${
+          details["Last Name"]
+        } - Background Check Copy - ${uploadBlob.getName()}`
+      );
+      uploadedFile.setSharing(
+        DriveApp.Access.ANYONE_WITH_LINK,
+        DriveApp.Permission.VIEW
+      );
+      details["UploadedBackgroundUrl"] = uploadedFile.getUrl();
+    }
+
+    // 4. Prepare Data for PDF
     details["Signature"] = signature;
     details["SignDate"] = signDate;
     details["ReasonFingerprinted"] = reasonFingerprinted;
@@ -287,16 +321,7 @@ function submitBackground(form) {
     details["Zip"] = zip;
     details["PhoneNumber"] = phoneNumber;
 
-    // Capture optional upload/link info for PDF
-    details["BackgroundLink"] = form.backgroundLink || "";
-    // Check if a file was uploaded (we'll save it later)
-    const hasUpload =
-      form.backgroundUpload &&
-      form.backgroundUpload.getName &&
-      form.backgroundUpload.getName() !== "";
-    details["HasUploadedBackground"] = hasUpload;
-
-    // 3. Generate PDF
+    // 5. Generate PDF
     const template = HtmlService.createTemplateFromFile("page-background");
     template.caregiverId = id;
     template.caregiverData = details;
@@ -311,37 +336,11 @@ function submitBackground(form) {
         `${details["First Name"]} ${details["Last Name"]} - Background Check.pdf`
       );
 
-    // 4. Upload to Drive
-    const parentFolderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
-    let folder;
-    try {
-      folder = getCaregiverFolder(parentFolderId, details);
-    } catch (err) {
-      return {
-        success: false,
-        message: "Error accessing/creating Drive folder: " + err,
-      };
-    }
-
+    // 6. Save PDF to Drive
     const file = folder.createFile(pdfBlob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
-    // Save optional uploaded file
-    if (details["HasUploadedBackground"]) {
-      const uploadBlob = form.backgroundUpload;
-      const uploadedFile = folder.createFile(uploadBlob);
-      uploadedFile.setName(
-        `UPLOADED - ${details["First Name"]} ${
-          details["Last Name"]
-        } - Background Check Copy - ${uploadBlob.getName()}`
-      );
-      uploadedFile.setSharing(
-        DriveApp.Access.ANYONE_WITH_LINK,
-        DriveApp.Permission.VIEW
-      );
-    }
-
-    // 5. Save Link to Sheet
+    // 7. Save Link to Sheet
     const fileUrl = file.getUrl();
     // Use "background" as docType to match "Background Link" column
     const saved = saveDocumentLink(id, "background", fileUrl);
