@@ -309,6 +309,82 @@
               </div>
             </div>
 
+            <!-- Upload / Link Section -->
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+              <div class="flex">
+                <div class="flex-shrink-0">
+                  <svg
+                    class="h-5 w-5 text-yellow-400"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                      clip-rule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-3">
+                  <p class="text-sm text-yellow-700">
+                    <span class="font-bold">Note:</span> If your background
+                    check was completed within the last 12 months, please upload
+                    a copy for verification.
+                  </p>
+                  <p class="text-sm text-yellow-700 mt-2">
+                    If you need to complete a new background check, you can do
+                    so here:
+                    <a
+                      href="#"
+                      class="font-bold underline text-yellow-800 hover:text-yellow-900"
+                      >Start Background Check</a
+                    >
+                  </p>
+                </div>
+              </div>
+
+              <? if (!isPdf) { ?>
+              <div class="mt-4 space-y-3">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Upload Document (Optional)</label
+                  >
+                  <input
+                    type="file"
+                    name="backgroundUpload"
+                    class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-100 file:text-yellow-700 hover:file:bg-yellow-200"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700"
+                    >Or provide a link (Optional)</label
+                  >
+                  <input
+                    type="url"
+                    name="backgroundLink"
+                    placeholder="https://"
+                    class="mt-1 shadow-sm focus:ring-yellow-500 focus:border-yellow-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
+                  />
+                </div>
+              </div>
+              <? } else { ?>
+              <div class="mt-4 border-t border-gray-200 pt-4">
+                <? if (caregiverData['BackgroundLink']) { ?>
+                <p class="text-sm">
+                  <strong>Provided Link:</strong>
+                  <?= caregiverData['BackgroundLink'] ?>
+                </p>
+                <? } ?>
+                <? if (caregiverData['HasUploadedBackground']) { ?>
+                <p class="text-sm">
+                  <strong>Attachment:</strong> A background check copy was
+                  uploaded with this submission.
+                </p>
+                <? } ?>
+              </div>
+              <? } ?>
+            </div>
+
             <div class="space-y-2 mt-2 pt-4">
               <? if (isPdf) { ?>
               <div class="flex gap-3 items-start">

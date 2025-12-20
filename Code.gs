@@ -287,6 +287,15 @@ function submitBackground(form) {
     details["Zip"] = zip;
     details["PhoneNumber"] = phoneNumber;
 
+    // Capture optional upload/link info for PDF
+    details["BackgroundLink"] = form.backgroundLink || "";
+    // Check if a file was uploaded (we'll save it later)
+    const hasUpload =
+      form.backgroundUpload &&
+      form.backgroundUpload.getName &&
+      form.backgroundUpload.getName() !== "";
+    details["HasUploadedBackground"] = hasUpload;
+
     // 3. Generate PDF
     const template = HtmlService.createTemplateFromFile("page-background");
     template.caregiverId = id;
@@ -316,6 +325,21 @@ function submitBackground(form) {
 
     const file = folder.createFile(pdfBlob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    // Save optional uploaded file
+    if (details["HasUploadedBackground"]) {
+      const uploadBlob = form.backgroundUpload;
+      const uploadedFile = folder.createFile(uploadBlob);
+      uploadedFile.setName(
+        `UPLOADED - ${details["First Name"]} ${
+          details["Last Name"]
+        } - Background Check Copy - ${uploadBlob.getName()}`
+      );
+      uploadedFile.setSharing(
+        DriveApp.Access.ANYONE_WITH_LINK,
+        DriveApp.Permission.VIEW
+      );
+    }
 
     // 5. Save Link to Sheet
     const fileUrl = file.getUrl();
