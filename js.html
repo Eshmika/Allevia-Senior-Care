@@ -753,12 +753,37 @@
           }`
         );
         set("p-ssn", data["SSN"]);
-        set(
-          "p-banking",
-          `Routing: ${data["Routing Number"] || "--"} | Account: ${
-            data["Bank Account"] || "--"
-          }`
-        );
+
+        // Payment Info
+        const payMethod = data["Payment Method"] || "Not Set";
+        set("p-pay-method", payMethod);
+
+        const bankDetailsDiv = document.getElementById("p-bank-details");
+        if (bankDetailsDiv) {
+          if (["Direct Deposit", "Bank Deposit"].includes(payMethod)) {
+            bankDetailsDiv.classList.remove("hidden");
+            set("p-bank-name", data["Bank Name"]);
+            set("p-holder-name", data["Account Holder Name"]);
+            set(
+              "p-holder-type",
+              data["Holder Type"] ? `(${data["Holder Type"]})` : ""
+            );
+            // Mask Account Number for security
+            const accNum = String(data["Bank Account"] || "");
+            set(
+              "p-account-num",
+              accNum.length > 4 ? `****${accNum.slice(-4)}` : accNum
+            );
+            set(
+              "p-routing-num",
+              data["Routing Number"] ? `Routing: ${data["Routing Number"]}` : ""
+            );
+            set("p-account-type", data["Account Type"]);
+          } else {
+            bankDetailsDiv.classList.add("hidden");
+          }
+        }
+
         set(
           "p-license",
           `Driver License: ${data["Driver License?"]} | License State: ${data["License State"]} | License #: ${data["License #"]}`

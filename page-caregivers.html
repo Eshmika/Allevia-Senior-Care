@@ -315,10 +315,46 @@
               <p class="text-xs text-gray-400 uppercase">SSN</p>
               <p class="text-sm font-medium" id="p-ssn">--</p>
             </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Banking</p>
-              <p class="text-sm font-medium" id="p-banking">--</p>
+
+            <!-- Payment Info -->
+            <div class="bg-green-50 p-3 rounded border border-green-100">
+              <p class="text-xs text-green-700 uppercase font-bold mb-2">
+                Payment Information
+              </p>
+              <div class="space-y-2">
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Method</p>
+                  <p class="text-sm font-bold text-gray-800" id="p-pay-method">
+                    --
+                  </p>
+                </div>
+                <div
+                  id="p-bank-details"
+                  class="hidden space-y-2 border-t border-green-200 pt-2 mt-2"
+                >
+                  <div>
+                    <p class="text-xs text-gray-400 uppercase">Bank Name</p>
+                    <p class="text-sm font-medium" id="p-bank-name">--</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-400 uppercase">
+                      Account Holder
+                    </p>
+                    <p class="text-sm font-medium" id="p-holder-name">--</p>
+                    <p class="text-xs text-gray-500" id="p-holder-type">--</p>
+                  </div>
+                  <div>
+                    <p class="text-xs text-gray-400 uppercase">
+                      Account Details
+                    </p>
+                    <p class="text-sm font-medium" id="p-account-num">--</p>
+                    <p class="text-xs text-gray-500" id="p-routing-num">--</p>
+                    <p class="text-xs text-gray-500" id="p-account-type">--</p>
+                  </div>
+                </div>
+              </div>
             </div>
+
             <div>
               <p class="text-xs text-gray-400 uppercase">License</p>
               <p class="text-sm font-medium" id="p-license">--</p>
