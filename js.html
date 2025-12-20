@@ -405,6 +405,8 @@
     setVal("edit-emName", d["Emergency Contact"]);
     setVal("edit-emPhone", d["Emerg. Phone"]);
     setVal("edit-emRel", d["Emerg. Relation"]);
+    setVal("edit-emEmail", d["Emerg. Email"]);
+    setVal("edit-emAddress", d["Emerg. Address"]);
 
     // New Sections Mapped
     setVal("edit-hsName", d["High School"]);
@@ -460,6 +462,36 @@
       document.getElementById("edit-billingCity").value = "";
       document.getElementById("edit-billingState").value = "";
       document.getElementById("edit-billingZip").value = "";
+    }
+  }
+
+  function toggleEmAddress() {
+    const isChecked = document.getElementById("emSameAsAddress").checked;
+    if (isChecked) {
+      const addr = document.getElementById("app-address").value;
+      const city = document.getElementById("app-city").value;
+      const state = document.getElementById("app-state").value;
+      const zip = document.getElementById("app-zip").value;
+
+      const fullAddress = [addr, city, state, zip].filter(Boolean).join(", ");
+      document.getElementById("app-emAddress").value = fullAddress;
+    } else {
+      document.getElementById("app-emAddress").value = "";
+    }
+  }
+
+  function toggleEditEmAddress() {
+    const isChecked = document.getElementById("edit-emSameAsAddress").checked;
+    if (isChecked) {
+      const addr = document.getElementById("edit-address").value;
+      const city = document.getElementById("edit-city").value;
+      const state = document.getElementById("edit-state").value;
+      const zip = document.getElementById("edit-zip").value;
+
+      const fullAddress = [addr, city, state, zip].filter(Boolean).join(", ");
+      document.getElementById("edit-emAddress").value = fullAddress;
+    } else {
+      document.getElementById("edit-emAddress").value = "";
     }
   }
 
@@ -837,6 +869,8 @@
           "p-emergency-contact",
           `${data["Emerg. Relation"]} - ${data["Emerg. Phone"]}`
         );
+        set("p-emergency-email", data["Emerg. Email"]);
+        set("p-emergency-address", data["Emerg. Address"]);
 
         // Signature Details
         set("p-signName", data["Signature Name"]);

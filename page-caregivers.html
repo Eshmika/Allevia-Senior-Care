@@ -430,6 +430,8 @@
               <p class="text-xs text-gray-400 uppercase">Emergency Contact</p>
               <p class="text-sm font-bold mt-1" id="p-emergency-name">--</p>
               <p class="text-xs text-gray-600" id="p-emergency-contact">--</p>
+              <p class="text-xs text-gray-600" id="p-emergency-email">--</p>
+              <p class="text-xs text-gray-600" id="p-emergency-address">--</p>
             </div>
 
             <!-- Signature Section -->
@@ -1388,6 +1390,39 @@
               type="text"
               name="emRel"
               id="edit-emRel"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              name="emEmail"
+              id="edit-emEmail"
+              class="input-field"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <div class="flex items-center gap-2 mb-1">
+              <label class="block text-sm font-medium text-gray-700 mb-0"
+                >Address</label
+              >
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  id="edit-emSameAsAddress"
+                  onchange="toggleEditEmAddress()"
+                  class="w-4 h-4 text-[#65c027] rounded border-gray-300 focus:ring-[#65c027]"
+                />
+                Same as Caregiver Address
+              </label>
+            </div>
+            <input
+              type="text"
+              name="emAddress"
+              id="edit-emAddress"
               class="input-field"
             />
           </div>

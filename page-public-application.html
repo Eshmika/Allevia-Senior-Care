@@ -1139,6 +1139,32 @@
                 >Relationship <span class="text-red-500">*</span></label
               ><input type="text" name="emRel" required class="input-field" />
             </div>
+            <div>
+              <label class="input-label">Email</label>
+              <input type="email" name="emEmail" class="input-field" />
+            </div>
+            <div class="md:col-span-2">
+              <div class="flex items-center gap-2 mb-1">
+                <label class="input-label mb-0">Address</label>
+                <label
+                  class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    id="emSameAsAddress"
+                    onchange="toggleEmAddress()"
+                    class="w-4 h-4 text-[#65c027] rounded border-gray-300 focus:ring-[#65c027]"
+                  />
+                  Same as Caregiver Address
+                </label>
+              </div>
+              <input
+                type="text"
+                name="emAddress"
+                id="app-emAddress"
+                class="input-field"
+              />
+            </div>
           </div>
         </div>
 

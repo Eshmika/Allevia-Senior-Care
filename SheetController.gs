@@ -113,6 +113,15 @@ function getOrCreateSheet() {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Marital Status");
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Spouse Name");
     }
+
+    // Add Emergency Contact Extra Columns
+    const emHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!emHeaders.includes("Emerg. Email")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Emerg. Email");
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Emerg. Address");
+    }
   }
   return sheet;
 }
@@ -331,6 +340,15 @@ function submitFullApplication(form) {
         .setValue(form.maritalStatus || "");
     if (spouseNameIdx > -1)
       sheet.getRange(r, spouseNameIdx + 1).setValue(form.spouseName || "");
+
+    // Save Emergency Contact Extra Info
+    const emEmailIdx = headers.indexOf("Emerg. Email");
+    const emAddressIdx = headers.indexOf("Emerg. Address");
+
+    if (emEmailIdx > -1)
+      sheet.getRange(r, emEmailIdx + 1).setValue(form.emEmail || "");
+    if (emAddressIdx > -1)
+      sheet.getRange(r, emAddressIdx + 1).setValue(form.emAddress || "");
 
     if (billingAddrIdx > -1)
       sheet.getRange(r, billingAddrIdx + 1).setValue(form.billingAddress || "");
