@@ -158,6 +158,15 @@ function getOrCreateSheet() {
         .getRange(1, sheet.getLastColumn() + 1)
         .setValue("Digital Account Details");
     }
+
+    // Add Vaccination Columns
+    const vaxHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!vaxHeaders.includes("Covid Vaccine")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Covid Vaccine");
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Flu Vaccine");
+    }
   }
   return sheet;
 }
@@ -395,6 +404,21 @@ function submitFullApplication(form) {
       sheet.getRange(r, billingStateIdx + 1).setValue(form.billingState || "");
     if (billingZipIdx > -1)
       sheet.getRange(r, billingZipIdx + 1).setValue(form.billingZip || "");
+
+    // Save Vaccination Info
+    const covidIdx = headers.indexOf("Covid Vaccine");
+    const fluIdx = headers.indexOf("Flu Vaccine");
+
+    if (covidIdx > -1) {
+      const val =
+        form.covidVaccine === "Yes"
+          ? `Yes (${form.covidDoses || "Unspecified"})`
+          : form.covidVaccine || "No";
+      sheet.getRange(r, covidIdx + 1).setValue(val);
+    }
+    if (fluIdx > -1) {
+      sheet.getRange(r, fluIdx + 1).setValue(form.fluVaccine || "No");
+    }
 
     return { success: true };
   } catch (e) {

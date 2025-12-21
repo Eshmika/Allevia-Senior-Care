@@ -434,6 +434,19 @@
     setVal("edit-criminalHistory", d["Criminal Conviction?"]);
     setVal("edit-criminalExplain", d["Conviction Details"]);
 
+    // Vaccinations
+    let covidVal = d["Covid Vaccine"] || "No";
+    let covidDose = "";
+    if (covidVal.includes("Yes")) {
+      if (covidVal.includes("One Dose")) covidDose = "One Dose";
+      if (covidVal.includes("Two Dose")) covidDose = "Two Dose";
+      covidVal = "Yes";
+    }
+    setVal("edit-covidVaccine", covidVal);
+    setVal("edit-covidDoses", covidDose);
+    setVal("edit-fluVaccine", d["Flu Vaccine"] || "No");
+    toggleEditCovidDose();
+
     // 2. Checkboxes
     const checkBoxes = (name, str) => {
       const arr = str ? str.split(",").map((s) => s.trim()) : [];
@@ -452,6 +465,17 @@
 
   function cancelEdit() {
     switchCgView("profile");
+  }
+
+  function toggleEditCovidDose() {
+    const val = document.getElementById("edit-covidVaccine").value;
+    const div = document.getElementById("edit-covidDoseDiv");
+    if (val === "Yes") {
+      div.classList.remove("hidden");
+    } else {
+      div.classList.add("hidden");
+      document.getElementById("edit-covidDoses").value = "";
+    }
   }
 
   function toggleEditBillingAddress() {
@@ -913,6 +937,8 @@
         makeTags("p-days", data["Schedule Desired"]);
         set("p-skills", data["Skills Checklist"]);
         set("p-langs", data["Languages"]);
+        set("p-covid", data["Covid Vaccine"]);
+        set("p-flu", data["Flu Vaccine"]);
         set(
           "p-highSchool",
           `High School: ${data["High School"]} | HS Degree: ${data["HS Degree"]}`

@@ -961,6 +961,98 @@
               Other</label
             >
           </div>
+
+          <label class="input-label mt-6 mb-3"
+            >Vaccinations <span class="text-red-500">*</span></label
+          >
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-gray-50 p-4 rounded-lg"
+          >
+            <!-- Covid -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Covid Vaccination</label
+              >
+              <div class="flex gap-4 items-center">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="covidVaccine"
+                    value="No"
+                    class="accent-[#65c027]"
+                    checked
+                    onclick="document.getElementById('covidDoseDiv').classList.add('hidden')"
+                  />
+                  <span>No</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="covidVaccine"
+                    value="Yes"
+                    class="accent-[#65c027]"
+                    onclick="document.getElementById('covidDoseDiv').classList.remove('hidden')"
+                  />
+                  <span>Yes</span>
+                </label>
+              </div>
+
+              <div
+                id="covidDoseDiv"
+                class="hidden mt-3 ml-4 border-l-2 border-green-200 pl-3"
+              >
+                <label class="block text-xs text-gray-500 mb-1">Doses</label>
+                <div class="flex gap-4">
+                  <label class="flex items-center gap-2 cursor-pointer text-sm">
+                    <input
+                      type="radio"
+                      name="covidDoses"
+                      value="One Dose"
+                      class="accent-[#65c027]"
+                    />
+                    <span>One Dose</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer text-sm">
+                    <input
+                      type="radio"
+                      name="covidDoses"
+                      value="Two Dose"
+                      class="accent-[#65c027]"
+                    />
+                    <span>Two Dose</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Flu -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Flu / Cold Vaccination</label
+              >
+              <div class="flex gap-4 items-center">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="fluVaccine"
+                    value="No"
+                    class="accent-[#65c027]"
+                    checked
+                  />
+                  <span>No</span>
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="fluVaccine"
+                    value="Yes"
+                    class="accent-[#65c027]"
+                  />
+                  <span>Yes</span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 5. Education -->
