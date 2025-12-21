@@ -89,7 +89,6 @@
               <option value="Apple Pay">Apple Pay</option>
               <option value="Check">Check</option>
               <option value="Cash">Cash</option>
-              <option value="Credit/Debit Card">Credit/Debit Card</option>
             </select>
           </div>
 
@@ -218,8 +217,66 @@
             class="hidden space-y-4 border-t border-gray-100 pt-6"
           >
             <div class="bg-blue-50 p-4 rounded-lg text-blue-800 text-sm">
-              Please ensure the phone number or email associated with your
-              account is correct.
+              Please confirm your full name phone number or email associated
+              with your Zelle or Apple Pay
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Account Details <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                name="digitalAccountDetails"
+                id="digitalAccountDetails"
+                class="input-field"
+                placeholder="Enter Full Name, Phone, or Email"
+              />
+            </div>
+          </div>
+
+          <!-- Check Details Section -->
+          <div
+            id="checkDetails"
+            class="hidden space-y-6 border-t border-gray-100 pt-6"
+          >
+            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+              <i class="ph ph-file-text text-[#65c027]"></i> Check Payment
+              Requirements
+            </h3>
+            <div class="bg-blue-50 p-4 rounded-lg text-blue-800 text-sm mb-4">
+              To set up payment by check, please upload the following documents.
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Government-Issued ID (Front Only)
+                <span class="text-red-500">*</span></label
+              >
+              <input
+                type="file"
+                name="checkIdUpload"
+                id="checkIdUpload"
+                class="input-field"
+                accept="image/*,application/pdf"
+              />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700"
+                >Proof of Mailing Address
+                <span class="text-red-500">*</span></label
+              >
+              <p class="text-xs text-gray-500 mb-2">
+                Utility bill, lease, bank statement, or official mail dated
+                within 60 days.
+              </p>
+              <input
+                type="file"
+                name="checkAddressUpload"
+                id="checkAddressUpload"
+                class="input-field"
+                accept="image/*,application/pdf"
+              />
             </div>
           </div>
 
@@ -244,21 +301,35 @@
         const method = document.getElementById("paymentMethod").value;
         const bankSection = document.getElementById("bankDetails");
         const digitalSection = document.getElementById("digitalDetails");
+        const checkSection = document.getElementById("checkDetails");
+        const digitalInput = document.getElementById("digitalAccountDetails");
 
         // Reset required attributes
         const bankInputs = bankSection.querySelectorAll("input, select");
         bankInputs.forEach((input) => (input.required = false));
+        if (digitalInput) digitalInput.required = false;
+        const checkInputs = checkSection.querySelectorAll("input");
+        checkInputs.forEach((input) => (input.required = false));
 
         if (["Direct Deposit", "Bank Deposit"].includes(method)) {
           bankSection.classList.remove("hidden");
           digitalSection.classList.add("hidden");
+          checkSection.classList.add("hidden");
           bankInputs.forEach((input) => (input.required = true));
         } else if (["Zelle", "Apple Pay"].includes(method)) {
           bankSection.classList.add("hidden");
           digitalSection.classList.remove("hidden");
+          checkSection.classList.add("hidden");
+          if (digitalInput) digitalInput.required = true;
+        } else if (method === "Check") {
+          bankSection.classList.add("hidden");
+          digitalSection.classList.add("hidden");
+          checkSection.classList.remove("hidden");
+          checkInputs.forEach((input) => (input.required = true));
         } else {
           bankSection.classList.add("hidden");
           digitalSection.classList.add("hidden");
+          checkSection.classList.add("hidden");
         }
       }
 
@@ -290,9 +361,6 @@
           '<i class="ph ph-spinner animate-spin text-xl"></i> Processing...';
 
         const form = document.getElementById("paymentForm");
-        const formData = new FormData(form);
-        const obj = {};
-        formData.forEach((value, key) => (obj[key] = value));
 
         google.script.run
           .withSuccessHandler((res) => {
@@ -326,7 +394,7 @@
             btn.disabled = false;
             btn.innerHTML = originalText;
           })
-          .submitPaymentDetails(obj);
+          .submitPaymentDetails(form);
       }
     </script>
   </body>

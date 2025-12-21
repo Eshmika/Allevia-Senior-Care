@@ -759,6 +759,8 @@
         set("p-pay-method", payMethod);
 
         const bankDetailsDiv = document.getElementById("p-bank-details");
+        const checkDetailsDiv = document.getElementById("p-check-details");
+
         if (bankDetailsDiv) {
           if (["Direct Deposit", "Bank Deposit"].includes(payMethod)) {
             bankDetailsDiv.classList.remove("hidden");
@@ -781,6 +783,30 @@
             set("p-account-type", data["Account Type"]);
           } else {
             bankDetailsDiv.classList.add("hidden");
+          }
+        }
+
+        if (checkDetailsDiv) {
+          if (payMethod === "Check") {
+            checkDetailsDiv.classList.remove("hidden");
+            const idLink = document.getElementById("p-check-id");
+            const addrLink = document.getElementById("p-check-addr");
+
+            if (data["Check ID Proof"]) {
+              idLink.href = data["Check ID Proof"];
+              idLink.classList.remove("hidden");
+            } else {
+              idLink.classList.add("hidden");
+            }
+
+            if (data["Check Address Proof"]) {
+              addrLink.href = data["Check Address Proof"];
+              addrLink.classList.remove("hidden");
+            } else {
+              addrLink.classList.add("hidden");
+            }
+          } else {
+            checkDetailsDiv.classList.add("hidden");
           }
         }
 

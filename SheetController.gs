@@ -136,6 +136,17 @@ function getOrCreateSheet() {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Account Type");
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Holder Type");
     }
+
+    // Add Check Payment Columns
+    const checkHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!checkHeaders.includes("Check ID Proof")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Check ID Proof");
+      sheet
+        .getRange(1, sheet.getLastColumn() + 1)
+        .setValue("Check Address Proof");
+    }
   }
   return sheet;
 }
@@ -577,6 +588,67 @@ function submitPaymentDetails(form) {
       setVal("Holder Type", form.holderType);
       setVal("Bank Account", form.accountNum);
       setVal("Routing Number", form.routingNum);
+    } else if (form.paymentMethod === "Check") {
+      // Handle Check Uploads
+      const parentFolderId = "1q6_Gyjvj5FZxMMnXUQ3MhiKT2gF9KD8L";
+
+      // Get caregiver details for folder creation/retrieval
+      const firstNameIdx = headers.indexOf("First Name");
+      const lastNameIdx = headers.indexOf("Last Name");
+      const details = {
+        "First Name": data[rowIndex][firstNameIdx],
+        "Last Name": data[rowIndex][lastNameIdx],
+      };
+
+      let folder;
+      try {
+        folder = getCaregiverFolder(parentFolderId, details);
+      } catch (err) {
+        return {
+          success: false,
+          message: "Error accessing/creating Drive folder: " + err,
+        };
+      }
+
+      // Upload ID Proof
+      if (
+        form.checkIdUpload &&
+        form.checkIdUpload.getName &&
+        form.checkIdUpload.getName() !== ""
+      ) {
+        const idBlob = form.checkIdUpload;
+        const idFile = folder.createFile(idBlob);
+        idFile.setName(
+          `CHECK_ID_PROOF - ${details["First Name"]} ${
+            details["Last Name"]
+          } - ${idBlob.getName()}`
+        );
+        idFile.setSharing(
+          DriveApp.Access.ANYONE_WITH_LINK,
+          DriveApp.Permission.VIEW
+        );
+        setVal("Check ID Proof", idFile.getUrl());
+      }
+
+      // Upload Address Proof
+      if (
+        form.checkAddressUpload &&
+        form.checkAddressUpload.getName &&
+        form.checkAddressUpload.getName() !== ""
+      ) {
+        const addrBlob = form.checkAddressUpload;
+        const addrFile = folder.createFile(addrBlob);
+        addrFile.setName(
+          `CHECK_ADDRESS_PROOF - ${details["First Name"]} ${
+            details["Last Name"]
+          } - ${addrBlob.getName()}`
+        );
+        addrFile.setSharing(
+          DriveApp.Access.ANYONE_WITH_LINK,
+          DriveApp.Permission.VIEW
+        );
+        setVal("Check Address Proof", addrFile.getUrl());
+      }
     } else {
       // Clear bank details if switching to other methods?
       // Or keep them? Let's keep them but maybe clear the method specific ones if needed.
