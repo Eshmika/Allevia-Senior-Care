@@ -83,6 +83,35 @@ function doGet(e) {
   } else if (e.parameter.page === "payment-setup" && e.parameter.id) {
     const isValid = validateCaregiverId(e.parameter.id);
     if (isValid) {
+      var details = getCaregiverDetails(e.parameter.id);
+
+      // Check if payment details are already submitted
+      if (details && details["Payment Method"]) {
+        return HtmlService.createHtmlOutput(
+          `
+          <div style="font-family: 'Inter', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f3f4f6;">
+            <div style="background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; max-width: 500px;">
+              <div style="width: 80px; height: 80px; background-color: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <svg style="width: 40px; height: 40px; color: #16a34a;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+              </div>
+              <h1 style="color: #1f2937; font-size: 24px; margin-bottom: 10px;">Payment Details Submitted</h1>
+              <p style="color: #4b5563; line-height: 1.5;">
+                Your payment information has already been securely recorded.
+              </p>
+              <p style="color: #6b7280; font-size: 14px; margin-top: 20px;">
+                If you need to make changes, please contact HR directly.
+              </p>
+            </div>
+          </div>
+        `
+        )
+          .setTitle("Payment Status - Allevia Senior Care")
+          .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+          .addMetaTag("viewport", "width=device-width, initial-scale=1");
+      }
+
       var template = HtmlService.createTemplateFromFile("page-payment-setup");
       template.caregiverId = e.parameter.id;
       return template

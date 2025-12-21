@@ -810,6 +810,16 @@
           }
         }
 
+        const digitalDetailsDiv = document.getElementById("p-digital-details");
+        if (digitalDetailsDiv) {
+          if (["Zelle", "Apple Pay"].includes(payMethod)) {
+            digitalDetailsDiv.classList.remove("hidden");
+            set("p-digital-account", data["Digital Account Details"]);
+          } else {
+            digitalDetailsDiv.classList.add("hidden");
+          }
+        }
+
         set(
           "p-license",
           `Driver License: ${data["Driver License?"]} | License State: ${data["License State"]} | License #: ${data["License #"]}`
