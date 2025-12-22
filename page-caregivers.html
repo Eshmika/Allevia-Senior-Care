@@ -276,15 +276,15 @@
       <!-- Pipeline Removed -->
 
       <!-- Details Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Col 1: Personal Info -->
+      <div class="space-y-6">
+        <!-- 1. CAREGIVER PROFILE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-user text-[#65c027]"></i> Personal Details
+            <i class="ph ph-user text-[#65c027]"></i> CAREGIVER PROFILE
           </h3>
-          <div class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <p class="text-xs text-gray-400 uppercase">Phone</p>
               <p class="text-sm font-medium" id="p-phone">--</p>
@@ -319,87 +319,6 @@
               <p class="text-xs text-gray-400 uppercase">EIN</p>
               <p class="text-sm font-medium" id="p-ein">--</p>
             </div>
-
-            <!-- Payment Info -->
-            <div class="bg-green-50 p-3 rounded border border-green-100">
-              <p class="text-xs text-green-700 uppercase font-bold mb-2">
-                Payment Information
-              </p>
-              <div class="space-y-2">
-                <div>
-                  <p class="text-xs text-gray-400 uppercase">Method</p>
-                  <p class="text-sm font-bold text-gray-800" id="p-pay-method">
-                    --
-                  </p>
-                </div>
-                <div
-                  id="p-bank-details"
-                  class="hidden space-y-2 border-t border-green-200 pt-2 mt-2"
-                >
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">Bank Name</p>
-                    <p class="text-sm font-medium" id="p-bank-name">--</p>
-                  </div>
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">
-                      Account Holder
-                    </p>
-                    <p class="text-sm font-medium" id="p-holder-name">--</p>
-                    <p class="text-xs text-gray-500" id="p-holder-type">--</p>
-                  </div>
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">
-                      Account Details
-                    </p>
-                    <p class="text-sm font-medium" id="p-account-num">--</p>
-                    <p class="text-xs text-gray-500" id="p-routing-num">--</p>
-                    <p class="text-xs text-gray-500" id="p-account-type">--</p>
-                  </div>
-                </div>
-                <div
-                  id="p-check-details"
-                  class="hidden space-y-2 border-t border-green-200 pt-2 mt-2"
-                >
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">
-                      Check Documents
-                    </p>
-                    <a
-                      id="p-check-id"
-                      href="#"
-                      target="_blank"
-                      class="text-sm text-blue-600 hover:underline block hidden"
-                      ><i class="ph ph-file-text"></i> ID Proof</a
-                    >
-                    <a
-                      id="p-check-addr"
-                      href="#"
-                      target="_blank"
-                      class="text-sm text-blue-600 hover:underline block hidden"
-                      ><i class="ph ph-file-text"></i> Address Proof</a
-                    >
-                  </div>
-                </div>
-                <div
-                  id="p-digital-details"
-                  class="hidden space-y-2 border-t border-green-200 pt-2 mt-2"
-                >
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">Digital Name</p>
-                    <p class="text-sm font-medium" id="p-digital-name">--</p>
-                  </div>
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">Digital Phone</p>
-                    <p class="text-sm font-medium" id="p-digital-phone">--</p>
-                  </div>
-                  <div>
-                    <p class="text-xs text-gray-400 uppercase">Digital Email</p>
-                    <p class="text-sm font-medium" id="p-digital-email">--</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div>
               <p class="text-xs text-gray-400 uppercase">License</p>
               <p class="text-sm font-medium" id="p-license">--</p>
@@ -424,48 +343,6 @@
               <p class="text-xs text-gray-400 uppercase">Criminal Conviction</p>
               <p class="text-sm font-medium" id="p-criminal-conviction">--</p>
             </div>
-          </div>
-        </div>
-
-        <!-- Col 2: Professional -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
-            <i class="ph ph-briefcase text-[#65c027]"></i> Professional
-          </h3>
-          <div class="space-y-4">
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Last Client Seen</p>
-              <p class="text-sm font-bold text-gray-800" id="p-last-client">
-                --
-              </p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Certifications</p>
-              <div id="p-certs" class="flex flex-wrap gap-1 mt-1"></div>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Skills</p>
-              <p class="text-sm font-medium" id="p-skills">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Languages</p>
-              <p class="text-sm font-medium" id="p-langs">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Vaccinations</p>
-              <div class="grid grid-cols-2 gap-2 mt-1">
-                <div>
-                  <span class="text-xs text-gray-500">Covid:</span>
-                  <span class="text-sm font-medium block" id="p-covid">--</span>
-                </div>
-                <div>
-                  <span class="text-xs text-gray-500">Flu:</span>
-                  <span class="text-sm font-medium block" id="p-flu">--</span>
-                </div>
-              </div>
-            </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">High School</p>
               <p class="text-sm font-medium" id="p-highSchool">--</p>
@@ -482,28 +359,164 @@
               <p class="text-xs text-gray-400 uppercase">Last Employer</p>
               <p class="text-sm font-medium" id="p-emp">--</p>
             </div>
-
-            <!-- Documents Section -->
-            <div
-              id="p-documents-container"
-              class="hidden border-t border-gray-100 pt-4 mt-2"
-            >
-              <p class="text-xs text-gray-400 uppercase mb-2 font-bold">
-                Signed Documents
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Signed By</p>
+              <p class="text-sm font-bold text-blue-900" id="p-signName">--</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Date Signed</p>
+              <p class="text-sm font-medium text-blue-800" id="p-signDate">
+                --
               </p>
-              <div id="p-documents" class="flex flex-col gap-2"></div>
             </div>
           </div>
         </div>
 
-        <!-- Col 3: Availability -->
+        <!-- 2. EMERGENCY CONTACT -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-calendar-check text-[#65c027]"></i> Availability
+            <i class="ph ph-phone text-[#65c027]"></i> EMERGENCY CONTACT
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Name</p>
+              <p class="text-sm font-bold mt-1" id="p-emergency-name">--</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Phone</p>
+              <p class="text-sm font-medium mt-1" id="p-emergency-contact">
+                --
+              </p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Email</p>
+              <p class="text-sm font-medium mt-1" id="p-emergency-email">--</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Address</p>
+              <p class="text-sm font-medium mt-1" id="p-emergency-address">
+                --
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. DOCUMENTS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-files text-[#65c027]"></i> DOCUMENTS
+          </h3>
+          <div id="p-documents-container" class="hidden">
+            <div id="p-documents" class="flex flex-col gap-2"></div>
+          </div>
+        </div>
+
+        <!-- 4. PAYMENT METHODS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-credit-card text-[#65c027]"></i> PAYMENT METHODS
           </h3>
           <div class="space-y-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Method</p>
+              <p class="text-sm font-bold text-gray-800" id="p-pay-method">
+                --
+              </p>
+            </div>
+            <div
+              id="p-bank-details"
+              class="hidden space-y-2 border-t border-gray-100 pt-2"
+            >
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Bank Name</p>
+                  <p class="text-sm font-medium" id="p-bank-name">--</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Account Holder</p>
+                  <p class="text-sm font-medium" id="p-holder-name">--</p>
+                  <p class="text-xs text-gray-500" id="p-holder-type">--</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Account Details</p>
+                  <p class="text-sm font-medium" id="p-account-num">--</p>
+                  <p class="text-xs text-gray-500" id="p-routing-num">--</p>
+                  <p class="text-xs text-gray-500" id="p-account-type">--</p>
+                </div>
+              </div>
+            </div>
+            <div
+              id="p-check-details"
+              class="hidden space-y-2 border-t border-gray-100 pt-2"
+            >
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Check Documents</p>
+                <div class="flex gap-4">
+                  <a
+                    id="p-check-id"
+                    href="#"
+                    target="_blank"
+                    class="text-sm text-blue-600 hover:underline block hidden"
+                    ><i class="ph ph-file-text"></i> ID Proof</a
+                  >
+                  <a
+                    id="p-check-addr"
+                    href="#"
+                    target="_blank"
+                    class="text-sm text-blue-600 hover:underline block hidden"
+                    ><i class="ph ph-file-text"></i> Address Proof</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div
+              id="p-digital-details"
+              class="hidden space-y-2 border-t border-gray-100 pt-2"
+            >
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Digital Name</p>
+                  <p class="text-sm font-medium" id="p-digital-name">--</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Digital Phone</p>
+                  <p class="text-sm font-medium" id="p-digital-phone">--</p>
+                </div>
+                <div>
+                  <p class="text-xs text-gray-400 uppercase">Digital Email</p>
+                  <p class="text-sm font-medium" id="p-digital-email">--</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. CARE MATCHING AND SKILLS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-star text-[#65c027]"></i> CARE MATCHING AND SKILLS
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Certifications</p>
+              <div id="p-certs" class="flex flex-wrap gap-1 mt-1"></div>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Skills</p>
+              <p class="text-sm font-medium" id="p-skills">--</p>
+            </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Languages</p>
+              <p class="text-sm font-medium" id="p-langs">--</p>
+            </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">Hours</p>
               <p class="text-sm font-medium" id="p-hours">--</p>
@@ -520,32 +533,39 @@
               <p class="text-xs text-gray-400 uppercase">Emergency / Live-In</p>
               <p class="text-sm font-medium" id="p-extra-avail">--</p>
             </div>
-            <div class="bg-gray-50 p-3 rounded mt-4">
-              <p class="text-xs text-gray-400 uppercase">Emergency Contact</p>
-              <p class="text-sm font-bold mt-1" id="p-emergency-name">--</p>
-              <p class="text-xs text-gray-600" id="p-emergency-contact">--</p>
-              <p class="text-xs text-gray-600" id="p-emergency-email">--</p>
-              <p class="text-xs text-gray-600" id="p-emergency-address">--</p>
-            </div>
+          </div>
+        </div>
 
-            <!-- Signature Section -->
-            <div class="bg-blue-50 p-3 rounded mt-4 border border-blue-100">
-              <p class="text-xs text-blue-400 uppercase font-bold mb-2">
-                Application Signature
-              </p>
-              <div>
-                <p class="text-xs text-gray-400 uppercase">Signed By</p>
-                <p class="text-sm font-bold text-blue-900" id="p-signName">
-                  --
-                </p>
-              </div>
-              <div class="mt-2">
-                <p class="text-xs text-gray-400 uppercase">Date Signed</p>
-                <p class="text-sm font-medium text-blue-800" id="p-signDate">
-                  --
-                </p>
-              </div>
+        <!-- 6. VACCINATION -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-syringe text-[#65c027]"></i> VACCINATION
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <span class="text-xs text-gray-500">Covid:</span>
+              <span class="text-sm font-medium block" id="p-covid">--</span>
             </div>
+            <div>
+              <span class="text-xs text-gray-500">Flu:</span>
+              <span class="text-sm font-medium block" id="p-flu">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. CLIENT HISTORY -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-clock-counter-clockwise text-[#65c027]"></i> CLIENT
+            HISTORY
+          </h3>
+          <div>
+            <p class="text-xs text-gray-400 uppercase">Last Client Seen</p>
+            <p class="text-sm font-bold text-gray-800" id="p-last-client">--</p>
           </div>
         </div>
       </div>

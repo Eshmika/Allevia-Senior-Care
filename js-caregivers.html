@@ -1,4 +1,5 @@
 <script>
+  console.log("js-caregivers loaded");
   // -- 1. Load List --
   window.loadCaregiverList = function () {
     document.getElementById("cgTableBody").innerHTML =
@@ -264,17 +265,30 @@
   }
 
   function toggleEmAddress() {
-    const isChecked = document.getElementById("emSameAsAddress").checked;
-    if (isChecked) {
-      const addr = document.getElementById("app-address").value;
-      const city = document.getElementById("app-city").value;
-      const state = document.getElementById("app-state").value;
-      const zip = document.getElementById("app-zip").value;
+    const checkbox = document.getElementById("emSameAsAddress");
+    if (!checkbox) return; // Safety check if element doesn't exist in this view
 
-      const fullAddress = [addr, city, state, zip].filter(Boolean).join(", ");
-      document.getElementById("app-emAddress").value = fullAddress;
+    const isChecked = checkbox.checked;
+    if (isChecked) {
+      const addrEl = document.getElementById("app-address");
+      const cityEl = document.getElementById("app-city");
+      const stateEl = document.getElementById("app-state");
+      const zipEl = document.getElementById("app-zip");
+
+      // Only proceed if source elements exist
+      if (addrEl && cityEl && stateEl && zipEl) {
+        const addr = addrEl.value;
+        const city = cityEl.value;
+        const state = stateEl.value;
+        const zip = zipEl.value;
+
+        const fullAddress = [addr, city, state, zip].filter(Boolean).join(", ");
+        const targetEl = document.getElementById("app-emAddress");
+        if (targetEl) targetEl.value = fullAddress;
+      }
     } else {
-      document.getElementById("app-emAddress").value = "";
+      const targetEl = document.getElementById("app-emAddress");
+      if (targetEl) targetEl.value = "";
     }
   }
 
