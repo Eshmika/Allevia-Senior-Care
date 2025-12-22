@@ -438,6 +438,8 @@ function getCaregiverList() {
   const w9Idx = headers.indexOf("W9 Link");
   const backgroundIdx = headers.indexOf("Background Link");
   const paymentIdx = headers.indexOf("Payment Method");
+  const interviewIdx = headers.indexOf("Interview Status");
+  const backgroundCheckIdx = headers.indexOf("Background Check");
 
   // Pre-fetch Last Client Seen Map
   const lastClientMap = getAllLastClientsSeen();
@@ -459,8 +461,8 @@ function getCaregiverList() {
       city: row[15] || "--",
       zip: row[17] || "",
       appStatus: row[8], // App Status
-      interviewStatus: row[53], // Interview Status (Check index)
-      backgroundCheck: row[54], // Background Check (Check index)
+      interviewStatus: interviewIdx > -1 ? row[interviewIdx] : "",
+      backgroundCheck: backgroundCheckIdx > -1 ? row[backgroundCheckIdx] : "",
       lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
       lastClientSeen: lastClientMap[row[0].trim()] || "--",
       contractLink: contractIdx > -1 ? row[contractIdx] : "",
