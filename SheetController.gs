@@ -98,17 +98,6 @@ function getOrCreateSheet() {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Background Link");
     }
 
-    // Add Billing Address Columns
-    const billingHeaders = sheet
-      .getRange(1, 1, 1, sheet.getLastColumn())
-      .getValues()[0];
-    if (!billingHeaders.includes("Billing Address")) {
-      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Billing Address");
-      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Billing City");
-      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Billing State");
-      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Billing Zip");
-    }
-
     // Add Marital Status Columns
     const maritalHeaders = sheet
       .getRange(1, 1, 1, sheet.getLastColumn())
@@ -404,12 +393,6 @@ function submitFullApplication(form) {
       sheet.getRange(r, accountIdx + 1).setValue(form.accountNum || "");
     if (reviewIdx > -1) sheet.getRange(r, reviewIdx + 1).setValue(new Date());
 
-    // Save Billing Info
-    const billingAddrIdx = headers.indexOf("Billing Address");
-    const billingCityIdx = headers.indexOf("Billing City");
-    const billingStateIdx = headers.indexOf("Billing State");
-    const billingZipIdx = headers.indexOf("Billing Zip");
-
     // Save Marital Status Info
     const maritalStatusIdx = headers.indexOf("Marital Status");
     const spouseNameIdx = headers.indexOf("Spouse Name");
@@ -429,15 +412,6 @@ function submitFullApplication(form) {
       sheet.getRange(r, emEmailIdx + 1).setValue(form.emEmail || "");
     if (emAddressIdx > -1)
       sheet.getRange(r, emAddressIdx + 1).setValue(form.emAddress || "");
-
-    if (billingAddrIdx > -1)
-      sheet.getRange(r, billingAddrIdx + 1).setValue(form.billingAddress || "");
-    if (billingCityIdx > -1)
-      sheet.getRange(r, billingCityIdx + 1).setValue(form.billingCity || "");
-    if (billingStateIdx > -1)
-      sheet.getRange(r, billingStateIdx + 1).setValue(form.billingState || "");
-    if (billingZipIdx > -1)
-      sheet.getRange(r, billingZipIdx + 1).setValue(form.billingZip || "");
 
     // Save Vaccination Info
     const covidIdx = headers.indexOf("Covid Vaccine");

@@ -312,26 +312,6 @@
                 <p class="text-sm font-medium" id="p-zip">--</p>
               </div>
             </div>
-            <div class="flex gap-4">
-              <div class="flex-1">
-                <p class="text-xs text-gray-400 uppercase">Billing Address</p>
-                <p class="text-sm font-medium" id="p-billing-address">--</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 uppercase">Billing City</p>
-                <p class="text-sm font-medium" id="p-billing-city">--</p>
-              </div>
-            </div>
-            <div class="flex gap-4">
-              <div class="flex-1">
-                <p class="text-xs text-gray-400 uppercase">Billing State</p>
-                <p class="text-sm font-medium" id="p-billing-state">--</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-400 uppercase">Billing Zip</p>
-                <p class="text-sm font-medium" id="p-billing-zip">--</p>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -991,75 +971,6 @@
               maxlength="5"
               class="input-field"
             />
-          </div>
-
-          <!-- Billing Address Section -->
-          <div class="md:col-span-3 mt-4 mb-2">
-            <div class="flex items-center gap-2">
-              <h3 class="font-semibold text-gray-700">Billing Address</h3>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  id="edit-sameAsAddress"
-                  onchange="toggleEditBillingAddress()"
-                  class="w-4 h-4 text-[#65c027] rounded border-gray-300 focus:ring-[#65c027]"
-                />
-                Same as Residential Address
-              </label>
-            </div>
-          </div>
-
-          <div
-            class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6"
-            id="edit-billingAddressContainer"
-          >
-            <div class="md:col-span-3">
-              <label class="block text-sm font-medium text-gray-700"
-                >Billing Address</label
-              >
-              <input
-                type="text"
-                name="billingAddress"
-                id="edit-billingAddress"
-                class="input-field"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Billing City</label
-              >
-              <input
-                type="text"
-                name="billingCity"
-                id="edit-billingCity"
-                class="input-field"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Billing State</label
-              >
-              <input
-                type="text"
-                name="billingState"
-                id="edit-billingState"
-                class="input-field"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Billing Zip</label
-              >
-              <input
-                type="text"
-                name="billingZip"
-                id="edit-billingZip"
-                class="input-field"
-                maxlength="5"
-              />
-            </div>
           </div>
 
           <div>

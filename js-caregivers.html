@@ -161,10 +161,6 @@
     setVal("edit-city", d["City"]);
     setVal("edit-state", d["State"]);
     setVal("edit-zip", d["Zip"]);
-    setVal("edit-billingAddress", d["Billing Address"]);
-    setVal("edit-billingCity", d["Billing City"]);
-    setVal("edit-billingState", d["Billing State"]);
-    setVal("edit-billingZip", d["Billing Zip"]);
     setVal("edit-phone", d["Phone"]);
     setVal("edit-email", d["Email"]);
 
@@ -244,25 +240,6 @@
     } else {
       div.classList.add("hidden");
       document.getElementById("edit-covidDoses").value = "";
-    }
-  }
-
-  function toggleEditBillingAddress() {
-    const isChecked = document.getElementById("edit-sameAsAddress").checked;
-    if (isChecked) {
-      document.getElementById("edit-billingAddress").value =
-        document.getElementById("edit-address").value;
-      document.getElementById("edit-billingCity").value =
-        document.getElementById("edit-city").value;
-      document.getElementById("edit-billingState").value =
-        document.getElementById("edit-state").value;
-      document.getElementById("edit-billingZip").value =
-        document.getElementById("edit-zip").value;
-    } else {
-      document.getElementById("edit-billingAddress").value = "";
-      document.getElementById("edit-billingCity").value = "";
-      document.getElementById("edit-billingState").value = "";
-      document.getElementById("edit-billingZip").value = "";
     }
   }
 
@@ -569,11 +546,6 @@
         set("p-city", data["City"]);
         set("p-state", data["State"]);
         set("p-zip", data["Zip"]);
-
-        set("p-billing-address", data["Billing Address"]);
-        set("p-billing-city", data["Billing City"]);
-        set("p-billing-state", data["Billing State"]);
-        set("p-billing-zip", data["Billing Zip"]);
 
         set("p-dob", `${data["DOB"] || "--"} (${data["Gender"] || "--"})`);
         set(
