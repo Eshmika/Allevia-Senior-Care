@@ -133,6 +133,7 @@
     };
 
     setVal("edit-id", d["Caregiver ID"]);
+    setVal("edit-username", d["Username"]);
     setVal("edit-firstName", d["First Name"]);
     setVal("edit-lastName", d["Last Name"]);
     setVal("edit-middleName", d["Middle Int"]);
@@ -543,22 +544,23 @@
         const emailBtn = document.getElementById("p-email-btn");
         if (emailBtn) emailBtn.href = "mailto:" + data["Email"];
 
+        set("p-username", data["Username"]);
         set("p-email", data["Email"]);
         set("p-phone", data["Phone"]);
         set("p-ssn", data["SSN"]);
         set("p-ein", data["EIN"]);
-        set(
-          "p-address",
-          `${data["Address"] || ""} ${data["Apt"] || ""}, ${
-            data["City"] || ""
-          } ${data["Zip"] || ""}`
-        );
-        set(
-          "p-billing-address",
-          `${data["Billing Address"] || ""} ${data["Billing City"] || ""} ${
-            data["Billing State"] || ""
-          } ${data["Billing Zip"] || ""}`
-        );
+
+        set("p-address", data["Address"]);
+        set("p-apt", data["Apt"]);
+        set("p-city", data["City"]);
+        set("p-state", data["State"]);
+        set("p-zip", data["Zip"]);
+
+        set("p-billing-address", data["Billing Address"]);
+        set("p-billing-city", data["Billing City"]);
+        set("p-billing-state", data["Billing State"]);
+        set("p-billing-zip", data["Billing Zip"]);
+
         set("p-dob", `${data["DOB"] || "--"} (${data["Gender"] || "--"})`);
         set(
           "p-marital",

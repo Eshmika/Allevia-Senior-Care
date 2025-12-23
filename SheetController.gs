@@ -67,6 +67,7 @@ function getOrCreateSheet() {
       "Routing Number",
       "Bank Account",
       "Last Reviewed",
+      "Username",
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   } else {
@@ -171,6 +172,14 @@ function getOrCreateSheet() {
     if (!vaxHeaders.includes("Covid Vaccine")) {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Covid Vaccine");
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Flu Vaccine");
+    }
+
+    // Add Username Column
+    const userHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!userHeaders.includes("Username")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Username");
     }
   }
   return sheet;
@@ -423,6 +432,12 @@ function submitFullApplication(form) {
     }
     if (fluIdx > -1) {
       sheet.getRange(r, fluIdx + 1).setValue(form.fluVaccine || "No");
+    }
+
+    // Save Username
+    const usernameIdx = headers.indexOf("Username");
+    if (usernameIdx > -1) {
+      sheet.getRange(r, usernameIdx + 1).setValue(form.username || "");
     }
 
     return { success: true };
