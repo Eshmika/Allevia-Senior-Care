@@ -68,6 +68,8 @@ function getOrCreateSheet() {
       "Bank Account",
       "Last Reviewed",
       "Username",
+      "Started Date",
+      "Years of Experience",
     ];
     sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   } else {
@@ -180,6 +182,24 @@ function getOrCreateSheet() {
       .getValues()[0];
     if (!userHeaders.includes("Username")) {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Username");
+    }
+
+    // Add Started Date Column
+    const startedHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!startedHeaders.includes("Started Date")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Started Date");
+    }
+
+    // Add Years of Experience Column
+    const expHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!expHeaders.includes("Years of Experience")) {
+      sheet
+        .getRange(1, sheet.getLastColumn() + 1)
+        .setValue("Years of Experience");
     }
   }
   return sheet;
@@ -432,6 +452,11 @@ function submitFullApplication(form) {
     }
     if (fluIdx > -1) {
       sheet.getRange(r, fluIdx + 1).setValue(form.fluVaccine || "No");
+      // Save Years of Experience
+      const expIdx = headers.indexOf("Years of Experience");
+      if (expIdx > -1) {
+        sheet.getRange(r, expIdx + 1).setValue(form.yearsOfExperience || "");
+      }
     }
 
     // Save Username
@@ -590,6 +615,21 @@ function updateCaregiverStage(id, stage, value) {
 
   sheet.getRange(r, colIndex + 1).setValue(value);
 
+  // Check for Activation + Payment to set Started Date
+  if (stage === "Active" && value === "Active") {
+    const payMethodIdx = headers.indexOf("Payment Method");
+    const startedDateIdx = headers.indexOf("Started Date");
+
+    if (payMethodIdx > -1 && startedDateIdx > -1) {
+      const payMethod = data[rowIndex][payMethodIdx];
+      const startedDate = data[rowIndex][startedDateIdx];
+
+      if (payMethod && !startedDate) {
+        sheet.getRange(r, startedDateIdx + 1).setValue(new Date());
+      }
+    }
+  }
+
   return { success: true, newValue: value };
 }
 
@@ -715,6 +755,19 @@ function submitPaymentDetails(form) {
       // Clear bank details if switching to other methods?
       // Or keep them? Let's keep them but maybe clear the method specific ones if needed.
       // For now, just save what is sent.
+    }
+
+    // Check for Activation + Payment to set Started Date
+    const statusIdx = headers.indexOf("Status");
+    const startedDateIdx = headers.indexOf("Started Date");
+
+    if (statusIdx > -1 && startedDateIdx > -1) {
+      const status = data[rowIndex][statusIdx];
+      const startedDate = data[rowIndex][startedDateIdx];
+
+      if (status === "Active" && !startedDate) {
+        sheet.getRange(r, startedDateIdx + 1).setValue(new Date());
+      }
     }
 
     return { success: true };

@@ -134,6 +134,7 @@
 
     setVal("edit-id", d["Caregiver ID"]);
     setVal("edit-username", d["Username"]);
+    setVal("edit-yearsOfExperience", d["Years of Experience"]);
     setVal("edit-firstName", d["First Name"]);
     setVal("edit-lastName", d["Last Name"]);
     setVal("edit-middleName", d["Middle Int"]);
@@ -519,6 +520,12 @@
         set("p-title", data["Title"]);
         set("p-id", data["Caregiver ID"]);
         set("p-last-client", data["Last Client Seen"]);
+        set(
+          "p-started-date",
+          data["Started Date"]
+            ? new Date(data["Started Date"]).toLocaleDateString()
+            : "--"
+        );
 
         const pipelinePanel = document.getElementById("pipeline-panel");
         if (data["Status"] === "Active") {
@@ -545,6 +552,7 @@
         if (emailBtn) emailBtn.href = "mailto:" + data["Email"];
 
         set("p-username", data["Username"]);
+        set("p-yearsOfExperience", data["Years of Experience"]);
         set("p-email", data["Email"]);
         set("p-phone", data["Phone"]);
         set("p-ssn", data["SSN"]);

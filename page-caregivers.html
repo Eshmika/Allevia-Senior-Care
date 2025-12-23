@@ -253,15 +253,6 @@
             <span class="text-sm">•</span>
             <span class="text-sm" id="p-id">--</span>
           </div>
-          <div
-            class="mt-3 flex items-center justify-center md:justify-start gap-4"
-          >
-            <span
-              id="p-status-badge"
-              class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700"
-              >Active</span
-            >
-          </div>
         </div>
         <div class="flex gap-2">
           <a
@@ -277,14 +268,18 @@
 
       <!-- Details Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- 1. CAREGIVER PROFILE -->
+        <!-- 1. PROFILE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-user text-[#65c027]"></i> CAREGIVER PROFILE
+            <i class="ph ph-user text-[#65c027]"></i> PROFILE
           </h3>
           <div class="grid grid-cols-1 gap-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Username</p>
+              <p class="text-sm font-medium" id="p-username">--</p>
+            </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">Phone</p>
               <p class="text-sm font-medium" id="p-phone">--</p>
@@ -293,83 +288,146 @@
               <p class="text-xs text-gray-400 uppercase">Email</p>
               <p class="text-sm font-medium break-all" id="p-email">--</p>
             </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Address</p>
-              <p class="text-sm font-medium" id="p-address">--</p>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <p class="text-xs text-gray-400 uppercase">Address</p>
+                <p class="text-sm font-medium" id="p-address">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Apt</p>
+                <p class="text-sm font-medium" id="p-apt">--</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <p class="text-xs text-gray-400 uppercase">City</p>
+                <p class="text-sm font-medium" id="p-city">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">State</p>
+                <p class="text-sm font-medium" id="p-state">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Zip</p>
+                <p class="text-sm font-medium" id="p-zip">--</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <p class="text-xs text-gray-400 uppercase">Billing Address</p>
+                <p class="text-sm font-medium" id="p-billing-address">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Billing City</p>
+                <p class="text-sm font-medium" id="p-billing-city">--</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-1">
+                <p class="text-xs text-gray-400 uppercase">Billing State</p>
+                <p class="text-sm font-medium" id="p-billing-state">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Billing Zip</p>
+                <p class="text-sm font-medium" id="p-billing-zip">--</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. STATUS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-user text-[#65c027]"></i> STATUS
+          </h3>
+          <div class="grid grid-cols-1 gap-4">
+            <div
+              class="mt-3 flex items-center justify-center md:justify-start gap-4"
+            >
+              <span
+                id="p-status-badge"
+                class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700"
+                >Active</span
+              >
             </div>
             <div>
-              <p class="text-xs text-gray-400 uppercase">Billing Address</p>
-              <p class="text-sm font-medium" id="p-billing-address">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">DOB / Gender</p>
-              <p class="text-sm font-medium" id="p-dob">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">
-                Marital Status / Spouse
-              </p>
-              <p class="text-sm font-medium" id="p-marital">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">SSN</p>
-              <p class="text-sm font-medium" id="p-ssn">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">EIN</p>
-              <p class="text-sm font-medium" id="p-ein">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">License</p>
-              <p class="text-sm font-medium" id="p-license">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Car</p>
-              <p class="text-sm font-medium" id="p-car">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">
-                US Eligible / US Citizen
-              </p>
-              <p class="text-sm font-medium" id="p-us-eligible">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">
-                Reference Contact Details
-              </p>
-              <p class="text-sm font-medium" id="p-reference-contact">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Criminal Conviction</p>
-              <p class="text-sm font-medium" id="p-criminal-conviction">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">High School</p>
-              <p class="text-sm font-medium" id="p-highSchool">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">College</p>
-              <p class="text-sm font-medium" id="p-college">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Other Education</p>
-              <p class="text-sm font-medium" id="p-otherEducation">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Last Employer</p>
-              <p class="text-sm font-medium" id="p-emp">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Signed By</p>
-              <p class="text-sm font-bold text-blue-900" id="p-signName">--</p>
-            </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Date Signed</p>
-              <p class="text-sm font-medium text-blue-800" id="p-signDate">
+              <p class="text-xs text-gray-400 uppercase">Started Date</p>
+              <p class="text-sm font-medium text-gray-800" id="p-started-date">
                 --
               </p>
             </div>
+            <div>
+              <p class="text-xs text-gray-400 uppercase">Years of Experience</p>
+              <p class="text-sm font-medium" id="p-yearsOfExperience">--</p>
+            </div>
           </div>
+        </div>
+
+        <div>
+          <p class="text-xs text-gray-400 uppercase">DOB / Gender</p>
+          <p class="text-sm font-medium" id="p-dob">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Marital Status / Spouse</p>
+          <p class="text-sm font-medium" id="p-marital">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">SSN</p>
+          <p class="text-sm font-medium" id="p-ssn">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">EIN</p>
+          <p class="text-sm font-medium" id="p-ein">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">License</p>
+          <p class="text-sm font-medium" id="p-license">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Car</p>
+          <p class="text-sm font-medium" id="p-car">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">
+            US Eligible / US Citizen
+          </p>
+          <p class="text-sm font-medium" id="p-us-eligible">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">
+            Reference Contact Details
+          </p>
+          <p class="text-sm font-medium" id="p-reference-contact">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Criminal Conviction</p>
+          <p class="text-sm font-medium" id="p-criminal-conviction">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">High School</p>
+          <p class="text-sm font-medium" id="p-highSchool">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">College</p>
+          <p class="text-sm font-medium" id="p-college">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Other Education</p>
+          <p class="text-sm font-medium" id="p-otherEducation">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Last Employer</p>
+          <p class="text-sm font-medium" id="p-emp">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Signed By</p>
+          <p class="text-sm font-bold text-blue-900" id="p-signName">--</p>
+        </div>
+        <div>
+          <p class="text-xs text-gray-400 uppercase">Date Signed</p>
+          <p class="text-sm font-medium text-blue-800" id="p-signDate">--</p>
         </div>
 
         <!-- 2. EMERGENCY CONTACT -->
@@ -600,6 +658,17 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="block text-sm font-medium text-gray-700"
+              >Username</label
+            >
+            <input
+              type="text"
+              name="username"
+              id="edit-username"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
               >First Name</label
             ><input
               type="text"
@@ -640,6 +709,18 @@
               <option value="CPR">CPR</option>
               <option value="Other">Other</option>
             </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700"
+              >Years of Experience</label
+            >
+            <input
+              type="number"
+              name="yearsOfExperience"
+              id="edit-yearsOfExperience"
+              class="input-field"
+            />
           </div>
 
           <div>
