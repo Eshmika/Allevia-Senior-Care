@@ -356,7 +356,8 @@
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-identification-card text-[#65c027]"></i> PERSONAL DETAILS
+            <i class="ph ph-identification-card text-[#65c027]"></i> PERSONAL
+            DETAILS
           </h3>
           <div class="grid grid-cols-1 gap-4">
             <div>
@@ -596,7 +597,8 @@
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-graduation-cap text-[#65c027]"></i> EDUCATION & CERTIFICATIONS
+            <i class="ph ph-graduation-cap text-[#65c027]"></i> EDUCATION &
+            CERTIFICATIONS
           </h3>
           <div class="grid grid-cols-1 gap-4">
             <div>
@@ -652,7 +654,8 @@
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-calendar-check text-[#65c027]"></i> AVAILABILITY & SCHEDULE
+            <i class="ph ph-calendar-check text-[#65c027]"></i> AVAILABILITY &
+            SCHEDULE
           </h3>
           <div class="grid grid-cols-1 gap-4">
             <div>
@@ -727,7 +730,8 @@
           <h3
             class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
-            <i class="ph ph-clock-counter-clockwise text-[#65c027]"></i> CLIENT HISTORY
+            <i class="ph ph-clock-counter-clockwise text-[#65c027]"></i> CLIENT
+            HISTORY
           </h3>
           <div class="grid grid-cols-1 gap-4">
             <div>
@@ -754,1015 +758,1197 @@
       <h1 class="text-2xl font-bold text-gray-800">Edit Profile</h1>
     </div>
 
-    <form
-      id="editProfileForm"
-      onsubmit="submitEditProfile(event)"
-      class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 space-y-8"
-    >
+    <form id="editProfileForm" onsubmit="submitEditProfile(event)">
       <input type="hidden" name="caregiverId" id="edit-id" />
-      <input type="hidden" name="signName" value="Admin Edit" />
 
-      <!-- 1. General Info -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          General Info
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Username</label
-            >
-            <input
-              type="text"
-              name="username"
-              id="edit-username"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >First Name</label
-            ><input
-              type="text"
-              name="firstName"
-              id="edit-firstName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Middle Initial</label
-            ><input
-              type="text"
-              name="middleName"
-              id="edit-middleName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Last Name</label
-            ><input
-              type="text"
-              name="lastName"
-              id="edit-lastName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Title</label>
-            <select name="title" id="edit-title" class="input-field">
-              <option value="STNA">STNA</option>
-              <option value="CNA">CNA</option>
-              <option value="HHA">HHA</option>
-              <option value="PCA">PCA</option>
-              <option value="LPN">LPN</option>
-              <option value="RN">RN</option>
-              <option value="CPR">CPR</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Years of Experience</label
-            >
-            <input
-              type="number"
-              name="yearsOfExperience"
-              id="edit-yearsOfExperience"
-              class="input-field"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700">DOB</label
-            ><input type="date" name="dob" id="edit-dob" class="input-field" />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Gender</label
-            ><select name="gender" id="edit-gender" class="input-field">
-              <option value="F">Female</option>
-              <option value="M">Male</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Marital Status</label
-            >
-            <select
-              name="maritalStatus"
-              id="edit-maritalStatus"
-              class="input-field"
-            >
-              <option value="">Select...</option>
-              <option value="Married">Married</option>
-              <option value="Divorced">Divorced</option>
-              <option value="Single">Single</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Spouse Name</label
-            >
-            <input
-              type="text"
-              name="spouseName"
-              id="edit-spouseName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">SSN #</label
-            ><input
-              type="text"
-              name="ssn"
-              id="edit-ssn"
-              maxlength="11"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">EIN #</label
-            ><input
-              type="text"
-              name="ein"
-              id="edit-ein"
-              maxlength="10"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Routing #</label
-            ><input
-              type="text"
-              name="routingNum"
-              id="edit-routingNum"
-              maxlength="9"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Account #</label
-            ><input
-              type="text"
-              name="accountNum"
-              id="edit-accountNum"
-              maxlength="12"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Status</label
-            >
-            <select name="status" id="edit-status" class="input-field">
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="No call">No call</option>
-              <option value="Vacation">Vacation</option>
-            </select>
-          </div>
-
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700"
-              >Address</label
-            ><input
-              type="text"
-              name="address"
-              id="edit-address"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Apt</label
-            ><input type="text" name="apt" id="edit-apt" class="input-field" />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700">City</label
-            ><input
-              type="text"
-              name="city"
-              id="edit-city"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">State</label
-            ><input
-              type="text"
-              name="state"
-              id="edit-state"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Zip</label
-            ><input
-              type="text"
-              name="zip"
-              id="edit-zip"
-              maxlength="5"
-              class="input-field"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Phone</label
-            ><input
-              type="tel"
-              name="phone"
-              id="edit-phone"
-              maxlength="14"
-              class="input-field"
-            />
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium text-gray-700">Email</label
-            ><input
-              type="email"
-              name="email"
-              id="edit-email"
-              class="input-field"
-            />
-          </div>
-
-          <!-- NEW: Legal Status -->
-          <div
-            class="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded-lg mt-4"
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 1. PROFILE -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
           >
+            <i class="ph ph-user-circle text-[#65c027]"></i> PROFILE
+          </h3>
+          <div class="space-y-3">
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Eligible to work in US?</label
-              ><select
-                name="usEligible"
-                id="edit-usEligible"
-                class="input-field"
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Username</label
               >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
+              <input
+                type="text"
+                name="username"
+                id="edit-username"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  name="firstName"
+                  id="edit-firstName"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  name="lastName"
+                  id="edit-lastName"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Middle</label
+                >
+                <input
+                  type="text"
+                  name="middleName"
+                  id="edit-middleName"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Title</label
+                >
+                <select
+                  name="title"
+                  id="edit-title"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="STNA">STNA</option>
+                  <option value="CNA">CNA</option>
+                  <option value="HHA">HHA</option>
+                  <option value="PCA">PCA</option>
+                  <option value="LPN">LPN</option>
+                  <option value="RN">RN</option>
+                  <option value="CPR">CPR</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Legal US Citizen?</label
-              ><select name="usCitizen" id="edit-usCitizen" class="input-field">
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. Transportation -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Transportation
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Has License?</label
-            ><select name="hasLicense" id="edit-hasLicense" class="input-field">
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >License State</label
-            ><input
-              type="text"
-              name="licenseState"
-              id="edit-licenseState"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >License #</label
-            ><input
-              type="text"
-              name="licenseNum"
-              id="edit-licenseNum"
-              class="input-field"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Has Car?</label
-            ><select name="hasCar" id="edit-hasCar" class="input-field">
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Car Model</label
-            ><input
-              type="text"
-              name="carModel"
-              id="edit-carModel"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Has Insurance?</label
-            ><select
-              name="hasInsurance"
-              id="edit-hasInsurance"
-              class="input-field"
-            >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. Availability -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Availability
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Hours</label>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <label
-                ><input type="checkbox" name="hoursAvail" value="1-4 hours" />
-                1-4</label
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Phone</label
               >
-              <label
-                ><input type="checkbox" name="hoursAvail" value="5-8 hours" />
-                5-8</label
-              >
-              <label
-                ><input type="checkbox" name="hoursAvail" value="9-12 hours" />
-                9-12</label
-              >
-              <label
-                ><input type="checkbox" name="hoursAvail" value="More" />
-                More</label
-              >
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Schedule Days</label
-            >
-            <div class="flex flex-wrap gap-2 mt-2">
-              <label
-                ><input type="checkbox" name="scheduleDays" value="MON" />
-                M</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="TUE" />
-                T</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="WED" />
-                W</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="THU" />
-                Th</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="FRI" />
-                F</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="SAT" />
-                S</label
-              >
-              <label
-                ><input type="checkbox" name="scheduleDays" value="SUN" />
-                Su</label
-              >
-            </div>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Times</label>
-            <div class="flex flex-wrap gap-2 mt-2">
-              <label
-                ><input type="checkbox" name="timesAvail" value="Mornings" />
-                Mornings</label
-              >
-              <label
-                ><input type="checkbox" name="timesAvail" value="Evenings" />
-                Evenings</label
-              >
-              <label
-                ><input type="checkbox" name="timesAvail" value="Overnights" />
-                Overnights</label
-              >
-            </div>
-          </div>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Emergency?</label
-              ><select
-                name="emergencyAvail"
-                id="edit-emergencyAvail"
-                class="input-field"
-              >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
+              <input
+                type="tel"
+                name="phone"
+                id="edit-phone"
+                maxlength="14"
+                class="input-field text-sm py-1"
+              />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700"
-                >Live-in?</label
-              ><select
-                name="liveInAvail"
-                id="edit-liveInAvail"
-                class="input-field"
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Email</label
               >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
+              <input
+                type="email"
+                name="email"
+                id="edit-email"
+                class="input-field text-sm py-1"
+              />
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Skills & Certs (Expanded) -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Skills, Certs & Languages
-        </h2>
-
-        <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Certifications</label
-        >
-        <div class="flex flex-wrap gap-4 mb-4">
-          <label
-            ><input type="checkbox" name="certs" value="CPR & First Aid" /> CPR
-            & First Aid</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="Geriatric Aide" />
-            Geriatric Aide</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="Medication Aide" />
-            Medication Aide</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="PCT" /> Patient Care
-            Tech (PCT)</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="CNA" /> Certified
-            Nursing Assistant (CNA)</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="HHA" /> Home Health Aide
-            (HHA)</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="LPN" /> Licensed
-            Practical Nurse (LPN)</label
-          >
-          <label
-            ><input type="checkbox" name="certs" value="RN" /> Registered Nurse
-            (RN)</label
-          >
-        </div>
-
-        <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Skills</label
-        >
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-          <label
-            ><input type="checkbox" name="skills" value="Bathing" />
-            Bathing/Showering</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Ambulating" />
-            Ambulating</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Food Prep" /> Food
-            Preparation</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Meds" /> Medication
-            Assist</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Bed-bath" />
-            Bed-bath</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Transferring" />
-            Transferring</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Meal Planning" /> Meal
-            Planning</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Combative" />
-            Combative</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Oral Hygiene" /> Oral
-            Hygiene</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Transportation" />
-            Transportation</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Nutrition Training" />
-            Nutrition Training</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Nutrition Training" />
-            Nutrition Training</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Bed-bound" />
-            Bed-bound</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Dressing" />
-            Dressing</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Eating Assistance" />
-            Eating Assistance</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Eating Assistance" />
-            Eating Assistance</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Dementia" />
-            Dementia</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Toileting" />
-            Toileting</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Parkinson’s" />
-            Parkinson’s</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Bedpan" />
-            Bedpan</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Hospital Bed" />
-            Hospital Bed</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Bed Linen Change" />
-            Bed Linen Change</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Paralyzed" />
-            Paralyzed</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Foley Catheter care" />
-            Foley Catheter care</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Shower Chair" /> Shower
-            Chair</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              name="skills"
-              value="Linen Change (person in bed)"
-            />
-            Linen Change (person in bed)</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              name="skills"
-              value="Stroke / Heart Attack"
-            />
-            Stroke / Heart Attack</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Skin Care" /> Skin
-            Care</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Wheelchair" />
-            Wheelchair</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Laundry" />
-            Laundry</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Diabetes" />
-            Diabetes</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Shaving" />
-            Shaving</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Shaving" />
-            Shaving</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Hoyer Lift" /> Hoyer
-            Lift</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Dusting / Vacuuming" />
-            Dusting / Vacuuming</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Cancers" />
-            Cancers</label
-          >
-          <label
-            ><input type="checkbox" name="skills" value="Gait Belt" /> Gait
-            Belt</label
-          >
-          <label
-            ><input
-              type="checkbox"
-              name="skills"
-              value="Light Housework / Cleaning"
-            />
-            Light Housework / Cleaning</label
-          >
-        </div>
-
-        <label class="block text-sm font-medium text-gray-700 mb-2"
-          >Languages</label
-        >
-        <div class="grid grid-cols-3 gap-2">
-          <label
-            ><input type="checkbox" name="languages" value="English" />
-            English</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Spanish" />
-            Spanish</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="French" />
-            French</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Arabic" />
-            Arabic</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Mandrin" />
-            Mandrin</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Hindi" />
-            Hindi</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Portuguese" />
-            Portuguese</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Russian" />
-            Russian</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Japanese" />
-            Japanese</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="German" />
-            German</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Turkish" />
-            Turkish</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Swahili" />
-            Swahili</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Somali" />
-            Somali</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Chinese" />
-            Chinese</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Bengali" />
-            Bengali</label
-          >
-          <label
-            ><input type="checkbox" name="languages" value="Other" />
-            Other</label
-          >
-        </div>
-
-        <label class="block text-sm font-medium text-gray-700 mb-2 mt-4"
-          >Vaccinations</label
-        >
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-4 rounded"
-        >
-          <div>
-            <label class="block text-xs text-gray-500 mb-1"
-              >Covid Vaccination</label
-            >
-            <select
-              name="covidVaccine"
-              id="edit-covidVaccine"
-              class="input-field mb-2"
-              onchange="toggleEditCovidDose()"
-            >
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-            <div id="edit-covidDoseDiv" class="hidden">
-              <label class="block text-xs text-gray-500 mb-1">Doses</label>
-              <select
-                name="covidDoses"
-                id="edit-covidDoses"
-                class="input-field"
-              >
-                <option value="">Select...</option>
-                <option value="One Dose">One Dose</option>
-                <option value="Two Dose">Two Dose</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs text-gray-500 mb-1"
-              >Flu / Cold Vaccination</label
-            >
-            <select name="fluVaccine" id="edit-fluVaccine" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. Education (NEW) -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Education
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >High School (Name & City)</label
-            ><input
-              type="text"
-              name="hsName"
-              id="edit-hsName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >HS Degree/Year</label
-            ><input
-              type="text"
-              name="hsDegree"
-              id="edit-hsDegree"
-              class="input-field"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >College (Name & City)</label
-            ><input
-              type="text"
-              name="colName"
-              id="edit-colName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >College Degree</label
-            ><input
-              type="text"
-              name="colDegree"
-              id="edit-colDegree"
-              class="input-field"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Other Edu</label
-            ><input
-              type="text"
-              name="otherEdu"
-              id="edit-otherEdu"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Degree</label
-            ><input
-              type="text"
-              name="otherDegree"
-              id="edit-otherDegree"
-              class="input-field"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- 6. Employment History (NEW) -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Employment History
-        </h2>
-        <div class="space-y-3">
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Employer 1 (Company & Title)</label
-            ><input
-              type="text"
-              name="emp1_full"
-              id="edit-emp1"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Employer 2 (Company & Title)</label
-            ><input
-              type="text"
-              name="emp2_full"
-              id="edit-emp2"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Employer 3 (Company & Title)</label
-            ><input
-              type="text"
-              name="emp3_full"
-              id="edit-emp3"
-              class="input-field"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. References (NEW) -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          References
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Reference 1 (Name & Phone)</label
-            ><input
-              type="text"
-              name="ref1_full"
-              id="edit-ref1"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Reference 2 (Name & Phone)</label
-            ><input
-              type="text"
-              name="ref2_full"
-              id="edit-ref2"
-              class="input-field"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- 8. Emergency Contact -->
-      <div>
-        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-          Emergency Contact
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Name</label
-            ><input
-              type="text"
-              name="emName"
-              id="edit-emName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Phone</label
-            ><input
-              type="text"
-              name="emPhone"
-              id="edit-emPhone"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700"
-              >Relation</label
-            ><input
-              type="text"
-              name="emRel"
-              id="edit-emRel"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="emEmail"
-              id="edit-emEmail"
-              class="input-field"
-            />
-          </div>
-          <div class="md:col-span-2">
-            <div class="flex items-center gap-2 mb-1">
-              <label class="block text-sm font-medium text-gray-700 mb-0"
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
                 >Address</label
               >
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  id="edit-emSameAsAddress"
-                  onchange="toggleEditEmAddress()"
-                  class="w-4 h-4 text-[#65c027] rounded border-gray-300 focus:ring-[#65c027]"
-                />
-                Same as Caregiver Address
-              </label>
+              <input
+                type="text"
+                name="address"
+                id="edit-address"
+                class="input-field text-sm py-1"
+              />
             </div>
-            <input
-              type="text"
-              name="emAddress"
-              id="edit-emAddress"
-              class="input-field"
-            />
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Apt</label
+                >
+                <input
+                  type="text"
+                  name="apt"
+                  id="edit-apt"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >City</label
+                >
+                <input
+                  type="text"
+                  name="city"
+                  id="edit-city"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >State</label
+                >
+                <input
+                  type="text"
+                  name="state"
+                  id="edit-state"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Zip</label
+                >
+                <input
+                  type="text"
+                  name="zip"
+                  id="edit-zip"
+                  maxlength="5"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. STATUS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-info text-[#65c027]"></i> STATUS
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Status</label
+              >
+              <select
+                name="status"
+                id="edit-status"
+                class="input-field text-sm py-1"
+              >
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="No call">No call</option>
+                <option value="Vacation">Vacation</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Years of Experience</label
+              >
+              <input
+                type="number"
+                name="yearsOfExperience"
+                id="edit-yearsOfExperience"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. PERSONAL DETAILS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-identification-card text-[#65c027]"></i> PERSONAL
+            DETAILS
+          </h3>
+          <div class="space-y-3">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >DOB</label
+                >
+                <input
+                  type="date"
+                  name="dob"
+                  id="edit-dob"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Gender</label
+                >
+                <select
+                  name="gender"
+                  id="edit-gender"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="F">Female</option>
+                  <option value="M">Male</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >SSN</label
+                >
+                <input
+                  type="text"
+                  name="ssn"
+                  id="edit-ssn"
+                  maxlength="11"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >EIN</label
+                >
+                <input
+                  type="text"
+                  name="ein"
+                  id="edit-ein"
+                  maxlength="10"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Marital Status</label
+              >
+              <select
+                name="maritalStatus"
+                id="edit-maritalStatus"
+                class="input-field text-sm py-1"
+              >
+                <option value="">Select...</option>
+                <option value="Married">Married</option>
+                <option value="Divorced">Divorced</option>
+                <option value="Single">Single</option>
+                <option value="Widowed">Widowed</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Spouse Name</label
+              >
+              <input
+                type="text"
+                name="spouseName"
+                id="edit-spouseName"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div class="pt-2 border-t border-gray-100">
+              <label class="block text-xs text-red-500 font-bold uppercase mb-1"
+                >Criminal Conviction</label
+              >
+              <select
+                name="criminalHistory"
+                id="edit-criminalHistory"
+                class="input-field text-sm py-1 mb-2"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+              <input
+                type="text"
+                name="criminalExplain"
+                id="edit-criminalExplain"
+                placeholder="Details if any"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. EMERGENCY CONTACT -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-phone-plus text-[#65c027]"></i> EMERGENCY CONTACT
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Name</label
+              >
+              <input
+                type="text"
+                name="emName"
+                id="edit-emName"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Relation</label
+              >
+              <input
+                type="text"
+                name="emRel"
+                id="edit-emRel"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Phone</label
+              >
+              <input
+                type="text"
+                name="emPhone"
+                id="edit-emPhone"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Email</label
+              >
+              <input
+                type="email"
+                name="emEmail"
+                id="edit-emEmail"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <label class="block text-xs text-gray-400 uppercase"
+                  >Address</label
+                >
+                <label
+                  class="flex items-center gap-1 text-xs text-gray-600 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    id="edit-emSameAsAddress"
+                    onchange="toggleEditEmAddress()"
+                    class="w-3 h-3 text-[#65c027]"
+                  />
+                  Same as Profile
+                </label>
+              </div>
+              <input
+                type="text"
+                name="emAddress"
+                id="edit-emAddress"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. TRANSPORTATION -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-car text-[#65c027]"></i> TRANSPORTATION
+          </h3>
+          <div class="space-y-3">
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Has License?</label
+                >
+                <select
+                  name="hasLicense"
+                  id="edit-hasLicense"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >State</label
+                >
+                <input
+                  type="text"
+                  name="licenseState"
+                  id="edit-licenseState"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >License #</label
+              >
+              <input
+                type="text"
+                name="licenseNum"
+                id="edit-licenseNum"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Has Car?</label
+                >
+                <select
+                  name="hasCar"
+                  id="edit-hasCar"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Insurance?</label
+                >
+                <select
+                  name="hasInsurance"
+                  id="edit-hasInsurance"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Car Model</label
+              >
+              <input
+                type="text"
+                name="carModel"
+                id="edit-carModel"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. ELIGIBILITY -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-flag text-[#65c027]"></i> ELIGIBILITY
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Eligible to work in US?</label
+              >
+              <select
+                name="usEligible"
+                id="edit-usEligible"
+                class="input-field text-sm py-1"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Legal US Citizen?</label
+              >
+              <select
+                name="usCitizen"
+                id="edit-usCitizen"
+                class="input-field text-sm py-1"
+              >
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7. PAYMENT METHODS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-credit-card text-[#65c027]"></i> PAYMENT METHODS
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Routing #</label
+              >
+              <input
+                type="text"
+                name="routingNum"
+                id="edit-routingNum"
+                maxlength="9"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Account #</label
+              >
+              <input
+                type="text"
+                name="accountNum"
+                id="edit-accountNum"
+                maxlength="12"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. EDUCATION & CERTIFICATIONS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-graduation-cap text-[#65c027]"></i> EDUCATION &
+            CERTIFICATIONS
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >High School</label
+              >
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  name="hsName"
+                  id="edit-hsName"
+                  placeholder="Name"
+                  class="input-field text-sm py-1"
+                />
+                <input
+                  type="text"
+                  name="hsDegree"
+                  id="edit-hsDegree"
+                  placeholder="Degree/Year"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >College</label
+              >
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  name="colName"
+                  id="edit-colName"
+                  placeholder="Name"
+                  class="input-field text-sm py-1"
+                />
+                <input
+                  type="text"
+                  name="colDegree"
+                  id="edit-colDegree"
+                  placeholder="Degree"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Other</label
+              >
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  name="otherEdu"
+                  id="edit-otherEdu"
+                  placeholder="Name"
+                  class="input-field text-sm py-1"
+                />
+                <input
+                  type="text"
+                  name="otherDegree"
+                  id="edit-otherDegree"
+                  placeholder="Degree"
+                  class="input-field text-sm py-1"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-2"
+                >Certifications</label
+              >
+              <div class="flex flex-wrap gap-2">
+                <label class="flex items-center gap-1 text-xs"
+                  ><input
+                    type="checkbox"
+                    name="certs"
+                    value="CPR & First Aid"
+                  />
+                  CPR</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="Geriatric Aide" />
+                  Geriatric</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input
+                    type="checkbox"
+                    name="certs"
+                    value="Medication Aide"
+                  />
+                  Med Aide</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="PCT" /> PCT</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="CNA" /> CNA</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="HHA" /> HHA</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="LPN" /> LPN</label
+                >
+                <label class="flex items-center gap-1 text-xs"
+                  ><input type="checkbox" name="certs" value="RN" /> RN</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. CAREER HIGHLIGHTS -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-briefcase text-[#65c027]"></i> CAREER HIGHLIGHTS
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Employer 1</label
+              ><input
+                type="text"
+                name="emp1_full"
+                id="edit-emp1"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Employer 2</label
+              ><input
+                type="text"
+                name="emp2_full"
+                id="edit-emp2"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Employer 3</label
+              ><input
+                type="text"
+                name="emp3_full"
+                id="edit-emp3"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. REFERENCES -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-users-three text-[#65c027]"></i> REFERENCES
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Reference 1</label
+              ><input
+                type="text"
+                name="ref1_full"
+                id="edit-ref1"
+                class="input-field text-sm py-1"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Reference 2</label
+              ><input
+                type="text"
+                name="ref2_full"
+                id="edit-ref2"
+                class="input-field text-sm py-1"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. AVAILABILITY & SCHEDULE -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-calendar-check text-[#65c027]"></i> AVAILABILITY &
+            SCHEDULE
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Hours</label
+              >
+              <div class="flex flex-wrap gap-2">
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="hoursAvail" value="1-4 hours" />
+                  1-4</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="hoursAvail" value="5-8 hours" />
+                  5-8</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="hoursAvail"
+                    value="9-12 hours"
+                  />
+                  9-12</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="hoursAvail" value="More" />
+                  More</label
+                >
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Days</label
+              >
+              <div class="flex flex-wrap gap-2">
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="MON" />
+                  M</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="TUE" />
+                  T</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="WED" />
+                  W</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="THU" />
+                  Th</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="FRI" />
+                  F</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="SAT" />
+                  S</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="scheduleDays" value="SUN" />
+                  Su</label
+                >
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Times</label
+              >
+              <div class="flex flex-wrap gap-2">
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="timesAvail" value="Mornings" />
+                  Mornings</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="timesAvail" value="Evenings" />
+                  Evenings</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="timesAvail"
+                    value="Overnights"
+                  />
+                  Overnights</label
+                >
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Emergency?</label
+                >
+                <select
+                  name="emergencyAvail"
+                  id="edit-emergencyAvail"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Live-in?</label
+                >
+                <select
+                  name="liveInAvail"
+                  id="edit-liveInAvail"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12. CARE MATCHING & SKILLS -->
+        <div
+          class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3"
+        >
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-star text-[#65c027]"></i> CARE MATCHING & SKILLS
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-2"
+                >Languages</label
+              >
+              <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="English" />
+                  English</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Spanish" />
+                  Spanish</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="French" />
+                  French</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Arabic" />
+                  Arabic</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Mandrin" />
+                  Mandrin</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Hindi" />
+                  Hindi</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Portuguese" />
+                  Portuguese</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Russian" />
+                  Russian</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Japanese" />
+                  Japanese</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="German" />
+                  German</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Turkish" />
+                  Turkish</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Swahili" />
+                  Swahili</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Somali" />
+                  Somali</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Chinese" />
+                  Chinese</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Bengali" />
+                  Bengali</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="languages" value="Other" />
+                  Other</label
+                >
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-2"
+                >Skills</label
+              >
+              <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Bathing" />
+                  Bathing/Showering</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Ambulating" />
+                  Ambulating</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Food Prep" />
+                  Food Prep</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Meds" /> Meds
+                  Assist</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Bed-bath" />
+                  Bed-bath</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Transferring" />
+                  Transferring</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Meal Planning" />
+                  Meal Planning</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Combative" />
+                  Combative</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Oral Hygiene" />
+                  Oral Hygiene</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Transportation"
+                  />
+                  Transportation</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Nutrition Training"
+                  />
+                  Nutrition Training</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Bed-bound" />
+                  Bed-bound</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Dressing" />
+                  Dressing</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Eating Assistance"
+                  />
+                  Eating Assistance</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Dementia" />
+                  Dementia</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Toileting" />
+                  Toileting</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Parkinson’s" />
+                  Parkinson’s</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Bedpan" />
+                  Bedpan</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Hospital Bed" />
+                  Hospital Bed</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Bed Linen Change"
+                  />
+                  Bed Linen Change</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Paralyzed" />
+                  Paralyzed</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Foley Catheter care"
+                  />
+                  Foley Catheter</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Shower Chair" />
+                  Shower Chair</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Linen Change (person in bed)"
+                  />
+                  Linen Change (in bed)</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Stroke / Heart Attack"
+                  />
+                  Stroke / Heart Attack</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Skin Care" />
+                  Skin Care</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Wheelchair" />
+                  Wheelchair</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Laundry" />
+                  Laundry</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Diabetes" />
+                  Diabetes</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Shaving" />
+                  Shaving</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Hoyer Lift" />
+                  Hoyer Lift</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Dusting / Vacuuming"
+                  />
+                  Dusting / Vacuuming</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Cancers" />
+                  Cancers</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input type="checkbox" name="skills" value="Gait Belt" />
+                  Gait Belt</label
+                >
+                <label class="text-xs flex items-center gap-1"
+                  ><input
+                    type="checkbox"
+                    name="skills"
+                    value="Light Housework / Cleaning"
+                  />
+                  Light Housework</label
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13. VACCINATION -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+          <h3
+            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+          >
+            <i class="ph ph-syringe text-[#65c027]"></i> VACCINATION
+          </h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Covid Vaccination</label
+              >
+              <select
+                name="covidVaccine"
+                id="edit-covidVaccine"
+                class="input-field text-sm py-1 mb-2"
+                onchange="toggleEditCovidDose()"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="edit-covidDoseDiv" class="hidden">
+                <label class="block text-xs text-gray-400 uppercase mb-1"
+                  >Doses</label
+                >
+                <select
+                  name="covidDoses"
+                  id="edit-covidDoses"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="">Select...</option>
+                  <option value="One Dose">One Dose</option>
+                  <option value="Two Dose">Two Dose</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Flu Vaccination</label
+              >
+              <select
+                name="fluVaccine"
+                id="edit-fluVaccine"
+                class="input-field text-sm py-1"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 9. Criminal History (NEW) -->
-      <div class="bg-red-50 p-4 rounded-lg">
-        <h2 class="text-lg font-bold text-red-800 mb-2">Legal History</h2>
-        <div class="grid grid-cols-1 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-red-700"
-              >Criminal Conviction?</label
-            ><select
-              name="criminalHistory"
-              id="edit-criminalHistory"
-              class="input-field"
-            >
-              <option value="Yes">Yes</option>
-              <option value="No">No</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-red-700"
-              >Details (if any)</label
-            ><input
-              type="text"
-              name="criminalExplain"
-              id="edit-criminalExplain"
-              class="input-field"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="flex items-center gap-4 pt-6 border-t border-gray-100">
+      <!-- Action Buttons -->
+      <div
+        class="flex items-center gap-4 pt-6 border-t border-gray-100 mt-6 bg-white p-4 rounded-xl shadow-sm"
+      >
         <button type="submit" id="saveProfileBtn" class="flex-1 btn-primary">
           Save Changes
         </button>
