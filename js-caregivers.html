@@ -88,27 +88,23 @@
             </div>
           </td>
           <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
-          <td class="p-4 text-xs text-gray-500 font-medium">${
-            row.lastClientSeen || "--"
+          <td class="p-4 text-xs text-gray-500 font-medium">${row.lastClientSeen || "--"
           }</td>
           <td class="p-4">
-            <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
-          row.status
-        }</span>
+            <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${row.status
+          }</span>
           </td>
           <td class="p-4 text-right">
-             <button onclick="loadProfile('${
-               row.id
-             }')" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full hover:bg-green-100 font-bold border border-green-200 transition-colors">Details</button>
+             <button onclick="loadProfile('${row.id
+          }')" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full hover:bg-green-100 font-bold border border-green-200 transition-colors">Details</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    document.getElementById("cgPageInfo").textContent = `Showing ${
-      pageData.length > 0 ? start + 1 : 0
-    }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
+    document.getElementById("cgPageInfo").textContent = `Showing ${pageData.length > 0 ? start + 1 : 0
+      }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
     document.getElementById("btnPrev").disabled = cgCurrentPage === 1;
     document.getElementById("btnNext").disabled =
       cgCurrentPage >= totalPages || totalPages === 0;
@@ -400,10 +396,10 @@
         stageNum === 2
           ? '<i class="ph ph-chats-circle"></i>'
           : stageNum === 3
-          ? '<i class="ph ph-shield-check"></i>'
-          : stageNum === 4
-          ? '<i class="ph ph-briefcase"></i>'
-          : stageNum;
+            ? '<i class="ph ph-shield-check"></i>'
+            : stageNum === 4
+              ? '<i class="ph ph-briefcase"></i>'
+              : stageNum;
     }
   }
 
@@ -491,10 +487,10 @@
         set(
           "p-name",
           data["First Name"] +
-            " " +
-            data["Middle Int"] +
-            " " +
-            data["Last Name"]
+          " " +
+          data["Middle Int"] +
+          " " +
+          data["Last Name"]
         );
         set("p-initials", (data["First Name"] || "U").charAt(0));
         set("p-title", data["Title"]);
@@ -527,11 +523,10 @@
         const badge = document.getElementById("p-status-badge");
         if (badge) {
           badge.textContent = data["Status"];
-          badge.className = `px-3 py-1 rounded-full text-xs font-bold ${
-            data["Status"] === "Active"
+          badge.className = `px-3 py-1 rounded-full text-xs font-bold ${data["Status"] === "Active"
               ? "bg-green-100 text-green-700"
               : "bg-gray-100 text-gray-600"
-          }`;
+            }`;
         }
 
         const emailBtn = document.getElementById("p-email-btn");
@@ -569,8 +564,7 @@
         set("p-gender", data["Gender"]);
         set(
           "p-marital",
-          `${data["Marital Status"] || "--"} ${
-            data["Spouse Name"] ? "(" + data["Spouse Name"] + ")" : ""
+          `${data["Marital Status"] || "--"} ${data["Spouse Name"] ? "(" + data["Spouse Name"] + ")" : ""
           }`
         );
         set("p-ssn", data["SSN"]);
@@ -656,9 +650,8 @@
         );
         const refEl = document.getElementById("p-reference-contact");
         if (refEl) {
-          refEl.innerHTML = `Reference 1: ${
-            data["Reference 1"] || "--"
-          }<br>Reference 2: ${data["Reference 2"] || "--"}`;
+          refEl.innerHTML = `Reference 1: ${data["Reference 1"] || "--"
+            }<br>Reference 2: ${data["Reference 2"] || "--"}`;
         }
         set(
           "p-criminal-conviction",
@@ -696,8 +689,8 @@
           data["Status"] === "Active"
             ? "Done"
             : data["Status"] === "Inactive"
-            ? "No"
-            : "Pending";
+              ? "No"
+              : "Pending";
         updateStageUI(
           4,
           activeState,
@@ -729,25 +722,19 @@
         set("p-langs", data["Languages"]);
         set("p-covid", data["Covid Vaccine"]);
         set("p-flu", data["Flu Vaccine"]);
-        set(
-          "p-highSchool",
-          `High School: ${data["High School"]} | HS Degree: ${data["HS Degree"]}`
-        );
-        set(
-          "p-college",
-          `College: ${data["College"]} | Degree: ${data["College Degree"]}`
-        );
-        set(
-          "p-otherEducation",
-          `Other Education: ${data["Other Edu"]} | Degree: ${data["Other Degree"]}`
-        );
+        set("p-hs-name", data["High School"]);
+        set("p-hs-degree", data["HS Degree"]);
+
+        set("p-col-name", data["College"]);
+        set("p-col-degree", data["College Degree"]);
+
+        set("p-other-name", data["Other Edu"]);
+        set("p-other-degree", data["Other Degree"]);
         const empEl = document.getElementById("p-emp");
         if (empEl) {
-          empEl.innerHTML = `Employer 1: ${
-            data["Employer 1"] || "--"
-          }<br>Employer 2: ${data["Employer 2"] || "--"}<br>Employer 3: ${
-            data["Employer 3"] || "--"
-          }`;
+          empEl.innerHTML = `Employer 1: ${data["Employer 1"] || "--"
+            }<br>Employer 2: ${data["Employer 2"] || "--"}<br>Employer 3: ${data["Employer 3"] || "--"
+            }`;
         }
         set("p-hours", data["Hours Avail"]);
         set("p-times", data["Times Avail"]);

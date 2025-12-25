@@ -1,49 +1,33 @@
 <div id="view-caregivers" class="view-section">
   <!-- SUB-VIEW: LIST -->
   <div id="cg-subview-list">
-    <div
-      class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
-    >
+    <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
       <div>
         <h1 class="text-2xl font-bold text-gray-800">Caregiver Staff</h1>
         <p class="text-gray-500">
           Manage your team, track status, and view profiles.
         </p>
       </div>
-      <button
-        onclick="switchCgView('add')"
-        class="btn-primary shadow-lg shadow-green-100"
-      >
+      <button onclick="switchCgView('add')" class="btn-primary shadow-lg shadow-green-100">
         <i class="ph ph-plus-circle text-lg"></i> Add Caregiver
       </button>
     </div>
 
     <!-- Toolbar -->
     <div
-      class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between"
-    >
+      class="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
       <!-- Search -->
       <div class="relative w-full md:w-96">
-        <i
-          class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-        ></i>
-        <input
-          type="text"
-          id="cgSearch"
-          onkeyup="renderCgTable()"
-          placeholder="Search by name, email or ID..."
-          class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:border-[#65c027] transition-colors"
-        />
+        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        <input type="text" id="cgSearch" onkeyup="renderCgTable()" placeholder="Search by name, email or ID..."
+          class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:border-[#65c027] transition-colors" />
       </div>
 
       <!-- Filter -->
       <div class="flex items-center gap-3 w-full md:w-auto">
         <label class="text-sm font-medium text-gray-600">Status:</label>
-        <select
-          id="cgFilterStatus"
-          onchange="renderCgTable()"
-          class="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2 focus:border-[#65c027] outline-none"
-        >
+        <select id="cgFilterStatus" onchange="renderCgTable()"
+          class="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2 focus:border-[#65c027] outline-none">
           <option value="All">All Status</option>
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
@@ -54,15 +38,12 @@
     </div>
 
     <!-- Table -->
-    <div
-      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-    >
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
             <tr
-              class="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-            >
+              class="bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <th class="p-4">Caregiver</th>
               <th class="p-4">Title</th>
               <th class="p-4">Contact</th>
@@ -73,35 +54,22 @@
               <th class="p-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody
-            id="cgTableBody"
-            class="text-sm text-gray-700 divide-y divide-gray-50"
-          >
+          <tbody id="cgTableBody" class="text-sm text-gray-700 divide-y divide-gray-50">
             <!-- Rows injected via JS -->
           </tbody>
         </table>
       </div>
 
       <!-- Pagination -->
-      <div
-        class="p-4 border-t border-gray-100 flex items-center justify-between bg-gray-50"
-      >
-        <span class="text-xs text-gray-500" id="cgPageInfo"
-          >Showing 0-0 of 0</span
-        >
+      <div class="p-4 border-t border-gray-100 flex items-center justify-between bg-gray-50">
+        <span class="text-xs text-gray-500" id="cgPageInfo">Showing 0-0 of 0</span>
         <div class="flex gap-2">
-          <button
-            onclick="changeCgPage(-1)"
-            id="btnPrev"
-            class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-600 hover:border-[#65c027] disabled:opacity-50"
-          >
+          <button onclick="changeCgPage(-1)" id="btnPrev"
+            class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-600 hover:border-[#65c027] disabled:opacity-50">
             Prev
           </button>
-          <button
-            onclick="changeCgPage(1)"
-            id="btnNext"
-            class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-600 hover:border-[#65c027] disabled:opacity-50"
-          >
+          <button onclick="changeCgPage(1)" id="btnNext"
+            class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-600 hover:border-[#65c027] disabled:opacity-50">
             Next
           </button>
         </div>
@@ -112,10 +80,7 @@
   <!-- SUB-VIEW: ADD FORM -->
   <div id="cg-subview-add" class="hidden">
     <div class="mb-6 flex items-center gap-4">
-      <button
-        onclick="switchCgView('list')"
-        class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
-      >
+      <button onclick="switchCgView('list')" class="p-2 rounded-full hover:bg-gray-200 text-gray-600">
         <i class="ph ph-arrow-left text-xl"></i>
       </button>
       <h1 class="text-2xl font-bold text-gray-800">
@@ -123,49 +88,33 @@
       </h1>
     </div>
 
-    <div
-      class="max-w-4xl bg-white rounded-xl shadow-md border border-gray-100 p-8"
-    >
+    <div class="max-w-4xl bg-white rounded-xl shadow-md border border-gray-100 p-8">
       <form id="caregiverForm" onsubmit="submitForm(event)">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div
-            class="col-span-2 bg-gray-50 p-4 rounded border border-gray-200 flex items-center gap-3"
-          >
+          <div class="col-span-2 bg-gray-50 p-4 rounded border border-gray-200 flex items-center gap-3">
             <i class="ph ph-info text-[#65c027] text-xl"></i>
             <p class="text-sm text-gray-600">
               Caregiver ID will be <strong>auto-generated</strong>.
             </p>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >First Name</label
-            ><input type="text" name="firstName" required class="input-field" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label><input type="text"
+              name="firstName" required class="input-field" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >Last Name</label
-            ><input type="text" name="lastName" required class="input-field" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label><input type="text"
+              name="lastName" required class="input-field" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >Phone</label
-            ><input
-              type="tel"
-              name="phone"
-              required
-              maxlength="14"
-              class="input-field"
-            />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label><input type="tel" name="phone"
+              required maxlength="14" class="input-field" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >Email</label
-            ><input type="email" name="email" required class="input-field" />
+            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label><input type="email" name="email"
+              required class="input-field" />
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2"
-              >Title</label
-            >
+            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
             <select name="title" required class="input-field bg-white">
               <option value="STNA">STNA</option>
               <option value="CNA">CNA</option>
@@ -181,14 +130,9 @@
             <input type="hidden" name="status" value="Applicant" />
           </div>
         </div>
-        <div
-          class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100"
-        >
-          <button
-            type="button"
-            onclick="document.getElementById('caregiverForm').reset()"
-            class="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
-          >
+        <div class="flex items-center justify-end gap-4 pt-6 border-t border-gray-100">
+          <button type="button" onclick="document.getElementById('caregiverForm').reset()"
+            class="px-6 py-3 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors">
             Reset
           </button>
           <button type="submit" id="submitBtn" class="btn-primary">
@@ -204,63 +148,44 @@
   <div id="cg-subview-profile" class="hidden">
     <div class="mb-6 flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <button
-          onclick="switchCgView('list')"
-          class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
-        >
+        <button onclick="switchCgView('list')" class="p-2 rounded-full hover:bg-gray-200 text-gray-600">
           <i class="ph ph-arrow-left text-xl"></i>
         </button>
         <h1 class="text-2xl font-bold text-gray-800">Caregiver Profile</h1>
       </div>
       <!-- EDIT BUTTON (Hidden by default, shown via JS) -->
-      <button
-        id="btn-edit-profile"
-        onclick="openEditMode()"
-        class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition flex items-center gap-2"
-      >
+      <button id="btn-edit-profile" onclick="openEditMode()"
+        class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition flex items-center gap-2">
         <i class="ph ph-pencil-simple"></i> Edit Profile
       </button>
     </div>
 
     <div id="profileLoading" class="text-center py-20 text-gray-400">
-      <div
-        class="spinner mx-auto mb-4 border-gray-300 border-t-[#65c027]"
-      ></div>
+      <div class="spinner mx-auto mb-4 border-gray-300 border-t-[#65c027]"></div>
       Loading profile...
     </div>
 
     <div id="profileContent" class="hidden animate-fade-in">
       <!-- HEADER -->
       <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden"
-      >
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6 flex flex-col md:flex-row items-center gap-6 relative overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-2 bg-[#65c027]"></div>
         <div
-          class="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center text-[#65c027] text-4xl font-bold border-4 border-white shadow-lg z-10"
-        >
+          class="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center text-[#65c027] text-4xl font-bold border-4 border-white shadow-lg z-10">
           <span id="p-initials">--</span>
         </div>
         <div class="text-center md:text-left flex-1 z-10">
           <h2 class="text-2xl font-bold text-gray-800" id="p-name">--</h2>
-          <div
-            class="flex items-center justify-center md:justify-start gap-2 text-gray-500 mt-1"
-          >
-            <span
-              class="bg-gray-100 px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase"
-              id="p-title"
-              >--</span
-            >
+          <div class="flex items-center justify-center md:justify-start gap-2 text-gray-500 mt-1">
+            <span class="bg-gray-100 px-2 py-0.5 rounded text-xs font-semibold tracking-wide uppercase"
+              id="p-title">--</span>
             <span class="text-sm">•</span>
             <span class="text-sm" id="p-id">--</span>
           </div>
         </div>
         <div class="flex gap-2">
-          <a
-            id="p-email-btn"
-            href="#"
-            class="p-3 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition"
-            ><i class="ph ph-envelope-simple"></i
-          ></a>
+          <a id="p-email-btn" href="#" class="p-3 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition"><i
+              class="ph ph-envelope-simple"></i></a>
         </div>
       </div>
 
@@ -270,9 +195,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- 1. PROFILE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-user-circle text-[#65c027]"></i> PROFILE
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -317,20 +240,13 @@
 
         <!-- 2. STATUS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-info text-[#65c027]"></i> STATUS
           </h3>
           <div class="grid grid-cols-1 gap-4">
-            <div
-              class="mt-3 flex items-center justify-center md:justify-start gap-4"
-            >
-              <span
-                id="p-status-badge"
-                class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700"
-                >Active</span
-              >
+            <div class="mt-3 flex items-center justify-center md:justify-start gap-4">
+              <span id="p-status-badge"
+                class="px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">Active</span>
             </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">Started Date</p>
@@ -353,9 +269,7 @@
 
         <!-- 3. PERSONAL DETAILS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-identification-card text-[#65c027]"></i> PERSONAL
             DETAILS
           </h3>
@@ -363,10 +277,7 @@
             <div class="flex gap-4">
               <div class="flex-1">
                 <p class="text-xs text-gray-400 uppercase">DOB</p>
-                <p
-                  class="text-sm font-medium flex items-center gap-2"
-                  id="p-dob"
-                >
+                <p class="text-sm font-medium flex items-center gap-2" id="p-dob">
                   --
                 </p>
               </div>
@@ -401,9 +312,7 @@
 
         <!-- 3. EMERGENCY CONTACT -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-phone-plus text-[#65c027]"></i> EMERGENCY CONTACT
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -432,9 +341,7 @@
 
         <!-- 4. TRANSPORATION -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-car text-[#65c027]"></i> TRANSPORTATION
           </h3>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -470,28 +377,37 @@
           </div>
         </div>
 
-        <!-- 5. ELIGIBILITY -->
+        <!-- 5. ELIGIBILITY / VACCINATION -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
-            <i class="ph ph-flag text-[#65c027]"></i> ELIGIBILITY
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
+            <i class="ph ph-flag text-[#65c027]"></i> ELIGIBILITY / VACCINATION
           </h3>
-          <div class="grid grid-cols-1 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Eligibility -->
             <div>
               <p class="text-xs text-gray-400 uppercase">
                 US Eligible / US Citizen
               </p>
               <p class="text-sm font-medium" id="p-us-eligible">--</p>
             </div>
+
+            <!-- Vaccination -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Covid</p>
+                <p class="text-sm font-medium" id="p-covid">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Flu</p>
+                <p class="text-sm font-medium" id="p-flu">--</p>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- 6. PAYMENT METHODS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-credit-card text-[#65c027]"></i> PAYMENT METHODS
           </h3>
           <div class="space-y-4">
@@ -501,10 +417,7 @@
                 --
               </p>
             </div>
-            <div
-              id="p-bank-details"
-              class="hidden space-y-2 border-t border-gray-100 pt-2"
-            >
+            <div id="p-bank-details" class="hidden space-y-2 border-t border-gray-100 pt-2">
               <div class="grid grid-cols-1 gap-4">
                 <div>
                   <p class="text-xs text-gray-400 uppercase">Bank Name</p>
@@ -523,34 +436,20 @@
                 </div>
               </div>
             </div>
-            <div
-              id="p-check-details"
-              class="hidden space-y-2 border-t border-gray-100 pt-2"
-            >
+            <div id="p-check-details" class="hidden space-y-2 border-t border-gray-100 pt-2">
               <div>
                 <p class="text-xs text-gray-400 uppercase">Check Documents</p>
                 <div class="flex gap-4">
-                  <a
-                    id="p-check-id"
-                    href="#"
-                    target="_blank"
-                    class="text-sm text-blue-600 hover:underline block hidden"
-                    ><i class="ph ph-file-text"></i> ID Proof</a
-                  >
-                  <a
-                    id="p-check-addr"
-                    href="#"
-                    target="_blank"
-                    class="text-sm text-blue-600 hover:underline block hidden"
-                    ><i class="ph ph-file-text"></i> Address Proof</a
-                  >
+                  <a id="p-check-id" href="#" target="_blank"
+                    class="text-sm text-blue-600 hover:underline block hidden"><i class="ph ph-file-text"></i> ID
+                    Proof</a>
+                  <a id="p-check-addr" href="#" target="_blank"
+                    class="text-sm text-blue-600 hover:underline block hidden"><i class="ph ph-file-text"></i> Address
+                    Proof</a>
                 </div>
               </div>
             </div>
-            <div
-              id="p-digital-details"
-              class="hidden space-y-2 border-t border-gray-100 pt-2"
-            >
+            <div id="p-digital-details" class="hidden space-y-2 border-t border-gray-100 pt-2">
               <div class="grid grid-cols-1 gap-4">
                 <div>
                   <p class="text-xs text-gray-400 uppercase">Digital Name</p>
@@ -571,9 +470,7 @@
 
         <!-- 8. DOCUMENTS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-files text-[#65c027]"></i> DOCUMENTS
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -595,30 +492,24 @@
 
         <!-- 9. SEND EMAILS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-envelope-simple text-[#65c027]"></i> SEND EMAILS
           </h3>
           <div class="grid grid-cols-1 gap-4">
             <button
-              class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
+              class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
               <i class="ph ph-hand-waving"></i> Send Welcome
             </button>
             <button
-              class="w-full bg-purple-50 hover:bg-purple-100 text-purple-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
+              class="w-full bg-purple-50 hover:bg-purple-100 text-purple-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
               <i class="ph ph-check-circle"></i> Send Shift verification
             </button>
             <button
-              class="w-full bg-orange-50 hover:bg-orange-100 text-orange-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
+              class="w-full bg-orange-50 hover:bg-orange-100 text-orange-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
               <i class="ph ph-user-switch"></i> Send Username change
             </button>
             <button
-              class="w-full bg-green-50 hover:bg-green-100 text-green-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
+              class="w-full bg-green-50 hover:bg-green-100 text-green-600 font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
               <i class="ph ph-lock-key-open"></i> Send Password reset
             </button>
           </div>
@@ -626,24 +517,47 @@
 
         <!-- 10. EDUCATION & CERTIFICATIONS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-graduation-cap text-[#65c027]"></i> EDUCATION &
             CERTIFICATIONS
           </h3>
           <div class="grid grid-cols-1 gap-4">
-            <div>
-              <p class="text-xs text-gray-400 uppercase">High School</p>
-              <p class="text-sm font-medium" id="p-highSchool">--</p>
+            <!-- High School -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+              <div>
+                <p class="text-xs text-gray-400 uppercase">High School Name</p>
+                <p class="text-sm font-medium" id="p-hs-name">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">HS Degree</p>
+                <p class="text-sm font-medium" id="p-hs-degree">--</p>
+              </div>
             </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">College</p>
-              <p class="text-sm font-medium" id="p-college">--</p>
+
+            <!-- College -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+              <div>
+                <p class="text-xs text-gray-400 uppercase">College Name</p>
+                <p class="text-sm font-medium" id="p-col-name">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Degree</p>
+                <p class="text-sm font-medium" id="p-col-degree">--</p>
+              </div>
             </div>
-            <div>
-              <p class="text-xs text-gray-400 uppercase">Other Education</p>
-              <p class="text-sm font-medium" id="p-otherEducation">--</p>
+
+            <!-- Other Education -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-gray-50 pb-4 last:border-0 last:pb-0">
+              <div>
+                <p class="text-xs text-gray-400 uppercase">
+                  Other Education Name
+                </p>
+                <p class="text-sm font-medium" id="p-other-name">--</p>
+              </div>
+              <div>
+                <p class="text-xs text-gray-400 uppercase">Degree</p>
+                <p class="text-sm font-medium" id="p-other-degree">--</p>
+              </div>
             </div>
             <div>
               <p class="text-xs text-gray-400 uppercase">Certifications</p>
@@ -654,9 +568,7 @@
 
         <!-- 11. CAREER HIGHLIGHTS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-briefcase text-[#65c027]"></i> CAREER HIGHLIGHTS
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -669,9 +581,7 @@
 
         <!-- 12. REFERENCES -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-users-three text-[#65c027]"></i> REFERENCES
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -683,9 +593,7 @@
 
         <!-- 13. AVAILABILITY & SCHEDULE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-calendar-check text-[#65c027]"></i> AVAILABILITY &
             SCHEDULE
           </h3>
@@ -711,9 +619,7 @@
 
         <!-- 14. CARE MATCHING & SKILLS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-star text-[#65c027]"></i> CARE MATCHING & SKILLS
           </h3>
           <div class="grid grid-cols-1 gap-4">
@@ -730,38 +636,15 @@
 
         <!-- 15. OFFICE LOCATION -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-map-pin text-[#65c027]"></i> OFFICE LOCATION
           </h3>
           <div class="grid grid-cols-1 gap-4"></div>
         </div>
 
-        <!-- 16. VACCINATION -->
+        <!-- 16. CLIENT HISTORY -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
-            <i class="ph ph-syringe text-[#65c027]"></i> VACCINATION
-          </h3>
-          <div class="grid grid-cols-1 gap-4">
-            <div>
-              <span class="text-xs text-gray-500">Covid:</span>
-              <span class="text-sm font-medium block" id="p-covid">--</span>
-            </div>
-            <div>
-              <span class="text-xs text-gray-500">Flu:</span>
-              <span class="text-sm font-medium block" id="p-flu">--</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- 17. CLIENT HISTORY -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-clock-counter-clockwise text-[#65c027]"></i> CLIENT
             HISTORY
           </h3>
@@ -781,10 +664,7 @@
   <!-- NEW: EDIT PROFILE VIEW -->
   <div id="cg-subview-edit" class="hidden">
     <div class="mb-6 flex items-center gap-4">
-      <button
-        onclick="cancelEdit()"
-        class="p-2 rounded-full hover:bg-gray-200 text-gray-600"
-      >
+      <button onclick="cancelEdit()" class="p-2 rounded-full hover:bg-gray-200 text-gray-600">
         <i class="ph ph-x text-xl"></i>
       </button>
       <h1 class="text-2xl font-bold text-gray-800">Edit Profile</h1>
@@ -797,68 +677,32 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- 1. PROFILE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-user-circle text-[#65c027]"></i> PROFILE
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Username</label
-              >
-              <input
-                type="text"
-                name="username"
-                id="edit-username"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Username</label>
+              <input type="text" name="username" id="edit-username" class="input-field text-sm py-1" />
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >First Name</label
-                >
-                <input
-                  type="text"
-                  name="firstName"
-                  id="edit-firstName"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">First Name</label>
+                <input type="text" name="firstName" id="edit-firstName" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Last Name</label
-                >
-                <input
-                  type="text"
-                  name="lastName"
-                  id="edit-lastName"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">Last Name</label>
+                <input type="text" name="lastName" id="edit-lastName" class="input-field text-sm py-1" />
               </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Middle</label
-                >
-                <input
-                  type="text"
-                  name="middleName"
-                  id="edit-middleName"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">Middle</label>
+                <input type="text" name="middleName" id="edit-middleName" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Title</label
-                >
-                <select
-                  name="title"
-                  id="edit-title"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Title</label>
+                <select name="title" id="edit-title" class="input-field text-sm py-1">
                   <option value="STNA">STNA</option>
                   <option value="CNA">CNA</option>
                   <option value="HHA">HHA</option>
@@ -871,86 +715,35 @@
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Phone</label
-              >
-              <input
-                type="tel"
-                name="phone"
-                id="edit-phone"
-                maxlength="14"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Phone</label>
+              <input type="tel" name="phone" id="edit-phone" maxlength="14" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Email</label
-              >
-              <input
-                type="email"
-                name="email"
-                id="edit-email"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Email</label>
+              <input type="email" name="email" id="edit-email" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Address</label
-              >
-              <input
-                type="text"
-                name="address"
-                id="edit-address"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Address</label>
+              <input type="text" name="address" id="edit-address" class="input-field text-sm py-1" />
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Apt</label
-                >
-                <input
-                  type="text"
-                  name="apt"
-                  id="edit-apt"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">Apt</label>
+                <input type="text" name="apt" id="edit-apt" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >City</label
-                >
-                <input
-                  type="text"
-                  name="city"
-                  id="edit-city"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">City</label>
+                <input type="text" name="city" id="edit-city" class="input-field text-sm py-1" />
               </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >State</label
-                >
-                <input
-                  type="text"
-                  name="state"
-                  id="edit-state"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">State</label>
+                <input type="text" name="state" id="edit-state" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Zip</label
-                >
-                <input
-                  type="text"
-                  name="zip"
-                  id="edit-zip"
-                  maxlength="5"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">Zip</label>
+                <input type="text" name="zip" id="edit-zip" maxlength="5" class="input-field text-sm py-1" />
               </div>
             </div>
           </div>
@@ -958,21 +751,13 @@
 
         <!-- 2. STATUS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-info text-[#65c027]"></i> STATUS
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Status</label
-              >
-              <select
-                name="status"
-                id="edit-status"
-                class="input-field text-sm py-1"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Status</label>
+              <select name="status" id="edit-status" class="input-field text-sm py-1">
                 <option value="Active">Active</option>
                 <option value="Inactive">Inactive</option>
                 <option value="No call">No call</option>
@@ -980,49 +765,28 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Years of Experience</label
-              >
-              <input
-                type="number"
-                name="yearsOfExperience"
-                id="edit-yearsOfExperience"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Years of Experience</label>
+              <input type="number" name="yearsOfExperience" id="edit-yearsOfExperience"
+                class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 3. PERSONAL DETAILS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-identification-card text-[#65c027]"></i> PERSONAL
             DETAILS
           </h3>
           <div class="space-y-3">
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >DOB</label
-                >
-                <input
-                  type="date"
-                  name="dob"
-                  id="edit-dob"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">DOB</label>
+                <input type="date" name="dob" id="edit-dob" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Gender</label
-                >
-                <select
-                  name="gender"
-                  id="edit-gender"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Gender</label>
+                <select name="gender" id="edit-gender" class="input-field text-sm py-1">
                   <option value="F">Female</option>
                   <option value="M">Male</option>
                   <option value="Other">Other</option>
@@ -1031,39 +795,17 @@
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >SSN</label
-                >
-                <input
-                  type="text"
-                  name="ssn"
-                  id="edit-ssn"
-                  maxlength="11"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">SSN</label>
+                <input type="text" name="ssn" id="edit-ssn" maxlength="11" class="input-field text-sm py-1" />
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >EIN</label
-                >
-                <input
-                  type="text"
-                  name="ein"
-                  id="edit-ein"
-                  maxlength="10"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">EIN</label>
+                <input type="text" name="ein" id="edit-ein" maxlength="10" class="input-field text-sm py-1" />
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Marital Status</label
-              >
-              <select
-                name="maritalStatus"
-                id="edit-maritalStatus"
-                class="input-field text-sm py-1"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Marital Status</label>
+              <select name="maritalStatus" id="edit-maritalStatus" class="input-field text-sm py-1">
                 <option value="">Select...</option>
                 <option value="Married">Married</option>
                 <option value="Divorced">Divorced</option>
@@ -1073,235 +815,119 @@
               </select>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Spouse Name</label
-              >
-              <input
-                type="text"
-                name="spouseName"
-                id="edit-spouseName"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Spouse Name</label>
+              <input type="text" name="spouseName" id="edit-spouseName" class="input-field text-sm py-1" />
             </div>
             <div class="pt-2 border-t border-gray-100">
-              <label class="block text-xs text-red-500 font-bold uppercase mb-1"
-                >Criminal Conviction</label
-              >
-              <select
-                name="criminalHistory"
-                id="edit-criminalHistory"
-                class="input-field text-sm py-1 mb-2"
-              >
+              <label class="block text-xs text-red-500 font-bold uppercase mb-1">Criminal Conviction</label>
+              <select name="criminalHistory" id="edit-criminalHistory" class="input-field text-sm py-1 mb-2">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
-              <input
-                type="text"
-                name="criminalExplain"
-                id="edit-criminalExplain"
-                placeholder="Details if any"
-                class="input-field text-sm py-1"
-              />
+              <input type="text" name="criminalExplain" id="edit-criminalExplain" placeholder="Details if any"
+                class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 4. EMERGENCY CONTACT -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-phone-plus text-[#65c027]"></i> EMERGENCY CONTACT
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Name</label
-              >
-              <input
-                type="text"
-                name="emName"
-                id="edit-emName"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Name</label>
+              <input type="text" name="emName" id="edit-emName" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Relation</label
-              >
-              <input
-                type="text"
-                name="emRel"
-                id="edit-emRel"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Relation</label>
+              <input type="text" name="emRel" id="edit-emRel" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Phone</label
-              >
-              <input
-                type="text"
-                name="emPhone"
-                id="edit-emPhone"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Phone</label>
+              <input type="text" name="emPhone" id="edit-emPhone" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Email</label
-              >
-              <input
-                type="email"
-                name="emEmail"
-                id="edit-emEmail"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Email</label>
+              <input type="email" name="emEmail" id="edit-emEmail" class="input-field text-sm py-1" />
             </div>
             <div>
               <div class="flex items-center justify-between mb-1">
-                <label class="block text-xs text-gray-400 uppercase"
-                  >Address</label
-                >
-                <label
-                  class="flex items-center gap-1 text-xs text-gray-600 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="edit-emSameAsAddress"
-                    onchange="toggleEditEmAddress()"
-                    class="w-3 h-3 text-[#65c027]"
-                  />
+                <label class="block text-xs text-gray-400 uppercase">Address</label>
+                <label class="flex items-center gap-1 text-xs text-gray-600 cursor-pointer">
+                  <input type="checkbox" id="edit-emSameAsAddress" onchange="toggleEditEmAddress()"
+                    class="w-3 h-3 text-[#65c027]" />
                   Same as Profile
                 </label>
               </div>
-              <input
-                type="text"
-                name="emAddress"
-                id="edit-emAddress"
-                class="input-field text-sm py-1"
-              />
+              <input type="text" name="emAddress" id="edit-emAddress" class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 5. TRANSPORTATION -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-car text-[#65c027]"></i> TRANSPORTATION
           </h3>
           <div class="space-y-3">
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Has License?</label
-                >
-                <select
-                  name="hasLicense"
-                  id="edit-hasLicense"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Has License?</label>
+                <select name="hasLicense" id="edit-hasLicense" class="input-field text-sm py-1">
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >State</label
-                >
-                <input
-                  type="text"
-                  name="licenseState"
-                  id="edit-licenseState"
-                  class="input-field text-sm py-1"
-                />
+                <label class="block text-xs text-gray-400 uppercase mb-1">State</label>
+                <input type="text" name="licenseState" id="edit-licenseState" class="input-field text-sm py-1" />
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >License #</label
-              >
-              <input
-                type="text"
-                name="licenseNum"
-                id="edit-licenseNum"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">License #</label>
+              <input type="text" name="licenseNum" id="edit-licenseNum" class="input-field text-sm py-1" />
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Has Car?</label
-                >
-                <select
-                  name="hasCar"
-                  id="edit-hasCar"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Has Car?</label>
+                <select name="hasCar" id="edit-hasCar" class="input-field text-sm py-1">
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Insurance?</label
-                >
-                <select
-                  name="hasInsurance"
-                  id="edit-hasInsurance"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Insurance?</label>
+                <select name="hasInsurance" id="edit-hasInsurance" class="input-field text-sm py-1">
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Car Model</label
-              >
-              <input
-                type="text"
-                name="carModel"
-                id="edit-carModel"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Car Model</label>
+              <input type="text" name="carModel" id="edit-carModel" class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 6. ELIGIBILITY -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-flag text-[#65c027]"></i> ELIGIBILITY
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Eligible to work in US?</label
-              >
-              <select
-                name="usEligible"
-                id="edit-usEligible"
-                class="input-field text-sm py-1"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Eligible to work in US?</label>
+              <select name="usEligible" id="edit-usEligible" class="input-field text-sm py-1">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Legal US Citizen?</label
-              >
-              <select
-                name="usCitizen"
-                id="edit-usCitizen"
-                class="input-field text-sm py-1"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Legal US Citizen?</label>
+              <select name="usCitizen" id="edit-usCitizen" class="input-field text-sm py-1">
                 <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
@@ -1311,151 +937,78 @@
 
         <!-- 7. PAYMENT METHODS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-credit-card text-[#65c027]"></i> PAYMENT METHODS
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Routing #</label
-              >
-              <input
-                type="text"
-                name="routingNum"
-                id="edit-routingNum"
-                maxlength="9"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Routing #</label>
+              <input type="text" name="routingNum" id="edit-routingNum" maxlength="9"
+                class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Account #</label
-              >
-              <input
-                type="text"
-                name="accountNum"
-                id="edit-accountNum"
-                maxlength="12"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Account #</label>
+              <input type="text" name="accountNum" id="edit-accountNum" maxlength="12"
+                class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 8. EDUCATION & CERTIFICATIONS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-graduation-cap text-[#65c027]"></i> EDUCATION &
             CERTIFICATIONS
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >High School</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">High School</label>
               <div class="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  name="hsName"
-                  id="edit-hsName"
-                  placeholder="Name"
-                  class="input-field text-sm py-1"
-                />
-                <input
-                  type="text"
-                  name="hsDegree"
-                  id="edit-hsDegree"
-                  placeholder="Degree/Year"
-                  class="input-field text-sm py-1"
-                />
+                <input type="text" name="hsName" id="edit-hsName" placeholder="Name" class="input-field text-sm py-1" />
+                <input type="text" name="hsDegree" id="edit-hsDegree" placeholder="Degree/Year"
+                  class="input-field text-sm py-1" />
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >College</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">College</label>
               <div class="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  name="colName"
-                  id="edit-colName"
-                  placeholder="Name"
-                  class="input-field text-sm py-1"
-                />
-                <input
-                  type="text"
-                  name="colDegree"
-                  id="edit-colDegree"
-                  placeholder="Degree"
-                  class="input-field text-sm py-1"
-                />
+                <input type="text" name="colName" id="edit-colName" placeholder="Name"
+                  class="input-field text-sm py-1" />
+                <input type="text" name="colDegree" id="edit-colDegree" placeholder="Degree"
+                  class="input-field text-sm py-1" />
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Other</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Other</label>
               <div class="grid grid-cols-2 gap-2">
-                <input
-                  type="text"
-                  name="otherEdu"
-                  id="edit-otherEdu"
-                  placeholder="Name"
-                  class="input-field text-sm py-1"
-                />
-                <input
-                  type="text"
-                  name="otherDegree"
-                  id="edit-otherDegree"
-                  placeholder="Degree"
-                  class="input-field text-sm py-1"
-                />
+                <input type="text" name="otherEdu" id="edit-otherEdu" placeholder="Name"
+                  class="input-field text-sm py-1" />
+                <input type="text" name="otherDegree" id="edit-otherDegree" placeholder="Degree"
+                  class="input-field text-sm py-1" />
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-2"
-                >Certifications</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-2">Certifications</label>
               <div class="flex flex-wrap gap-2">
-                <label class="flex items-center gap-1 text-xs"
-                  ><input
-                    type="checkbox"
-                    name="certs"
-                    value="CPR & First Aid"
-                  />
-                  CPR</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="Geriatric Aide" />
-                  Geriatric</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input
-                    type="checkbox"
-                    name="certs"
-                    value="Medication Aide"
-                  />
-                  Med Aide</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="PCT" /> PCT</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="CNA" /> CNA</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="HHA" /> HHA</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="LPN" /> LPN</label
-                >
-                <label class="flex items-center gap-1 text-xs"
-                  ><input type="checkbox" name="certs" value="RN" /> RN</label
-                >
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs"
+                    value="CPR & First Aid" />
+                  CPR</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs"
+                    value="Geriatric Aide" />
+                  Geriatric</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs"
+                    value="Medication Aide" />
+                  Med Aide</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs" value="PCT" />
+                  PCT</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs" value="CNA" />
+                  CNA</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs" value="HHA" />
+                  HHA</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs" value="LPN" />
+                  LPN</label>
+                <label class="flex items-center gap-1 text-xs"><input type="checkbox" name="certs" value="RN" />
+                  RN</label>
               </div>
             </div>
           </div>
@@ -1463,193 +1016,109 @@
 
         <!-- 9. CAREER HIGHLIGHTS -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-briefcase text-[#65c027]"></i> CAREER HIGHLIGHTS
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Employer 1</label
-              ><input
-                type="text"
-                name="emp1_full"
-                id="edit-emp1"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Employer 1</label><input type="text"
+                name="emp1_full" id="edit-emp1" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Employer 2</label
-              ><input
-                type="text"
-                name="emp2_full"
-                id="edit-emp2"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Employer 2</label><input type="text"
+                name="emp2_full" id="edit-emp2" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Employer 3</label
-              ><input
-                type="text"
-                name="emp3_full"
-                id="edit-emp3"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Employer 3</label><input type="text"
+                name="emp3_full" id="edit-emp3" class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 10. REFERENCES -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-users-three text-[#65c027]"></i> REFERENCES
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Reference 1</label
-              ><input
-                type="text"
-                name="ref1_full"
-                id="edit-ref1"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Reference 1</label><input type="text"
+                name="ref1_full" id="edit-ref1" class="input-field text-sm py-1" />
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Reference 2</label
-              ><input
-                type="text"
-                name="ref2_full"
-                id="edit-ref2"
-                class="input-field text-sm py-1"
-              />
+              <label class="block text-xs text-gray-400 uppercase mb-1">Reference 2</label><input type="text"
+                name="ref2_full" id="edit-ref2" class="input-field text-sm py-1" />
             </div>
           </div>
         </div>
 
         <!-- 11. AVAILABILITY & SCHEDULE -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-calendar-check text-[#65c027]"></i> AVAILABILITY &
             SCHEDULE
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Hours</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Hours</label>
               <div class="flex flex-wrap gap-2">
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="hoursAvail" value="1-4 hours" />
-                  1-4</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="hoursAvail" value="5-8 hours" />
-                  5-8</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="hoursAvail"
-                    value="9-12 hours"
-                  />
-                  9-12</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="hoursAvail" value="More" />
-                  More</label
-                >
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="hoursAvail"
+                    value="1-4 hours" />
+                  1-4</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="hoursAvail"
+                    value="5-8 hours" />
+                  5-8</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="hoursAvail"
+                    value="9-12 hours" />
+                  9-12</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="hoursAvail" value="More" />
+                  More</label>
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Days</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Days</label>
               <div class="flex flex-wrap gap-2">
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="MON" />
-                  M</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="TUE" />
-                  T</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="WED" />
-                  W</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="THU" />
-                  Th</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="FRI" />
-                  F</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="SAT" />
-                  S</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="scheduleDays" value="SUN" />
-                  Su</label
-                >
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="MON" />
+                  M</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="TUE" />
+                  T</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="WED" />
+                  W</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="THU" />
+                  Th</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="FRI" />
+                  F</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="SAT" />
+                  S</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="scheduleDays" value="SUN" />
+                  Su</label>
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Times</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Times</label>
               <div class="flex flex-wrap gap-2">
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="timesAvail" value="Mornings" />
-                  Mornings</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="timesAvail" value="Evenings" />
-                  Evenings</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="timesAvail"
-                    value="Overnights"
-                  />
-                  Overnights</label
-                >
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="timesAvail"
+                    value="Mornings" />
+                  Mornings</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="timesAvail"
+                    value="Evenings" />
+                  Evenings</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="timesAvail"
+                    value="Overnights" />
+                  Overnights</label>
               </div>
             </div>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Emergency?</label
-                >
-                <select
-                  name="emergencyAvail"
-                  id="edit-emergencyAvail"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Emergency?</label>
+                <select name="emergencyAvail" id="edit-emergencyAvail" class="input-field text-sm py-1">
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
               </div>
               <div>
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Live-in?</label
-                >
-                <select
-                  name="liveInAvail"
-                  id="edit-liveInAvail"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Live-in?</label>
+                <select name="liveInAvail" id="edit-liveInAvail" class="input-field text-sm py-1">
                   <option value="Yes">Yes</option>
                   <option value="No">No</option>
                 </select>
@@ -1659,267 +1128,149 @@
         </div>
 
         <!-- 12. CARE MATCHING & SKILLS -->
-        <div
-          class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3"
-        >
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2 lg:col-span-3">
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-star text-[#65c027]"></i> CARE MATCHING & SKILLS
           </h3>
           <div class="space-y-4">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-2"
-                >Languages</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-2">Languages</label>
               <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="English" />
-                  English</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Spanish" />
-                  Spanish</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="French" />
-                  French</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Arabic" />
-                  Arabic</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Mandrin" />
-                  Mandrin</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Hindi" />
-                  Hindi</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Portuguese" />
-                  Portuguese</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Russian" />
-                  Russian</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Japanese" />
-                  Japanese</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="German" />
-                  German</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Turkish" />
-                  Turkish</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Swahili" />
-                  Swahili</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Somali" />
-                  Somali</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Chinese" />
-                  Chinese</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Bengali" />
-                  Bengali</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="languages" value="Other" />
-                  Other</label
-                >
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="English" />
+                  English</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Spanish" />
+                  Spanish</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="French" />
+                  French</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="Arabic" />
+                  Arabic</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Mandrin" />
+                  Mandrin</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="Hindi" />
+                  Hindi</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Portuguese" />
+                  Portuguese</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Russian" />
+                  Russian</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Japanese" />
+                  Japanese</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="German" />
+                  German</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Turkish" />
+                  Turkish</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Swahili" />
+                  Swahili</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="Somali" />
+                  Somali</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Chinese" />
+                  Chinese</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages"
+                    value="Bengali" />
+                  Bengali</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="languages" value="Other" />
+                  Other</label>
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-2"
-                >Skills</label
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-2">Skills</label>
               <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Bathing" />
-                  Bathing/Showering</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Ambulating" />
-                  Ambulating</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Food Prep" />
-                  Food Prep</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Meds" /> Meds
-                  Assist</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Bed-bath" />
-                  Bed-bath</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Transferring" />
-                  Transferring</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Meal Planning" />
-                  Meal Planning</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Combative" />
-                  Combative</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Oral Hygiene" />
-                  Oral Hygiene</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Transportation"
-                  />
-                  Transportation</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Nutrition Training"
-                  />
-                  Nutrition Training</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Bed-bound" />
-                  Bed-bound</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Dressing" />
-                  Dressing</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Eating Assistance"
-                  />
-                  Eating Assistance</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Dementia" />
-                  Dementia</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Toileting" />
-                  Toileting</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Parkinson’s" />
-                  Parkinson’s</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Bedpan" />
-                  Bedpan</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Hospital Bed" />
-                  Hospital Bed</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Bed Linen Change"
-                  />
-                  Bed Linen Change</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Paralyzed" />
-                  Paralyzed</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Foley Catheter care"
-                  />
-                  Foley Catheter</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Shower Chair" />
-                  Shower Chair</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Linen Change (person in bed)"
-                  />
-                  Linen Change (in bed)</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Stroke / Heart Attack"
-                  />
-                  Stroke / Heart Attack</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Skin Care" />
-                  Skin Care</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Wheelchair" />
-                  Wheelchair</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Laundry" />
-                  Laundry</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Diabetes" />
-                  Diabetes</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Shaving" />
-                  Shaving</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Hoyer Lift" />
-                  Hoyer Lift</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Dusting / Vacuuming"
-                  />
-                  Dusting / Vacuuming</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Cancers" />
-                  Cancers</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input type="checkbox" name="skills" value="Gait Belt" />
-                  Gait Belt</label
-                >
-                <label class="text-xs flex items-center gap-1"
-                  ><input
-                    type="checkbox"
-                    name="skills"
-                    value="Light Housework / Cleaning"
-                  />
-                  Light Housework</label
-                >
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Bathing" />
+                  Bathing/Showering</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Ambulating" />
+                  Ambulating</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Food Prep" />
+                  Food Prep</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Meds" /> Meds
+                  Assist</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Bed-bath" />
+                  Bed-bath</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Transferring" />
+                  Transferring</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Meal Planning" />
+                  Meal Planning</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Combative" />
+                  Combative</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Oral Hygiene" />
+                  Oral Hygiene</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Transportation" />
+                  Transportation</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Nutrition Training" />
+                  Nutrition Training</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Bed-bound" />
+                  Bed-bound</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Dressing" />
+                  Dressing</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Eating Assistance" />
+                  Eating Assistance</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Dementia" />
+                  Dementia</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Toileting" />
+                  Toileting</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Parkinson’s" />
+                  Parkinson’s</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Bedpan" />
+                  Bedpan</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Hospital Bed" />
+                  Hospital Bed</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Bed Linen Change" />
+                  Bed Linen Change</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Paralyzed" />
+                  Paralyzed</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Foley Catheter care" />
+                  Foley Catheter</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Shower Chair" />
+                  Shower Chair</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Linen Change (person in bed)" />
+                  Linen Change (in bed)</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Stroke / Heart Attack" />
+                  Stroke / Heart Attack</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Skin Care" />
+                  Skin Care</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Wheelchair" />
+                  Wheelchair</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Laundry" />
+                  Laundry</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Diabetes" />
+                  Diabetes</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Shaving" />
+                  Shaving</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Hoyer Lift" />
+                  Hoyer Lift</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Dusting / Vacuuming" />
+                  Dusting / Vacuuming</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Cancers" />
+                  Cancers</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills" value="Gait Belt" />
+                  Gait Belt</label>
+                <label class="text-xs flex items-center gap-1"><input type="checkbox" name="skills"
+                    value="Light Housework / Cleaning" />
+                  Light Housework</label>
               </div>
             </div>
           </div>
@@ -1927,34 +1278,20 @@
 
         <!-- 13. VACCINATION -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-          <h3
-            class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-          >
+          <h3 class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2">
             <i class="ph ph-syringe text-[#65c027]"></i> VACCINATION
           </h3>
           <div class="space-y-3">
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Covid Vaccination</label
-              >
-              <select
-                name="covidVaccine"
-                id="edit-covidVaccine"
-                class="input-field text-sm py-1 mb-2"
-                onchange="toggleEditCovidDose()"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Covid Vaccination</label>
+              <select name="covidVaccine" id="edit-covidVaccine" class="input-field text-sm py-1 mb-2"
+                onchange="toggleEditCovidDose()">
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
               </select>
               <div id="edit-covidDoseDiv" class="hidden">
-                <label class="block text-xs text-gray-400 uppercase mb-1"
-                  >Doses</label
-                >
-                <select
-                  name="covidDoses"
-                  id="edit-covidDoses"
-                  class="input-field text-sm py-1"
-                >
+                <label class="block text-xs text-gray-400 uppercase mb-1">Doses</label>
+                <select name="covidDoses" id="edit-covidDoses" class="input-field text-sm py-1">
                   <option value="">Select...</option>
                   <option value="One Dose">One Dose</option>
                   <option value="Two Dose">Two Dose</option>
@@ -1962,14 +1299,8 @@
               </div>
             </div>
             <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Flu Vaccination</label
-              >
-              <select
-                name="fluVaccine"
-                id="edit-fluVaccine"
-                class="input-field text-sm py-1"
-              >
+              <label class="block text-xs text-gray-400 uppercase mb-1">Flu Vaccination</label>
+              <select name="fluVaccine" id="edit-fluVaccine" class="input-field text-sm py-1">
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
               </select>
@@ -1979,17 +1310,12 @@
       </div>
 
       <!-- Action Buttons -->
-      <div
-        class="flex items-center gap-4 pt-6 border-t border-gray-100 mt-6 bg-white p-4 rounded-xl shadow-sm"
-      >
+      <div class="flex items-center gap-4 pt-6 border-t border-gray-100 mt-6 bg-white p-4 rounded-xl shadow-sm">
         <button type="submit" id="saveProfileBtn" class="flex-1 btn-primary">
           Save Changes
         </button>
-        <button
-          type="button"
-          onclick="cancelEdit()"
-          class="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold"
-        >
+        <button type="button" onclick="cancelEdit()"
+          class="px-6 py-3 rounded-lg border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold">
           Cancel
         </button>
       </div>
@@ -2005,30 +1331,17 @@
 
     <div class="space-y-4">
       <!-- Stage 1: New Application -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-      >
-        <button
-          onclick="toggleStage('stage-new')"
-          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-        >
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button onclick="toggleStage('stage-new')"
+          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
           <div class="flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold"
-            >
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
               1
             </div>
             <span class="font-bold text-gray-700">New Application</span>
-            <span
-              id="count-stage-new"
-              class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
-              >0</span
-            >
+            <span id="count-stage-new" class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">0</span>
           </div>
-          <i
-            id="icon-stage-new"
-            class="ph ph-caret-down text-gray-400 transition-transform"
-          ></i>
+          <i id="icon-stage-new" class="ph ph-caret-down text-gray-400 transition-transform"></i>
         </button>
         <div id="content-stage-new" class="hidden border-t border-gray-100">
           <div class="p-4">
@@ -2040,45 +1353,26 @@
                   <th class="pb-2 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody
-                id="list-stage-new"
-                class="divide-y divide-gray-50"
-              ></tbody>
+              <tbody id="list-stage-new" class="divide-y divide-gray-50"></tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- Stage 2: Interview Completed -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-      >
-        <button
-          onclick="toggleStage('stage-interview')"
-          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-        >
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button onclick="toggleStage('stage-interview')"
+          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
           <div class="flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold"
-            >
+            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
               2
             </div>
             <span class="font-bold text-gray-700">Interview Completed</span>
-            <span
-              id="count-stage-interview"
-              class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
-              >0</span
-            >
+            <span id="count-stage-interview" class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">0</span>
           </div>
-          <i
-            id="icon-stage-interview"
-            class="ph ph-caret-down text-gray-400 transition-transform"
-          ></i>
+          <i id="icon-stage-interview" class="ph ph-caret-down text-gray-400 transition-transform"></i>
         </button>
-        <div
-          id="content-stage-interview"
-          class="hidden border-t border-gray-100"
-        >
+        <div id="content-stage-interview" class="hidden border-t border-gray-100">
           <div class="p-4">
             <table class="w-full text-left text-sm">
               <thead class="text-gray-500 border-b border-gray-100">
@@ -2088,47 +1382,26 @@
                   <th class="pb-2 text-right">Interview Passed?</th>
                 </tr>
               </thead>
-              <tbody
-                id="list-stage-interview"
-                class="divide-y divide-gray-50"
-              ></tbody>
+              <tbody id="list-stage-interview" class="divide-y divide-gray-50"></tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- Stage 3: Consent Form & Background -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-      >
-        <button
-          onclick="toggleStage('stage-background')"
-          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-        >
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button onclick="toggleStage('stage-background')"
+          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
           <div class="flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold"
-            >
+            <div class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
               3
             </div>
-            <span class="font-bold text-gray-700"
-              >Consent Form & Background</span
-            >
-            <span
-              id="count-stage-background"
-              class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
-              >0</span
-            >
+            <span class="font-bold text-gray-700">Consent Form & Background</span>
+            <span id="count-stage-background" class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">0</span>
           </div>
-          <i
-            id="icon-stage-background"
-            class="ph ph-caret-down text-gray-400 transition-transform"
-          ></i>
+          <i id="icon-stage-background" class="ph ph-caret-down text-gray-400 transition-transform"></i>
         </button>
-        <div
-          id="content-stage-background"
-          class="hidden border-t border-gray-100"
-        >
+        <div id="content-stage-background" class="hidden border-t border-gray-100">
           <div class="p-4">
             <table class="w-full text-left text-sm">
               <thead class="text-gray-500 border-b border-gray-100">
@@ -2138,42 +1411,24 @@
                   <th class="pb-2 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody
-                id="list-stage-background"
-                class="divide-y divide-gray-50"
-              ></tbody>
+              <tbody id="list-stage-background" class="divide-y divide-gray-50"></tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- Stage 4: Converted to Active -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
-      >
-        <button
-          onclick="toggleStage('stage-active')"
-          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-        >
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <button onclick="toggleStage('stage-active')"
+          class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
           <div class="flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold"
-            >
+            <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold">
               4
             </div>
-            <span class="font-bold text-gray-700"
-              >Converted to Active Caregiver</span
-            >
-            <span
-              id="count-stage-active"
-              class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
-              >0</span
-            >
+            <span class="font-bold text-gray-700">Converted to Active Caregiver</span>
+            <span id="count-stage-active" class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">0</span>
           </div>
-          <i
-            id="icon-stage-active"
-            class="ph ph-caret-down text-gray-400 transition-transform"
-          ></i>
+          <i id="icon-stage-active" class="ph ph-caret-down text-gray-400 transition-transform"></i>
         </button>
         <div id="content-stage-active" class="hidden border-t border-gray-100">
           <div class="p-4">
@@ -2185,10 +1440,7 @@
                   <th class="pb-2 text-right">Action</th>
                 </tr>
               </thead>
-              <tbody
-                id="list-stage-active"
-                class="divide-y divide-gray-50"
-              ></tbody>
+              <tbody id="list-stage-active" class="divide-y divide-gray-50"></tbody>
             </table>
           </div>
         </div>
