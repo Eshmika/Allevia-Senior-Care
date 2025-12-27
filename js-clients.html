@@ -48,25 +48,31 @@
       return matchSearch && matchStatus && matchType;
     });
 
+    const totalPages = Math.ceil(filtered.length / clRowsPerPage);
+    if (clCurrentPage > totalPages) clCurrentPage = 1;
+
+    const start = (clCurrentPage - 1) * clRowsPerPage;
+    const end = start + clRowsPerPage;
+    const pageData = filtered.slice(start, end);
+
     const tbody = document.getElementById("clTableBody");
     tbody.innerHTML = "";
 
-    if (filtered.length === 0) {
+    if (pageData.length === 0) {
       tbody.innerHTML =
         '<tr><td colspan="7" class="p-8 text-center text-gray-400">No clients found.</td></tr>';
-      return;
-    }
+    } else {
+      pageData.forEach((row) => {
+        let statusColor = "bg-gray-100 text-gray-600";
+        if (row.status === "Active")
+          statusColor = "bg-green-100 text-green-700";
+        if (row.status === "Inactive") statusColor = "bg-red-100 text-red-700";
+        if (row.status === "Cancelled service")
+          statusColor = "bg-gray-200 text-gray-800";
+        if (row.status === "Temporary hospital stay")
+          statusColor = "bg-orange-100 text-orange-800";
 
-    filtered.forEach((row) => {
-      let statusColor = "bg-gray-100 text-gray-600";
-      if (row.status === "Active") statusColor = "bg-green-100 text-green-700";
-      if (row.status === "Inactive") statusColor = "bg-red-100 text-red-700";
-      if (row.status === "Cancelled service")
-        statusColor = "bg-gray-200 text-gray-800";
-      if (row.status === "Temporary hospital stay")
-        statusColor = "bg-orange-100 text-orange-800";
-
-      tbody.innerHTML += `
+        tbody.innerHTML += `
         <tr class="hover:bg-gray-50 border-b border-gray-50">
           <td class="p-4">
             <div class="flex items-center gap-3">
@@ -92,8 +98,8 @@
           </td>
           <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
           <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
-        row.status
-      }</span></td>
+          row.status
+        }</span></td>
           <td class="p-4 text-right">
              <button onclick="loadClientProfile('${
                row.id
@@ -101,7 +107,25 @@
           </td>
         </tr>
       `;
-    });
+      });
+    }
+
+    const infoEl = document.getElementById("clPageInfo");
+    if (infoEl) {
+      infoEl.textContent = `Showing ${
+        pageData.length > 0 ? start + 1 : 0
+      }-${Math.min(end, filtered.length)} of ${filtered.length}`;
+    }
+    const btnPrev = document.getElementById("clBtnPrev");
+    const btnNext = document.getElementById("clBtnNext");
+    if (btnPrev) btnPrev.disabled = clCurrentPage === 1;
+    if (btnNext)
+      btnNext.disabled = clCurrentPage >= totalPages || totalPages === 0;
+  }
+
+  function changeClPage(dir) {
+    clCurrentPage += dir;
+    renderClTable();
   }
 
   function submitClientForm(e) {
