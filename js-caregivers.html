@@ -88,23 +88,27 @@
             </div>
           </td>
           <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
-          <td class="p-4 text-xs text-gray-500 font-medium">${row.lastClientSeen || "--"
+          <td class="p-4 text-xs text-gray-500 font-medium">${
+            row.lastClientSeen || "--"
           }</td>
           <td class="p-4">
-            <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${row.status
-          }</span>
+            <span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
+          row.status
+        }</span>
           </td>
           <td class="p-4 text-right">
-             <button onclick="loadProfile('${row.id
-          }')" class="text-xs bg-green-50 text-green-600 px-3 py-1 rounded-full hover:bg-green-100 font-bold border border-green-200 transition-colors">Details</button>
+             <button onclick="loadProfile('${
+               row.id
+             }')" class="text-xs bg-gray-50 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100 font-bold border border-gray-200 transition-colors">Details</button>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    document.getElementById("cgPageInfo").textContent = `Showing ${pageData.length > 0 ? start + 1 : 0
-      }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
+    document.getElementById("cgPageInfo").textContent = `Showing ${
+      pageData.length > 0 ? start + 1 : 0
+    }-${Math.min(end, cgFiltered.length)} of ${cgFiltered.length}`;
     document.getElementById("btnPrev").disabled = cgCurrentPage === 1;
     document.getElementById("btnNext").disabled =
       cgCurrentPage >= totalPages || totalPages === 0;
@@ -299,11 +303,16 @@
   function toggleEditEmAddress() {
     const isChecked = document.getElementById("edit-emSameAsAddress").checked;
     if (isChecked) {
-      document.getElementById("edit-emAddress").value = document.getElementById("edit-address").value;
-      document.getElementById("edit-emApt").value = document.getElementById("edit-apt").value;
-      document.getElementById("edit-emCity").value = document.getElementById("edit-city").value;
-      document.getElementById("edit-emState").value = document.getElementById("edit-state").value;
-      document.getElementById("edit-emZip").value = document.getElementById("edit-zip").value;
+      document.getElementById("edit-emAddress").value =
+        document.getElementById("edit-address").value;
+      document.getElementById("edit-emApt").value =
+        document.getElementById("edit-apt").value;
+      document.getElementById("edit-emCity").value =
+        document.getElementById("edit-city").value;
+      document.getElementById("edit-emState").value =
+        document.getElementById("edit-state").value;
+      document.getElementById("edit-emZip").value =
+        document.getElementById("edit-zip").value;
     } else {
       document.getElementById("edit-emAddress").value = "";
       document.getElementById("edit-emApt").value = "";
@@ -451,10 +460,10 @@
         stageNum === 2
           ? '<i class="ph ph-chats-circle"></i>'
           : stageNum === 3
-            ? '<i class="ph ph-shield-check"></i>'
-            : stageNum === 4
-              ? '<i class="ph ph-briefcase"></i>'
-              : stageNum;
+          ? '<i class="ph ph-shield-check"></i>'
+          : stageNum === 4
+          ? '<i class="ph ph-briefcase"></i>'
+          : stageNum;
     }
   }
 
@@ -542,10 +551,10 @@
         set(
           "p-name",
           data["First Name"] +
-          " " +
-          data["Middle Int"] +
-          " " +
-          data["Last Name"]
+            " " +
+            data["Middle Int"] +
+            " " +
+            data["Last Name"]
         );
         set("p-initials", (data["First Name"] || "U").charAt(0));
         set("p-title", data["Title"]);
@@ -578,10 +587,11 @@
         const badge = document.getElementById("p-status-badge");
         if (badge) {
           badge.textContent = data["Status"];
-          badge.className = `px-3 py-1 rounded-full text-xs font-bold ${data["Status"] === "Active"
-            ? "bg-green-100 text-green-700"
-            : "bg-gray-100 text-gray-600"
-            }`;
+          badge.className = `px-3 py-1 rounded-full text-xs font-bold ${
+            data["Status"] === "Active"
+              ? "bg-green-100 text-green-700"
+              : "bg-gray-100 text-gray-600"
+          }`;
         }
 
         const emailBtn = document.getElementById("p-email-btn");
@@ -619,7 +629,8 @@
         set("p-gender", data["Gender"]);
         set(
           "p-marital",
-          `${data["Marital Status"] || "--"} ${data["Spouse Name"] ? "(" + data["Spouse Name"] + ")" : ""
+          `${data["Marital Status"] || "--"} ${
+            data["Spouse Name"] ? "(" + data["Spouse Name"] + ")" : ""
           }`
         );
         set("p-ssn", data["SSN"]);
@@ -756,8 +767,8 @@
           data["Status"] === "Active"
             ? "Done"
             : data["Status"] === "Inactive"
-              ? "No"
-              : "Pending";
+            ? "No"
+            : "Pending";
         updateStageUI(
           4,
           activeState,
@@ -917,7 +928,7 @@
       "edit-emp2-phone",
       "edit-emp3-phone",
       "edit-ref1-phone",
-      "edit-ref2-phone"
+      "edit-ref2-phone",
     ];
 
     ids.forEach((id) => {
@@ -938,8 +949,8 @@
   }
 
   // Initialize masks
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupPhoneMasks);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupPhoneMasks);
   } else {
     setupPhoneMasks();
   }
