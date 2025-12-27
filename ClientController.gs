@@ -24,6 +24,7 @@ function getOrCreateClientSheet() {
       "Client Zip",
       "Client Care Needs",
       "Referred By",
+      "Stage",
       "Created At",
       "Last Reviewed",
     ];
@@ -78,6 +79,7 @@ function handleClientSubmission(data) {
     data.clientZip,
     data.careNeeds || "",
     data.referredBy || "",
+    "New leads", // Initial Stage
     new Date(),
     new Date(), // Initial Last Reviewed
   ];
@@ -114,9 +116,70 @@ function getClientList() {
       type: "Lead",
       city: "--",
       zip: "--",
+      stage: headers.includes("Stage")
+        ? row[headers.indexOf("Stage")]
+        : "New leads",
       lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
     }))
     .reverse();
+}
+
+function updateClientStage(clientId, newStage) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const stageIdx = headers.indexOf("Stage");
+  if (stageIdx === -1)
+    return { success: false, message: "Stage column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  sheet.getRange(rowIndex + 2, stageIdx + 1).setValue(newStage);
+
+  // Also update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true, message: `Client moved to ${newStage} stage.` };
+}
+
+function updateClientStatus(clientId, newStatus) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = headers.indexOf("Status");
+  if (statusIdx === -1)
+    return { success: false, message: "Status column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  sheet.getRange(rowIndex + 2, statusIdx + 1).setValue(newStatus);
+
+  // Also update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true, message: `Client status updated to ${newStatus}.` };
 }
 
 function getClientDetails(id) {

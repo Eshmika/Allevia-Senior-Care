@@ -11,6 +11,14 @@
     }
   }
 
+  function loadClientStages() {
+    google.script.run
+      .withSuccessHandler((clients) => {
+        renderClientStages(clients);
+      })
+      .getClientList();
+  }
+
   function renderClientStages(clients) {
     const stages = {
       "New leads": document.getElementById("list-stage-new-leads"),
@@ -34,14 +42,33 @@
     });
 
     clients.forEach((client) => {
-      const stage = client.stage || "New leads"; // Default to 'New leads' if stage is not defined
+      const stage = client.stage || "New leads";
       if (stages[stage]) {
         const row = document.createElement("tr");
+
+        let actionHtml = `
+                    <button onclick="loadClientProfile('${client.id}')" class="text-blue-500 hover:underline">View</button>
+                `;
+
+        if (stage === "New leads") {
+          actionHtml = `
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="passClient('${client.id}')" class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold hover:bg-green-200">Pass</button>
+                            <button onclick="failClient('${client.id}')" class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold hover:bg-red-200">Fail</button>                            
+                        </div>
+                    `;
+        }
+
         row.innerHTML = `
-                    <td class="py-2">${client.firstName} ${client.lastName}</td>
-                    <td class="py-2">${client.status}</td>
+                    <td class="py-2">
+                        <div class="font-medium text-gray-800">${client.name}</div>
+                        <div class="text-[10px] text-gray-400">${client.id}</div>
+                    </td>
+                    <td class="py-2">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600">${client.status}</span>
+                    </td>
                     <td class="py-2 text-right">
-                        <button onclick="viewClient('${client.id}')" class="text-blue-500 hover:underline">View</button>
+                        ${actionHtml}
                     </td>
                 `;
         stages[stage].appendChild(row);
@@ -59,5 +86,54 @@
       counts["Client Agreements"];
     document.getElementById("count-stage-converted").textContent =
       counts["Convert Clients"];
+  }
+
+  function passClient(clientId) {
+    Swal.fire({
+      title: "Pass Lead?",
+      text: "Move this lead to the Assessment stage?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#65c027",
+      confirmButtonText: "Yes, Pass",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire("Passed!", res.message, "success");
+              loadClientStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .updateClientStage(clientId, "Assessment");
+      }
+    });
+  }
+
+  function failClient(clientId) {
+    Swal.fire({
+      title: "Fail Lead?",
+      text: "Mark this lead as failed? (Status will be set to Cancelled)",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      confirmButtonText: "Yes, Fail",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // First update status to Cancelled
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire("Failed", "Lead has been marked as failed.", "success");
+              loadClientStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .updateClientStatus(clientId, "Cancelled service");
+      }
+    });
   }
 </script>
