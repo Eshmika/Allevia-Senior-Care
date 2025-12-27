@@ -51,12 +51,23 @@
                 `;
 
         if (stage === "New leads") {
-          actionHtml = `
+          if (client.status === "Cancelled service") {
+            actionHtml = `
+                        <div class="flex items-center justify-end gap-2">
+                            <span class="text-xs text-red-600 font-bold mr-2">Failed</span>
+                            <button onclick="undoFailClient('${client.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1">
+                                <i class="ph ph-arrow-u-up-left"></i> Undo
+                            </button>
+                        </div>
+                    `;
+          } else {
+            actionHtml = `
                         <div class="flex items-center justify-end gap-2">
                             <button onclick="passClient('${client.id}')" class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold hover:bg-green-200">Pass</button>
                             <button onclick="failClient('${client.id}')" class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold hover:bg-red-200">Fail</button>                            
                         </div>
                     `;
+          }
         }
 
         row.innerHTML = `
@@ -135,5 +146,18 @@
           .updateClientStatus(clientId, "Cancelled service");
       }
     });
+  }
+
+  function undoFailClient(clientId) {
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (res.success) {
+          Swal.fire("Reverted", "Lead status has been restored.", "success");
+          loadClientStages();
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
+      })
+      .updateClientStatus(clientId, "Active");
   }
 </script>
