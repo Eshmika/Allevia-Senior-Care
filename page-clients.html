@@ -125,14 +125,14 @@
     <form
       id="clientForm"
       onsubmit="submitClientForm(event)"
-      class="max-w-3xl bg-white rounded-xl shadow-md border border-gray-100 p-8 space-y-8"
+      class="max-w-4xl bg-white rounded-xl shadow-md border border-gray-100 p-8 space-y-8"
     >
       <!-- Initial Contact Information -->
       <div>
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
           Initial Contact Information
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="input-label">Date</label>
             <input
@@ -153,7 +153,7 @@
               class="input-field"
             />
           </div>
-          <div class="md:col-span-2">
+          <div>
             <label class="input-label">Coordinator</label>
             <input
               type="text"
@@ -171,7 +171,7 @@
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
           Representative
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="input-label">Name of Person Calling</label>
             <input
@@ -191,6 +191,126 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+            />
+          </div>
+          <div>
+            <label class="input-label">Relationship to Client</label>
+            <input
+              type="text"
+              name="repRelationship"
+              required
+              class="input-field"
+              placeholder="e.g., Daughter, Son, Spouse"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- New Lead Information -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          New Lead Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="input-label">Client Name</label>
+            <input
+              type="text"
+              name="clientName"
+              required
+              class="input-field"
+              placeholder="Enter client's full name"
+            />
+          </div>
+          <div>
+            <label class="input-label">Phone</label>
+            <input
+              type="tel"
+              name="clientPhone"
+              required
+              maxlength="14"
+              class="input-field"
+              placeholder="(XXX) XXX-XXXX"
+            />
+          </div>
+          <div>
+            <label class="input-label">Status</label>
+            <select name="status" required class="input-field">
+              <option value="">Select status...</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Hospital stay">Hospital stay</option>
+              <option value="Cancelled service">Cancelled service</option>
+              <option value="Insurance approval">Insurance approval</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Address</label>
+            <input
+              type="text"
+              name="clientAddress"
+              required
+              class="input-field"
+              placeholder="Street address"
+            />
+          </div>
+          <div>
+            <label class="input-label">Apt/Unit</label>
+            <input
+              type="text"
+              name="clientApt"
+              class="input-field"
+              placeholder="Apt #"
+            />
+          </div>
+          <div>
+            <label class="input-label">City</label>
+            <input
+              type="text"
+              name="clientCity"
+              required
+              class="input-field"
+              placeholder="City"
+            />
+          </div>
+          <div>
+            <label class="input-label">State</label>
+            <input
+              type="text"
+              name="clientState"
+              required
+              maxlength="2"
+              class="input-field"
+              placeholder="CA"
+            />
+          </div>
+          <div>
+            <label class="input-label">Zip</label>
+            <input
+              type="text"
+              name="clientZip"
+              required
+              maxlength="5"
+              class="input-field"
+              placeholder="12345"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Client Care Needs</label>
+            <textarea
+              name="careNeeds"
+              rows="3"
+              class="input-field resize-none"
+              placeholder="Describe the client's care needs..."
+            ></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Referred By</label>
+            <input
+              type="text"
+              name="referredBy"
+              class="input-field"
+              placeholder="Enter referral source (optional)"
             />
           </div>
         </div>
@@ -351,7 +471,7 @@
     <form
       id="clientEditForm"
       onsubmit="submitEditClientForm(event)"
-      class="max-w-3xl bg-white p-8 rounded-xl shadow-sm border border-gray-100 space-y-8"
+      class="max-w-4xl bg-white p-8 rounded-xl shadow-sm border border-gray-100 space-y-8"
     >
       <input type="hidden" name="id" id="ce-id" />
 
@@ -360,7 +480,7 @@
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
           Initial Contact Information
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="input-label">Date</label>
             <input
@@ -381,7 +501,7 @@
               class="input-field"
             />
           </div>
-          <div class="md:col-span-2">
+          <div>
             <label class="input-label">Coordinator</label>
             <input
               type="text"
@@ -400,7 +520,7 @@
         <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
           Representative
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label class="input-label">Name of Person Calling</label>
             <input
@@ -422,6 +542,136 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+            />
+          </div>
+          <div>
+            <label class="input-label">Relationship to Client</label>
+            <input
+              type="text"
+              name="repRelationship"
+              id="ce-repRelationship"
+              required
+              class="input-field"
+              placeholder="e.g., Daughter, Son, Spouse"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- New Lead Information -->
+      <div>
+        <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
+          New Lead Information
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="input-label">Client Name</label>
+            <input
+              type="text"
+              name="clientName"
+              id="ce-clientName"
+              required
+              class="input-field"
+              placeholder="Enter client's full name"
+            />
+          </div>
+          <div>
+            <label class="input-label">Phone</label>
+            <input
+              type="tel"
+              name="clientPhone"
+              id="ce-clientPhone"
+              required
+              maxlength="14"
+              class="input-field"
+              placeholder="(XXX) XXX-XXXX"
+            />
+          </div>
+          <div>
+            <label class="input-label">Status</label>
+            <select name="status" id="ce-status" required class="input-field">
+              <option value="">Select status...</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Hospital stay">Hospital stay</option>
+              <option value="Cancelled service">Cancelled service</option>
+              <option value="Insurance approval">Insurance approval</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Address</label>
+            <input
+              type="text"
+              name="clientAddress"
+              id="ce-clientAddress"
+              required
+              class="input-field"
+              placeholder="Street address"
+            />
+          </div>
+          <div>
+            <label class="input-label">Apt/Unit</label>
+            <input
+              type="text"
+              name="clientApt"
+              id="ce-clientApt"
+              class="input-field"
+              placeholder="Apt #"
+            />
+          </div>
+          <div>
+            <label class="input-label">City</label>
+            <input
+              type="text"
+              name="clientCity"
+              id="ce-clientCity"
+              required
+              class="input-field"
+              placeholder="City"
+            />
+          </div>
+          <div>
+            <label class="input-label">State</label>
+            <input
+              type="text"
+              name="clientState"
+              id="ce-clientState"
+              required
+              maxlength="2"
+              class="input-field"
+              placeholder="CA"
+            />
+          </div>
+          <div>
+            <label class="input-label">Zip</label>
+            <input
+              type="text"
+              name="clientZip"
+              id="ce-clientZip"
+              required
+              maxlength="5"
+              class="input-field"
+              placeholder="12345"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Client Care Needs</label>
+            <textarea
+              name="careNeeds"
+              id="ce-careNeeds"
+              rows="3"
+              class="input-field resize-none"
+              placeholder="Describe the client's care needs..."
+            ></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label class="input-label">Referred By</label>
+            <input
+              type="text"
+              name="referredBy"
+              id="ce-referredBy"
+              class="input-field"
+              placeholder="Enter referral source (optional)"
             />
           </div>
         </div>

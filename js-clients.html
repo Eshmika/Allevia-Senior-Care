@@ -199,21 +199,32 @@
       if (el) el.textContent = val || "--";
     };
 
-    // Set initials from representative name
-    const repName = data.repName || "";
-    const nameParts = repName.split(" ");
+    // Set initials from client name
+    const clientName = data.clientName || "";
+    const nameParts = clientName.split(" ");
     const initials =
       nameParts.length > 1
         ? nameParts[0][0] + nameParts[nameParts.length - 1][0]
-        : repName[0] || "?";
+        : clientName[0] || "?";
 
     set("cp-initials", initials);
-    set("cp-name", data.repName);
+    set("cp-name", data.clientName);
     set("cp-id", data.id);
-    set("cp-status", "Pending Assessment");
+    set("cp-status", data.status);
     set("cp-email", "--");
-    set("cp-phone", data.repPhone);
-    set("cp-address", "--");
+    set("cp-phone", data.clientPhone);
+
+    // Format full address
+    const addressParts = [
+      data.clientAddress,
+      data.clientApt ? `Apt ${data.clientApt}` : "",
+      data.clientCity,
+      data.clientState,
+      data.clientZip,
+    ]
+      .filter((part) => part)
+      .join(", ");
+    set("cp-address", addressParts || "--");
 
     // Format Contact Date
     let contactDate = data.contactDate;
@@ -223,7 +234,7 @@
         contactDate = d.toLocaleDateString();
       }
     }
-    set("cp-dob", contactDate);
+    set("cp-dob", `Contact Date: ${contactDate || "--"}`);
 
     // Format Assessment Date/Time
     let assessmentDateTime = data.assessmentDateTime;
@@ -234,15 +245,16 @@
       }
     }
 
-    set("cp-gender", assessmentDateTime);
-    set("cp-type", "Initial Contact");
-    set("cp-living", data.coordinator);
-    set("cp-languages", "--");
+    set("cp-gender", `Assessment: ${assessmentDateTime || "--"}`);
+    set("cp-type", "Lead");
+    set("cp-living", `Coordinator: ${data.coordinator || "--"}`);
+    set("cp-languages", `Care Needs: ${data.careNeeds || "--"}`);
 
-    set("cp-emName", "--");
-    set("cp-emRel", "--");
-    set("cp-emPhone", "--");
-    set("cp-emEmail", "--");
+    // Representative information in emergency contact section
+    set("cp-emName", data.repName);
+    set("cp-emRel", data.repRelationship);
+    set("cp-emPhone", data.repPhone);
+    set("cp-emEmail", `Referred by: ${data.referredBy || "--"}`);
     set("cp-emAddress", "--");
 
     document.getElementById("clProfileLoading").classList.add("hidden");
@@ -285,6 +297,17 @@
     setVal("ce-coordinator", d.coordinator);
     setVal("ce-repName", d.repName);
     setVal("ce-repPhone", d.repPhone);
+    setVal("ce-repRelationship", d.repRelationship);
+    setVal("ce-clientName", d.clientName);
+    setVal("ce-clientPhone", d.clientPhone);
+    setVal("ce-status", d.status);
+    setVal("ce-clientAddress", d.clientAddress);
+    setVal("ce-clientApt", d.clientApt);
+    setVal("ce-clientCity", d.clientCity);
+    setVal("ce-clientState", d.clientState);
+    setVal("ce-clientZip", d.clientZip);
+    setVal("ce-careNeeds", d.careNeeds);
+    setVal("ce-referredBy", d.referredBy);
   }
 
   function submitEditClientForm(e) {

@@ -13,6 +13,17 @@ function getOrCreateClientSheet() {
       "Coordinator",
       "Representative Name",
       "Representative Phone",
+      "Representative Relationship",
+      "Client Name",
+      "Client Phone",
+      "Status",
+      "Client Address",
+      "Client Apt",
+      "Client City",
+      "Client State",
+      "Client Zip",
+      "Client Care Needs",
+      "Referred By",
       "Created At",
       "Last Reviewed",
     ];
@@ -48,7 +59,7 @@ function handleClientSubmission(data) {
   const randomPart = Math.floor(1000 + Math.random() * 9000); // 4 digit random
   const newId = `CL${randomPart}`;
 
-  // Format Array for Sheet
+  // Format Array for Sheet - New comprehensive schema
   const rowData = [
     newId,
     data.contactDate,
@@ -56,6 +67,17 @@ function handleClientSubmission(data) {
     data.coordinator,
     data.repName,
     data.repPhone,
+    data.repRelationship,
+    data.clientName,
+    data.clientPhone,
+    data.status,
+    data.clientAddress,
+    data.clientApt || "",
+    data.clientCity,
+    data.clientState,
+    data.clientZip,
+    data.careNeeds || "",
+    data.referredBy || "",
     new Date(),
     new Date(), // Initial Last Reviewed
   ];
@@ -85,11 +107,11 @@ function getClientList() {
     .filter((row) => row[0] !== "")
     .map((row) => ({
       id: row[0],
-      name: row[4] || "Unknown", // Representative Name
+      name: row[7] || "Unknown", // Client Name
       email: "--",
-      phone: row[5] || "--", // Representative Phone
-      status: "Pending",
-      type: "Initial Contact",
+      phone: row[8] || "--", // Client Phone
+      status: row[9] || "Pending", // Status
+      type: "Lead",
       city: "--",
       zip: "--",
       lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
@@ -108,7 +130,7 @@ function getClientDetails(id) {
 
   if (!row) return null;
 
-  // Return data based on new simplified schema
+  // Return data based on new comprehensive schema
   return {
     id: row[0],
     contactDate: row[1],
@@ -116,8 +138,19 @@ function getClientDetails(id) {
     coordinator: row[3],
     repName: row[4],
     repPhone: row[5],
-    createdAt: row[6],
-    lastReviewed: row[7],
+    repRelationship: row[6],
+    clientName: row[7],
+    clientPhone: row[8],
+    status: row[9],
+    clientAddress: row[10],
+    clientApt: row[11],
+    clientCity: row[12],
+    clientState: row[13],
+    clientZip: row[14],
+    careNeeds: row[15],
+    referredBy: row[16],
+    createdAt: row[17],
+    lastReviewed: row[18],
   };
 }
 
@@ -138,14 +171,25 @@ function updateClient(data) {
 
   const rowNum = rowIndex + 2; // +2 because of header and 0-based index
 
-  // Update columns 2-6 (Contact Date to Representative Phone)
-  // Note: Created At (col 7) is not updated
+  // Update columns 2-17 (Contact Date to Referred By)
+  // Note: Created At (col 18) is not updated
   const rowData = [
     data.contactDate,
     data.assessmentDateTime,
     data.coordinator,
     data.repName,
     data.repPhone,
+    data.repRelationship,
+    data.clientName,
+    data.clientPhone,
+    data.status,
+    data.clientAddress,
+    data.clientApt || "",
+    data.clientCity,
+    data.clientState,
+    data.clientZip,
+    data.careNeeds || "",
+    data.referredBy || "",
   ];
 
   sheet.getRange(rowNum, 2, 1, rowData.length).setValues([rowData]);
