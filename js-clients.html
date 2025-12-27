@@ -234,15 +234,15 @@
     };
 
     // Set initials from client name
-    const clientName = data.clientName || "";
-    const nameParts = clientName.split(" ");
-    const initials =
-      nameParts.length > 1
-        ? nameParts[0][0] + nameParts[nameParts.length - 1][0]
-        : clientName[0] || "?";
+    const fName = data.firstName || "";
+    const mName = data.middleName || "";
+    const lName = data.lastName || "";
+    const fullName = [fName, mName, lName].filter(Boolean).join(" ");
+
+    const initials = fName && lName ? fName[0] + lName[0] : fName[0] || "?";
 
     set("cp-initials", initials);
-    set("cp-name", data.clientName);
+    set("cp-name", fullName);
     set("cp-id", data.id);
     set("cp-status", data.status);
     set("cp-email", "--");
@@ -332,7 +332,9 @@
     setVal("ce-repName", d.repName);
     setVal("ce-repPhone", d.repPhone);
     setVal("ce-repRelationship", d.repRelationship);
-    setVal("ce-clientName", d.clientName);
+    setVal("ce-firstName", d.firstName);
+    setVal("ce-middleName", d.middleName);
+    setVal("ce-lastName", d.lastName);
     setVal("ce-clientPhone", d.clientPhone);
     setVal("ce-status", d.status);
     setVal("ce-clientAddress", d.clientAddress);

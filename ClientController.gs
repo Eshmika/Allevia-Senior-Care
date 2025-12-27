@@ -14,7 +14,9 @@ function getOrCreateClientSheet() {
       "Representative Name",
       "Representative Phone",
       "Representative Relationship",
-      "Client Name",
+      "First Name",
+      "Middle Name",
+      "Last Name",
       "Client Phone",
       "Status",
       "Client Address",
@@ -69,7 +71,9 @@ function handleClientSubmission(data) {
     data.repName,
     data.repPhone,
     data.repRelationship,
-    data.clientName,
+    data.firstName,
+    data.middleName || "",
+    data.lastName,
     data.clientPhone,
     data.status,
     data.clientAddress,
@@ -107,20 +111,30 @@ function getClientList() {
 
   return data
     .filter((row) => row[0] !== "")
-    .map((row) => ({
-      id: row[0],
-      name: row[7] || "Unknown", // Client Name
-      email: "--",
-      phone: row[8] || "--", // Client Phone
-      status: row[9] || "Pending", // Status
-      type: "Lead",
-      city: "--",
-      zip: "--",
-      stage: headers.includes("Stage")
-        ? row[headers.indexOf("Stage")]
-        : "New leads",
-      lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
-    }))
+    .map((row) => {
+      const fName = row[7] || "";
+      const mName = row[8] || "";
+      const lName = row[9] || "";
+      const fullName = [fName, mName, lName].filter(Boolean).join(" ");
+
+      return {
+        id: row[0],
+        name: fullName || "Unknown",
+        firstName: fName,
+        middleName: mName,
+        lastName: lName,
+        email: "--",
+        phone: row[10] || "--", // Client Phone
+        status: row[11] || "Pending", // Status
+        type: "Lead",
+        city: "--",
+        zip: "--",
+        stage: headers.includes("Stage")
+          ? row[headers.indexOf("Stage")]
+          : "New leads",
+        lastReviewed: reviewIdx > -1 ? row[reviewIdx] : "--",
+      };
+    })
     .reverse();
 }
 
@@ -202,18 +216,20 @@ function getClientDetails(id) {
     repName: row[4],
     repPhone: row[5],
     repRelationship: row[6],
-    clientName: row[7],
-    clientPhone: row[8],
-    status: row[9],
-    clientAddress: row[10],
-    clientApt: row[11],
-    clientCity: row[12],
-    clientState: row[13],
-    clientZip: row[14],
-    careNeeds: row[15],
-    referredBy: row[16],
-    createdAt: row[17],
-    lastReviewed: row[18],
+    firstName: row[7],
+    middleName: row[8],
+    lastName: row[9],
+    clientPhone: row[10],
+    status: row[11],
+    clientAddress: row[12],
+    clientApt: row[13],
+    clientCity: row[14],
+    clientState: row[15],
+    clientZip: row[16],
+    careNeeds: row[17],
+    referredBy: row[18],
+    createdAt: row[19],
+    lastReviewed: row[20],
   };
 }
 
@@ -234,8 +250,8 @@ function updateClient(data) {
 
   const rowNum = rowIndex + 2; // +2 because of header and 0-based index
 
-  // Update columns 2-17 (Contact Date to Referred By)
-  // Note: Created At (col 18) is not updated
+  // Update columns 2-19 (Contact Date to Referred By)
+  // Note: Created At (col 20) is not updated
   const rowData = [
     data.contactDate,
     data.assessmentDateTime,
@@ -243,7 +259,9 @@ function updateClient(data) {
     data.repName,
     data.repPhone,
     data.repRelationship,
-    data.clientName,
+    data.firstName,
+    data.middleName || "",
+    data.lastName,
     data.clientPhone,
     data.status,
     data.clientAddress,

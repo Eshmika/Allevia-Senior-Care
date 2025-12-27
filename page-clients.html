@@ -215,15 +215,36 @@
           New Lead Information
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="input-label">Client Name</label>
-            <input
-              type="text"
-              name="clientName"
-              required
-              class="input-field"
-              placeholder="Enter client's full name"
-            />
+          <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="input-label">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                required
+                class="input-field"
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <label class="input-label">Middle Name</label>
+              <input
+                type="text"
+                name="middleName"
+                class="input-field"
+                placeholder="Middle Name (Optional)"
+              />
+            </div>
+            <div>
+              <label class="input-label">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                required
+                class="input-field"
+                placeholder="Last Name"
+              />
+            </div>
           </div>
           <div>
             <label class="input-label">Phone</label>
@@ -574,16 +595,39 @@
           New Lead Information
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label class="input-label">Client Name</label>
-            <input
-              type="text"
-              name="clientName"
-              id="ce-clientName"
-              required
-              class="input-field"
-              placeholder="Enter client's full name"
-            />
+          <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="input-label">First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                id="ce-firstName"
+                required
+                class="input-field"
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <label class="input-label">Middle Name</label>
+              <input
+                type="text"
+                name="middleName"
+                id="ce-middleName"
+                class="input-field"
+                placeholder="Middle Name"
+              />
+            </div>
+            <div>
+              <label class="input-label">Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                id="ce-lastName"
+                required
+                class="input-field"
+                placeholder="Last Name"
+              />
+            </div>
           </div>
           <div>
             <label class="input-label">Phone</label>
