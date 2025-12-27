@@ -164,6 +164,18 @@
 
           <div>
             <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Spouse Full Name</label
+            >
+            <input
+              type="text"
+              name="spouseName"
+              id="as-spouseName"
+              class="input-field text-sm py-2"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
               >Status</label
             >
             <select
@@ -445,7 +457,126 @@
         </div>
       </div>
 
-      <!-- 3. ADDRESS & IDENTIFICATION -->
+      <!-- 3. EMERGENCY CONTACT SECTION -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-phone-call text-purple-600"></i> EMERGENCY CONTACT
+        </h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >EC Name</label
+            >
+            <input
+              type="text"
+              name="emergencyName"
+              id="as-emergencyName"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >EC Phone</label
+              >
+              <input
+                type="tel"
+                name="emergencyPhone"
+                id="as-emergencyPhone"
+                class="input-field text-sm py-2"
+                oninput="formatPhone(this)"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >EC Relationship</label
+              >
+              <input
+                type="text"
+                name="emergencyRelationship"
+                id="as-emergencyRelationship"
+                class="input-field text-sm py-2"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >EC E-mail</label
+            >
+            <input
+              type="email"
+              name="emergencyEmail"
+              id="as-emergencyEmail"
+              class="input-field text-sm py-2"
+            />
+          </div>
+
+          <!-- Emergency Contact Address -->
+          <div class="p-3 bg-red-50 rounded-lg border border-red-100">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="text-xs font-bold text-red-700 uppercase">
+                Emergency Contact Address
+              </h4>
+              <label
+                class="flex items-center gap-1 text-[10px] text-gray-500 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  id="as-ec-same-address"
+                  onchange="syncEmergencyAddress(this)"
+                  class="rounded text-purple-600"
+                />
+                Same as client
+              </label>
+            </div>
+            <div id="ec-address-fields" class="space-y-2">
+              <input
+                type="text"
+                name="emergencyAddress"
+                id="as-emergencyAddress"
+                placeholder="Address"
+                class="input-field text-sm py-2"
+              />
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  name="emergencyApt"
+                  id="as-emergencyApt"
+                  placeholder="Apt"
+                  class="input-field text-sm py-2"
+                />
+                <input
+                  type="text"
+                  name="emergencyCity"
+                  id="as-emergencyCity"
+                  placeholder="City"
+                  class="input-field text-sm py-2"
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  type="text"
+                  name="emergencyState"
+                  id="as-emergencyState"
+                  placeholder="State"
+                  class="input-field text-sm py-2"
+                />
+                <input
+                  type="text"
+                  name="emergencyZip"
+                  id="as-emergencyZip"
+                  placeholder="Zip"
+                  class="input-field text-sm py-2"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. ADDRESS & IDENTIFICATION -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h3
           class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"

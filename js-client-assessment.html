@@ -46,6 +46,22 @@
     }
   }
 
+  function syncEmergencyAddress(checkbox) {
+    const fields = ["Address", "Apt", "City", "State", "Zip"];
+    const container = document.getElementById("ec-address-fields");
+
+    if (checkbox.checked) {
+      container.classList.add("opacity-50", "pointer-events-none");
+      fields.forEach((f) => {
+        const clientRel = document.getElementById(`as-client${f}`);
+        const ecRel = document.getElementById(`as-emergency${f}`);
+        if (clientRel && ecRel) ecRel.value = clientRel.value;
+      });
+    } else {
+      container.classList.remove("opacity-50", "pointer-events-none");
+    }
+  }
+
   function openAssessmentForm(clientId) {
     toggleClientStageView("form");
     document.getElementById("assessmentDetailsForm").reset();
@@ -56,6 +72,9 @@
     document.getElementById("as-lang-other-container").classList.add("hidden");
     document
       .getElementById("billing-fields")
+      .classList.remove("opacity-50", "pointer-events-none");
+    document
+      .getElementById("ec-address-fields")
       .classList.remove("opacity-50", "pointer-events-none");
 
     google.script.run
@@ -136,15 +155,38 @@
         setVal("as-billingState", data.billingState);
         setVal("as-billingZip", data.billingZip);
 
+        // Emergency Contact fields
+        setVal("as-emergencyName", data.emergencyName);
+        setVal("as-emergencyPhone", data.emergencyPhone);
+        setVal("as-emergencyEmail", data.emergencyEmail);
+        setVal("as-emergencyRelationship", data.emergencyRelationship);
+        setVal("as-emergencyAddress", data.emergencyAddress);
+        setVal("as-emergencyApt", data.emergencyApt);
+        setVal("as-emergencyCity", data.emergencyCity);
+        setVal("as-emergencyState", data.emergencyState);
+        setVal("as-emergencyZip", data.emergencyZip);
+
         // Check if billing same as primary
-        const isSame =
+        const isBillingSame =
           data.clientAddress === data.billingAddress &&
           data.clientZip === data.billingZip &&
           data.billingAddress !== "";
-        if (isSame) {
+        if (isBillingSame) {
           document.getElementById("as-same-address").checked = true;
           document
             .getElementById("billing-fields")
+            .classList.add("opacity-50", "pointer-events-none");
+        }
+
+        // Check if emergency address same as primary
+        const isECSame =
+          data.clientAddress === data.emergencyAddress &&
+          data.clientZip === data.emergencyZip &&
+          data.emergencyAddress !== "";
+        if (isECSame) {
+          document.getElementById("as-ec-same-address").checked = true;
+          document
+            .getElementById("ec-address-fields")
             .classList.add("opacity-50", "pointer-events-none");
         }
 
@@ -201,6 +243,15 @@
       data.billingCity = data.clientCity;
       data.billingState = data.clientState;
       data.billingZip = data.clientZip;
+    }
+
+    // Handle Emergency Address sync if checked
+    if (document.getElementById("as-ec-same-address").checked) {
+      data.emergencyAddress = data.clientAddress;
+      data.emergencyApt = data.clientApt;
+      data.emergencyCity = data.clientCity;
+      data.emergencyState = data.clientState;
+      data.emergencyZip = data.clientZip;
     }
 
     google.script.run
