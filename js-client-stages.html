@@ -1,0 +1,63 @@
+<script>
+  function toggleClientStage(stageId) {
+    const content = document.getElementById(`content-${stageId}`);
+    const icon = document.getElementById(`icon-${stageId}`);
+    if (content) {
+      content.classList.toggle("hidden");
+    }
+    if (icon) {
+      icon.classList.toggle("ph-caret-down");
+      icon.classList.toggle("ph-caret-up");
+    }
+  }
+
+  function renderClientStages(clients) {
+    const stages = {
+      "New leads": document.getElementById("list-stage-new-leads"),
+      Assessment: document.getElementById("list-stage-assessment"),
+      "Insurance Verification": document.getElementById("list-stage-insurance"),
+      "Client Agreements": document.getElementById("list-stage-agreements"),
+      "Convert Clients": document.getElementById("list-stage-converted"),
+    };
+
+    const counts = {
+      "New leads": 0,
+      Assessment: 0,
+      "Insurance Verification": 0,
+      "Client Agreements": 0,
+      "Convert Clients": 0,
+    };
+
+    // Clear existing content
+    Object.values(stages).forEach((stage) => {
+      if (stage) stage.innerHTML = "";
+    });
+
+    clients.forEach((client) => {
+      const stage = client.stage || "New leads"; // Default to 'New leads' if stage is not defined
+      if (stages[stage]) {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                    <td class="py-2">${client.firstName} ${client.lastName}</td>
+                    <td class="py-2">${client.status}</td>
+                    <td class="py-2 text-right">
+                        <button onclick="viewClient('${client.id}')" class="text-blue-500 hover:underline">View</button>
+                    </td>
+                `;
+        stages[stage].appendChild(row);
+        counts[stage]++;
+      }
+    });
+
+    document.getElementById("count-stage-new-leads").textContent =
+      counts["New leads"];
+    document.getElementById("count-stage-assessment").textContent =
+      counts["Assessment"];
+    document.getElementById("count-stage-insurance").textContent =
+      counts["Insurance Verification"];
+    document.getElementById("count-stage-agreements").textContent =
+      counts["Client Agreements"];
+    document.getElementById("count-stage-converted").textContent =
+      counts["Convert Clients"];
+  }
+</script>

@@ -1,0 +1,239 @@
+<div id="view-client-stages" class="view-section hidden">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Client Care Activation</h1>
+    <p class="text-gray-500">Manage the client onboarding pipeline.</p>
+  </div>
+
+  <div class="space-y-4">
+    <!-- Stage 1: New Leads -->
+    <div
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      <button
+        onclick="toggleClientStage('stage-new-leads')"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold"
+          >
+            1
+          </div>
+          <span class="font-bold text-gray-700">New Leads</span>
+          <span
+            id="count-stage-new-leads"
+            class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
+            >0</span
+          >
+        </div>
+        <i
+          id="icon-stage-new-leads"
+          class="ph ph-caret-down text-gray-400 transition-transform"
+        ></i>
+      </button>
+      <div id="content-stage-new-leads" class="hidden border-t border-gray-100">
+        <div class="p-4">
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-500 border-b border-gray-100">
+              <tr>
+                <th class="pb-2">Name</th>
+                <th class="pb-2">Status</th>
+                <th class="pb-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody
+              id="list-stage-new-leads"
+              class="divide-y divide-gray-50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 2: Assessment -->
+    <div
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      <button
+        onclick="toggleClientStage('stage-assessment')"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold"
+          >
+            2
+          </div>
+          <span class="font-bold text-gray-700">Assessment</span>
+          <span
+            id="count-stage-assessment"
+            class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
+            >0</span
+          >
+        </div>
+        <i
+          id="icon-stage-assessment"
+          class="ph ph-caret-down text-gray-400 transition-transform"
+        ></i>
+      </button>
+      <div
+        id="content-stage-assessment"
+        class="hidden border-t border-gray-100"
+      >
+        <div class="p-4">
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-500 border-b border-gray-100">
+              <tr>
+                <th class="pb-2">Name</th>
+                <th class="pb-2">Status</th>
+                <th class="pb-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody
+              id="list-stage-assessment"
+              class="divide-y divide-gray-50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 3: Insurance Verification -->
+    <div
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      <button
+        onclick="toggleClientStage('stage-insurance')"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold"
+          >
+            3
+          </div>
+          <span class="font-bold text-gray-700">Insurance Verification</span>
+          <span
+            id="count-stage-insurance"
+            class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
+            >0</span
+          >
+        </div>
+        <i
+          id="icon-stage-insurance"
+          class="ph ph-caret-down text-gray-400 transition-transform"
+        ></i>
+      </button>
+      <div id="content-stage-insurance" class="hidden border-t border-gray-100">
+        <div class="p-4">
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-500 border-b border-gray-100">
+              <tr>
+                <th class="pb-2">Name</th>
+                <th class="pb-2">Status</th>
+                <th class="pb-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody
+              id="list-stage-insurance"
+              class="divide-y divide-gray-50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 4: Client Agreements -->
+    <div
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      <button
+        onclick="toggleClientStage('stage-agreements')"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center font-bold"
+          >
+            4
+          </div>
+          <span class="font-bold text-gray-700">Client Agreements</span>
+          <span
+            id="count-stage-agreements"
+            class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
+            >0</span
+          >
+        </div>
+        <i
+          id="icon-stage-agreements"
+          class="ph ph-caret-down text-gray-400 transition-transform"
+        ></i>
+      </button>
+      <div
+        id="content-stage-agreements"
+        class="hidden border-t border-gray-100"
+      >
+        <div class="p-4">
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-500 border-b border-gray-100">
+              <tr>
+                <th class="pb-2">Name</th>
+                <th class="pb-2">Status</th>
+                <th class="pb-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody
+              id="list-stage-agreements"
+              class="divide-y divide-gray-50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage 5: Convert Clients -->
+    <div
+      class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden"
+    >
+      <button
+        onclick="toggleClientStage('stage-converted')"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold"
+          >
+            5
+          </div>
+          <span class="font-bold text-gray-700">Convert Clients</span>
+          <span
+            id="count-stage-converted"
+            class="bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full"
+            >0</span
+          >
+        </div>
+        <i
+          id="icon-stage-converted"
+          class="ph ph-caret-down text-gray-400 transition-transform"
+        ></i>
+      </button>
+      <div id="content-stage-converted" class="hidden border-t border-gray-100">
+        <div class="p-4">
+          <table class="w-full text-left text-sm">
+            <thead class="text-gray-500 border-b border-gray-100">
+              <tr>
+                <th class="pb-2">Name</th>
+                <th class="pb-2">Status</th>
+                <th class="pb-2 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody
+              id="list-stage-converted"
+              class="divide-y divide-gray-50"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

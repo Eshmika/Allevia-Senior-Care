@@ -33,6 +33,13 @@
     } else if (viewName === "clients") {
       loadClientList();
       switchClView("list");
+    } else if (viewName === "add-new-leads") {
+      document.getElementById("view-clients").classList.add("active");
+      switchClView("add");
+    } else if (viewName === "client-stages") {
+      document.getElementById("view-client-stages").classList.add("active");
+      // You might need a function to load client stages data similar to loadCaregiverStages
+      // loadClientStages();
     } else if (viewName === "dashboard") {
       loadDashboardStats();
     } else if (viewName === "communication") {

@@ -55,6 +55,20 @@
               <i class="ph ph-users text-xl"></i>
               All clients
             </button>
+            <button
+              onclick="appNavigate('add-new-leads')"
+              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
+            >
+              <i class="ph ph-user-plus text-xl"></i>
+              Add new leads
+            </button>
+            <button
+              onclick="appNavigate('client-stages')"
+              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
+            >
+              <i class="ph ph-rocket-launch text-xl"></i>
+              Care activation
+            </button>
           </div>
 
           <!-- Caregiver Section -->
@@ -150,6 +164,7 @@
           <?!= include('page-dashboard'); ?>
           <?!= include('page-caregivers'); ?>
           <?!= include('page-clients'); ?>
+          <?!= include('page-client-stages'); ?>
           <?!= include('page-shifts'); ?>
           <?!= include('page-caregiver-calendar'); ?>
           <?!= include('page-communication'); ?>
@@ -163,6 +178,7 @@
     <?!= include('js-dashboard'); ?>
     <?!= include('js-clients'); ?>
     <?!= include('js-caregiver-stages'); ?>
+    <?!= include('js-client-stages'); ?>
     <?!= include('js-communication'); ?>
     <?!= include('js-shifts'); ?>
     <?!= include('js-calendar'); ?>
