@@ -191,6 +191,7 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+              onkeyup="formatPhone(this)"
             />
           </div>
           <div>
@@ -231,6 +232,7 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+              onkeyup="formatPhone(this)"
             />
           </div>
           <div>
@@ -255,7 +257,7 @@
             />
           </div>
           <div>
-            <label class="input-label">Apt/Unit</label>
+            <label class="input-label">Apt</label>
             <input
               type="text"
               name="clientApt"
@@ -279,7 +281,7 @@
               type="text"
               name="clientState"
               required
-              maxlength="2"
+              maxlength="14"
               class="input-field"
               placeholder="CA"
             />
@@ -293,6 +295,7 @@
               maxlength="5"
               class="input-field"
               placeholder="12345"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             />
           </div>
           <div class="md:col-span-2">
@@ -542,6 +545,7 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+              onkeyup="formatPhone(this)"
             />
           </div>
           <div>
@@ -585,6 +589,7 @@
               maxlength="14"
               class="input-field"
               placeholder="(XXX) XXX-XXXX"
+              onkeyup="formatPhone(this)"
             />
           </div>
           <div>
@@ -637,7 +642,7 @@
               name="clientState"
               id="ce-clientState"
               required
-              maxlength="2"
+              maxlength="14"
               class="input-field"
               placeholder="CA"
             />
@@ -652,6 +657,7 @@
               maxlength="5"
               class="input-field"
               placeholder="12345"
+              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
             />
           </div>
           <div class="md:col-span-2">
