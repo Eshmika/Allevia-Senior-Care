@@ -34,6 +34,13 @@ function getOrCreateClientSheet() {
       "DOB",
       "SSN",
       "EIN",
+      "Code Status",
+      "Languages",
+      "Billing Address",
+      "Billing Apt",
+      "Billing City",
+      "Billing State",
+      "Billing Zip",
       "Stage",
       "Created At",
       "Last Reviewed",
@@ -99,6 +106,13 @@ function handleClientSubmission(data) {
     data.dob || "",
     data.ssn || "",
     data.ein || "",
+    data.codeStatus || "",
+    data.languages || "",
+    data.billingAddress || "",
+    data.billingApt || "",
+    data.billingCity || "",
+    data.billingState || "",
+    data.billingZip || "",
     "New leads", // Initial Stage
     new Date(),
     new Date(), // Initial Last Reviewed
@@ -252,9 +266,16 @@ function getClientDetails(id) {
     dob: row[24],
     ssn: row[25],
     ein: row[26],
-    stage: row[27],
-    createdAt: row[28],
-    lastReviewed: row[29],
+    codeStatus: row[27],
+    languages: row[28],
+    billingAddress: row[29],
+    billingApt: row[30],
+    billingCity: row[31],
+    billingState: row[32],
+    billingZip: row[33],
+    stage: row[34],
+    createdAt: row[35],
+    lastReviewed: row[36],
   };
 }
 
@@ -304,6 +325,13 @@ function updateClient(data) {
     data.dob || "",
     data.ssn || "",
     data.ein || "",
+    data.codeStatus || "",
+    data.languages || "",
+    data.billingAddress || "",
+    data.billingApt || "",
+    data.billingCity || "",
+    data.billingState || "",
+    data.billingZip || "",
   ];
 
   sheet.getRange(rowNum, 2, 1, rowData.length).setValues([rowData]);

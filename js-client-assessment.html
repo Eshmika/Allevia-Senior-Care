@@ -1,14 +1,36 @@
 <script>
-  function toggleClientStageView(view) {
-    const main = document.getElementById("client-stages-main");
-    const form = document.getElementById("client-assessment-view");
-
-    if (view === "form") {
-      main.classList.add("hidden");
-      form.classList.remove("hidden");
+  function toggleOtherInput(select, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (select.value === "Other") {
+      container.classList.remove("hidden");
     } else {
-      main.classList.remove("hidden");
-      form.classList.add("hidden");
+      container.classList.add("hidden");
+    }
+  }
+
+  function toggleLangOther(checkbox) {
+    const container = document.getElementById("as-lang-other-container");
+    if (checkbox.checked) {
+      container.classList.remove("hidden");
+    } else {
+      container.classList.add("hidden");
+    }
+  }
+
+  function syncBillingAddress(checkbox) {
+    const fields = ["Address", "Apt", "City", "State", "Zip"];
+    const container = document.getElementById("billing-fields");
+
+    if (checkbox.checked) {
+      container.classList.add("opacity-50", "pointer-events-none");
+      fields.forEach((f) => {
+        const primary = document.getElementById(`as-client${f}`);
+        const billing = document.getElementById(`as-billing${f}`);
+        if (primary && billing) billing.value = primary.value;
+      });
+    } else {
+      container.classList.remove("opacity-50", "pointer-events-none");
     }
   }
 
@@ -16,6 +38,13 @@
     toggleClientStageView("form");
     document.getElementById("assessmentDetailsForm").reset();
     document.getElementById("as-age-display").textContent = "-- years old";
+    document
+      .getElementById("as-status-other-container")
+      .classList.add("hidden");
+    document.getElementById("as-lang-other-container").classList.add("hidden");
+    document
+      .getElementById("billing-fields")
+      .classList.remove("opacity-50", "pointer-events-none");
 
     google.script.run
       .withSuccessHandler((data) => {
@@ -35,6 +64,78 @@
         setVal("as-gender", data.gender);
         setVal("as-maritalStatus", data.maritalStatus);
         setVal("as-spouseName", data.spouseName);
+        setVal("as-coordinator", data.coordinator);
+        setVal("as-codeStatus", data.codeStatus);
+
+        // Status handling
+        const statusSelect = document.getElementById("as-status-select");
+        const options = Array.from(statusSelect.options).map(
+          (opt) => opt.value
+        );
+        if (data.status && options.includes(data.status)) {
+          statusSelect.value = data.status;
+        } else if (data.status) {
+          statusSelect.value = "Other";
+          setVal("as-status-other", data.status);
+          document
+            .getElementById("as-status-other-container")
+            .classList.remove("hidden");
+        }
+
+        // Languages handling
+        const langs = (data.languages || "").split(",").map((s) => s.trim());
+        const langChecks = document.getElementsByName("lang");
+        let otherLang = "";
+        langChecks.forEach((cb) => {
+          if (cb.value === "Other") {
+            const hasOther = langs.some(
+              (l) =>
+                !Array.from(langChecks).some(
+                  (alt) => alt.value !== "Other" && alt.value === l
+                )
+            );
+            if (hasOther) {
+              cb.checked = true;
+              document
+                .getElementById("as-lang-other-container")
+                .classList.remove("hidden");
+              // Find the one that doesn't match predefined
+              const predefined = Array.from(langChecks).map((alt) => alt.value);
+              otherLang = langs
+                .filter((l) => !predefined.includes(l))
+                .join(", ");
+              setVal("as-lang-other", otherLang);
+            }
+          } else {
+            cb.checked = langs.includes(cb.value);
+          }
+        });
+
+        // Address handling
+        setVal("as-clientAddress", data.clientAddress);
+        setVal("as-clientApt", data.clientApt);
+        setVal("as-clientCity", data.clientCity);
+        setVal("as-clientState", data.clientState);
+        setVal("as-clientZip", data.clientZip);
+
+        setVal("as-billingAddress", data.billingAddress);
+        setVal("as-billingApt", data.billingApt);
+        setVal("as-billingCity", data.billingCity);
+        setVal("as-billingState", data.billingState);
+        setVal("as-billingZip", data.billingZip);
+
+        // Check if billing same as primary
+        const isSame =
+          data.clientAddress === data.billingAddress &&
+          data.clientZip === data.billingZip &&
+          data.billingAddress !== "";
+        if (isSame) {
+          document.getElementById("as-same-address").checked = true;
+          document
+            .getElementById("billing-fields")
+            .classList.add("opacity-50", "pointer-events-none");
+        }
+
         setVal("as-ssn", data.ssn);
         setVal("as-ein", data.ein);
 
@@ -44,6 +145,70 @@
         }
       })
       .getClientDetails(clientId);
+  }
+
+  function submitAssessmentForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById("saveAssessmentBtn");
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+
+    const form = document.getElementById("assessmentDetailsForm");
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((value, key) => {
+      if (key !== "lang") data[key] = value;
+    });
+
+    // Handle Status Other
+    if (data.status_select === "Other") {
+      data.status = document.getElementById("as-status-other").value;
+    } else {
+      data.status = data.status_select;
+    }
+
+    // Handle Languages
+    const langChecks = document.getElementsByName("lang");
+    const selectedLangs = Array.from(langChecks)
+      .filter((cb) => cb.checked && cb.value !== "Other")
+      .map((cb) => cb.value);
+
+    const otherLangCb = Array.from(langChecks).find(
+      (cb) => cb.value === "Other" && cb.checked
+    );
+    if (otherLangCb) {
+      const otherVal = document.getElementById("as-lang-other").value;
+      if (otherVal) selectedLangs.push(otherVal);
+    }
+    data.languages = selectedLangs.join(", ");
+
+    // Handle Billing Address sync if checked
+    if (document.getElementById("as-same-address").checked) {
+      data.billingAddress = data.clientAddress;
+      data.billingApt = data.clientApt;
+      data.billingCity = data.clientCity;
+      data.billingState = data.clientState;
+      data.billingZip = data.clientZip;
+    }
+
+    google.script.run
+      .withSuccessHandler((existing) => {
+        const merged = { ...existing, ...data };
+        google.script.run
+          .withSuccessHandler((res) => {
+            btn.disabled = false;
+            btn.textContent = "Save Details";
+            if (res.success) {
+              Swal.fire("Success", "Assessment details saved!", "success");
+              toggleClientStageView("stages");
+              loadClientStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .updateClient(merged);
+      })
+      .getClientDetails(data.id);
   }
 
   function updateClientAge(dobValue) {
@@ -83,36 +248,5 @@
       if (value.length > 2) formatted += "-" + value.substring(2, 9);
     }
     input.value = formatted;
-  }
-
-  function submitAssessmentForm(e) {
-    e.preventDefault();
-    const btn = document.getElementById("saveAssessmentBtn");
-    btn.disabled = true;
-    btn.textContent = "Saving...";
-
-    const form = document.getElementById("assessmentDetailsForm");
-    const formData = new FormData(form);
-    const data = {};
-    formData.forEach((value, key) => (data[key] = value));
-
-    google.script.run
-      .withSuccessHandler((existing) => {
-        const merged = { ...existing, ...data };
-        google.script.run
-          .withSuccessHandler((res) => {
-            btn.disabled = false;
-            btn.textContent = "Save Details";
-            if (res.success) {
-              Swal.fire("Success", "Assessment details saved!", "success");
-              toggleClientStageView("stages");
-              loadClientStages();
-            } else {
-              Swal.fire("Error", res.message, "error");
-            }
-          })
-          .updateClient(merged);
-      })
-      .getClientDetails(data.id);
   }
 </script>
