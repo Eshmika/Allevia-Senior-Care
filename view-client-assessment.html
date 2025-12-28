@@ -21,7 +21,7 @@
     <input type="hidden" id="as-repName-hidden" />
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- 1. PROFILE SECTION -->
+      <!-- 1. CLIENT PROFILE SECTION -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <h3
           class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
@@ -832,6 +832,360 @@
                   id="as-authZip"
                   placeholder="Zip"
                   class="input-field text-sm py-2"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. SERVICE DATE SECTION -->
+      <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-calendar-check text-purple-600"></i> SERVICE DATE
+        </h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Date Requested</label
+            >
+            <input
+              type="text"
+              id="as-contactDate"
+              readonly
+              class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+            />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Assessment Date/Time</label
+            >
+            <input
+              type="text"
+              id="as-assessmentDateTime"
+              readonly
+              class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. PROJECT SERVICE SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-briefcase text-purple-600"></i> PROJECT SERVICE
+        </h3>
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Project hours per week</label
+              >
+              <input
+                type="number"
+                name="projectHours"
+                id="as-projectHours"
+                class="input-field text-sm py-2"
+                placeholder="Hours"
+                oninput="calculateProjectCosts()"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Rate per hour ($)</label
+              >
+              <input
+                type="number"
+                name="hourlyRate"
+                id="as-hourlyRate"
+                class="input-field text-sm py-2"
+                placeholder="e.g. 35"
+                oninput="calculateProjectCosts()"
+              />
+            </div>
+            <div class="flex items-end pb-2">
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  name="overtime"
+                  id="as-overtime"
+                  class="rounded text-purple-600"
+                />
+                Overtime
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Level of care</label
+            >
+            <input
+              type="text"
+              name="levelOfCare"
+              id="as-levelOfCare"
+              class="input-field text-sm py-2"
+              placeholder="Enter notes..."
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-3 bg-green-50 rounded-lg border border-green-100">
+              <label
+                class="block text-[10px] text-green-700 font-bold uppercase mb-1"
+                >Weekly Cost</label
+              >
+              <div class="text-xl font-bold text-green-600">
+                $<span id="as-weeklyCost-display">0.00</span>
+              </div>
+              <input type="hidden" name="weeklyCost" id="as-weeklyCost" />
+            </div>
+            <div class="p-3 bg-blue-50 rounded-lg border border-blue-100">
+              <label
+                class="block text-[10px] text-blue-700 font-bold uppercase mb-1"
+                >Monthly Estimated
+              </label>
+              <div class="text-xl font-bold text-blue-600">
+                $<span id="as-monthlyCost-display">0.00</span>
+              </div>
+              <input type="hidden" name="monthlyCost" id="as-monthlyCost" />
+            </div>
+          </div>
+
+          <!-- Service Types -->
+          <div class="space-y-2">
+            <label class="block text-xs text-gray-400 uppercase"
+              >Service Categories</label
+            >
+            <div class="grid grid-cols-2 lg:grid-cols-3 gap-2">
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="Respite care"
+                  class="rounded text-purple-600"
+                />
+                Respite care
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="Hourly routine care"
+                  class="rounded text-purple-600"
+                />
+                Hourly routine care
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="On call care"
+                  class="rounded text-purple-600"
+                />
+                On call care
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="Overnight"
+                  class="rounded text-purple-600"
+                />
+                Overnight
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="24/7 care live out"
+                  class="rounded text-purple-600"
+                />
+                24/7 care live out
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer bg-gray-50 hover:bg-white p-2 rounded border border-transparent hover:border-purple-200 transition-all"
+              >
+                <input
+                  type="checkbox"
+                  name="serviceType"
+                  value="24/7 care live in"
+                  class="rounded text-purple-600"
+                />
+                24/7 care live in
+              </label>
+            </div>
+          </div>
+
+          <!-- Weekly Schedule -->
+          <div class="space-y-2">
+            <label class="block text-xs text-gray-400 uppercase"
+              >Weekly Schedule</label
+            >
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- Monday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="MO"
+                    class="rounded text-purple-600"
+                  />
+                  Mon
+                </label>
+                <input
+                  type="text"
+                  name="schMO"
+                  id="as-schMO"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Tuesday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="T"
+                    class="rounded text-purple-600"
+                  />
+                  Tue
+                </label>
+                <input
+                  type="text"
+                  name="schT"
+                  id="as-schT"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Wednesday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="W"
+                    class="rounded text-purple-600"
+                  />
+                  Wed
+                </label>
+                <input
+                  type="text"
+                  name="schW"
+                  id="as-schW"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Thursday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="TH"
+                    class="rounded text-purple-600"
+                  />
+                  Thu
+                </label>
+                <input
+                  type="text"
+                  name="schTH"
+                  id="as-schTH"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Friday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="FR"
+                    class="rounded text-purple-600"
+                  />
+                  Fri
+                </label>
+                <input
+                  type="text"
+                  name="schFR"
+                  id="as-schFR"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Saturday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="SA"
+                    class="rounded text-purple-600"
+                  />
+                  Sat
+                </label>
+                <input
+                  type="text"
+                  name="schSA"
+                  id="as-schSA"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
+                />
+              </div>
+              <!-- Sunday -->
+              <div class="flex items-center gap-2 p-2 bg-gray-50 rounded-lg">
+                <label
+                  class="flex items-center gap-2 min-w-[100px] text-xs font-bold text-gray-700"
+                >
+                  <input
+                    type="checkbox"
+                    name="daySch"
+                    value="SU"
+                    class="rounded text-purple-600"
+                  />
+                  Sun
+                </label>
+                <input
+                  type="text"
+                  name="schSU"
+                  id="as-schSU"
+                  placeholder="e.g. 8am-4pm"
+                  class="input-field text-xs py-1"
                 />
               </div>
             </div>

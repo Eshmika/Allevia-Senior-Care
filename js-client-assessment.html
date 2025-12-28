@@ -21,6 +21,30 @@
     }
   }
 
+  function calculateProjectCosts() {
+    const hours =
+      parseFloat(document.getElementById("as-projectHours").value) || 0;
+    const rate =
+      parseFloat(document.getElementById("as-hourlyRate").value) || 0;
+
+    const weekly = hours * rate;
+    const monthly = weekly * 4.33;
+
+    document.getElementById("as-weeklyCost-display").textContent =
+      weekly.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    document.getElementById("as-monthlyCost-display").textContent =
+      monthly.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+
+    document.getElementById("as-weeklyCost").value = weekly.toFixed(2);
+    document.getElementById("as-monthlyCost").value = monthly.toFixed(2);
+  }
+
   function toggleLangOther(checkbox) {
     const container = document.getElementById("as-lang-other-container");
     if (checkbox.checked) {
@@ -131,6 +155,8 @@
         };
 
         setVal("as-id", data.id);
+        setVal("as-contactDate", data.contactDate);
+        setVal("as-assessmentDateTime", data.assessmentDateTime);
         setVal("as-repName-hidden", data.repName);
         setVal("as-firstName", data.firstName);
         setVal("as-middleName", data.middleName);
@@ -238,6 +264,41 @@
           document.getElementById("as-authName").classList.add("hidden");
         }
 
+        // Project Service population
+        setVal("as-projectHours", data.projectHours);
+        setVal("as-hourlyRate", data.hourlyRate);
+        setVal("as-levelOfCare", data.levelOfCare);
+        document.getElementById("as-overtime").checked =
+          data.overtime === "on" || data.overtime === true;
+
+        calculateProjectCosts();
+
+        // Multi-select checkboxes for Service Types
+        const serviceTypes = (data.serviceTypes || "")
+          .split(",")
+          .map((s) => s.trim());
+        const serviceChecks = document.getElementsByName("serviceType");
+        serviceChecks.forEach(
+          (cb) => (cb.checked = serviceTypes.includes(cb.value))
+        );
+
+        // Weekly Schedule
+        const dayChecks = document.getElementsByName("daySch");
+        const schMap = {
+          MO: data.schMO,
+          T: data.schT,
+          W: data.schW,
+          TH: data.schTH,
+          FR: data.schFR,
+          SA: data.schSA,
+          SU: data.schSU,
+        };
+        dayChecks.forEach((cb) => {
+          const val = schMap[cb.value];
+          cb.checked = !!(val && val.trim() !== "");
+          setVal(`as-sch${cb.value}`, val);
+        });
+
         // Check if billing same as primary
         const isBillingSame =
           data.clientAddress === data.billingAddress &&
@@ -295,7 +356,8 @@
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => {
-      if (key !== "lang") data[key] = value;
+      if (key !== "lang" && key !== "serviceType" && key !== "daySch")
+        data[key] = value;
     });
 
     // Handle Status Other
@@ -319,6 +381,24 @@
       if (otherVal) selectedLangs.push(otherVal);
     }
     data.languages = selectedLangs.join(", ");
+
+    // Handle Service Types
+    const serviceChecks = document.getElementsByName("serviceType");
+    const selectedServices = Array.from(serviceChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.serviceTypes = selectedServices.join(", ");
+
+    // Handle Schedule
+    const schDayChecks = document.getElementsByName("daySch");
+    schDayChecks.forEach((cb) => {
+      const fieldId = `as-sch${cb.value}`;
+      if (!cb.checked) {
+        data[`sch${cb.value}`] = "";
+      } else {
+        data[`sch${cb.value}`] = document.getElementById(fieldId).value;
+      }
+    });
 
     // Handle Billing Address sync if checked
     if (document.getElementById("as-same-address").checked) {
