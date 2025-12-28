@@ -45,6 +45,16 @@
     document.getElementById("as-monthlyCost").value = monthly.toFixed(2);
   }
 
+  function convertWeight(lbs) {
+    const kgDisplay = document.getElementById("as-weight-kg");
+    if (!lbs || isNaN(lbs)) {
+      kgDisplay.textContent = "-- kg";
+      return;
+    }
+    const kg = parseFloat(lbs) * 0.453592;
+    kgDisplay.textContent = `${kg.toFixed(1)} kg`;
+  }
+
   function toggleLangOther(checkbox) {
     const container = document.getElementById("as-lang-other-container");
     if (checkbox.checked) {
@@ -158,6 +168,7 @@
         setVal("as-contactDate", data.contactDate);
         setVal("as-assessmentDateTime", data.assessmentDateTime);
         setVal("as-repName-hidden", data.repName);
+        setVal("as-referredBy", data.referredBy);
         setVal("as-firstName", data.firstName);
         setVal("as-middleName", data.middleName);
         setVal("as-lastName", data.lastName);
@@ -299,6 +310,69 @@
           setVal(`as-sch${cb.value}`, val);
         });
 
+        // Assessment Details
+        setVal("as-height", data.height);
+        setVal("as-weight", data.weight);
+        if (data.weight) convertWeight(data.weight);
+        setVal("as-diagnosis", data.diagnosis);
+        setVal("as-serviceNeedsText", data.serviceNeedsText);
+        setVal("as-goals", data.goals);
+
+        // Mental Status
+        const mentalSelect = document.getElementById("as-mentalStatus-select");
+        const mentalOpts = Array.from(mentalSelect.options).map((o) => o.value);
+        if (data.mentalStatus && mentalOpts.includes(data.mentalStatus)) {
+          mentalSelect.value = data.mentalStatus;
+        } else if (data.mentalStatus) {
+          mentalSelect.value = "Other";
+          setVal("as-mental-other", data.mentalStatus);
+          document
+            .getElementById("as-mental-other-container")
+            .classList.remove("hidden");
+        }
+
+        // General Info
+        setVal("as-blind", data.blind);
+        setVal("as-glasses", data.glasses);
+        setVal("as-dentures", data.dentures);
+
+        // Checkboxes: Continent, Incontinent, Medical Aids
+        const setChecks = (name, val) => {
+          const items = (val || "").split(",").map((s) => s.trim());
+          const cbs = document.getElementsByName(name);
+          cbs.forEach((cb) => (cb.checked = items.includes(cb.value)));
+        };
+        setChecks("contCheckbox", data.continentInfo);
+        setChecks("incontCheckbox", data.incontinentInfo);
+
+        // Medical Aids with "Other"
+        const aids = (data.medicalAids || "").split(",").map((s) => s.trim());
+        const aidCbs = document.getElementsByName("medAid");
+        let otherAid = "";
+        aidCbs.forEach((cb) => {
+          if (cb.value === "Other") {
+            const hasOther = aids.some(
+              (a) =>
+                !["Ostomy bag", "Urinary-catheter", "Adult briefs"].includes(a)
+            );
+            if (hasOther) {
+              cb.checked = true;
+              document
+                .getElementById("as-medAid-other-container")
+                .classList.remove("hidden");
+              otherAid = aids.find(
+                (a) =>
+                  !["Ostomy bag", "Urinary-catheter", "Adult briefs"].includes(
+                    a
+                  )
+              );
+              setVal("as-medAid-other", otherAid);
+            }
+          } else {
+            cb.checked = aids.includes(cb.value);
+          }
+        });
+
         // Check if billing same as primary
         const isBillingSame =
           data.clientAddress === data.billingAddress &&
@@ -356,9 +430,26 @@
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => {
-      if (key !== "lang" && key !== "serviceType" && key !== "daySch")
+      if (
+        ![
+          "lang",
+          "serviceType",
+          "daySch",
+          "contCheckbox",
+          "incontCheckbox",
+          "medAid",
+        ].includes(key)
+      ) {
         data[key] = value;
+      }
     });
+
+    // Handle Mental Status Other
+    if (data.mentalStatus_select === "Other") {
+      data.mentalStatus = document.getElementById("as-mental-other").value;
+    } else {
+      data.mentalStatus = data.mentalStatus_select;
+    }
 
     // Handle Status Other
     if (data.status_select === "Other") {
@@ -399,6 +490,26 @@
         data[`sch${cb.value}`] = document.getElementById(fieldId).value;
       }
     });
+
+    // Handle Continent/Incontinent
+    const getMulti = (name) =>
+      Array.from(document.getElementsByName(name))
+        .filter((cb) => cb.checked)
+        .map((cb) => cb.value)
+        .join(", ");
+    data.continentInfo = getMulti("contCheckbox");
+    data.incontinentInfo = getMulti("incontCheckbox");
+
+    // Handle Medical Aids
+    const aidCbs = document.getElementsByName("medAid");
+    const selectedAids = Array.from(aidCbs)
+      .filter((cb) => cb.checked && cb.value !== "Other")
+      .map((cb) => cb.value);
+    if (document.getElementById("as-medAid-other-cb").checked) {
+      const otherVal = document.getElementById("as-medAid-other").value;
+      if (otherVal) selectedAids.push(otherVal);
+    }
+    data.medicalAids = selectedAids.join(", ");
 
     // Handle Billing Address sync if checked
     if (document.getElementById("as-same-address").checked) {

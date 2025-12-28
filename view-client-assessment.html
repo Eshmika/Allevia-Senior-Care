@@ -1193,6 +1193,327 @@
         </div>
       </div>
 
+      <!-- 6. REFERRAL SOURCE -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-briefcase text-purple-600"></i> REFERRAL SOURCE
+        </h3>
+        <div class="space-y-6">
+          <div
+            class="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4"
+          >
+            <label
+              class="block text-xs text-purple-700 font-bold uppercase mb-1"
+              >Referral Source</label
+            >
+            <input
+              type="text"
+              id="as-referredBy"
+              readonly
+              class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. FULL ASSESSMENT SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-stethoscope text-purple-600"></i> FULL ASSESSMENT
+        </h3>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Height (ft'in\")</label
+              >
+              <input type="text" name="height" id="as-height" placeholder="e.g.
+              5'10\" class=\"input-field text-sm py-2\">
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Weight (lbs)</label
+              >
+              <div class="flex items-center gap-2">
+                <input
+                  type="number"
+                  name="weight"
+                  id="as-weight"
+                  placeholder="lbs"
+                  class="input-field text-sm py-2"
+                  oninput="convertWeight(this.value)"
+                />
+                <span
+                  id="as-weight-kg"
+                  class="text-xs text-gray-400 whitespace-nowrap"
+                  >-- kg</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Mental Status</label
+            >
+            <select
+              name="mentalStatus_select"
+              id="as-mentalStatus-select"
+              class="input-field text-sm py-2"
+              onchange="toggleOtherInput(this, 'as-mental-other-container')"
+            >
+              <option value="Alert">Alert</option>
+              <option value="Alzheimer/Dementia">Alzheimer/Dementia</option>
+              <option value="Confused">Confused</option>
+              <option value="Forgetful">Forgetful</option>
+              <option value="Never oriented">Never oriented</option>
+              <option value="Combative">Combative</option>
+              <option value="Comatose">Comatose</option>
+              <option value="Agitated">Agitated</option>
+              <option value="Lethargic">Lethargic</option>
+              <option value="Stuporous">Stuporous</option>
+              <option value="Other">Other</option>
+            </select>
+            <div id="as-mental-other-container" class="mt-2 hidden">
+              <input
+                type="text"
+                name="mentalStatus_other"
+                id="as-mental-other"
+                placeholder="Please specify..."
+                class="input-field text-sm py-2"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Diagnosis</label
+            >
+            <textarea
+              name="diagnosis"
+              id="as-diagnosis"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Primary/Secondary diagnosis..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Service Needs</label
+            >
+            <textarea
+              name="serviceNeedsText"
+              id="as-serviceNeedsText"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Detailed service needs..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Goals</label
+            >
+            <textarea
+              name="goals"
+              id="as-goals"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Assessment goals..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. GENERAL INFORMATION SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-info text-purple-600"></i> GENERAL INFO
+        </h3>
+        <div class="space-y-4">
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[10px] text-gray-400 uppercase mb-1"
+                >Blind</label
+              >
+              <select
+                name="blind"
+                id="as-blind"
+                class="input-field text-xs py-1"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-gray-400 uppercase mb-1"
+                >Glasses</label
+              >
+              <select
+                name="glasses"
+                id="as-glasses"
+                class="input-field text-xs py-1"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] text-gray-400 uppercase mb-1"
+                >Dentures</label
+              >
+              <select
+                name="dentures"
+                id="as-dentures"
+                class="input-field text-xs py-1"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="p-2 bg-green-50 rounded border border-green-100">
+              <label
+                class="block text-[10px] text-green-700 font-bold uppercase mb-1"
+                >Continent</label
+              >
+              <div class="flex flex-col gap-1">
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="contCheckbox"
+                    value="Stool"
+                    class="rounded"
+                  />
+                  Stool</label
+                >
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="contCheckbox"
+                    value="Urine"
+                    class="rounded"
+                  />
+                  Urine</label
+                >
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="contCheckbox"
+                    value="Both"
+                    class="rounded"
+                  />
+                  Both</label
+                >
+              </div>
+            </div>
+            <div class="p-2 bg-red-50 rounded border border-red-100">
+              <label
+                class="block text-[10px] text-red-700 font-bold uppercase mb-1"
+                >Incontinent</label
+              >
+              <div class="flex flex-col gap-1">
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="incontCheckbox"
+                    value="Stool"
+                    class="rounded"
+                  />
+                  Stool</label
+                >
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="incontCheckbox"
+                    value="Urine"
+                    class="rounded"
+                  />
+                  Urine</label
+                >
+                <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                  ><input
+                    type="checkbox"
+                    name="incontCheckbox"
+                    value="Both"
+                    class="rounded"
+                  />
+                  Both</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-xs text-gray-400 uppercase"
+              >Medical Aids</label
+            >
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                ><input
+                  type="checkbox"
+                  name="medAid"
+                  value="Ostomy bag"
+                  class="rounded"
+                />
+                Ostomy bag</label
+              >
+              <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                ><input
+                  type="checkbox"
+                  name="medAid"
+                  value="Urinary-catheter"
+                  class="rounded"
+                />
+                Urinary-catheter</label
+              >
+              <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                ><input
+                  type="checkbox"
+                  name="medAid"
+                  value="Adult briefs"
+                  class="rounded"
+                />
+                Adult briefs</label
+              >
+              <label class="flex items-center gap-1 text-[10px] text-gray-600"
+                ><input
+                  type="checkbox"
+                  name="medAid"
+                  value="Other"
+                  id="as-medAid-other-cb"
+                  class="rounded"
+                  onchange="toggleOtherInput(this, 'as-medAid-other-container')"
+                />
+                Other</label
+              >
+            </div>
+            <div id="as-medAid-other-container" class="mt-1 hidden">
+              <input
+                type="text"
+                name="medAid_other"
+                id="as-medAid-other"
+                placeholder="Specify aid..."
+                class="input-field text-xs py-1"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SUBMIT BUTTON -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <button
