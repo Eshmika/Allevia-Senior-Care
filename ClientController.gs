@@ -85,6 +85,7 @@ function getOrCreateClientSheet() {
       "Continent Info",
       "Incontinent Info",
       "Medical Aids",
+      "Medical History",
       "Stage",
       "Created At",
       "Last Reviewed",
@@ -201,6 +202,7 @@ function handleClientSubmission(data) {
     data.continentInfo || "",
     data.incontinentInfo || "",
     data.medicalAids || "",
+    data.medicalHistory || "",
     "New leads", // Initial Stage
     new Date(),
     new Date(), // Initial Last Reviewed
@@ -405,9 +407,10 @@ function getClientDetails(id) {
     continentInfo: row[75],
     incontinentInfo: row[76],
     medicalAids: row[77],
-    stage: row[78],
-    createdAt: row[79],
-    lastReviewed: row[80],
+    medicalHistory: row[78],
+    stage: row[79],
+    createdAt: row[80],
+    lastReviewed: row[81],
   };
 }
 
@@ -508,6 +511,7 @@ function updateClient(data) {
     data.continentInfo || "",
     data.incontinentInfo || "",
     data.medicalAids || "",
+    data.medicalHistory || "",
   ];
 
   sheet.getRange(rowNum, 2, 1, rowData.length).setValues([rowData]);

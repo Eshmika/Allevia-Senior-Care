@@ -1337,7 +1337,7 @@
         </div>
       </div>
 
-      <!-- 8. GENERAL INFORMATION SECTION -->
+      <!-- 9. GENERAL INFORMATION SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
       >
@@ -1515,6 +1515,212 @@
                 class="input-field text-xs py-1"
               />
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. MEDICAL HISTORY SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-heartbeat text-purple-600"></i> MEDICAL HISTORY
+        </h3>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Arthritis"
+                class="rounded text-purple-600"
+              />
+              Arthritis
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Cancer"
+                class="rounded text-purple-600"
+              />
+              Cancer
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Heart Disease"
+                class="rounded text-purple-600"
+              />
+              Heart Disease
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Seizures"
+                class="rounded text-purple-600"
+              />
+              Seizures
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Diabetic"
+                class="rounded text-purple-600"
+              />
+              Diabetic
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="High blood pressure"
+                class="rounded text-purple-600"
+              />
+              High blood pressure
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Low blood pressure"
+                class="rounded text-purple-600"
+              />
+              Low blood pressure
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Multiple sclerosis"
+                class="rounded text-purple-600"
+              />
+              Multiple sclerosis
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="ALS"
+                class="rounded text-purple-600"
+              />
+              ALS
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="COPD"
+                class="rounded text-purple-600"
+              />
+              COPD
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Alzheimer's"
+                class="rounded text-purple-600"
+              />
+              Alzheimer's
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Dementia"
+                class="rounded text-purple-600"
+              />
+              Dementia
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Easily bruise"
+                class="rounded text-purple-600"
+              />
+              Easily bruise
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Osteoporosis"
+                class="rounded text-purple-600"
+              />
+              Osteoporosis
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Stroke"
+                class="rounded text-purple-600"
+              />
+              Stroke
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Paralysis"
+                class="rounded text-purple-600"
+              />
+              Paralysis
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Surgeries"
+                class="rounded text-purple-600"
+              />
+              Surgeries
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Breaks/fractures"
+                class="rounded text-purple-600"
+              />
+              Breaks/fractures
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Recent falls"
+                class="rounded text-purple-600"
+              />
+              Recent falls
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-600">
+              <input
+                type="checkbox"
+                name="medHistory"
+                value="Other"
+                id="as-medHistory-other-cb"
+                class="rounded text-purple-600"
+                onchange="toggleOtherInput(this, 'as-medHistory-other-container')"
+              />
+              Other
+            </label>
+          </div>
+          <div id="as-medHistory-other-container" class="mt-2 hidden">
+            <input
+              type="text"
+              name="medHistory_other"
+              id="as-medHistory-other"
+              placeholder="Specify condition..."
+              class="input-field text-sm py-2"
+            />
           </div>
         </div>
       </div>

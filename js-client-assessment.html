@@ -11,6 +11,7 @@
       form.classList.add("hidden");
     }
   }
+
   function toggleOtherInput(select, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -136,10 +137,18 @@
     toggleClientStageView("form");
     document.getElementById("assessmentDetailsForm").reset();
     document.getElementById("as-age-display").textContent = "-- years old";
-    document
-      .getElementById("as-status-other-container")
-      .classList.add("hidden");
-    document.getElementById("as-lang-other-container").classList.add("hidden");
+
+    [
+      "as-status-other-container",
+      "as-lang-other-container",
+      "as-mental-other-container",
+      "as-medAid-other-container",
+      "as-medHistory-other-container",
+    ].forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add("hidden");
+    });
+
     document
       .getElementById("billing-fields")
       .classList.remove("opacity-50", "pointer-events-none");
@@ -373,6 +382,53 @@
           }
         });
 
+        // Medical History handling
+        const historyItems = (data.medicalHistory || "")
+          .split(",")
+          .map((s) => s.trim());
+        const historyChecks = document.getElementsByName("medHistory");
+        const knownHistory = [
+          "Arthritis",
+          "Cancer",
+          "Heart Disease",
+          "Seizures",
+          "Diabetic",
+          "High blood pressure",
+          "Low blood pressure",
+          "Multiple sclerosis",
+          "ALS",
+          "COPD",
+          "Alzheimer's",
+          "Dementia",
+          "Easily bruise",
+          "Osteoporosis",
+          "Stroke",
+          "Paralysis",
+          "Surgeries",
+          "Breaks/fractures",
+          "Recent falls",
+        ];
+
+        historyChecks.forEach((cb) => {
+          if (cb.value === "Other") {
+            const hasOther = historyItems.some(
+              (h) => !knownHistory.includes(h) && h !== ""
+            );
+            if (hasOther) {
+              cb.checked = true;
+              document
+                .getElementById("as-medHistory-other-container")
+                .classList.remove("hidden");
+              const otherVal = historyItems.find(
+                (h) => !knownHistory.includes(h) && h !== ""
+              );
+              setVal("as-medHistory-other", otherVal);
+            }
+          } else {
+            cb.checked = historyItems.includes(cb.value);
+          }
+        });
+
         // Check if billing same as primary
         const isBillingSame =
           data.clientAddress === data.billingAddress &&
@@ -438,6 +494,7 @@
           "contCheckbox",
           "incontCheckbox",
           "medAid",
+          "medHistory",
         ].includes(key)
       ) {
         data[key] = value;
@@ -510,6 +567,17 @@
       if (otherVal) selectedAids.push(otherVal);
     }
     data.medicalAids = selectedAids.join(", ");
+
+    // Handle Medical History
+    const historyCbs = document.getElementsByName("medHistory");
+    const selectedHistory = Array.from(historyCbs)
+      .filter((cb) => cb.checked && cb.value !== "Other")
+      .map((cb) => cb.value);
+    if (document.getElementById("as-medHistory-other-cb").checked) {
+      const otherVal = document.getElementById("as-medHistory-other").value;
+      if (otherVal) selectedHistory.push(otherVal);
+    }
+    data.medicalHistory = selectedHistory.join(", ");
 
     // Handle Billing Address sync if checked
     if (document.getElementById("as-same-address").checked) {
@@ -595,5 +663,23 @@
       if (value.length > 2) formatted += "-" + value.substring(2, 9);
     }
     input.value = formatted;
+  }
+
+  function formatPhone(input) {
+    const selectionStart = input.selectionStart;
+    const oldLength = input.value.length;
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 10) value = value.substring(0, 10);
+    let formattedValue = "";
+    if (value.length > 0) {
+      formattedValue = "(" + value.substring(0, 3);
+      if (value.length > 3) formattedValue += ") " + value.substring(3, 6);
+      if (value.length > 6) formattedValue += "-" + value.substring(6, 10);
+    }
+    input.value = formattedValue;
+    const newLength = formattedValue.length;
+    let newCursorPos = selectionStart + (newLength - oldLength);
+    if (newCursorPos < 0) newCursorPos = 0;
+    input.setSelectionRange(newCursorPos, newCursorPos);
   }
 </script>
