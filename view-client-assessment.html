@@ -18,6 +18,7 @@
     class="space-y-6"
   >
     <input type="hidden" name="id" id="as-id" />
+    <input type="hidden" id="as-repName-hidden" />
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- 1. PROFILE SECTION -->
@@ -467,14 +468,25 @@
         <div class="space-y-4">
           <div>
             <label class="block text-xs text-gray-400 uppercase mb-1"
-              >EC Name</label
+              >Emergency Contact Name</label
             >
-            <input
-              type="text"
-              name="emergencyName"
-              id="as-emergencyName"
-              class="input-field text-sm py-2"
-            />
+            <div class="flex flex-col gap-2">
+              <select
+                id="as-ec-name-sync"
+                class="input-field text-sm py-2"
+                onchange="handleNameSync('ec', this.value)"
+              >
+                <option value="custom">Custom (Type below)</option>
+                <option value="rep">Same as Representative</option>
+              </select>
+              <input
+                type="text"
+                name="emergencyName"
+                id="as-emergencyName"
+                placeholder="Full Name"
+                class="input-field text-sm py-2"
+              />
+            </div>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>
@@ -588,12 +600,24 @@
             <label class="block text-xs text-gray-400 uppercase mb-1"
               >Authorized Contact Name</label
             >
-            <input
-              type="text"
-              name="authName"
-              id="as-authName"
-              class="input-field text-sm py-2"
-            />
+            <div class="flex flex-col gap-2">
+              <select
+                id="as-auth-name-sync"
+                class="input-field text-sm py-2"
+                onchange="handleNameSync('auth', this.value)"
+              >
+                <option value="custom">Custom (Type below)</option>
+                <option value="rep">Same as Representative</option>
+                <option value="ec">Same as Emergency Contact</option>
+              </select>
+              <input
+                type="text"
+                name="authName"
+                id="as-authName"
+                placeholder="Full Name"
+                class="input-field text-sm py-2"
+              />
+            </div>
           </div>
           <div class="grid grid-cols-2 gap-4">
             <div>

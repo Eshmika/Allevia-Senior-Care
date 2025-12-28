@@ -78,6 +78,26 @@
     }
   }
 
+  function handleNameSync(type, value) {
+    const input = document.getElementById(
+      `as-${type === "ec" ? "emergency" : "auth"}Name`
+    );
+    if (!input) return;
+
+    if (value === "custom") {
+      input.classList.remove("hidden");
+      input.readOnly = false;
+    } else {
+      input.classList.add("hidden");
+      input.readOnly = true;
+      if (value === "rep") {
+        input.value = document.getElementById("as-repName-hidden").value;
+      } else if (value === "ec") {
+        input.value = document.getElementById("as-emergencyName").value;
+      }
+    }
+  }
+
   function openAssessmentForm(clientId) {
     toggleClientStageView("form");
     document.getElementById("assessmentDetailsForm").reset();
@@ -96,6 +116,12 @@
       .getElementById("auth-address-fields")
       .classList.remove("opacity-50", "pointer-events-none");
 
+    // Reset sync selectors
+    document.getElementById("as-ec-name-sync").value = "custom";
+    document.getElementById("as-emergencyName").classList.remove("hidden");
+    document.getElementById("as-auth-name-sync").value = "custom";
+    document.getElementById("as-authName").classList.remove("hidden");
+
     google.script.run
       .withSuccessHandler((data) => {
         if (!data) return;
@@ -105,6 +131,7 @@
         };
 
         setVal("as-id", data.id);
+        setVal("as-repName-hidden", data.repName);
         setVal("as-firstName", data.firstName);
         setVal("as-middleName", data.middleName);
         setVal("as-lastName", data.lastName);
@@ -185,6 +212,12 @@
         setVal("as-emergencyState", data.emergencyState);
         setVal("as-emergencyZip", data.emergencyZip);
 
+        // Detect EC Name sync
+        if (data.emergencyName && data.emergencyName === data.repName) {
+          document.getElementById("as-ec-name-sync").value = "rep";
+          document.getElementById("as-emergencyName").classList.add("hidden");
+        }
+
         // Authorized Contact fields
         setVal("as-authName", data.authName);
         setVal("as-authPhone", data.authPhone);
@@ -195,6 +228,15 @@
         setVal("as-authCity", data.authCity);
         setVal("as-authState", data.authState);
         setVal("as-authZip", data.authZip);
+
+        // Detect Auth Name sync
+        if (data.authName && data.authName === data.repName) {
+          document.getElementById("as-auth-name-sync").value = "rep";
+          document.getElementById("as-authName").classList.add("hidden");
+        } else if (data.authName && data.authName === data.emergencyName) {
+          document.getElementById("as-auth-name-sync").value = "ec";
+          document.getElementById("as-authName").classList.add("hidden");
+        }
 
         // Check if billing same as primary
         const isBillingSame =
