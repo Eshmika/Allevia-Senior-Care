@@ -510,6 +510,22 @@
         const dietChecks = document.getElementsByName("dietaryInfo");
         dietChecks.forEach((cb) => (cb.checked = dietItems.includes(cb.value)));
 
+        // Care Certifications
+        const certItems = (data.careCertifications || "")
+          .split(",")
+          .map((s) => s.trim());
+        const certChecks = document.getElementsByName("careCertifications");
+        certChecks.forEach((cb) => (cb.checked = certItems.includes(cb.value)));
+
+        // Care Pets List
+        const carePetItems = (data.carePetsList || "")
+          .split(",")
+          .map((s) => s.trim());
+        const carePetChecks = document.getElementsByName("carePetsList");
+        carePetChecks.forEach(
+          (cb) => (cb.checked = carePetItems.includes(cb.value))
+        );
+
         // Check if billing same as primary
         const isBillingSame =
           data.clientAddress === data.billingAddress &&
@@ -684,8 +700,52 @@
         setVal("as-pharmacyName", data.pharmacyName);
         setVal("as-pharmacyPhone", data.pharmacyPhone);
         setVal("as-pharmacyAddress", data.pharmacyAddress);
+
+        // Care Matching Loading
+        setVal("as-careGender", data.careGender);
+        setVal("as-carePets", data.carePets); // Should match data.pets if synced
+        if (data.carePets === "Yes") {
+          document
+            .getElementById("as-carePets-detail")
+            .classList.remove("hidden");
+        }
+        setVal("as-carePetsNote", data.carePetsNote);
+
+        setVal("as-careSmoking", data.careSmoking); // Should match data.smoke
+        setVal("as-careSmokePremises", data.careSmokePremises);
+        setVal("as-careSmokeNote", data.careSmokeNote);
+
+        // Run sync initially
+        syncCareMatching();
       })
       .getClientDetails(clientId);
+  }
+
+  // Sync Logic
+  function syncCareMatching() {
+    const petsSource = document.getElementById("as-pets");
+    const petsTarget = document.getElementById("as-carePets");
+    const smokeSource = document.getElementById("as-smoke");
+    const smokeTarget = document.getElementById("as-careSmoking");
+
+    if (petsSource && petsTarget) {
+      petsTarget.value = petsSource.value;
+      // Trigger change to update visibility
+      toggleDetailInput(petsTarget, "as-carePets-detail", "Yes");
+
+      petsSource.addEventListener("change", () => {
+        petsTarget.value = petsSource.value;
+        toggleDetailInput(petsTarget, "as-carePets-detail", "Yes");
+      });
+    }
+
+    if (smokeSource && smokeTarget) {
+      smokeTarget.value = smokeSource.value;
+
+      smokeSource.addEventListener("change", () => {
+        smokeTarget.value = smokeSource.value;
+      });
+    }
   }
 
   function submitAssessmentForm(e) {
@@ -713,6 +773,8 @@
           "lightHousekeeping",
           "mobility",
           "dietaryInfo",
+          "careCertifications",
+          "carePetsList",
         ].includes(key)
       ) {
         data[key] = value;
@@ -838,6 +900,20 @@
       .filter((cb) => cb.checked)
       .map((cb) => cb.value);
     data.dietaryInfo = selectedDiet.join(", ");
+
+    // Handle Care Certifications
+    const certChecks = document.getElementsByName("careCertifications");
+    const selectedCerts = Array.from(certChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.careCertifications = selectedCerts.join(", ");
+
+    // Handle Care Pets List
+    const petChecks = document.getElementsByName("carePetsList");
+    const selectedPetList = Array.from(petChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.carePetsList = selectedPetList.join(", ");
 
     // Handle Billing Address sync if checked
     if (document.getElementById("as-same-address").checked) {

@@ -2821,6 +2821,278 @@
         </div>
       </div>
 
+      <!-- 20. CARE MATCHING SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-heart-handshake text-purple-600"></i> CARE MATCHING
+        </h3>
+
+        <!-- 1) Certification -->
+        <div class="mb-4">
+          <label class="block text-xs text-gray-400 uppercase mb-2"
+            >Certification</label
+          >
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="CPR & First Aid"
+                class="rounded text-purple-600"
+              />
+              CPR & First Aid
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Geriatric Aide"
+                class="rounded text-purple-600"
+              />
+              Geriatric Aide
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Medication Aide"
+                class="rounded text-purple-600"
+              />
+              Medication Aide
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Patient Care Tech (PCT)"
+                class="rounded text-purple-600"
+              />
+              Patient Care Tech (PCT)
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="No preference"
+                class="rounded text-purple-600"
+              />
+              No preference
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Caregiver (CG)"
+                class="rounded text-purple-600"
+              />
+              Caregiver (CG)
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Certified Nursing Assistant (CNA)"
+                class="rounded text-purple-600"
+              />
+              Certified Nursing Assistant (CNA)
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Home Health Aide (HHA)"
+                class="rounded text-purple-600"
+              />
+              Home Health Aide (HHA)
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Licensed Practical Nurse (LPN)"
+                class="rounded text-purple-600"
+              />
+              Licensed Practical Nurse (LPN)
+            </label>
+            <label
+              class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer hover:text-purple-600"
+            >
+              <input
+                type="checkbox"
+                name="careCertifications"
+                value="Registered Nurse (RN)"
+                class="rounded text-purple-600"
+              />
+              Registered Nurse (RN)
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- 2) Gender preferences -->
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Gender preference</label
+            >
+            <select
+              name="careGender"
+              id="as-careGender"
+              class="input-field text-sm py-2"
+            >
+              <option value="No preference">No preference</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+
+          <!-- Spacer -->
+          <div class="hidden md:block"></div>
+
+          <!-- 3) Pets -->
+          <div class="md:col-span-2 border-t pt-4">
+            <label class="block text-xs text-gray-400 uppercase mb-2"
+              >Pets (Auto-filled from Living Arrangement)</label
+            >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <select
+                  name="carePets"
+                  id="as-carePets"
+                  class="input-field text-sm py-2 bg-gray-50"
+                  onchange="toggleDetailInput(this, 'as-carePets-detail', 'Yes')"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div id="as-carePets-detail" class="hidden">
+                <div class="flex flex-wrap gap-4 mb-2">
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      name="carePetsList"
+                      value="Dogs"
+                      class="rounded text-purple-600"
+                    />
+                    Dogs</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      name="carePetsList"
+                      value="Cats"
+                      class="rounded text-purple-600"
+                    />
+                    Cats</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      name="carePetsList"
+                      value="Birds"
+                      class="rounded text-purple-600"
+                    />
+                    Birds</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      name="carePetsList"
+                      value="Fish"
+                      class="rounded text-purple-600"
+                    />
+                    Fish</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      name="carePetsList"
+                      value="Other"
+                      class="rounded text-purple-600"
+                    />
+                    Other</label
+                  >
+                </div>
+                <input
+                  type="text"
+                  name="carePetsNote"
+                  id="as-carePetsNote"
+                  class="input-field text-sm py-2"
+                  placeholder="Pets notes..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 4) Smoking -->
+          <div class="md:col-span-2 border-t pt-4">
+            <label class="block text-xs text-gray-400 uppercase mb-2"
+              >Smoking (Auto-filled from Living Arrangement)</label
+            >
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-[10px] text-gray-400 mb-1"
+                  >Client Smokes?</label
+                >
+                <select
+                  name="careSmoking"
+                  id="as-careSmoking"
+                  class="input-field text-sm py-2 bg-gray-50"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[10px] text-gray-400 mb-1"
+                  >Can caregiver smoke on premises?</label
+                >
+                <select
+                  name="careSmokePremises"
+                  id="as-careSmokePremises"
+                  class="input-field text-sm py-2"
+                >
+                  <option value="No preference">No preference</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+              <div class="md:col-span-2">
+                <input
+                  type="text"
+                  name="careSmokeNote"
+                  id="as-careSmokeNote"
+                  class="input-field text-sm py-2"
+                  placeholder="Smoke notes..."
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- SUBMIT BUTTON -->
       <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <button
