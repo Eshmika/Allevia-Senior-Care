@@ -22,6 +22,31 @@
     }
   }
 
+  function toggleDetailInput(select, containerId, triggerValue) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (select.value === triggerValue) {
+      if (
+        container.classList.contains("md:flex-row") ||
+        container.tagName === "DIV"
+      ) {
+        // Just remove hidden, handling flex is done by class structure
+        container.classList.remove("hidden");
+        // Maintain flex display if it had it (for the multi-input rows)
+        if (container.classList.contains("md:flex-row")) {
+          container.style.display = "flex";
+        } else {
+          container.classList.remove("hidden");
+        }
+      } else {
+        container.classList.remove("hidden");
+      }
+    } else {
+      container.classList.add("hidden");
+      if (container.style.display) container.style.display = "";
+    }
+  }
+
   function calculateProjectCosts() {
     const hours =
       parseFloat(document.getElementById("as-projectHours").value) || 0;
@@ -144,9 +169,19 @@
       "as-mental-other-container",
       "as-medAid-other-container",
       "as-medHistory-other-container",
+      "as-medHistory-other-container",
+      "as-liveFamily-detail",
+      "as-liveSenior-detail",
+      "as-liveRehab-detail",
+      "as-pets-detail",
+      "as-allergies-detail",
+      "as-assistDirections-detail",
     ].forEach((id) => {
       const el = document.getElementById(id);
-      if (el) el.classList.add("hidden");
+      if (el) {
+        el.classList.add("hidden");
+        el.style.display = ""; // Reset inline display if set
+      }
     });
 
     document
@@ -516,6 +551,104 @@
           setVal("as-dob", data.dob);
           updateClientAge(data.dob);
         }
+
+        // Living Arrangement Loading
+        setVal("as-liveAlone", data.liveAlone);
+
+        setVal("as-liveFamily", data.liveFamily);
+        if (data.liveFamily === "Yes") {
+          document
+            .getElementById("as-liveFamily-detail")
+            .classList.remove("hidden");
+          setVal("as-liveFamilyName", data.liveFamilyName);
+        }
+
+        setVal("as-liveSenior", data.liveSenior);
+        if (data.liveSenior === "Yes") {
+          const cont = document.getElementById("as-liveSenior-detail");
+          cont.classList.remove("hidden");
+          cont.style.display = "flex";
+          setVal("as-liveSeniorName", data.liveSeniorName);
+          setVal("as-liveSeniorAddress", data.liveSeniorAddress);
+        }
+
+        setVal("as-liveRehab", data.liveRehab);
+        if (data.liveRehab === "Yes") {
+          const cont = document.getElementById("as-liveRehab-detail");
+          cont.classList.remove("hidden");
+          cont.style.display = "flex";
+          setVal("as-liveRehabName", data.liveRehabName);
+          setVal("as-liveRehabAddress", data.liveRehabAddress);
+        }
+
+        setVal("as-pets", data.pets);
+        if (data.pets === "Yes") {
+          document.getElementById("as-pets-detail").classList.remove("hidden");
+          setVal("as-petType", data.petType);
+        }
+
+        setVal("as-smoke", data.smoke);
+        setVal("as-drink", data.drink);
+        setVal("as-liveAlone", data.liveAlone);
+
+        setVal("as-liveFamily", data.liveFamily);
+        if (data.liveFamily === "Yes") {
+          document
+            .getElementById("as-liveFamily-detail")
+            .classList.remove("hidden");
+          setVal("as-liveFamilyName", data.liveFamilyName);
+        }
+
+        setVal("as-liveSenior", data.liveSenior);
+        if (data.liveSenior === "Yes") {
+          const cont = document.getElementById("as-liveSenior-detail");
+          cont.classList.remove("hidden");
+          cont.style.display = "flex";
+          setVal("as-liveSeniorName", data.liveSeniorName);
+          setVal("as-liveSeniorAddress", data.liveSeniorAddress);
+        }
+
+        setVal("as-liveRehab", data.liveRehab);
+        if (data.liveRehab === "Yes") {
+          const cont = document.getElementById("as-liveRehab-detail");
+          cont.classList.remove("hidden");
+          cont.style.display = "flex";
+          setVal("as-liveRehabName", data.liveRehabName);
+          setVal("as-liveRehabAddress", data.liveRehabAddress);
+        }
+
+        setVal("as-pets", data.pets);
+        if (data.pets === "Yes") {
+          document.getElementById("as-pets-detail").classList.remove("hidden");
+          setVal("as-petType", data.petType);
+        }
+
+        setVal("as-smoke", data.smoke);
+        setVal("as-drink", data.drink);
+
+        // Medication Loading
+        setVal("as-medReminder", data.medReminder);
+        setVal("as-selfAdminMed", data.selfAdminMed);
+
+        setVal("as-allergies", data.allergies);
+        if (data.allergies === "Yes") {
+          document
+            .getElementById("as-allergies-detail")
+            .classList.remove("hidden");
+          setVal("as-allergiesDetail", data.allergiesDetail);
+        }
+
+        setVal("as-assistDirections", data.assistDirections);
+        if (data.assistDirections === "Yes") {
+          document
+            .getElementById("as-assistDirections-detail")
+            .classList.remove("hidden");
+          setVal("as-assistDirectionsDetail", data.assistDirectionsDetail);
+        }
+
+        setVal("as-takingMed", data.takingMed);
+        setVal("as-medOverseer", data.medOverseer);
+        setVal("as-medList", data.medList);
       })
       .getClientDetails(clientId);
   }
