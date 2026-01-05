@@ -429,6 +429,38 @@
           }
         });
 
+        // Daily Living Skills
+        const dlsItems = (data.dailyLivingSkills || "")
+          .split(",")
+          .map((s) => s.trim());
+        const dlsChecks = document.getElementsByName("dailyLivingSkills");
+        dlsChecks.forEach((cb) => (cb.checked = dlsItems.includes(cb.value)));
+
+        // Transportation
+        const transItems = (data.transportation || "")
+          .split(",")
+          .map((s) => s.trim());
+        const transChecks = document.getElementsByName("transportation");
+        transChecks.forEach(
+          (cb) => (cb.checked = transItems.includes(cb.value))
+        );
+
+        // Meal Preparation
+        const mealItems = (data.mealPreparation || "")
+          .split(",")
+          .map((s) => s.trim());
+        const mealChecks = document.getElementsByName("mealPreparation");
+        mealChecks.forEach((cb) => (cb.checked = mealItems.includes(cb.value)));
+
+        // LIGHT Housekeeping
+        const houseItems = (data.lightHousekeeping || "")
+          .split(",")
+          .map((s) => s.trim());
+        const houseChecks = document.getElementsByName("lightHousekeeping");
+        houseChecks.forEach(
+          (cb) => (cb.checked = houseItems.includes(cb.value))
+        );
+
         // Check if billing same as primary
         const isBillingSame =
           data.clientAddress === data.billingAddress &&
@@ -495,6 +527,10 @@
           "incontCheckbox",
           "medAid",
           "medHistory",
+          "dailyLivingSkills",
+          "transportation",
+          "mealPreparation",
+          "lightHousekeeping",
         ].includes(key)
       ) {
         data[key] = value;
@@ -578,6 +614,34 @@
       if (otherVal) selectedHistory.push(otherVal);
     }
     data.medicalHistory = selectedHistory.join(", ");
+
+    // Handle Daily Living Skills
+    const dlsChecks = document.getElementsByName("dailyLivingSkills");
+    const selectedDls = Array.from(dlsChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.dailyLivingSkills = selectedDls.join(", ");
+
+    // Handle Transportation
+    const transChecks = document.getElementsByName("transportation");
+    const selectedTrans = Array.from(transChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.transportation = selectedTrans.join(", ");
+
+    // Handle Meal Preparation
+    const mealChecks = document.getElementsByName("mealPreparation");
+    const selectedMeal = Array.from(mealChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.mealPreparation = selectedMeal.join(", ");
+
+    // Handle LIGHT Housekeeping
+    const houseChecks = document.getElementsByName("lightHousekeeping");
+    const selectedHouse = Array.from(houseChecks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    data.lightHousekeeping = selectedHouse.join(", ");
 
     // Handle Billing Address sync if checked
     if (document.getElementById("as-same-address").checked) {
