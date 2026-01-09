@@ -1244,13 +1244,21 @@
               <label class="block text-xs text-gray-400 uppercase mb-1"
                 >Height (ft'in")</label
               >
-              <input
-                type="text"
-                name="height"
-                id="as-height"
-                placeholder="e.g. 5'10&quot;"
-                class="input-field text-sm py-2"
-              />
+              <div class="flex items-center gap-2">
+                <input
+                  type="text"
+                  name="height"
+                  id="as-height"
+                  placeholder="e.g. 5'10"
+                  class="input-field text-sm py-2"
+                  oninput="convertHeight(this)"
+                />
+                <span
+                  id="as-height-m"
+                  class="text-xs text-gray-400 whitespace-nowrap"
+                  >-- m</span
+                >
+              </div>
             </div>
             <div>
               <label class="block text-xs text-gray-400 uppercase mb-1"
@@ -1263,7 +1271,7 @@
                   id="as-weight"
                   placeholder="lbs"
                   class="input-field text-sm py-2"
-                  oninput="convertWeight(this.value)"
+                  oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3); convertWeight(this.value)"
                 />
                 <span
                   id="as-weight-kg"
@@ -1538,7 +1546,7 @@
           <i class="ph ph-heartbeat text-purple-600"></i> MEDICAL HISTORY
         </h3>
         <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-2">
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
             <label class="flex items-center gap-2 text-xs text-gray-600">
               <input
                 type="checkbox"
@@ -2405,52 +2413,63 @@
             </div>
           </div>
 
-          <!-- Pets -->
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Pets</label
-            >
-            <select
-              name="pets"
-              id="as-pets"
-              class="input-field text-sm py-2"
-              onchange="toggleDetailInput(this, 'as-pets-detail', 'Yes')"
-            >
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-            <div id="as-pets-detail" class="mt-2 hidden">
-              <input
-                type="text"
-                name="petType"
-                id="as-petType"
-                placeholder="Which animal?"
+          <!-- Pets, Smoke, Drink Group -->
+          <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Pets -->
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Pets</label
+              >
+              <select
+                name="pets"
+                id="as-pets"
                 class="input-field text-sm py-2"
-              />
+                onchange="toggleDetailInput(this, 'as-pets-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="as-pets-detail" class="mt-2 hidden">
+                <input
+                  type="text"
+                  name="petType"
+                  id="as-petType"
+                  placeholder="Which animal?"
+                  class="input-field text-sm py-2"
+                />
+              </div>
             </div>
-          </div>
 
-          <!-- Smoke -->
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Smoke</label
-            >
-            <select name="smoke" id="as-smoke" class="input-field text-sm py-2">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
+            <!-- Smoke -->
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Smoke</label
+              >
+              <select
+                name="smoke"
+                id="as-smoke"
+                class="input-field text-sm py-2"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
 
-          <!-- Drink -->
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Drink</label
-            >
-            <select name="drink" id="as-drink" class="input-field text-sm py-2">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-              <option value="Sober">Sober</option>
-            </select>
+            <!-- Drink -->
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Drink</label
+              >
+              <select
+                name="drink"
+                id="as-drink"
+                class="input-field text-sm py-2"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+                <option value="Sober">Sober</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -2837,7 +2856,7 @@
         <h3
           class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
         >
-          <i class="ph ph-heart-handshake text-purple-600"></i> CARE MATCHING
+          <i class="ph ph-users text-purple-600"></i> CARE MATCHING
         </h3>
 
         <!-- 1) Certification -->
@@ -3835,6 +3854,95 @@
         "bg-orange-50",
         "border-orange-200"
       );
+    }
+  }
+
+  function convertHeight(input) {
+    let val = input.value;
+
+    // Convert to meters logic
+    const numbers = val.match(/\d+/g);
+    let metersDisplay = "-- m";
+
+    if (numbers && numbers.length > 0) {
+      let feet = parseInt(numbers[0]);
+      let inches = 0;
+
+      // Enforce 1 digit for feet
+      if (numbers[0].length > 1) {
+        // If user typed more than 1 digit for feet, we might want to trim it?
+        // But regex match creates array. We can't easily modify the input value in place perfectly without cursor jumping.
+        // However, let's just use the first digit for calculation if valid.
+        // Or strictly, let's try to gently correct the input or just valid calculation.
+        // Given "no more than 3digit one digit in front", let's relax editing the input directly to avoid bad UX
+        // unless we are sure. A simple prompt requirement usually implies validation logic.
+        // Let's implement logic that prevents adding more digits if possible, or just calculates correctly.
+
+        // Let's rely on calculation using valid parts:
+        feet = parseInt(numbers[0].substring(0, 1));
+      }
+
+      if (numbers.length > 1) {
+        // Enforce max 2 digits for inches
+        let inchStr = numbers[1];
+        if (inchStr.length > 2) {
+          inchStr = inchStr.substring(0, 2);
+        }
+        inches = parseInt(inchStr);
+      }
+
+      if (!isNaN(feet)) {
+        const totalInches = feet * 12 + inches;
+        const meters = totalInches * 0.0254;
+
+        const mPart = Math.floor(meters);
+        const cmPart = Math.round((meters - mPart) * 100);
+
+        metersDisplay = `${mPart}m${cmPart.toString().padStart(2, "0")}`;
+      }
+    }
+
+    const displaySpan = document.getElementById("as-height-m");
+    if (displaySpan) displaySpan.textContent = metersDisplay;
+
+    // Optional: Input mask enforcement (simple version to meet "no more than 3digit" request)
+    // We replace the value if it violates the pattern significantly,
+    // but preserving separators is hard with regex replace alone.
+    // Let's just enforce the character set and length loosely for now to not break typing flow.
+    // A strict "3 digit max" rule:
+    const digitsOnly = val.replace(/\D/g, "");
+    if (digitsOnly.length > 3) {
+      // If we have > 3 digits total, we might want to trim.
+      // But we need to know WHERE.
+      // Let's assume user types sequentially.
+      // If matches `^\d\D*\d{1,2}$` it's good.
+      // If `^\d\d` (2 digit feet) -> bad.
+      // If `^\d\D*\d{3}` (3 digit inches) -> bad.
+
+      // Smart correction:
+      let potentialFeet = numbers[0] ? numbers[0].substring(0, 1) : "";
+      let potentialInches = numbers[1] ? numbers[1].substring(0, 2) : "";
+
+      // We can't easily reconstruct the *exact* separator the user used if we rebuild the string.
+      // So we will leave the input alone unless it's obviously wrong, relying on the user to see the calc?
+      // "Make sure type in will be... no more than 3 digit" -> I will try to enforce 1st digit rule.
+
+      if (numbers[0] && numbers[0].length > 1) {
+        // Remove extra digits from first group
+        // Replace first occurrence of numbers[0] with its first digit
+        input.value = input.value.replace(
+          numbers[0],
+          numbers[0].substring(0, 1)
+        );
+      }
+      // Re-evaluate numbers after potential fix
+      const newNumbers = input.value.match(/\d+/g);
+      if (newNumbers && newNumbers.length > 1 && newNumbers[1].length > 2) {
+        input.value = input.value.replace(
+          newNumbers[1],
+          newNumbers[1].substring(0, 2)
+        );
+      }
     }
   }
 </script>
