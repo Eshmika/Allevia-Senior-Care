@@ -3872,91 +3872,77 @@
   }
 
   function convertHeight(input) {
+    // 1. Enforce allowed characters: digits, -, ', "
+    // We allow typing but will aggressively trim invalid formatting
     let val = input.value;
 
-    // Convert to meters logic
-    const numbers = val.match(/\d+/g);
+    // Remove any characters that are NOT digits, -, ', or "
+    val = val.replace(/[^0-9\-\'\"]/g, "");
+
+    // Split into feet and inches based on separators
+    // valid separators are -, ', "
+    let parts = val.split(/[\-\'\"]/);
+
+    // Part 0 is feet
+    let feetStr = parts[0] || "";
+    // If feet is more than 1 digit, take only the first digit
+    if (feetStr.length > 1) {
+      // If we have "51", is it 5'1" or just invalid?
+      // Assuming 1 digit constraint for feet:
+      feetStr = feetStr.substring(0, 1);
+    }
+
+    // Part 1 is inches (if exists)
+    let inchesStr = "";
+    let separator = "";
+
+    // Find which separator was used (if any)
+    const sepMatch = input.value.match(/[\-\'\"]/);
+    if (sepMatch) {
+      separator = sepMatch[0];
+      if (parts.length > 1) {
+        inchesStr = parts[1];
+      }
+    } else {
+      // If no separator, but we have feet, we don't assume inches unless user typed separator
+      // Exception: if user just pasted "511", this logic might break, but
+      // with "oninput", they type one by one.
+      // We do NOT support "511" as "5'11"" implicitly because it's ambiguous (5'1" or 5'11").
+    }
+
+    // Enforce max 2 digits for inches
+    if (inchesStr.length > 2) {
+      inchesStr = inchesStr.substring(0, 2);
+    }
+
+    // Reconstruct valid value
+    let newVal = feetStr;
+    if (separator) {
+      newVal += separator + inchesStr;
+    }
+
+    // Update input value if it changed (to enforce masks)
+    if (input.value !== newVal) {
+      input.value = newVal;
+    }
+
+    // 2. Calculate Meters
     let metersDisplay = "-- m";
+    const feet = parseInt(feetStr);
+    const inches = inchesStr ? parseInt(inchesStr) : 0;
 
-    if (numbers && numbers.length > 0) {
-      let feet = parseInt(numbers[0]);
-      let inches = 0;
+    if (!isNaN(feet)) {
+      const totalInches = feet * 12 + inches; // inches defaults to 0 if empty
+      const meters = totalInches * 0.0254;
 
-      // Enforce 1 digit for feet
-      if (numbers[0].length > 1) {
-        // If user typed more than 1 digit for feet, we might want to trim it?
-        // But regex match creates array. We can't easily modify the input value in place perfectly without cursor jumping.
-        // However, let's just use the first digit for calculation if valid.
-        // Or strictly, let's try to gently correct the input or just valid calculation.
-        // Given "no more than 3digit one digit in front", let's relax editing the input directly to avoid bad UX
-        // unless we are sure. A simple prompt requirement usually implies validation logic.
-        // Let's implement logic that prevents adding more digits if possible, or just calculates correctly.
-
-        // Let's rely on calculation using valid parts:
-        feet = parseInt(numbers[0].substring(0, 1));
-      }
-
-      if (numbers.length > 1) {
-        // Enforce max 2 digits for inches
-        let inchStr = numbers[1];
-        if (inchStr.length > 2) {
-          inchStr = inchStr.substring(0, 2);
-        }
-        inches = parseInt(inchStr);
-      }
-
-      if (!isNaN(feet)) {
-        const totalInches = feet * 12 + inches;
-        const meters = totalInches * 0.0254;
-
-        const mPart = Math.floor(meters);
-        const cmPart = Math.round((meters - mPart) * 100);
-
-        metersDisplay = `${mPart}m${cmPart.toString().padStart(2, "0")}`;
-      }
+      // Format: XmYY
+      // e.g. 1.78m -> 1m78
+      const mPart = Math.floor(meters);
+      const cmPart = Math.round((meters - mPart) * 100);
+      metersDisplay = `${mPart}m${cmPart.toString().padStart(2, "0")}`;
     }
 
     const displaySpan = document.getElementById("as-height-m");
     if (displaySpan) displaySpan.textContent = metersDisplay;
-
-    // Optional: Input mask enforcement (simple version to meet "no more than 3digit" request)
-    // We replace the value if it violates the pattern significantly,
-    // but preserving separators is hard with regex replace alone.
-    // Let's just enforce the character set and length loosely for now to not break typing flow.
-    // A strict "3 digit max" rule:
-    const digitsOnly = val.replace(/\D/g, "");
-    if (digitsOnly.length > 3) {
-      // If we have > 3 digits total, we might want to trim.
-      // But we need to know WHERE.
-      // Let's assume user types sequentially.
-      // If matches `^\d\D*\d{1,2}$` it's good.
-      // If `^\d\d` (2 digit feet) -> bad.
-      // If `^\d\D*\d{3}` (3 digit inches) -> bad.
-
-      // Smart correction:
-      let potentialFeet = numbers[0] ? numbers[0].substring(0, 1) : "";
-      let potentialInches = numbers[1] ? numbers[1].substring(0, 2) : "";
-
-      // We can't easily reconstruct the *exact* separator the user used if we rebuild the string.
-      // So we will leave the input alone unless it's obviously wrong, relying on the user to see the calc?
-      // "Make sure type in will be... no more than 3 digit" -> I will try to enforce 1st digit rule.
-
-      if (numbers[0] && numbers[0].length > 1) {
-        // Remove extra digits from first group
-        // Replace first occurrence of numbers[0] with its first digit
-        input.value = input.value.replace(
-          numbers[0],
-          numbers[0].substring(0, 1)
-        );
-      }
-      // Re-evaluate numbers after potential fix
-      const newNumbers = input.value.match(/\d+/g);
-      if (newNumbers && newNumbers.length > 1 && newNumbers[1].length > 2) {
-        input.value = input.value.replace(
-          newNumbers[1],
-          newNumbers[1].substring(0, 2)
-        );
-      }
-    }
   }
 </script>
