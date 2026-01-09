@@ -837,6 +837,175 @@
         </div>
       </div>
 
+      <!-- 4. FULL ASSESSMENT SECTION -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-stethoscope text-purple-600"></i> FULL ASSESSMENT
+        </h3>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Date Requested</label
+              >
+              <input
+                type="text"
+                id="as-contactDate"
+                readonly
+                class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+              />
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Assessment Date/Time</label
+              >
+              <input
+                type="text"
+                id="as-assessmentDateTime"
+                readonly
+                class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Code Status</label
+            >
+            <select
+              name="codeStatus"
+              id="as-codeStatus"
+              class="input-field text-sm py-2"
+              onchange="updateCodeStatusColor(this)"
+            >
+              <option value="">Select...</option>
+              <option value="Full code" class="text-green-700 bg-green-50">
+                Full code
+              </option>
+              <option value="DNR" class="text-red-700 bg-red-50">DNR</option>
+              <option value="Comfort care" class="text-orange-700 bg-orange-50">
+                Comfort care
+              </option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Height (ft'in")</label
+              >
+              <div class="flex items-center gap-2">
+                <input
+                  type="text"
+                  name="height"
+                  id="as-height"
+                  placeholder="e.g. 5'10"
+                  class="input-field text-sm py-2"
+                  oninput="convertHeight(this)"
+                />
+                <span
+                  id="as-height-m"
+                  class="text-xs text-gray-400 whitespace-nowrap"
+                  >-- m</span
+                >
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs text-gray-400 uppercase mb-1"
+                >Weight (lbs)</label
+              >
+              <div class="flex items-center gap-2">
+                <input
+                  type="number"
+                  name="weight"
+                  id="as-weight"
+                  placeholder="lbs"
+                  class="input-field text-sm py-2"
+                  oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3); convertWeight(this.value)"
+                />
+                <span
+                  id="as-weight-kg"
+                  class="text-xs text-gray-400 whitespace-nowrap"
+                  >-- kg</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Mental Status</label
+            >
+            <select
+              name="mentalStatus_select"
+              id="as-mentalStatus-select"
+              class="input-field text-sm py-2"
+              onchange="toggleOtherInput(this, 'as-mental-other-container')"
+            >
+              <option value="Alert">Alert</option>
+              <option value="Alzheimer/Dementia">Alzheimer/Dementia</option>
+              <option value="Confused">Confused</option>
+              <option value="Forgetful">Forgetful</option>
+              <option value="Never oriented">Never oriented</option>
+              <option value="Combative">Combative</option>
+              <option value="Comatose">Comatose</option>
+              <option value="Agitated">Agitated</option>
+              <option value="Lethargic">Lethargic</option>
+              <option value="Stuporous">Stuporous</option>
+              <option value="Other">Other</option>
+            </select>
+            <div id="as-mental-other-container" class="mt-2 hidden">
+              <input
+                type="text"
+                name="mentalStatus_other"
+                id="as-mental-other"
+                placeholder="Please specify..."
+                class="input-field text-sm py-2"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Diagnosis</label
+            >
+            <textarea
+              name="diagnosis"
+              id="as-diagnosis"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Primary/Secondary diagnosis..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Service Needs</label
+            >
+            <textarea
+              name="serviceNeedsText"
+              id="as-serviceNeedsText"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Detailed service needs..."
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 uppercase mb-1"
+              >Goals</label
+            >
+            <textarea
+              name="goals"
+              id="as-goals"
+              rows="2"
+              class="input-field text-sm py-2"
+              placeholder="Assessment goals..."
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
       <!-- 5. PROJECT SERVICE SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
@@ -852,27 +1021,41 @@
               <label class="block text-xs text-gray-400 uppercase mb-1"
                 >Project hours per week</label
               >
-              <input
-                type="number"
-                name="projectHours"
-                id="as-projectHours"
-                class="input-field text-sm py-2"
-                placeholder="Hours"
-                oninput="calculateProjectCosts()"
-              />
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">Hrs</span>
+                </div>
+                <input
+                  type="number"
+                  name="projectHours"
+                  id="as-projectHours"
+                  class="input-field text-sm py-2 pl-12"
+                  placeholder="Hours"
+                  oninput="calculateProjectCosts()"
+                />
+              </div>
             </div>
             <div>
               <label class="block text-xs text-gray-400 uppercase mb-1"
                 >Rate per hour ($)</label
               >
-              <input
-                type="number"
-                name="hourlyRate"
-                id="as-hourlyRate"
-                class="input-field text-sm py-2"
-                placeholder="e.g. 35"
-                oninput="calculateProjectCosts()"
-              />
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="number"
+                  name="hourlyRate"
+                  id="as-hourlyRate"
+                  class="input-field text-sm py-2 pl-7"
+                  placeholder="e.g. 35"
+                  oninput="calculateProjectCosts()"
+                />
+              </div>
             </div>
             <div class="flex items-end pb-2">
               <label
@@ -1158,203 +1341,7 @@
         </div>
       </div>
 
-      <!-- 6. REFERRAL SOURCE -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
-      >
-        <h3
-          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-        >
-          <i class="ph ph-briefcase text-purple-600"></i> REFERRAL SOURCE
-        </h3>
-        <div class="space-y-6">
-          <div
-            class="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4"
-          >
-            <label
-              class="block text-xs text-purple-700 font-bold uppercase mb-1"
-              >Referral Source</label
-            >
-            <input
-              type="text"
-              id="as-referredBy"
-              readonly
-              class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. FULL ASSESSMENT SECTION -->
-      <div
-        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
-      >
-        <h3
-          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
-        >
-          <i class="ph ph-stethoscope text-purple-600"></i> FULL ASSESSMENT
-        </h3>
-        <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Date Requested</label
-              >
-              <input
-                type="text"
-                id="as-contactDate"
-                readonly
-                class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
-              />
-            </div>
-            <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Assessment Date/Time</label
-              >
-              <input
-                type="text"
-                id="as-assessmentDateTime"
-                readonly
-                class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
-              />
-            </div>
-          </div>
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Code Status</label
-            >
-            <select
-              name="codeStatus"
-              id="as-codeStatus"
-              class="input-field text-sm py-2"
-              onchange="updateCodeStatusColor(this)"
-            >
-              <option value="">Select...</option>
-              <option value="Full code" class="text-green-700 bg-green-50">
-                Full code
-              </option>
-              <option value="DNR" class="text-red-700 bg-red-50">DNR</option>
-              <option value="Comfort care" class="text-orange-700 bg-orange-50">
-                Comfort care
-              </option>
-            </select>
-          </div>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Height (ft'in")</label
-              >
-              <div class="flex items-center gap-2">
-                <input
-                  type="text"
-                  name="height"
-                  id="as-height"
-                  placeholder="e.g. 5'10"
-                  class="input-field text-sm py-2"
-                  oninput="convertHeight(this)"
-                />
-                <span
-                  id="as-height-m"
-                  class="text-xs text-gray-400 whitespace-nowrap"
-                  >-- m</span
-                >
-              </div>
-            </div>
-            <div>
-              <label class="block text-xs text-gray-400 uppercase mb-1"
-                >Weight (lbs)</label
-              >
-              <div class="flex items-center gap-2">
-                <input
-                  type="number"
-                  name="weight"
-                  id="as-weight"
-                  placeholder="lbs"
-                  class="input-field text-sm py-2"
-                  oninput="if(this.value.length > 3) this.value = this.value.slice(0, 3); convertWeight(this.value)"
-                />
-                <span
-                  id="as-weight-kg"
-                  class="text-xs text-gray-400 whitespace-nowrap"
-                  >-- kg</span
-                >
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Mental Status</label
-            >
-            <select
-              name="mentalStatus_select"
-              id="as-mentalStatus-select"
-              class="input-field text-sm py-2"
-              onchange="toggleOtherInput(this, 'as-mental-other-container')"
-            >
-              <option value="Alert">Alert</option>
-              <option value="Alzheimer/Dementia">Alzheimer/Dementia</option>
-              <option value="Confused">Confused</option>
-              <option value="Forgetful">Forgetful</option>
-              <option value="Never oriented">Never oriented</option>
-              <option value="Combative">Combative</option>
-              <option value="Comatose">Comatose</option>
-              <option value="Agitated">Agitated</option>
-              <option value="Lethargic">Lethargic</option>
-              <option value="Stuporous">Stuporous</option>
-              <option value="Other">Other</option>
-            </select>
-            <div id="as-mental-other-container" class="mt-2 hidden">
-              <input
-                type="text"
-                name="mentalStatus_other"
-                id="as-mental-other"
-                placeholder="Please specify..."
-                class="input-field text-sm py-2"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Diagnosis</label
-            >
-            <textarea
-              name="diagnosis"
-              id="as-diagnosis"
-              rows="2"
-              class="input-field text-sm py-2"
-              placeholder="Primary/Secondary diagnosis..."
-            ></textarea>
-          </div>
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Service Needs</label
-            >
-            <textarea
-              name="serviceNeedsText"
-              id="as-serviceNeedsText"
-              rows="2"
-              class="input-field text-sm py-2"
-              placeholder="Detailed service needs..."
-            ></textarea>
-          </div>
-          <div>
-            <label class="block text-xs text-gray-400 uppercase mb-1"
-              >Goals</label
-            >
-            <textarea
-              name="goals"
-              id="as-goals"
-              rows="2"
-              class="input-field text-sm py-2"
-              placeholder="Assessment goals..."
-            ></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- 9. GENERAL INFORMATION SECTION -->
+      <!-- 6. GENERAL INFORMATION SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
       >
@@ -1536,7 +1523,7 @@
         </div>
       </div>
 
-      <!-- 10. MEDICAL HISTORY SECTION -->
+      <!-- 7. MEDICAL HISTORY SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-1"
       >
@@ -1742,7 +1729,7 @@
         </div>
       </div>
 
-      <!-- 11. MOBILITY SECTION -->
+      <!-- 8. MOBILITY SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -1832,7 +1819,7 @@
         </div>
       </div>
 
-      <!-- 12. DAILY LIVING SKILLS SECTION -->
+      <!-- 9. DAILY LIVING SKILLS SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2155,7 +2142,7 @@
         </div>
       </div>
 
-      <!-- 13. DIETARY INFORMATION SECTION -->
+      <!-- 10. DIETARY INFORMATION SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2289,7 +2276,7 @@
         </div>
       </div>
 
-      <!-- 14. LIVING ARRANGEMENT SECTION -->
+      <!-- 11. LIVING ARRANGEMENT SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2474,7 +2461,7 @@
         </div>
       </div>
 
-      <!-- 15. MEDICATION SECTION -->
+      <!-- 12. MEDICATION SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2611,7 +2598,7 @@
         </div>
       </div>
 
-      <!-- 16. VACCINATION SECTION -->
+      <!-- 13. VACCINATION SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2673,7 +2660,7 @@
         </div>
       </div>
 
-      <!-- 17. DOCTORS SECTION -->
+      <!-- 14. DOCTORS SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2741,7 +2728,7 @@
         </div>
       </div>
 
-      <!-- 18. HOSPITAL SECTION -->
+      <!-- 15. HOSPITAL SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2795,7 +2782,7 @@
         </div>
       </div>
 
-      <!-- 19. PHARMACY SECTION -->
+      <!-- 16. PHARMACY SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -2849,7 +2836,7 @@
         </div>
       </div>
 
-      <!-- 20. CARE MATCHING SECTION -->
+      <!-- 17. CARE MATCHING SECTION -->
       <div
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
       >
@@ -3810,6 +3797,33 @@
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18. REFERRAL SOURCE -->
+      <div
+        class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 md:col-span-2"
+      >
+        <h3
+          class="font-bold text-gray-800 border-b pb-3 mb-4 flex items-center gap-2"
+        >
+          <i class="ph ph-briefcase text-purple-600"></i> REFERRAL SOURCE
+        </h3>
+        <div class="space-y-6">
+          <div
+            class="p-3 bg-purple-50 rounded-lg border border-purple-100 mb-4"
+          >
+            <label
+              class="block text-xs text-purple-700 font-bold uppercase mb-1"
+              >Referral Source</label
+            >
+            <input
+              type="text"
+              id="as-referredBy"
+              readonly
+              class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+            />
           </div>
         </div>
       </div>
