@@ -2489,6 +2489,7 @@
                 name="smoke"
                 id="as-smoke"
                 class="input-field text-sm py-2"
+                onchange="syncSmokeToCareMatching()"
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
@@ -3133,7 +3134,8 @@
                 <select
                   name="careSmoking"
                   id="as-careSmoking"
-                  class="input-field text-sm py-2 bg-gray-50"
+                  class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+                  disabled
                 >
                   <option value="No">No</option>
                   <option value="Yes">Yes</option>
@@ -4046,6 +4048,15 @@
     const carePetsNote = document.getElementById("as-carePetsNote");
     if (petsNote && carePetsNote) {
       carePetsNote.value = petsNote.value;
+    }
+  }
+
+  function syncSmokeToCareMatching() {
+    const smokeSelect = document.getElementById("as-smoke");
+    const careSmokingSelect = document.getElementById("as-careSmoking");
+
+    if (smokeSelect && careSmokingSelect) {
+      careSmokingSelect.value = smokeSelect.value;
     }
   }
 </script>
