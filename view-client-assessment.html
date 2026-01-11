@@ -2403,7 +2403,7 @@
           <!-- Pets, Smoke, Drink Group -->
           <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Pets -->
-            <div>
+            <div class="col-span-1">
               <label class="block text-xs text-gray-400 uppercase mb-1"
                 >Pets</label
               >
@@ -2411,18 +2411,71 @@
                 name="pets"
                 id="as-pets"
                 class="input-field text-sm py-2"
-                onchange="toggleDetailInput(this, 'as-pets-detail', 'Yes')"
+                onchange="toggleDetailInput(this, 'as-pets-detail', 'Yes'); syncPetsToCareMatching()"
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
               </select>
               <div id="as-pets-detail" class="mt-2 hidden">
+                <div class="flex flex-wrap gap-2 mb-2">
+                  <label class="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name="petsList"
+                      value="Dogs"
+                      class="rounded text-purple-600"
+                      onchange="syncPetsToCareMatching()"
+                    />
+                    Dogs
+                  </label>
+                  <label class="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name="petsList"
+                      value="Cats"
+                      class="rounded text-purple-600"
+                      onchange="syncPetsToCareMatching()"
+                    />
+                    Cats
+                  </label>
+                  <label class="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name="petsList"
+                      value="Birds"
+                      class="rounded text-purple-600"
+                      onchange="syncPetsToCareMatching()"
+                    />
+                    Birds
+                  </label>
+                  <label class="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name="petsList"
+                      value="Fish"
+                      class="rounded text-purple-600"
+                      onchange="syncPetsToCareMatching()"
+                    />
+                    Fish
+                  </label>
+                  <label class="flex items-center gap-2 text-xs text-gray-600">
+                    <input
+                      type="checkbox"
+                      name="petsList"
+                      value="Other"
+                      class="rounded text-purple-600"
+                      onchange="syncPetsToCareMatching()"
+                    />
+                    Other
+                  </label>
+                </div>
                 <input
                   type="text"
-                  name="petType"
-                  id="as-petType"
-                  placeholder="Which animal?"
+                  name="petsNote"
+                  id="as-petsNote"
                   class="input-field text-sm py-2"
+                  placeholder="Pets notes..."
+                  oninput="syncPetsToCareMatching()"
                 />
               </div>
             </div>
@@ -2995,8 +3048,8 @@
                 <select
                   name="carePets"
                   id="as-carePets"
-                  class="input-field text-sm py-2 bg-gray-50"
-                  onchange="toggleDetailInput(this, 'as-carePets-detail', 'Yes')"
+                  class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
+                  disabled
                 >
                   <option value="No">No</option>
                   <option value="Yes">Yes</option>
@@ -3009,7 +3062,8 @@
                       type="checkbox"
                       name="carePetsList"
                       value="Dogs"
-                      class="rounded text-purple-600"
+                      class="rounded text-purple-600 cursor-not-allowed"
+                      disabled
                     />
                     Dogs</label
                   >
@@ -3018,7 +3072,8 @@
                       type="checkbox"
                       name="carePetsList"
                       value="Cats"
-                      class="rounded text-purple-600"
+                      class="rounded text-purple-600 cursor-not-allowed"
+                      disabled
                     />
                     Cats</label
                   >
@@ -3027,7 +3082,8 @@
                       type="checkbox"
                       name="carePetsList"
                       value="Birds"
-                      class="rounded text-purple-600"
+                      class="rounded text-purple-600 cursor-not-allowed"
+                      disabled
                     />
                     Birds</label
                   >
@@ -3036,7 +3092,8 @@
                       type="checkbox"
                       name="carePetsList"
                       value="Fish"
-                      class="rounded text-purple-600"
+                      class="rounded text-purple-600 cursor-not-allowed"
+                      disabled
                     />
                     Fish</label
                   >
@@ -3045,7 +3102,8 @@
                       type="checkbox"
                       name="carePetsList"
                       value="Other"
-                      class="rounded text-purple-600"
+                      class="rounded text-purple-600 cursor-not-allowed"
+                      disabled
                     />
                     Other</label
                   >
@@ -3054,8 +3112,9 @@
                   type="text"
                   name="carePetsNote"
                   id="as-carePetsNote"
-                  class="input-field text-sm py-2"
+                  class="input-field text-sm py-2 bg-gray-50 text-gray-500 cursor-not-allowed"
                   placeholder="Pets notes..."
+                  disabled
                 />
               </div>
             </div>
@@ -3944,5 +4003,49 @@
 
     const displaySpan = document.getElementById("as-height-m");
     if (displaySpan) displaySpan.textContent = metersDisplay;
+  }
+
+  function syncPetsToCareMatching() {
+    // 1. Sync Dropdown
+    const petsSelect = document.getElementById("as-pets");
+    const carePetsSelect = document.getElementById("as-carePets");
+
+    if (petsSelect && carePetsSelect) {
+      carePetsSelect.value = petsSelect.value;
+
+      // Handle visibility of care pets detail
+      const carePetsDetail = document.getElementById("as-carePets-detail");
+      if (carePetsDetail) {
+        if (carePetsSelect.value === "Yes") {
+          carePetsDetail.classList.remove("hidden");
+        } else {
+          carePetsDetail.classList.add("hidden");
+        }
+      }
+    }
+
+    // 2. Sync Checkboxes
+    const sourceCheckboxes = document.querySelectorAll(
+      'input[name="petsList"]'
+    );
+    const targetCheckboxes = document.querySelectorAll(
+      'input[name="carePetsList"]'
+    );
+
+    sourceCheckboxes.forEach((sourceCb) => {
+      const targetCb = Array.from(targetCheckboxes).find(
+        (cb) => cb.value === sourceCb.value
+      );
+      if (targetCb) {
+        targetCb.checked = sourceCb.checked;
+      }
+    });
+
+    // 3. Sync Note
+    const petsNote = document.getElementById("as-petsNote");
+    const carePetsNote = document.getElementById("as-carePetsNote");
+    if (petsNote && carePetsNote) {
+      carePetsNote.value = petsNote.value;
+    }
   }
 </script>
