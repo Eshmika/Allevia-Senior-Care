@@ -1042,9 +1042,8 @@
     data.careLanguages = selectedCareLangs.join(", ");
 
     // Handle Care Covid
-    data.careCovidVaccine = document.getElementById(
-      "as-careCovidVaccine"
-    ).value;
+    const careCovidEl = document.getElementById("as-careCovidVaccine");
+    data.careCovidVaccine = careCovidEl ? careCovidEl.value : "";
 
     // Handle Care Live-in
     const dl = document.querySelector('input[name="careLiveIn"]:checked');
