@@ -1,4 +1,34 @@
 <script>
+  function togglePaymentDetailFields() {
+    const checks = document.getElementsByName("payOption");
+    const options = Array.from(checks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value.toLowerCase());
+
+    const bankSection = document.getElementById("pay-bankDetails");
+    const digitalSection = document.getElementById("pay-digitalDetails");
+    const checkSection = document.getElementById("pay-checkDetails");
+
+    const hasBank =
+      options.includes("direct deposit") || options.includes("bank deposit");
+    const hasDigital =
+      options.includes("zelle") || options.includes("apple pay");
+    const hasCheck = options.includes("check");
+
+    bankSection.classList.toggle("hidden", !hasBank);
+    digitalSection.classList.toggle("hidden", !hasDigital);
+    checkSection.classList.toggle("hidden", !hasCheck);
+  }
+
+  function togglePayDigitalInputs() {
+    const digitalType =
+      document.querySelector('input[name="payDigitalType"]:checked')?.value ||
+      "phone";
+    const label = document.getElementById("pay-digitalValueLabel");
+    label.textContent =
+      digitalType === "phone" ? "Phone Number" : "Email Address";
+  }
+
   function openPaymentForm(clientId) {
     toggleClientStageView("payment-form");
     document.getElementById("paymentDetailsForm").reset();
@@ -22,6 +52,34 @@
         checks.forEach((cb) => {
           cb.checked = options.includes(cb.value.toLowerCase());
         });
+
+        // Fill Bank Details
+        document.getElementById("pay-bankName").value = data.payBankName || "";
+        document.getElementById("pay-holderName").value =
+          data.payHolderName || "";
+        document.getElementById("pay-accountType").value =
+          data.payAccountType || "Checking";
+        document.getElementById("pay-holderType").value =
+          data.payHolderType || "Personal";
+        document.getElementById("pay-accountNum").value =
+          data.payAccountNum || "";
+        document.getElementById("pay-routingNum").value =
+          data.payRoutingNum || "";
+
+        // Fill Digital Details
+        document.getElementById("pay-digitalFullName").value =
+          data.payDigitalFullName || "";
+        if (data.payDigitalType) {
+          const typeRadios = document.getElementsByName("payDigitalType");
+          typeRadios.forEach((radio) => {
+            radio.checked = radio.value === data.payDigitalType;
+          });
+        }
+        document.getElementById("pay-digitalValue").value =
+          data.payDigitalValue || "";
+
+        togglePaymentDetailFields();
+        togglePayDigitalInputs();
       })
       .getClientDetails(clientId);
   }
@@ -43,10 +101,48 @@
 
     const clientId = document.getElementById("pay-id").value;
 
+    // Validation for Bank Details
+    const checks = document.getElementsByName("payOption");
+    const options = Array.from(checks)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value.toLowerCase());
+
+    if (
+      options.includes("direct deposit") ||
+      options.includes("bank deposit")
+    ) {
+      const acc = document.getElementById("pay-accountNum").value;
+      const accConf = document.getElementById("pay-accountNumConfirm").value;
+      const rout = document.getElementById("pay-routingNum").value;
+      const routConf = document.getElementById("pay-routingNumConfirm").value;
+
+      if (acc !== accConf) {
+        Swal.fire("Error", "Account Numbers do not match.", "error");
+        btn.disabled = false;
+        btn.textContent = "Save Payment Details";
+        return;
+      }
+      if (rout !== routConf) {
+        Swal.fire("Error", "Routing Numbers do not match.", "error");
+        btn.disabled = false;
+        btn.textContent = "Save Payment Details";
+        return;
+      }
+    }
+
     const data = {
       id: clientId,
       paymentType: paymentType,
       paymentOptions: paymentOptions,
+      payBankName: formData.get("payBankName"),
+      payHolderName: formData.get("payHolderName"),
+      payAccountType: formData.get("payAccountType"),
+      payHolderType: formData.get("payHolderType"),
+      payAccountNum: formData.get("payAccountNum"),
+      payRoutingNum: formData.get("payRoutingNum"),
+      payDigitalFullName: formData.get("payDigitalFullName"),
+      payDigitalType: formData.get("payDigitalType"),
+      payDigitalValue: formData.get("payDigitalValue"),
     };
 
     google.script.run

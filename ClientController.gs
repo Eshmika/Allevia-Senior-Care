@@ -54,6 +54,15 @@ function getOrCreateClientSheet() {
     "Care Accommodation",
     "Payment Type",
     "Payment Options",
+    "Pay Bank Name",
+    "Pay Holder Name",
+    "Pay Account Type",
+    "Pay Holder Type",
+    "Pay Account Number",
+    "Pay Routing Number",
+    "Pay Digital Full Name",
+    "Pay Digital Type",
+    "Pay Digital Value",
   ];
 
   if (!sheet) {
@@ -319,6 +328,15 @@ function handleClientSubmission(data) {
     data.careAccommodation || "",
     data.paymentType || "",
     data.paymentOptions || "",
+    data.payBankName || "",
+    data.payHolderName || "",
+    data.payAccountType || "",
+    data.payHolderType || "",
+    data.payAccountNum || "",
+    data.payRoutingNum || "",
+    data.payDigitalFullName || "",
+    data.payDigitalType || "",
+    data.payDigitalValue || "",
   ];
 
   sheet.appendRow(rowData);
@@ -591,6 +609,15 @@ function getClientDetails(id) {
     careAccommodation: row[131] || "",
     paymentType: row[132] || "",
     paymentOptions: row[133] || "",
+    payBankName: row[134] || "",
+    payHolderName: row[135] || "",
+    payAccountType: row[136] || "",
+    payHolderType: row[137] || "",
+    payAccountNum: row[138] || "",
+    payRoutingNum: row[139] || "",
+    payDigitalFullName: row[140] || "",
+    payDigitalType: row[141] || "",
+    payDigitalValue: row[142] || "",
   };
 }
 
@@ -759,6 +786,15 @@ function updateClient(data) {
     data.careAccommodation || "",
     data.paymentType || "",
     data.paymentOptions || "",
+    data.payBankName || "",
+    data.payHolderName || "",
+    data.payAccountType || "",
+    data.payHolderType || "",
+    data.payAccountNum || "",
+    data.payRoutingNum || "",
+    data.payDigitalFullName || "",
+    data.payDigitalType || "",
+    data.payDigitalValue || "",
   ];
 
   sheet

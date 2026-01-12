@@ -55,6 +55,7 @@
               name="payOption"
               value="cash"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Cash
           </label>
@@ -66,6 +67,7 @@
               name="payOption"
               value="check"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Check
           </label>
@@ -77,6 +79,7 @@
               name="payOption"
               value="zelle"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Zelle
           </label>
@@ -88,6 +91,7 @@
               name="payOption"
               value="direct deposit"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Direct Deposit
           </label>
@@ -99,6 +103,7 @@
               name="payOption"
               value="apple pay"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Apple Pay
           </label>
@@ -110,6 +115,7 @@
               name="payOption"
               value="bank deposit"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Bank Deposit
           </label>
@@ -121,9 +127,195 @@
               name="payOption"
               value="credit/debit card"
               class="rounded text-blue-600"
+              onchange="togglePaymentDetailFields()"
             />
             Credit/Debit Card
           </label>
+        </div>
+      </div>
+
+      <!-- Bank Details Section -->
+      <div
+        id="pay-bankDetails"
+        class="hidden space-y-4 border-t border-gray-100 pt-6"
+      >
+        <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <i class="ph ph-bank text-blue-600"></i> Bank Information
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Bank Name</label
+            >
+            <input
+              type="text"
+              name="payBankName"
+              id="pay-bankName"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Full Account Holder Name</label
+            >
+            <input
+              type="text"
+              name="payHolderName"
+              id="pay-holderName"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Account Type</label
+            >
+            <select
+              name="payAccountType"
+              id="pay-accountType"
+              class="input-field text-sm py-2"
+            >
+              <option value="Checking">Checking</option>
+              <option value="Savings">Savings</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Holder Type</label
+            >
+            <select
+              name="payHolderType"
+              id="pay-holderType"
+              class="input-field text-sm py-2"
+            >
+              <option value="Personal">Personal</option>
+              <option value="Business">Business</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Account Number</label
+            >
+            <input
+              type="password"
+              name="payAccountNum"
+              id="pay-accountNum"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Confirm Account Number</label
+            >
+            <input
+              type="text"
+              id="pay-accountNumConfirm"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Routing Number</label
+            >
+            <input
+              type="password"
+              name="payRoutingNum"
+              id="pay-routingNum"
+              class="input-field text-sm py-2"
+              maxlength="9"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Confirm Routing Number</label
+            >
+            <input
+              type="text"
+              id="pay-routingNumConfirm"
+              class="input-field text-sm py-2"
+              maxlength="9"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Digital Details Section (Zelle/Apple Pay) -->
+      <div
+        id="pay-digitalDetails"
+        class="hidden space-y-4 border-t border-gray-100 pt-6"
+      >
+        <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <i class="ph ph-device-mobile text-blue-600"></i> Digital Details
+          (Zelle/Apple Pay)
+        </h3>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase"
+              >Full Name</label
+            >
+            <input
+              type="text"
+              name="payDigitalFullName"
+              id="pay-digitalFullName"
+              class="input-field text-sm py-2"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] text-gray-400 uppercase mb-1"
+              >Link Account With</label
+            >
+            <div class="flex gap-4">
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="payDigitalType"
+                  value="phone"
+                  checked
+                  onchange="togglePayDigitalInputs()"
+                />
+                Phone Number
+              </label>
+              <label
+                class="flex items-center gap-2 text-xs text-gray-600 cursor-pointer"
+              >
+                <input
+                  type="radio"
+                  name="payDigitalType"
+                  value="email"
+                  onchange="togglePayDigitalInputs()"
+                />
+                Email Address
+              </label>
+            </div>
+          </div>
+          <div id="pay-digitalValueContainer">
+            <label
+              id="pay-digitalValueLabel"
+              class="block text-[10px] text-gray-400 uppercase"
+              >Phone Number</label
+            >
+            <input
+              type="text"
+              name="payDigitalValue"
+              id="pay-digitalValue"
+              class="input-field text-sm py-2"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Check Details Section -->
+      <div
+        id="pay-checkDetails"
+        class="hidden space-y-4 border-t border-gray-100 pt-6"
+      >
+        <h3 class="text-sm font-bold text-gray-800 flex items-center gap-2">
+          <i class="ph ph-file-text text-blue-600"></i> Check Payment Info
+        </h3>
+        <div class="bg-blue-50 p-3 rounded-lg text-blue-800 text-[10px]">
+          Please ensure all check payments are mailed to the official business
+          address. Details for mailing will be sent separately.
         </div>
       </div>
 
