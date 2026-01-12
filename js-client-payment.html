@@ -45,12 +45,10 @@
         }
 
         // Check payment options
-        const options = (data.paymentOptions || "")
-          .split(",")
-          .map((s) => s.trim().toLowerCase());
-        const checks = document.getElementsByName("payOption");
-        checks.forEach((cb) => {
-          cb.checked = options.includes(cb.value.toLowerCase());
+        const selectedOption = (data.paymentOptions || "").trim().toLowerCase();
+        const radios = document.getElementsByName("payOption");
+        radios.forEach((rb) => {
+          rb.checked = rb.value.toLowerCase() === selectedOption;
         });
 
         // Fill Bank Details
@@ -94,22 +92,19 @@
     const formData = new FormData(form);
 
     const paymentType = formData.get("paymentType");
-    const paymentOptions = Array.from(document.getElementsByName("payOption"))
-      .filter((cb) => cb.checked)
-      .map((cb) => cb.value)
-      .join(", ");
+    const selectedRadio = Array.from(
+      document.getElementsByName("payOption")
+    ).find((rb) => rb.checked);
+    const paymentOptions = selectedRadio ? selectedRadio.value : "";
 
     const clientId = document.getElementById("pay-id").value;
 
     // Validation for Bank Details
-    const checks = document.getElementsByName("payOption");
-    const options = Array.from(checks)
-      .filter((cb) => cb.checked)
-      .map((cb) => cb.value.toLowerCase());
+    const selectedOption = paymentOptions.toLowerCase();
 
     if (
-      options.includes("direct deposit") ||
-      options.includes("bank deposit")
+      selectedOption === "direct deposit" ||
+      selectedOption === "bank deposit"
     ) {
       const acc = document.getElementById("pay-accountNum").value;
       const accConf = document.getElementById("pay-accountNumConfirm").value;
