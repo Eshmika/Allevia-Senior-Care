@@ -56,28 +56,6 @@
       digitalType === "phone" ? "Phone Number" : "Email Address";
   }
 
-  function toggleBusinessNameField() {
-    const holderTypeSelect = document.getElementById("pay-holderType");
-    const container = document.getElementById("pay-businessNameContainer");
-    const businessInput = document.getElementById("pay-businessName");
-
-    if (!holderTypeSelect || !container) return;
-
-    const isBusiness = holderTypeSelect.value === "Business";
-    if (isBusiness) {
-      container.classList.remove("hidden");
-      container.style.display = "block";
-      if (businessInput) businessInput.required = true;
-    } else {
-      container.classList.add("hidden");
-      container.style.display = "none";
-      if (businessInput) {
-        businessInput.required = false;
-        businessInput.value = "";
-      }
-    }
-  }
-
   function openPaymentForm(clientId) {
     toggleClientStageView("payment-form");
     document.getElementById("paymentDetailsForm").reset();
@@ -163,9 +141,7 @@
         document.getElementById("pay-insuranceAddNote").value =
           data.insuranceAddNote || "";
 
-        togglePaymentDetailFields();
-        togglePayDigitalInputs();
-        toggleBusinessNameField();
+        togglePaymentDetailFields();              
       })
       .getClientDetails(clientId);
   }
