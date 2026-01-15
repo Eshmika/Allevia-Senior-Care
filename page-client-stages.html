@@ -245,6 +245,82 @@
           </div>
         </div>
       </div>
+
+      <!-- Stage: Archives -->
+      <div class="mt-12 pt-6 border-t border-dashed border-gray-300">
+        <div
+          class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl shadow-sm border border-gray-200 overflow-hidden"
+        >
+          <button
+            onclick="toggleClientStage('stage-archives')"
+            class="w-full flex items-center justify-between p-5 hover:bg-gray-200/50 transition-all group"
+          >
+            <div class="flex items-center gap-4">
+              <div
+                class="w-10 h-10 rounded-xl bg-gray-600 text-white flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
+              >
+                <i class="ph-bold ph-archive-box text-xl"></i>
+              </div>
+              <div class="text-left">
+                <span
+                  class="block font-black text-gray-700 uppercase tracking-wider text-xs"
+                  >Pipeline History</span
+                >
+                <span class="text-xl font-bold text-gray-900"
+                  >Archived Clients</span
+                >
+              </div>
+              <span
+                id="count-stage-archives"
+                class="ml-2 bg-gray-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-inner"
+                >0</span
+              >
+            </div>
+            <div class="flex items-center gap-3">
+              <span
+                class="text-xs font-semibold text-gray-400 group-hover:text-gray-600 transition-colors"
+                >Click to view archived records</span
+              >
+              <i
+                id="icon-stage-archives"
+                class="ph-bold ph-caret-down text-gray-400 transition-transform group-hover:text-gray-700"
+              ></i>
+            </div>
+          </button>
+          <div
+            id="content-stage-archives"
+            class="hidden border-t border-gray-200 bg-white/50 backdrop-blur-sm"
+          >
+            <div class="p-6">
+              <table class="w-full text-left text-sm">
+                <thead class="text-gray-400 border-b border-gray-100">
+                  <tr>
+                    <th
+                      class="pb-3 font-bold uppercase text-[10px] tracking-widest"
+                    >
+                      Client Name & ID
+                    </th>
+                    <th
+                      class="pb-3 font-bold uppercase text-[10px] tracking-widest"
+                    >
+                      Reason / Status
+                    </th>
+                    <th
+                      class="pb-3 font-bold uppercase text-[10px] tracking-widest text-right"
+                    >
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody
+                  id="list-stage-archives"
+                  class="divide-y divide-gray-50"
+                ></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

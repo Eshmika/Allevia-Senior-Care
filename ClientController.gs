@@ -987,3 +987,48 @@ function restoreClientFromArchive(clientId) {
 
   return { success: true, message: "Client restored from archive." };
 }
+
+function archiveClient(clientId, reason) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = headers.indexOf("Status");
+  const stageIdx = headers.indexOf("Stage");
+  const noteIdx = headers.indexOf("Insurance Add Note");
+
+  if (statusIdx === -1)
+    return { success: false, message: "Status column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  // Update status and stage to Archived
+  sheet.getRange(rowIndex + 2, statusIdx + 1).setValue("Archived");
+  if (stageIdx > -1) {
+    sheet.getRange(rowIndex + 2, stageIdx + 1).setValue("Archived");
+  }
+
+  // Add archive reason to notes
+  if (noteIdx > -1 && reason) {
+    const existing = sheet.getRange(rowIndex + 2, noteIdx + 1).getValue();
+    const entry = `[ARCHIVED] ${reason}`;
+    sheet
+      .getRange(rowIndex + 2, noteIdx + 1)
+      .setValue(existing ? `${existing}\n${entry}` : entry);
+  }
+
+  // Update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true, message: "Client has been moved to Archives." };
+}

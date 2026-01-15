@@ -26,6 +26,7 @@
       "Insurance Verification": document.getElementById("list-stage-insurance"),
       "Client Agreements": document.getElementById("list-stage-agreements"),
       "Convert Clients": document.getElementById("list-stage-converted"),
+      Archived: document.getElementById("list-stage-archives"),
     };
 
     const counts = {
@@ -34,6 +35,7 @@
       "Insurance Verification": 0,
       "Client Agreements": 0,
       "Convert Clients": 0,
+      Archived: 0,
     };
 
     // Clear existing content
@@ -131,6 +133,14 @@
                     </div>
                 `;
           }
+        } else if (stage === "Archived") {
+          actionHtml = `
+                    <div class="flex items-center justify-end gap-2">
+                        <button onclick="undoArchiveClient('${client.id}')" class="flex items-center gap-2 px-3 py-1.5 bg-white text-gray-700 rounded-lg text-xs font-bold hover:bg-blue-50 hover:text-blue-600 transition-all border border-gray-200 shadow-sm">
+                            <i class="ph-bold ph-arrow-u-up-left"></i> Restore Client
+                        </button>
+                    </div>
+                `;
         }
 
         row.innerHTML = `
@@ -160,6 +170,8 @@
       counts["Client Agreements"];
     document.getElementById("count-stage-converted").textContent =
       counts["Convert Clients"];
+    document.getElementById("count-stage-archives").textContent =
+      counts["Archived"];
   }
 
   function passClient(clientId) {
@@ -200,13 +212,17 @@
         google.script.run
           .withSuccessHandler((res) => {
             if (res.success) {
-              Swal.fire("Failed", "Lead has been marked as failed.", "success");
+              Swal.fire(
+                "Archived",
+                "Lead has been moved to archives.",
+                "success"
+              );
               loadClientStages();
             } else {
               Swal.fire("Error", res.message, "error");
             }
           })
-          .updateClientStatus(clientId, "Cancelled service");
+          .archiveClient(clientId, "Lead generation failed");
       }
     });
   }
@@ -262,8 +278,8 @@
           .withSuccessHandler((res) => {
             if (res.success) {
               Swal.fire(
-                "Failed",
-                "Assessment has been marked as failed.",
+                "Archived",
+                "Assessment has been moved to archives.",
                 "success"
               );
               loadClientStages();
@@ -271,7 +287,7 @@
               Swal.fire("Error", res.message, "error");
             }
           })
-          .updateClientStatus(clientId, "Cancelled service");
+          .archiveClient(clientId, "Assessment failed");
       }
     });
   }
