@@ -143,9 +143,7 @@
                 `;
         }
 
-        const statusHtml =
-          stage === "Archived"
-            ? `
+        const statusHtml = `
                     <div class="flex flex-col gap-1">
                         <span class="inline-block w-fit px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600">${
                           client.status
@@ -156,8 +154,7 @@
                             : ""
                         }
                     </div>
-                `
-            : `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600">${client.status}</span>`;
+                `;
 
         row.innerHTML = `
                     <td class="py-2">

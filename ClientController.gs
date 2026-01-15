@@ -888,8 +888,8 @@ function updateClientInsurancePending(clientId, reason, note) {
   sheet.getRange(rowIndex + 2, statusIdx + 1).setValue(statusValue);
 
   // Update note if exists
-  if (noteIdx > -1 && note) {
-    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(note);
+  if (noteIdx > -1) {
+    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(note || "");
   }
 
   // Update Last Reviewed
@@ -930,14 +930,10 @@ function updateClientInsuranceDenied(clientId, reason, note) {
     sheet.getRange(rowIndex + 2, stageIdx + 1).setValue("Archived");
   }
 
-  // Update note with denial reason
+  // Update note with denial reason (overwrite as requested)
   if (noteIdx > -1) {
-    const existingNote = sheet.getRange(rowIndex + 2, noteIdx + 1).getValue();
     const denialEntry = `[DENIED - ${reason}] ${note}`;
-    const combinedNote = existingNote
-      ? `${existingNote}\n${denialEntry}`
-      : denialEntry;
-    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(combinedNote);
+    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(denialEntry);
   }
 
   // Update Last Reviewed
@@ -1018,13 +1014,10 @@ function archiveClient(clientId, reason) {
     sheet.getRange(rowIndex + 2, stageIdx + 1).setValue("Archived");
   }
 
-  // Add archive reason to notes
+  // Add archive reason to notes (overwrite as requested)
   if (noteIdx > -1 && reason) {
-    const existing = sheet.getRange(rowIndex + 2, noteIdx + 1).getValue();
     const entry = `[ARCHIVED] ${reason}`;
-    sheet
-      .getRange(rowIndex + 2, noteIdx + 1)
-      .setValue(existing ? `${existing}\n${entry}` : entry);
+    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(entry);
   }
 
   // Update Last Reviewed
