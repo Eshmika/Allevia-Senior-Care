@@ -4,16 +4,16 @@
     const assessmentForm = document.getElementById("client-assessment-view");
     const paymentForm = document.getElementById("client-payment-view");
 
-    main.classList.add("hidden");
-    assessmentForm.classList.add("hidden");
-    paymentForm.classList.add("hidden");
+    if (main) main.classList.add("hidden");
+    if (assessmentForm) assessmentForm.classList.add("hidden");
+    if (paymentForm) paymentForm.classList.add("hidden");
 
     if (view === "form") {
-      assessmentForm.classList.remove("hidden");
+      if (assessmentForm) assessmentForm.classList.remove("hidden");
     } else if (view === "payment-form") {
-      paymentForm.classList.remove("hidden");
+      if (paymentForm) paymentForm.classList.remove("hidden");
     } else {
-      main.classList.remove("hidden");
+      if (main) main.classList.remove("hidden");
     }
   }
 
