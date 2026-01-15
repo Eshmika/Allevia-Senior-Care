@@ -859,3 +859,131 @@ function updateClient(data) {
 
   return { success: true, message: "Client updated successfully!" };
 }
+
+function updateClientInsurancePending(clientId, reason, note) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = headers.indexOf("Status");
+  const noteIdx = headers.indexOf("Insurance Add Note");
+
+  if (statusIdx === -1)
+    return { success: false, message: "Status column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  // Update status with pending info
+  const statusValue = `Pending - ${reason}`;
+  sheet.getRange(rowIndex + 2, statusIdx + 1).setValue(statusValue);
+
+  // Update note if exists
+  if (noteIdx > -1 && note) {
+    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(note);
+  }
+
+  // Update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true, message: `Client marked as Pending - ${reason}.` };
+}
+
+function updateClientInsuranceDenied(clientId, reason, note) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = headers.indexOf("Status");
+  const noteIdx = headers.indexOf("Insurance Add Note");
+  const stageIdx = headers.indexOf("Stage");
+
+  if (statusIdx === -1)
+    return { success: false, message: "Status column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  // Update status to Archived
+  sheet.getRange(rowIndex + 2, statusIdx + 1).setValue("Archived");
+
+  // Update stage to Archived
+  if (stageIdx > -1) {
+    sheet.getRange(rowIndex + 2, stageIdx + 1).setValue("Archived");
+  }
+
+  // Update note with denial reason
+  if (noteIdx > -1) {
+    const existingNote = sheet.getRange(rowIndex + 2, noteIdx + 1).getValue();
+    const denialEntry = `[DENIED - ${reason}] ${note}`;
+    const combinedNote = existingNote
+      ? `${existingNote}\n${denialEntry}`
+      : denialEntry;
+    sheet.getRange(rowIndex + 2, noteIdx + 1).setValue(combinedNote);
+  }
+
+  // Update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return {
+    success: true,
+    message: `Client archived with denial reason: ${reason}.`,
+  };
+}
+
+function restoreClientFromArchive(clientId) {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = headers.indexOf("Status");
+  const stageIdx = headers.indexOf("Stage");
+
+  if (statusIdx === -1)
+    return { success: false, message: "Status column not found." };
+
+  const ids = sheet
+    .getRange(2, 1, lastRow - 1, 1)
+    .getValues()
+    .flat();
+  const rowIndex = ids.indexOf(clientId);
+
+  if (rowIndex === -1) return { success: false, message: "Client not found." };
+
+  // Restore status to Active
+  sheet.getRange(rowIndex + 2, statusIdx + 1).setValue("Active");
+
+  // Restore stage to Insurance Verification
+  if (stageIdx > -1) {
+    sheet
+      .getRange(rowIndex + 2, stageIdx + 1)
+      .setValue("Insurance Verification");
+  }
+
+  // Update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true, message: "Client restored from archive." };
+}
