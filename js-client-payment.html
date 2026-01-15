@@ -134,6 +134,8 @@
           data.insuranceContactPhone || "";
         document.getElementById("pay-insuranceCase").value =
           data.insuranceCase || "";
+        document.getElementById("pay-insuranceClaim").value =
+          data.insuranceClaim || "";
         document.getElementById("pay-insuranceAddNote").value =
           data.insuranceAddNote || "";
 
@@ -218,6 +220,7 @@
       insuranceContactName: formData.get("insuranceContactName"),
       insuranceContactPhone: formData.get("insuranceContactPhone"),
       insuranceCase: formData.get("insuranceCase"),
+      insuranceClaim: formData.get("insuranceClaim"),
       insuranceAddNote: formData.get("insuranceAddNote"),
     };
 

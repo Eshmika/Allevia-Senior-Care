@@ -74,6 +74,7 @@ function getOrCreateClientSheet() {
     "Insurance Member Id",
     "Insurance Contact Phone",
     "Insurance Case",
+    "Insurance Claim",
     "Insurance Add Note",
   ];
 
@@ -360,6 +361,7 @@ function handleClientSubmission(data) {
     data.insuranceMemberId || "",
     data.insuranceContactPhone || "",
     data.insuranceCase || "",
+    data.insuranceClaim || "",
     data.insuranceAddNote || "",
   ];
 
@@ -653,7 +655,8 @@ function getClientDetails(id) {
     insuranceMemberId: row[151] || "",
     insuranceContactPhone: row[152] || "",
     insuranceCase: row[153] || "",
-    insuranceAddNote: row[154] || "",
+    insuranceClaim: row[154] || "",
+    insuranceAddNote: row[155] || "",
   };
 }
 
@@ -842,6 +845,7 @@ function updateClient(data) {
     data.insuranceMemberId || "",
     data.insuranceContactPhone || "",
     data.insuranceCase || "",
+    data.insuranceClaim || "",
     data.insuranceAddNote || "",
   ];
 
