@@ -972,7 +972,7 @@ function updateClientInsuranceDenied(clientId, reason, note) {
   };
 }
 
-function restoreClientFromArchive(clientId) {
+function restoreClientFromArchive(clientId, targetStage) {
   const sheet = getOrCreateClientSheet();
   const lastRow = sheet.getLastRow();
   if (lastRow <= 1) return { success: false, message: "No clients found." };
@@ -995,11 +995,10 @@ function restoreClientFromArchive(clientId) {
   // Restore status to Active
   sheet.getRange(rowIndex + 2, statusIdx + 1).setValue("Active");
 
-  // Restore stage to Insurance Verification
+  // Restore stage to selected stage or default to "New leads"
+  const stageToSet = targetStage || "New leads";
   if (stageIdx > -1) {
-    sheet
-      .getRange(rowIndex + 2, stageIdx + 1)
-      .setValue("Insurance Verification");
+    sheet.getRange(rowIndex + 2, stageIdx + 1).setValue(stageToSet);
   }
 
   // Update Last Reviewed
@@ -1008,7 +1007,7 @@ function restoreClientFromArchive(clientId) {
     sheet.getRange(rowIndex + 2, reviewIdx + 1).setValue(new Date());
   }
 
-  return { success: true, message: "Client restored from archive." };
+  return { success: true, message: `Client restored to ${stageToSet}.` };
 }
 
 function archiveClient(clientId, reason) {

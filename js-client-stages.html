@@ -255,7 +255,7 @@
   function failClient(clientId) {
     Swal.fire({
       title: "Fail Lead?",
-      text: "Mark this lead as failed? (Status will be set to Cancelled)",
+      text: "Mark this lead as failed? This will move the client to the Archived list.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ef4444",
@@ -321,7 +321,7 @@
   function failAssessment(clientId) {
     Swal.fire({
       title: "Fail Assessment?",
-      text: "Mark this assessment as failed? (Status will be set to Cancelled)",
+      text: "Mark this assessment as failed? This will move the client to the Archived list.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ef4444",
@@ -550,20 +550,29 @@
 
   function undoArchiveClient(clientId) {
     Swal.fire({
-      title: "Undo Archive?",
-      text: "Restore this client back to Insurance Verification stage?",
-      icon: "question",
+      title: "Restore Client",
+      text: "Select the stage to restore this client to:",
+      input: "select",
+      inputOptions: {
+        "New leads": "New leads",
+        Assessment: "Assessment",
+        "Insurance Verification": "Insurance Verification",
+        "Client Agreements": "Client Agreements",
+        "Convert Clients": "Convert Clients",
+      },
+      inputValue: "New leads",
       showCancelButton: true,
       confirmButtonColor: "#3b82f6",
       confirmButtonText: "Yes, Restore",
     }).then((result) => {
       if (result.isConfirmed) {
+        const targetStage = result.value;
         google.script.run
           .withSuccessHandler((res) => {
             if (res.success) {
               Swal.fire(
                 "Restored",
-                "Client has been restored to Insurance Verification.",
+                `Client has been restored to ${targetStage}.`,
                 "success",
               );
               loadClientStages();
@@ -571,7 +580,7 @@
               Swal.fire("Error", res.message, "error");
             }
           })
-          .restoreClientFromArchive(clientId);
+          .restoreClientFromArchive(clientId, targetStage);
       }
     });
   }
