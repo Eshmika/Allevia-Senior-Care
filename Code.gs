@@ -191,6 +191,44 @@ function doGet(e) {
         "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid Link.</h1>"
       );
     }
+  } else if (e.parameter.page === "client-intake-steps" && e.parameter.id) {
+    // Serve Client Intake Steps page
+    var clientDetails = getClientDetails(e.parameter.id);
+    if (clientDetails) {
+      var template = HtmlService.createTemplateFromFile("page-client-intake-steps");
+      template.clientId = e.parameter.id;
+      template.clientData = clientDetails;
+      template.scriptUrl = ScriptApp.getService().getUrl();
+
+      // Intake status flags (default to false if links/flags not yet implemented)
+      var status = {
+        agreement: !!clientDetails.agreementLink,
+        exhibitA: !!clientDetails.exhibitALink,
+        exhibitB: !!clientDetails.exhibitBLink,
+        billOfRights: !!clientDetails.billOfRightsLink,
+        hipaa: !!clientDetails.hipaaLink,
+        privacy: !!clientDetails.privacyLink,
+      };
+      template.status = status;
+      template.completedCount = [
+        status.agreement,
+        status.exhibitA,
+        status.exhibitB,
+        status.billOfRights,
+        status.hipaa,
+        status.privacy,
+      ].filter(function (v) { return !!v; }).length;
+
+      return template
+        .evaluate()
+        .setTitle("Client Intake Packet - Allevia Senior Care")
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag("viewport", "width=device-width, initial-scale=1");
+    } else {
+      return HtmlService.createHtmlOutput(
+        "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid or Expired Client Link.</h1>"
+      );
+    }
   }
   return HtmlService.createTemplateFromFile("index")
     .evaluate()
