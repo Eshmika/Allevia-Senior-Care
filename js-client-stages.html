@@ -23,35 +23,7 @@
   }
 
   function filterArchives() {
-    const search = document
-      .getElementById("archiveSearch")
-      ?.value.toLowerCase();
-    if (!search) {
-      renderClientStages(allClientsData);
-      return;
-    }
-    const filtered = allClientsData.filter((c) => {
-      const isArchived = c.stage === "Archived";
-      const matchesSearch =
-        c.name.toLowerCase().includes(search) ||
-        c.id.toLowerCase().includes(search);
-      return isArchived && matchesSearch;
-    });
-
-    // We only want to update the ARCHIVES list here if we are filtering
-    const archiveList = document.getElementById("list-stage-archives");
-    if (archiveList) {
-      archiveList.innerHTML = "";
-      // Re-use logic or just call render with a modified set?
-      // For simplicity, let's keep renderClientStages as the source of truth but allow it to take a partial list?
-      // Actually, easier to just update the UI here for the archives specifically.
-      if (filtered.length === 0) {
-        archiveList.innerHTML =
-          '<tr><td colspan="3" class="py-8 text-center text-gray-400">No matching archived records.</td></tr>';
-      }
-      // I'll need to reach into the rendering logic.
-      // Better approach: make renderClientStages handle the search term.
-    }
+    renderClientStages(allClientsData);
   }
 
   function renderClientStages(clients) {
@@ -236,6 +208,24 @@
       counts["Convert Clients"];
     document.getElementById("count-stage-archives").textContent =
       counts["Archived"];
+
+    // Handle empty search results for archives
+    if (
+      searchTerm &&
+      stages["Archived"] &&
+      stages["Archived"].innerHTML === ""
+    ) {
+      stages["Archived"].innerHTML = `
+        <tr>
+          <td colspan="3" class="px-6 py-10 text-center text-gray-400">
+            <div class="flex flex-col items-center gap-2">
+              <i class="ph ph-magnifying-glass text-2xl"></i>
+              <span>No archived records found matching "${searchTerm}"</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
   }
 
   function passClient(clientId) {
