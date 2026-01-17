@@ -9,7 +9,7 @@
       .forEach((el) => el.classList.remove("active"));
 
     const btn = document.querySelector(
-      `button[onclick="appNavigate('${viewName}')"]`
+      `button[onclick="appNavigate('${viewName}')"]`,
     );
     if (btn) btn.classList.add("active");
 
@@ -47,6 +47,8 @@
       loadShiftView();
     } else if (viewName === "caregiver-calendar") {
       loadCaregiverCalendar();
+    } else if (viewName === "client-archives") {
+      loadClientStages();
     }
   }
 

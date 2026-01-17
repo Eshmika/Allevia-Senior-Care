@@ -1,0 +1,116 @@
+<div id="view-client-archives" class="view-section hidden">
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+        Archives
+      </h1>
+      <p class="text-gray-500 mt-1">
+        Historically managed client records and pipeline history.
+      </p>
+    </div>
+    <div class="p-3 bg-gray-100 rounded-2xl">
+      <i class="ph-duotone ph-archive-box text-3xl text-gray-400"></i>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6">
+    <!-- Archive Stats Card -->
+    <div
+      class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 rounded-xl bg-gray-900 text-white flex items-center justify-center"
+        >
+          <i class="ph-bold ph-users text-xl"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            Total Archived
+          </p>
+          <h3
+            id="count-stage-archives"
+            class="text-2xl font-black text-gray-900"
+          >
+            0
+          </h3>
+        </div>
+      </div>
+      <div class="text-right">
+        <span
+          class="px-3 py-1 bg-gray-50 rounded-full text-[10px] font-bold text-gray-400 border border-gray-100"
+          >STATIONARY DATA</span
+        >
+      </div>
+    </div>
+
+    <!-- Main Archive Table -->
+    <div
+      class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+    >
+      <div
+        class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between"
+      >
+        <h2 class="font-bold text-gray-700 flex items-center gap-2">
+          <i class="ph ph-list-bullets text-gray-400"></i>
+          Archived records
+        </h2>
+        <div class="relative">
+          <input
+            id="archiveSearch"
+            oninput="filterArchives()"
+            type="text"
+            placeholder="Search archives..."
+            class="pl-8 pr-4 py-1.5 text-xs bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-gray-200 focus:border-gray-400 transition-all outline-none"
+          />
+          <i
+            class="ph ph-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+          ></i>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50/50">
+            <tr>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400"
+              >
+                Client Info
+              </th>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400"
+              >
+                Reason & Status
+              </th>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400 text-right"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody id="list-stage-archives" class="divide-y divide-gray-50">
+            <!-- Populated by js-client-stages.html -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State (Fallback handled by JS usually, but here for design) -->
+      <div
+        id="archives-empty-state"
+        class="hidden py-20 flex flex-col items-center justify-center text-center"
+      >
+        <div
+          class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4"
+        >
+          <i class="ph ph-folder-open text-3xl text-gray-300"></i>
+        </div>
+        <h4 class="text-gray-900 font-bold">No archived clients found</h4>
+        <p class="text-gray-400 text-sm max-w-xs">
+          When you archive a lead or client, they will appear here for
+          historical reference.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <base target="_top" />
@@ -134,6 +134,22 @@
               Send Email
             </button>
           </div>
+
+          <!-- Archives Section -->
+          <div class="space-y-1">
+            <div
+              class="px-4 py-2 text-xs font-bold text-black uppercase tracking-wider"
+            >
+              Archives
+            </div>
+            <button
+              onclick="appNavigate('client-archives')"
+              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
+            >
+              <i class="ph ph-archive text-xl"></i>
+              Archived Clients
+            </button>
+          </div>
         </nav>
 
         <!--<div class="p-4 border-t border-gray-100">
@@ -161,27 +177,21 @@
 
         <!-- VIEWS -->
         <div id="content-area">
-          <?!= include('page-dashboard'); ?>
-          <?!= include('page-caregivers'); ?>
-          <?!= include('page-clients'); ?>
-          <?!= include('page-client-stages'); ?>
-          <?!= include('page-shifts'); ?>
-          <?!= include('page-caregiver-calendar'); ?>
-          <?!= include('page-communication'); ?>
+          <?!= include('page-dashboard'); ?> <?!= include('page-caregivers'); ?>
+          <?!= include('page-clients'); ?> <?!= include('page-client-stages');
+          ?> <?!= include('page-shifts'); ?> <?!=
+          include('page-caregiver-calendar'); ?> <?!=
+          include('page-communication'); ?> <?!=
+          include('page-client-archives'); ?>
         </div>
       </main>
     </div>
 
-    <?!= include('js-utils'); ?>
-    <?!= include('js-caregivers'); ?>
-    <?!= include('js-navigation'); ?>
-    <?!= include('js-dashboard'); ?>
-    <?!= include('js-clients'); ?>
-    <?!= include('js-caregiver-stages'); ?>
-    <?!= include('js-client-stages'); ?>
-    <?!= include('js-client-assessment'); ?>
-    <?!= include('js-communication'); ?>
-    <?!= include('js-shifts'); ?>
-    <?!= include('js-calendar'); ?>
+    <?!= include('js-utils'); ?> <?!= include('js-caregivers'); ?> <?!=
+    include('js-navigation'); ?> <?!= include('js-dashboard'); ?> <?!=
+    include('js-clients'); ?> <?!= include('js-caregiver-stages'); ?> <?!=
+    include('js-client-stages'); ?> <?!= include('js-client-assessment'); ?>
+    <?!= include('js-communication'); ?> <?!= include('js-shifts'); ?> <?!=
+    include('js-calendar'); ?>
   </body>
 </html>

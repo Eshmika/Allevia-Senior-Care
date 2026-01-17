@@ -11,15 +11,54 @@
     }
   }
 
+  let allClientsData = [];
+
   function loadClientStages() {
     google.script.run
       .withSuccessHandler((clients) => {
+        allClientsData = clients;
         renderClientStages(clients);
       })
       .getClientList();
   }
 
+  function filterArchives() {
+    const search = document
+      .getElementById("archiveSearch")
+      ?.value.toLowerCase();
+    if (!search) {
+      renderClientStages(allClientsData);
+      return;
+    }
+    const filtered = allClientsData.filter((c) => {
+      const isArchived = c.stage === "Archived";
+      const matchesSearch =
+        c.name.toLowerCase().includes(search) ||
+        c.id.toLowerCase().includes(search);
+      return isArchived && matchesSearch;
+    });
+
+    // We only want to update the ARCHIVES list here if we are filtering
+    const archiveList = document.getElementById("list-stage-archives");
+    if (archiveList) {
+      archiveList.innerHTML = "";
+      // Re-use logic or just call render with a modified set?
+      // For simplicity, let's keep renderClientStages as the source of truth but allow it to take a partial list?
+      // Actually, easier to just update the UI here for the archives specifically.
+      if (filtered.length === 0) {
+        archiveList.innerHTML =
+          '<tr><td colspan="3" class="py-8 text-center text-gray-400">No matching archived records.</td></tr>';
+      }
+      // I'll need to reach into the rendering logic.
+      // Better approach: make renderClientStages handle the search term.
+    }
+  }
+
   function renderClientStages(clients) {
+    const searchTerm = document
+      .getElementById("archiveSearch")
+      ?.value.toLowerCase();
+
     const stages = {
       "New leads": document.getElementById("list-stage-new-leads"),
       Assessment: document.getElementById("list-stage-assessment"),
@@ -45,71 +84,85 @@
 
     clients.forEach((client) => {
       const stage = client.stage || "New leads";
-      if (stages[stage]) {
-        const row = document.createElement("tr");
+      if (!stages[stage]) return;
 
-        let actionHtml = `
+      // Increment count for stats card
+      counts[stage]++;
+
+      // Filter archives if search term exists
+      if (stage === "Archived" && searchTerm) {
+        const matchesSearch =
+          client.name.toLowerCase().includes(searchTerm) ||
+          client.id.toLowerCase().includes(searchTerm);
+        if (!matchesSearch) return;
+      }
+
+      const row = document.createElement("tr");
+      const isArchiveView = stage === "Archived";
+      const tdClass = isArchiveView ? "px-6 py-4" : "py-2";
+
+      let actionHtml = `
                     <button onclick="loadClientProfile('${client.id}')" class="text-blue-500 hover:underline">View</button>
                 `;
 
-        if (stage === "New leads") {
-          if (client.status === "Cancelled service") {
-            actionHtml = `
-                        <div class="flex items-center justify-end gap-2">
+      if (stage === "New leads") {
+        if (client.status === "Cancelled service") {
+          actionHtml = `
+                        <div class="flex items-center justify-end gap-2 px-4">
                             <span class="text-xs text-red-600 font-bold mr-2">Failed</span>
                             <button onclick="undoFailClient('${client.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1">
                                 <i class="ph ph-arrow-u-up-left"></i> Undo
                             </button>
                         </div>
                     `;
-          } else {
-            actionHtml = `
-                        <div class="flex items-center justify-end gap-2">
+        } else {
+          actionHtml = `
+                        <div class="flex items-center justify-end gap-2 px-4">
                             <button onclick="passClient('${client.id}')" class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold hover:bg-green-200">Pass</button>
                             <button onclick="failClient('${client.id}')" class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold hover:bg-red-200">Fail</button>
                         </div>
                     `;
-          }
-        } else if (stage === "Assessment") {
-          if (client.status === "Cancelled service") {
-            actionHtml = `
-                        <div class="flex items-center justify-end gap-2">
+        }
+      } else if (stage === "Assessment") {
+        if (client.status === "Cancelled service") {
+          actionHtml = `
+                        <div class="flex items-center justify-end gap-2 px-4">
                             <span class="text-xs text-red-600 font-bold mr-2">Failed</span>
                             <button onclick="undoFailClient('${client.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1">
                                 <i class="ph ph-arrow-u-up-left"></i> Undo
                             </button>
                         </div>
                     `;
-          } else if (client.assessmentFilled) {
-            actionHtml = `
-                    <div class="flex items-center justify-end gap-2">
+        } else if (client.assessmentFilled) {
+          actionHtml = `
+                    <div class="flex items-center justify-end gap-2 px-4">
                         <button onclick="passAssessment('${client.id}')" class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold hover:bg-green-200">Pass</button>
                         <button onclick="failAssessment('${client.id}')" class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold hover:bg-red-200">Fail</button>
                         <button onclick="openAssessmentForm('${client.id}')" class="px-2 py-1 bg-gray-100 text-gray-700 rounded text-xs font-bold hover:bg-gray-200">Edit</button>
                     </div>
                 `;
-          } else {
-            actionHtml = `
-                    <div class="flex items-center justify-end gap-2">
+        } else {
+          actionHtml = `
+                    <div class="flex items-center justify-end gap-2 px-4">
                         <button onclick="openAssessmentForm('${client.id}')" class="px-2 py-1 bg-purple-100 text-purple-700 rounded text-xs font-bold hover:bg-purple-200 flex items-center gap-1">
                             <i class="ph ph-plus-circle"></i> Add Details
                         </button>
                     </div>
                 `;
-          }
-        } else if (stage === "Insurance Verification") {
-          if (client.status === "Archived") {
-            actionHtml = `
-                        <div class="flex items-center justify-end gap-2">
+        }
+      } else if (stage === "Insurance Verification") {
+        if (client.status === "Archived") {
+          actionHtml = `
+                        <div class="flex items-center justify-end gap-2 px-4">
                             <span class="text-xs text-gray-600 font-bold mr-2">Archived</span>
                             <button onclick="undoArchiveClient('${client.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1">
                                 <i class="ph ph-arrow-u-up-left"></i> Undo
                             </button>
                         </div>
                     `;
-          } else if (client.paymentFilled) {
-            actionHtml = `
-                    <div class="flex flex-wrap items-center justify-end gap-2">
+        } else if (client.paymentFilled) {
+          actionHtml = `
+                    <div class="flex flex-wrap items-center justify-end gap-2 px-4">
                         <button onclick="openInsurancePendingDialog('${client.id}')" class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded text-xs font-bold hover:bg-yellow-200 flex items-center gap-1">
                             <i class="ph ph-clock"></i> Pending
                         </button>
@@ -124,26 +177,26 @@
                         </button>
                     </div>
                 `;
-          } else {
-            actionHtml = `
-                    <div class="flex items-center justify-end gap-2">
+        } else {
+          actionHtml = `
+                    <div class="flex items-center justify-end gap-2 px-4">
                         <button onclick="openPaymentForm('${client.id}')" class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold hover:bg-blue-200 flex items-center gap-1">
                             <i class="ph ph-credit-card"></i> Add Payment
                         </button>
                     </div>
                 `;
-          }
-        } else if (stage === "Archived") {
-          actionHtml = `
-                    <div class="flex items-center justify-end gap-2">
+        }
+      } else if (stage === "Archived") {
+        actionHtml = `
+                    <div class="flex items-center justify-end gap-2 px-4">
                         <button onclick="undoArchiveClient('${client.id}')" class="flex items-center gap-2 px-3 py-1.5 bg-white text-gray-700 rounded-lg text-xs font-bold hover:bg-blue-50 hover:text-blue-600 transition-all border border-gray-200 shadow-sm">
                             <i class="ph-bold ph-arrow-u-up-left"></i> Restore Client
                         </button>
                     </div>
                 `;
-        }
+      }
 
-        const statusHtml = `
+      const statusHtml = `
                     <div class="flex flex-col gap-1">
                         <span class="inline-block w-fit px-2 py-0.5 rounded-full text-[10px] font-bold bg-gray-100 text-gray-600">${
                           client.status
@@ -156,21 +209,19 @@
                     </div>
                 `;
 
-        row.innerHTML = `
-                    <td class="py-2">
+      row.innerHTML = `
+                    <td class="${tdClass}">
                         <div class="font-medium text-gray-800">${client.name}</div>
                         <div class="text-[10px] text-gray-400">${client.id}</div>
                     </td>
-                    <td class="py-2">
+                    <td class="${tdClass}">
                         ${statusHtml}
                     </td>
-                    <td class="py-2 text-right">
+                    <td class="${tdClass} text-right">
                         ${actionHtml}
                     </td>
                 `;
-        stages[stage].appendChild(row);
-        counts[stage]++;
-      }
+      stages[stage].appendChild(row);
     });
 
     document.getElementById("count-stage-new-leads").textContent =
@@ -228,7 +279,7 @@
               Swal.fire(
                 "Archived",
                 "Lead has been moved to archives.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -293,7 +344,7 @@
               Swal.fire(
                 "Archived",
                 "Assessment has been moved to archives.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -366,7 +417,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         const reason = document.querySelector(
-          'input[name="pendingReason"]:checked'
+          'input[name="pendingReason"]:checked',
         )?.value;
         const note = document.getElementById("pendingNote").value;
 
@@ -381,7 +432,7 @@
               Swal.fire(
                 "Pending",
                 `Status updated to Pending - ${reason}`,
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -436,7 +487,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         const reason = document.querySelector(
-          'input[name="denialReason"]:checked'
+          'input[name="denialReason"]:checked',
         )?.value;
         const note = document.getElementById("denialNote").value;
 
@@ -449,7 +500,7 @@
           Swal.fire(
             "Error",
             "Please add a note explaining the denial",
-            "error"
+            "error",
           );
           return;
         }
@@ -460,7 +511,7 @@
               Swal.fire(
                 "Denied",
                 "Client has been marked as Denied and archived.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -495,7 +546,7 @@
               Swal.fire(
                 "Approved!",
                 "Client moved to Client Agreements stage.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -523,7 +574,7 @@
               Swal.fire(
                 "Restored",
                 "Client has been restored to Insurance Verification.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
