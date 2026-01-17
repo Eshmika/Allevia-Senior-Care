@@ -1,260 +1,517 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
   <head>
+    <base target="_top" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Client Services Agreement - Allevia Senior Care</title>
+    <style>
+      body { font-family: "Inter", sans-serif; }
+
+      /* Tailwind Polyfill for PDF Generation */
+      .text-center { text-align: center; }
+      .text-justify { text-align: justify; }
+      .font-bold { font-weight: 700; }
+      .font-semibold { font-weight: 600; }
+      .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .underline { text-decoration: underline; }
+      .italic { font-style: italic; }
+      .mb-6 { margin-bottom: 1.5rem; }
+      .mb-4 { margin-bottom: 1rem; }
+      .mt-2 { margin-top: 0.5rem; }
+      .mt-4 { margin-top: 1rem; }
+      .p-8 { padding: 2rem; }
+      .px-8 { padding-left: 2rem; padding-right: 2rem; }
+      .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+      .space-y-2 > * + * { margin-top: 0.5rem; }
+      .list-none { list-style: none; padding: 0; margin: 0; }
+      .w-full { width: 100%; }
+      .border { border-width: 1px; border-style: solid; }
+      .border-gray-300 { border-color: #d1d5db; }
+      .rounded-md { border-radius: 0.375rem; }
+      .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+      .p-2 { padding: 0.5rem; }
+      .block { display: block; }
+      .flex { display: flex; }
+      .gap-3 { gap: 0.75rem; }
+      .items-start { align-items: flex-start; }
+      .text-red-500 { color: #ef4444; }
+
+      /* PDF Specific Overrides */
+      <? if (isPdf) { ?>
+        body { background-color: white !important; padding: 0 !important; }
+        .shadow-lg { box-shadow: none !important; }
+        .rounded-xl { border-radius: 0 !important; }
+        .no-pdf { display: none !important; }
+        .pdf-value {
+            border: none;
+            border-bottom: 1px solid #000;
+            padding: 4px 0;
+            width: 100%;
+            display: block;
+            font-family: 'Courier New', Courier, monospace;
+        }
+      <? } ?>
+    </style>
   </head>
-  <body>
-    <div id="page-1">
-      <header>
-        <h1>Allevia Senior Care</h1>
-        <h2>CLIENT SERVICES AGREEMENT</h2>
-      </header>
+  <body class="bg-gray-50 min-h-screen py-10 px-4">
+    <div
+      class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden"
+    >
+      <div class="px-8 py-6">
+        <h1 class="text-2xl font-bold text-center">
+          Client Services Agreement
+        </h1>
+      </div>
 
-      <section>
-        <p>
-          THIS Client Services Agreement ("Agreement") is entered into as of
-          ("Effective Date"), by and between Client and Allevia Senior Care
-          (Allevia, An Ohio LLC) and ("CLIENT"). who resides at CLIENT desires
-          to hire Allevia to provide Services, and Allevia offers and desires to
-          provide and/or perform such Services for the CLIENT under the terms
-          and conditions stated herein.
-        </p>
-      </section>
+      <div class="p-8">
+        <!-- Agreement Content (preserved) -->
+        <div id="page-1" class="mb-6">
+          <header class="mb-4">
+            <h2 class="font-semibold">Allevia Senior Care</h2>
+            <h3 class="underline">CLIENT SERVICES AGREEMENT</h3>
+          </header>
+          <section>
+            <p class="text-justify">
+              THIS Client Services Agreement ("Agreement") is entered into as of
+              ("Effective Date"), by and between Client and Allevia Senior Care
+              (Allevia, An Ohio LLC) and ("CLIENT"). CLIENT desires to hire
+              Allevia to provide Services, and Allevia offers and desires to
+              provide and/or perform such Services for the CLIENT under the
+              terms and conditions stated herein.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">1. Definitions:</h3>
+            <ul class="space-y-2 text-justify">
+              <li>
+                <strong>a. "Service(s)"</strong> - any and all work, services,
+                tasks and/or care being, or to be, provided and/or performed by
+                Allevia as described in the "Plan of Care" ("Exhibit B"),
+                attached hereto; and any other such services deemed necessary by
+                Allevia.
+              </li>
+              <li>
+                <strong>b. "Service Period"</strong> - a partial (respite), or
+                one whole calendar month, as defined by Allevia, in which
+                Service is being, or to be, provided and/or performed.
+              </li>
+              <li>
+                <strong>c. "Initial Deposit"</strong> - CLIENT shall make a
+                payment in advance to Allevia for the projected level and hours
+                of Service for the initial Service Period, as described in the
+                Cost of Services ("Exhibit A"), attached hereto. This Initial
+                Deposit is required to set-up and initiate Services for the
+                CLIENT and shall be retained by Allevia and used to reconcile
+                any final invoices, payments or Expenses.
+              </li>
+              <li>
+                <strong>d. "Holiday"</strong> - New Year's Eve&Day, Memorial
+                Day, Independence Day, Labor Day, Thanksgiving Day, Christmas
+                Eve&Day, Easter and any other specific Federal and/or State
+                holiday recognized by Allevia.
+              </li>
+              <li>
+                <strong>e. "Overtime"</strong> - one and one-half (1-1/2) times
+                the regular hourly or twenty-four (24) hour live-in rate for the
+                Service being, or to be, provided and/or performed at anytime on
+                any Holiday.
+              </li>
+              <li>
+                <strong>f. "Expense(s)"</strong> - Expenses include, but are not
+                limited to groceries, parking fees, excessive mileage driven by
+                Caregiver, bus fare, admissions, tips and prescription payments
+                made for and on behalf of the CLIENT.
+              </li>
+            </ul>
+          </section>
+        </div>
 
-      <section>
-        <h3>1. Definitions:</h3>
-        <ul>
-          <li>
-            <strong>a. "Service(s)"</strong> - any and all work, services, tasks
-            and/or care being, or to be, provided and/or performed by Allevia as
-            described in the "Plan of Care" ("Exhibit B"), attached hereto; and
-            any other such services deemed necessary by Allevia.
-          </li>
-          <li>
-            <strong>b. "Service Period"</strong> - a partial (respite), or one
-            whole calendar month, as defined by Allevia, in which Service is
-            being, or to be, provided and/or performed.
-          </li>
-          <li>
-            <strong>c. "Initial Deposit"</strong> - CLIENT shall make a payment
-            in advance to Allevia for the projected level and hours of Service
-            for the initial Service Period, as described in the Cost of Services
-            ("Exhibit A"), attached hereto. This Initial Deposit is required to
-            set-up and initiate Services for the CLIENT and shall be retained by
-            Allevia and used to reconcile any final invoices, payments or
-            Expenses.
-          </li>
-          <li>
-            <strong>d. "Holiday"</strong> - New Year's Eve&Day, Memorial Day,
-            Independence Day, Labor Day, Thanksgiving Day, Christmas Eve&Day,
-            Easter and any other specific Federal and/or State holiday
-            recognized by Allevia.
-          </li>
-          <li>
-            <strong>e. "Overtime"</strong> - one and one-half (1-1/2) times the
-            regular hourly or twenty-four (24) hour live-in rate for the Service
-            being, or to be, provided and/or performed at anytime on any
-            Holiday.
-          </li>
-          <li>
-            <strong>f. "Expense(s)"</strong> - Expenses include, but are not
-            limited to groceries, parking fees, excessive mileage driven by
-            Caregiver, bus fare, admissions, tips and prescription payments made
-            for and on behalf of the CLIENT.
-          </li>
-        </ul>
-      </section>
+        <div id="page-2" class="mb-6">
+          <section>
+            <h3 class="font-semibold underline">2. Obligations of Allevia:</h3>
+            <p class="text-justify">
+              Allevia will provide a Caregiver (or Caregivers, as required) to
+              render Services in the CLIENT's residence, or agreed upon
+              location, for the Service Period. CLIENT expressly acknowledges
+              that the Caregiver is not medically trained, nor is the Caregiver
+              licensed to provide medical or nursing care, and that such
+              services are therefore not included in this Agreement. The Service
+              shall at all times be subject to the criteria established by
+              Allevia and recorded on Allevia Service Charts. Due to potential
+              changes in CLIENT'S physical and/or mental health condition,
+              Allevia reserves the right to re-evaluate and/or re-assess the
+              hours worked and/or level of care required to meet the CLIENT's
+              needs prior to the start of each Service Period. Allevia shall
+              invoice the CLIENT for the level of care and Service hours
+              rendered during the prior, agreed to, Service Period. All invoices
+              shall include the actual hours worked, level of care, rate, and
+              Expenses (if any).
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">3. Obligations of CLIENT:</h3>
+            <p class="text-justify">
+              CLIENT and/or Financially Responsible Party acting in CLIENT's
+              behalf, who becomes a signatory to this Agreement, shall make
+              payments in accordance with the Services rendered and invoiced by
+              Allevia. CLIENT shall make payments to Allevia within three (3)
+              business days following the receipt of an invoice. In addition,
+              CLIENT agrees to pay any increases to the Initial Deposit that
+              reflects any expansion to the level of care and/or hours of
+              Service, as determined by Allevia. Past due payments will be
+              subject to a late charge of five percent (5%). CLIENT shall
+              provide adequate, proper and reasonable accommodation for
+              Caregiver(s) as described in Exhibit B. Client, Client's
+              agent/responsible party, beneficiaries, heirs and/or family
+              household members to release Allevia, its owners, officers'
+              directors, agents and employees, Office, Office Directors and
+              Office employees, from any and all liability, potential or real,
+              for any injury, claim, damage or loss, including attorney's fees,
+              incurred in connection with the services that a Caregiver referred
+              hereunder performs for Client. The protections of this paragraph
+              are not granted to and do not inure the potentially implied rights
+              of any possible third-party beneficiaries. Client Agrees to notify
+              Allevia promptly and well in advance of any and all proposed
+              changes in scheduling arrangements made with the Caregiver that
+              could affect Allevia fees. Client agrees to notify Allevia 24
+              hours in advance for the cancellation of the service otherwise
+              client will be fully charged for the service as planned.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">4. Term of the Agreement:</h3>
+            <p class="text-justify">
+              The term of this Agreement is indefinite and shall be renewed by
+              timely receipt of the invoiced payment. Except as otherwise
+              provided herein, this Agreement may be terminated by either party
+              with or without cause upon ten (10) days prior written notice. In
+              the event CLIENT is hospitalized, Allevia will suspend Services
+              until the CLIENT returns from the hospital. Such a temporary
+              interruption or suspension of Service will not terminate this
+              Agreement. The Agreement may be terminated by Allevia immediately,
+              if in its sole and absolute discretion, Allevia determines any of
+              the following events has occurred:
+            </p>
+            <ul class="space-y-2 text-justify mt-2">
+              <li>
+                a. CLIENT becomes abusive in any way or endangers the health or
+                safety of the Caregiver.
+              </li>
+              <li>
+                b. CLIENT requires sustaining care that does not permit the
+                live-in Caregiver to receive adequate sleep.
+              </li>
+              <li>
+                c. CLIENT's or Financially Responsible Party's payment is more
+                than (20) days past due.
+              </li>
+              <li>
+                d. CLIENT needs full-time care by a licensed health care
+                professional or needs to be institutionalized.
+              </li>
+            </ul>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">5. Termination:</h3>
+            <p class="text-justify">
+              Each party may terminate this agreement at its convenience by
+              providing the other party with a minimum of 72 hours in advance
+              written notice. Payment of any amounts owed to Allevia at the time
+              the agreement is terminated shall be paid in full concurrently
+              with agreement termination. In the event this Agreement is
+              terminated prior to the end of any Service Period (except the
+              initial Service Period), a refund of the Initial Deposit will be
+              made to CLIENT, less any outstanding Service hours and/or
+              Expenses. In the event this Agreement is terminated prior to the
+              end of the initial Service Period, an administrative set-up fee of
+              five hundred dollars ($500) will be deducted from any refund due
+              CLIENT. The refund will be sent within thirty (30) days of
+              termination to the CLIENT or Financially Responsible Party.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">
+              6. Employment Solicitation/Liquidated Damages:
+            </h3>
+            <p class="text-justify">
+              The CLIENT and/or Financially Responsible Party expressly
+              acknowledges that Allevia has invested time and money into the
+              development of its Caregiver staff and hereby specifically and
+              unequivocally agrees not to solicit, contract with, hire, or
+              attempt to hire any Allevia Caregiver, prior to twelve (12) months
+              after termination of this Agreement, or twelve (12) months after
+              the Allevia Caregiver has ceased to be employed by Allevia;
+              whichever is earlier, unless otherwise agreed to in writing by
+              both parties. Any such attempt constitutes a breach of this
+              Agreement, which are grounds for immediate termination of the
+              Agreement and forfeiture of all monies paid to Allevia. Because
+              the damage suffered by Allevia in the event of such breach would
+              be difficult to ascertain, CLIENT agrees to pay liquidated damages
+              in the amount fixed of $10,000 within ten (10) days of receiving
+              written demand from Allevia. CLIENT and/or Financially Responsible
+              Party may be subject to any and all other legal remedies and
+              actions available to Allevia. This provision shall survive the
+              termination of this Agreement.
+            </p>
+          </section>
+        </div>
 
-      <section>
-        <h3>2. Obligations of Allevia:</h3>
-        <p>
-          Allevia will provide a Caregiver (or Caregivers, as required) to
-          render Services in the CLIENT's residence, or agreed upon location,
-          for the Service Period. CLIENT expressly acknowledges that the
-          Caregiver is not medically trained, nor is the Caregiver licensed to
-          provide medical or nursing care, and that such services are therefore
-          not included in this Agreement. The Service shall at all times be
-          subject to the criteria established by Allevia and recorded on Allevia
-          Service Charts. Due to potential changes in CLIENT'S physical and/or
-          mental health condition, Allevia reserves the right to re-evaluate
-          and/or re-assess the hours worked and/or level of care required to
-          meet the CLIENT's needs prior to the start of each Service Period.
-          Allevia shall invoice the CLIENT for the level of care and Service
-          hours rendered during the prior, agreed to, Service Period. All
-          invoices shall include the actual hours worked, level of care, rate,
-          and Expenses (if any).
-        </p>
-      </section>
+        <div id="page-3" class="mb-6">
+          <section>
+            <h3 class="font-semibold underline">7. Entire Agreement:</h3>
+            <p class="text-justify">
+              This Agreement constitutes the entire agreement between the CLIENT
+              and Allevia and supersedes any prior oral or written
+              representations, agreements, arrangements, or understandings, and
+              can only be amended in writing by mutual consent of all parties.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">8. Release:</h3>
+            <p class="text-justify">
+              Client and/or Client's agent/responsible party agrees on behalf of
+              Client, Client's agent/responsible party, beneficiaries, heirs
+              and/or family household members to release Allevia llc, dba
+              allevie senior care. its owners, officers' directors, agents and
+              employees, Office, Office Directors and Office employees, from any
+              and all liability, potential or real, for any injury, claim,
+              damage or loss, including attorney's fees, incurred in connection
+              with the services that a Caregiver referred hereunder performs for
+              Client. The protections of this paragraph are not granted to and
+              do not inure the potentially implied rights of any possible
+              third-party beneficiaries. In the event of any litigation over
+              this Agreement, client agree to recover all costs and attorneys'
+              fees.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">9. No Assignment:</h3>
+            <p class="text-justify">
+              CLIENT may not assign this Agreement without Allevia's express
+              written consent.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">10. Severability:</h3>
+            <p class="text-justify">
+              In the event any provision of this Agreement is unenforceable, the
+              remaining provisions shall not be affected and shall remain in
+              full force and effect.
+            </p>
+          </section>
+          <section class="mt-4">
+            <h3 class="font-semibold underline">
+              11. Financially Responsible Party:
+            </h3>
+            <p class="text-justify">
+              The Financially Responsible Party, if any, agrees to be jointly
+              and severally responsible for the terms of this Agreement,
+              including payment of the Service Period invoices hereunder.
+            </p>
+          </section>
+        </div>
+
+        <!-- Signing Form -->
+        <form id="clientAgreementForm" class="space-y-6">
+          <div class="space-y-2 mt-2 pt-4">
+            <? if (isPdf) { ?>
+            <div class="flex gap-3 items-start">
+              <span style="font-size: 18px; line-height: 1">☑</span>
+              <span
+                >By executing this Agreement, the parties intend it to be
+                applicable as of the Effective Date.</span
+              >
+            </div>
+            <? } else { ?>
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agree"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              By executing this Agreement, the parties intend it to be
+              applicable as of the Effective Date.
+            </label>
+            <? } ?>
+          </div>
+
+          <div class="space-y-2 mt-2 pt-4">
+            <? if (isPdf) { ?>
+            <div class="flex gap-3 items-start">
+              <span style="font-size: 18px; line-height: 1">☑</span>
+              <span class="italic"
+                >By electronically typing or signing my name below, I
+                acknowledge and agree that this electronic representation of my
+                name constitutes my legal signature under applicable law.</span
+              >
+            </div>
+            <? } else { ?>
+            <label class="flex gap-3 items-start cursor-pointer">
+              <input
+                type="checkbox"
+                name="agreeEsign"
+                required
+                class="mt-0.5 accent-[#65c027] w-4 h-4 shrink-0"
+              />
+              <span class="italic"
+                >By electronically typing or signing my name below, I
+                acknowledge and agree that this electronic representation of my
+                name constitutes my legal signature under applicable law.</span
+              >
+            </label>
+            <? } ?>
+          </div>
+
+          <div>
+            <input type="hidden" name="clientId" value="<?= clientId ?>" />
+            <label class="input-label font-semibold block mb-1"
+              >Full Name <span class="text-red-500 no-pdf">*</span></label
+            >
+            <? if (isPdf) { ?>
+            <div class="w-full border-b border-gray-400 py-2 mb-4">
+              <?= [clientData.firstName, clientData.middleName, clientData.lastName].filter(Boolean).join(' ') ?>
+            </div>
+            <? } else { ?>
+            <input
+              type="text"
+              name="fullName"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border mb-4"
+              placeholder="Given Name"
+              value="<?= [clientData.firstName, clientData.middleName, clientData.lastName].filter(Boolean).join(' ') ?>"
+              readonly
+              required
+            />
+            <? } ?>
+
+            <label class="input-label font-semibold block mb-1"
+              >Digital Signature (Type Full Name)<span
+                class="text-red-500 no-pdf"
+                >*</span
+              ></label
+            >
+            <? if (isPdf) { ?>
+            <div
+              class="w-full border-b border-gray-400 py-2 mb-4"
+              style="font-family: 'Courier New', Courier, monospace"
+            >
+              <?= clientData.Signature || '' ?>
+            </div>
+            <? } else { ?>
+            <input
+              type="text"
+              name="signature"
+              required
+              placeholder="Type your full name"
+              value="<?= clientData.Signature || '' ?>"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+            />
+            <? } ?>
+
+            <label class="input-label mt-4 block font-semibold mb-1"
+              >Date <span class="text-red-500 no-pdf">*</span></label
+            >
+            <? if (isPdf) { ?>
+            <div class="w-full border-b border-gray-400 py-2 mb-4">
+              <?= clientData.SignDate || '' ?>
+            </div>
+            <? } else { ?>
+            <input
+              type="date"
+              name="signDate"
+              required
+              value="<?= clientData.SignDate || '' ?>"
+              class="w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 p-2 border"
+            />
+            <? } ?>
+          </div>
+
+          <div class="pt-4 no-pdf">
+            <button
+              type="submit"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            >
+              Sign Agreement
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
-    <div id="page-2">
-      <section>
-        <h3>3. Obligations of CLIENT:</h3>
-        <p>
-          CLIENT and/or Financially Responsible Party acting in CLIENT's behalf,
-          who becomes a signatory to this Agreement, shall make payments in
-          accordance with the Services rendered and invoiced by Allevia. CLIENT
-          shall make payments to Allevia within three (3) business days
-          following the receipt of an invoice. In addition, CLIENT agrees to pay
-          any increases to the Initial Deposit that reflects any expansion to
-          the level of care and/or hours of Service, as determined by Allevia.
-          Past due payments will be subject to a late charge of five percent
-          (5%). CLIENT shall provide adequate, proper and reasonable
-          accommodation for Caregiver(s) as described in Exhibit B. Client,
-          Client's agent/responsible party, beneficiaries, heirs and/or family
-          household members to release Allevia, its owners, officers' directors,
-          agents and employees, Office, Office Directors and Office employees,
-          from any and all liability, potential or real, for any injury, claim,
-          damage or loss, including attorney's fees, incurred in connection with
-          the services that a Caregiver referred hereunder performs for Client.
-          The protections of this paragraph are not granted to and do not inure
-          the potentially implied rights of any possible third-party
-          beneficiaries. Client Agrees to notify Allevia promptly and well in
-          advance of any and all proposed changes in scheduling arrangements
-          made with the Caregiver that could affect Allevia fees. Client agrees
-          to notify Allevia 24 hours in advance for the cancellation of the
-          service otherwise client will be fully charged for the service as
-          planned.
-        </p>
-      </section>
+    <script>
+      // Set default date to today
+      const dateInput = document.querySelector('input[name="signDate"]');
+      if (dateInput && !dateInput.value) {
+        dateInput.valueAsDate = new Date();
+      }
 
-      <section>
-        <h3>4. Term of the Agreement:</h3>
-        <p>
-          The term of this Agreement is indefinite and shall be renewed by
-          timely receipt of the invoiced payment. Except as otherwise provided
-          herein, this Agreement may be terminated by either party with or
-          without cause upon ten (10) days prior written notice. In the event
-          CLIENT is hospitalized, Allevia will suspend Services until the CLIENT
-          returns from the hospital. Such a temporary interruption or suspension
-          of Service will not terminate this Agreement. The Agreement may be
-          terminated by Allevia immediately, if in its sole and absolute
-          discretion, Allevia determines any of the following events has
-          occurred:
-        </p>
-        <ul>
-          <li>
-            a. CLIENT becomes abusive in any way or endangers the health or
-            safety of the Caregiver.
-          </li>
-          <li>
-            b. CLIENT requires sustaining care that does not permit the live-in
-            Caregiver to receive adequate sleep. "Adequate sleep" for the
-            purpose of this Agreement means at least seven (7) hours of sleep in
-            any given 24-hour period, including an uninterrupted and continuous
-            period of at least five (5) hours.
-          </li>
-          <li>
-            c. CLIENT's or Financially Responsible Party's payment is more than
-            (20) days past due Client agrees to pay reasonable attorney fees,
-            court costs and/or collection agency charges.
-          </li>
-          <li>
-            d. CLIENT needs full-time care by a licensed health care
-            professional or needs to be institutionalized.
-          </li>
-        </ul>
-      </section>
+      document
+        .getElementById("clientAgreementForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
 
-      <section>
-        <h3>5. Termination:</h3>
-        <p>
-          Each party may terminate this agreement at its convenience by
-          providing the other party with a minimum of 72 hours in advance
-          written notice. Payment of any amounts owed to Allevia at the time the
-          agreement is terminated shall be paid in full concurrently with
-          agreement termination. In the event this Agreement is terminated prior
-          to the end of any Service Period (except the initial Service Period),
-          a refund of the Initial Deposit will be made to CLIENT, less any
-          outstanding Service hours and/or Expenses. In the event this Agreement
-          is terminated prior to the end of the initial Service Period, an
-          administrative set-up fee of five hundred dollars ($500) will be
-          deducted from any refund due CLIENT. The refund will be sent within
-          thirty (30) days of termination to the CLIENT or Financially
-          Responsible Party.
-        </p>
-      </section>
+          const fullName = document
+            .querySelector('input[name="fullName"]')
+            .value.trim()
+            .replace(/\s+/g, " ")
+            .toLowerCase();
+          const signature = document
+            .querySelector('input[name="signature"]')
+            .value.trim()
+            .replace(/\s+/g, " ")
+            .toLowerCase();
 
-      <section>
-        <h3>6. Employment Solicitation/Liquidated Damages:</h3>
-        <p>
-          The CLIENT and/or Financially Responsible Party expressly acknowledges
-          that Allevia has invested time and money into the development of its
-          Caregiver staff and hereby specifically and unequivocally agrees not
-          to solicit, contract with, hire, or attempt to hire any Allevia
-          Caregiver, prior to twelve (12) months after termination of this
-          Agreement, or twelve (12) months after the Allevia Caregiver has
-          ceased to be employed by Allevia; whichever is earlier, unless
-          otherwise agreed to in writing by both parties. Any such attempt
-          constitutes a breach of this Agreement, which are grounds for
-          immediate termination of the Agreement and forfeiture of all monies
-          paid to Allevia. Because the damage suffered by Allevia in the event
-          of such breach would be difficult to ascertain, CLIENT agrees to pay
-          liquidated damages in the amount fixed of $10,000 within ten (10) days
-          of receiving written demand from Allevia. CLIENT and/or Financially
-          Responsible Party may be subject to any and all other legal remedies
-          and actions available to Allevia. This provision shall survive the
-          termination of this Agreement.
-        </p>
-      </section>
-    </div>
+          if (fullName !== signature) {
+            alert("Digital Signature must match the Full Name exactly.");
+            return;
+          }
 
-    <div id="page-3">
-      <section>
-        <h3>7. Entire Agreement:</h3>
-        <p>
-          This Agreement constitutes the entire agreement between the CLIENT and
-          Allevia and supersedes any prior oral or written representations,
-          agreements, arrangements, or understandings, and can only be amended
-          in writing by mutual consent of all parties.
-        </p>
-      </section>
+          const btn = e.target.querySelector('button[type="submit"]');
+          const originalText = btn.innerText;
+          btn.innerText = "Signing & Uploading...";
+          btn.disabled = true;
 
-      <section>
-        <h3>8. Release:</h3>
-        <p>
-          Client and/or Client's agent/responsible party agrees on behalf of
-          Client, Client's agent/responsible party, beneficiaries, heirs and/or
-          family household members to release Allevia llc, dba allevie senior
-          care. its owners, officers' directors, agents and employees, Office,
-          Office Directors and Office employees, from any and all liability,
-          potential or real, for any injury, claim, damage or loss, including
-          attorney's fees, incurred in connection with the services that a
-          Caregiver referred hereunder performs for Client. The protections of
-          this paragraph are not granted to and do not inure the potentially
-          implied rights of any possible third-party beneficiaries. In the event
-          of any litigation over this Agreement, client agree to recover all
-          costs and attorneys' fees.
-        </p>
-      </section>
+          google.script.run
+            .withSuccessHandler(function (response) {
+              if (response.success) {
+                const clientId = document.querySelector(
+                  'input[name="clientId"]'
+                ).value;
+                const targetUrl =
+                  "<?= scriptUrl ?>?page=client-intake-steps&id=" + clientId;
 
-      <section>
-        <h3>9. No Assignment:</h3>
-        <p>
-          CLIENT may not assign this Agreement without Allevia's express written
-          consent.
-        </p>
-      </section>
-
-      <section>
-        <h3>10. Severability:</h3>
-        <p>
-          In the event any provision of this Agreement is unenforceable, the
-          remaining provisions shall not be affected and shall remain in full
-          force and effect.
-        </p>
-      </section>
-
-      <section>
-        <h3>11. Financially Responsible Party:</h3>
-        <p>
-          The Financially Responsible Party, if any, agrees to be jointly and
-          severally responsible for the terms of this Agreement, including
-          payment of the Service Period invoices hereunder.
-        </p>
-      </section>  
-    </div>
+                const container = document.querySelector(".max-w-3xl");
+                container.innerHTML = `
+                <div class="p-10 text-center">
+                  <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                  </div>
+                  <h2 class="text-xl font-bold mb-2">Agreement Signed</h2>
+                  <p class="text-gray-600 mb-6">Thank you for signing the Client Services Agreement.</p>
+                  <a href="${targetUrl}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700">Return to Intake Steps</a>
+                </div>`;
+                window.scrollTo(0, 0);
+              } else {
+                alert("Error: " + response.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+              }
+            })
+            .withFailureHandler(function (err) {
+              alert("Error: " + err);
+              btn.innerText = originalText;
+              btn.disabled = false;
+            })
+            .submitClientAgreement(
+              document.getElementById("clientAgreementForm")
+            );
+        });
+    </script>
   </body>
 </html>

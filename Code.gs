@@ -195,7 +195,9 @@ function doGet(e) {
     // Serve Client Intake Steps page
     var clientDetails = getClientDetails(e.parameter.id);
     if (clientDetails) {
-      var template = HtmlService.createTemplateFromFile("page-client-intake-steps");
+      var template = HtmlService.createTemplateFromFile(
+        "page-client-intake-steps"
+      );
       template.clientId = e.parameter.id;
       template.clientData = clientDetails;
       template.scriptUrl = ScriptApp.getService().getUrl();
@@ -217,7 +219,9 @@ function doGet(e) {
         status.billOfRights,
         status.hipaa,
         status.privacy,
-      ].filter(function (v) { return !!v; }).length;
+      ].filter(function (v) {
+        return !!v;
+      }).length;
 
       return template
         .evaluate()
@@ -228,6 +232,48 @@ function doGet(e) {
       return HtmlService.createHtmlOutput(
         "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid or Expired Client Link.</h1>"
       );
+    }
+  } else if (e.parameter.page === "client-sign-agreement" && e.parameter.id) {
+    // Serve Client Service Agreement for clients
+    var clientDetails = getClientDetails(e.parameter.id);
+    if (clientDetails) {
+      var template = HtmlService.createTemplateFromFile(
+        "Client-Service-Agreement"
+      );
+      // Optional: expose client details if needed by template in the future
+      template.clientId = e.parameter.id;
+      template.clientData = clientDetails;
+      template.scriptUrl = ScriptApp.getService().getUrl();
+
+      return template
+        .evaluate()
+        .setTitle("Client Service Agreement - Allevia Senior Care")
+        .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
+        .addMetaTag("viewport", "width=device-width, initial-scale=1");
+    } else {
+      return HtmlService.createHtmlOutput(
+        "<h1 style='font-family:sans-serif; text-align:center; margin-top:50px;'>Error: Invalid or Expired Client Link.</h1>"
+      );
+    }
+  }
+
+  // Minimal handler for client agreement submission (can be extended to generate PDF and save to Drive/Sheet)
+  function submitClientAgreement(form) {
+    try {
+      var id = form.clientId;
+      var signature = form.signature;
+      var signDate = form.signDate;
+      if (!id) return { success: false, message: "Missing Client ID" };
+
+      // Basic validation mirror
+      var details = getClientDetails(id);
+      if (!details) return { success: false, message: "Client not found" };
+
+      // Optionally store signature and date in memory/object for future PDF generation
+      // For now, just acknowledge success. Implementation of PDF + Drive saving can be added later.
+      return { success: true };
+    } catch (e) {
+      return { success: false, message: e.toString() };
     }
   }
   return HtmlService.createTemplateFromFile("index")
