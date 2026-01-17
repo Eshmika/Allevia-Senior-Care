@@ -133,7 +133,7 @@ function sendCustomEmail(cgIds, clIds, subject, message) {
     if (cgIds && cgIds.length > 0) {
       const list = getCaregiverList();
       const selected = list.filter(
-        (c) => cgIds.includes(c.id) && c.email && c.email.includes("@")
+        (c) => cgIds.includes(c.id) && c.email && c.email.includes("@"),
       );
       recipients = recipients.concat(selected);
     }
@@ -142,7 +142,7 @@ function sendCustomEmail(cgIds, clIds, subject, message) {
     if (clIds && clIds.length > 0) {
       const list = getClientList();
       const selected = list.filter(
-        (c) => clIds.includes(c.id) && c.email && c.email.includes("@")
+        (c) => clIds.includes(c.id) && c.email && c.email.includes("@"),
       );
       recipients = recipients.concat(selected);
     }
@@ -310,3 +310,100 @@ function sendPaymentSetupEmail(caregiverId) {
 //   MailApp.getRemainingDailyQuota(); // This forces the email permission check
 //   console.log("Permissions granted!");
 // }
+
+function sendIntakePacketEmail(clientId) {
+  try {
+    const details = getClientDetails(clientId);
+    if (!details) return { success: false, message: "Client not found" };
+
+    const subject = `Your Allevia Senior Care Intake Packet`;
+    const webAppUrl = ScriptApp.getService().getUrl();
+    // Assuming a page for signing documents exists or will be created
+    const signLink = `${webAppUrl}?page=client-intake-sign&id=${clientId}`;
+    // Assuming a page/link for downloading records exists
+    const downloadLink = `${webAppUrl}?page=client-intake-records&id=${clientId}`;
+
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <!-- Header -->
+        <div style="background-color: #65c027; padding: 24px; text-align: center;">
+          <h2 style="color: white; margin: 0; font-size: 24px;">Allevia Senior Care</h2>
+          <p style="color: #f0fdf4; margin: 5px 0 0; font-style: italic;">Welcome to the Family</p>
+        </div>
+        
+        <!-- Body -->
+        <div style="padding: 30px; background-color: #ffffff;">
+          <p style="margin-top: 0;">Dear <strong>${details.firstName} ${details.lastName}</strong>,</p>
+          
+          <p>Welcome to Allevia Senior Care. We are honored to support you and your family with compassionate, reliable home care. To begin services, please review the attached intake packet.</p>
+          
+          <p>For clarity, we’ve separated the documents into two categories:</p>
+
+          <div style="margin-top: 20px; margin-bottom: 20px;">
+            <p style="font-weight: bold; color: #d97706; margin-bottom: 10px;">📌 Please Sign & Return:</p>
+            <ul style="color: #555; font-size: 14px; line-height: 1.6;">
+              <li>Client Service Agreement</li>
+              <li>Exhibit A – Cost of Services</li>
+              <li>Exhibit B – Plan of Care</li>
+              <li>Bill of Rights (Client Rights & Responsibilities)</li>
+              <li>HIPAA Release of Health Information</li>
+              <li>Notice of Privacy Practices (Acknowledgment)</li>
+            </ul>
+            <div style="text-align: center; margin-top: 15px;">
+              <a href="${signLink}" style="background-color: #d97706; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block;">
+                  PLEASE SIGN AND RETURN
+              </a>
+            </div>
+          </div>
+
+          <hr style="border: 0; border-top: 1px dashed #eee; margin: 25px 0;">
+
+          <div style="margin-top: 20px; margin-bottom: 20px;">
+            <p style="font-weight: bold; color: #2563eb; margin-bottom: 10px;">📘 For Your Records:</p>
+            <ul style="color: #555; font-size: 14px; line-height: 1.6;">
+              <li>Policies and Procedures</li>
+              <li>Health Information Sheet for Emergency</li>
+            </ul>
+             <div style="text-align: center; margin-top: 15px;">
+              <a href="${downloadLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block;">
+                  Download For Your Records
+              </a>
+            </div>
+          </div>
+          
+          <p style="margin-top: 30px;">Once you’ve signed the required documents don’t forget to submit them. At Allevia Senior Care, we take confidentiality seriously. All information is handled in accordance with HIPAA regulations to protect your privacy.</p>
+
+          <p>If you have any questions while reviewing the packet, please contact our office. We look forward to serving you.</p>
+
+          <br>
+          <p style="margin-bottom: 5px;">Warm regards,</p>
+          <p style="margin: 0; font-weight: bold;">The Allevia Senior Care Team</p>
+          <p style="margin: 0; color: #666; font-size: 14px;"><a href="${webAppUrl}" style="color: #65c027; text-decoration: none;">www.alleviaseniorcare.com</a> | 440-9079599 | <a href="mailto:info@alleviaseniorcare.com" style="color: #65c027; text-decoration: none;">info@alleviaseniorcare.com</a></p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af;">
+          &copy; 2025 Allevia Senior Care. All rights reserved.
+        </div>
+      </div>
+    `;
+
+    // Only send if email is present
+    if (details.email && details.email.includes("@")) {
+      MailApp.sendEmail({
+        to: details.email,
+        subject: subject,
+        htmlBody: htmlBody,
+      });
+      return {
+        success: true,
+        message: "Intake packet email sent successfully!",
+      };
+    } else {
+      return { success: false, message: "Client email invalid or missing." };
+    }
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: e.toString() };
+  }
+}

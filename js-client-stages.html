@@ -158,6 +158,17 @@
                     </div>
                 `;
         }
+      } else if (stage === "Client Agreements") {
+        actionHtml = `
+                    <div class="flex items-center justify-end gap-2 px-4">
+                        <button onclick="resendIntakeEmail('${client.id}')" class="px-2 py-1 bg-orange-100 text-orange-700 rounded text-xs font-bold hover:bg-orange-200 flex items-center gap-1">
+                            <i class="ph ph-envelope-simple"></i> Re-send Email
+                        </button>
+                        <button onclick="undoClientAgreement('${client.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1">
+                            <i class="ph ph-arrow-u-up-left"></i> Undo
+                        </button>
+                    </div>
+                `;
       } else if (stage === "Archived") {
         actionHtml = `
                     <div class="flex items-center justify-end gap-2 px-4">
@@ -521,21 +532,92 @@
           <p class="text-gray-700">Move this client to the Client Agreements stage?</p>
           <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
             <p class="text-sm text-green-800"><i class="ph ph-check-circle"></i> <strong>Insurance verification approved.</strong> Client is ready for next stage.</p>
+            <p class="text-xs text-green-600 mt-2">An email with the Intake Packet will be sent to the client.</p>
           </div>
         </div>
       `,
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#65c027",
-      confirmButtonText: "Yes, Approve",
+      confirmButtonText: "Yes, Approve & Send Email",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Processing",
+          text: "Updating stage and sending email...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              // Now send the email
+              google.script.run
+                .withSuccessHandler((emailRes) => {
+                  Swal.fire(
+                    "Approved!",
+                    "Client moved to Client Agreements stage. " +
+                      (emailRes.success
+                        ? "Email sent!"
+                        : "Warning: Email failed to send."),
+                    "success",
+                  );
+                  loadClientStages();
+                })
+                .sendIntakePacketEmail(clientId);
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .updateClientStage(clientId, "Client Agreements");
+      }
+    });
+  }
+
+  function resendIntakeEmail(clientId) {
+    Swal.fire({
+      title: "Sending Email",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (res.success) {
+          Swal.fire(
+            "Sent!",
+            "Intake packet email has been re-sent.",
+            "success",
+          );
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
+      })
+      .sendIntakePacketEmail(clientId);
+  }
+
+  function undoClientAgreement(clientId) {
+    Swal.fire({
+      title: "Undo Stage?",
+      text: "Move this client back to Insurance Verification?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#f59e0b",
+      confirmButtonText: "Yes, Undo",
     }).then((result) => {
       if (result.isConfirmed) {
         google.script.run
           .withSuccessHandler((res) => {
             if (res.success) {
               Swal.fire(
-                "Approved!",
-                "Client moved to Client Agreements stage.",
+                "Restored",
+                "Client moved back to Insurance Verification.",
                 "success",
               );
               loadClientStages();
@@ -543,7 +625,7 @@
               Swal.fire("Error", res.message, "error");
             }
           })
-          .updateClientStage(clientId, "Client Agreements");
+          .updateClientStage(clientId, "Insurance Verification");
       }
     });
   }
