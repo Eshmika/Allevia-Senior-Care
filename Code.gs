@@ -244,6 +244,7 @@ function doGet(e) {
       template.clientId = e.parameter.id;
       template.clientData = clientDetails;
       template.scriptUrl = ScriptApp.getService().getUrl();
+      template.isPdf = false;
 
       return template
         .evaluate()
