@@ -75,6 +75,7 @@
                 type="email"
                 name="email"
                 id="as-email"
+                required
                 class="input-field text-sm py-2"
               />
             </div>
@@ -3735,7 +3736,7 @@
       "border-red-200",
       "text-yellow-700",
       "bg-yellow-50",
-      "border-yellow-200",
+      "border-yellow-200"
     );
 
     const val = select.value;
@@ -3747,7 +3748,7 @@
       select.classList.add(
         "text-yellow-700",
         "bg-yellow-50",
-        "border-yellow-200",
+        "border-yellow-200"
       );
     }
   }
@@ -3848,15 +3849,15 @@
 
     // 2. Sync Checkboxes
     const sourceCheckboxes = document.querySelectorAll(
-      'input[name="petsList"]',
+      'input[name="petsList"]'
     );
     const targetCheckboxes = document.querySelectorAll(
-      'input[name="carePetsList"]',
+      'input[name="carePetsList"]'
     );
 
     sourceCheckboxes.forEach((sourceCb) => {
       const targetCb = Array.from(targetCheckboxes).find(
-        (cb) => cb.value === sourceCb.value,
+        (cb) => cb.value === sourceCb.value
       );
       if (targetCb) {
         targetCb.checked = sourceCb.checked;
