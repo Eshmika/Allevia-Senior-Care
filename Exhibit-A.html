@@ -57,150 +57,229 @@
     </style>
   </head>
   <body class="bg-gray-50 min-h-screen py-10 px-4">
-    <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden container-box">
+    <div
+      class="max-w-3xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden container-box"
+    >
       <div class="px-8 py-6">
-        <h1 class="text-2xl font-bold text-center">            
-            EXHIBIT A - COST OF SERVICES
+        <h1 class="text-2xl font-bold text-center">
+          EXHIBIT A - COST OF SERVICES
         </h1>
       </div>
 
       <div class="p-8">
         <p class="text-justify mb-6">
-          <b>THIS</b> Exhibit A - Cost of Services, shall be incorporated into and
-          considered part of the Client Services Agreement ("<b>Agreement</b>") by and
-          between Allevia Senior Care and the CLIENT and/or Financially
-          Responsible Party by this reference.
+          <b>THIS</b> Exhibit A - Cost of Services, shall be incorporated into
+          and considered part of the Client Services Agreement
+          ("<b>Agreement</b>") by and between Allevia Senior Care and the CLIENT
+          and/or Financially Responsible Party by this reference.
         </p>
 
-        <h3 class="font-semibold underline mt-6 mb-4">Projected Service Hours and Costs</h3>
-        <table class="w-full mb-6">
-            <tr>
-                <td style="width: 25%;">
-                    Projected Hours Per Week:<br>
-                    <div class="field"></div>
-                </td>
-                <td style="width: 25%;">
-                    Level of Care Needed:<br>
-                    <div class="field"></div>
-                </td>
-                <td style="width: 25%;">
-                    Rate Per Hour:<br>
-                    <div class="field"></div>
-                </td>
-                <td style="width: 25%;">
-                    OVERTIME<br>
-                    <div class="mt-2">
-                        <span class="checkbox"></span> YES &nbsp; <span class="checkbox"></span> NO
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    Projected Weekly Cost:<br>
-                    <div class="field"></div>
-                </td>
-                <td colspan="2">
-                    Projected Monthly Cost:<br>
-                    <div class="field"></div>
-                </td>
-            </tr>
-        </table>
+        <h3 class="font-semibold underline mt-6 mb-4">
+          Projected Service Hours and Costs
+        </h3>
 
-         <div class="mb-4">
-            <span class="font-semibold">Billing Address:</span>
-            <div class="field w-full"></div>
+        <div
+          class="border border-gray-300 rounded-lg overflow-hidden mb-8 shadow-sm"
+        >
+          <table class="w-full m-0" style="margin-bottom: 0">
+            <!-- Row 1: Key Metrics -->
+            <tr class="bg-gray-50">
+              <td
+                class="w-1/4 p-3 border-r border-b border-gray-300 align-middle text-center"
+              >
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Hours / Week</span
+                >
+                <div class="text-lg font-bold text-gray-900">
+                  <?= clientData.projectHours || '-' ?>
+                </div>
+              </td>
+              <td
+                class="w-1/4 p-3 border-r border-b border-gray-300 align-middle text-center"
+              >
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Level of Care</span
+                >
+                <div class="text-lg font-bold text-gray-900">
+                  <?= clientData.levelOfCare || '-' ?>
+                </div>
+              </td>
+              <td
+                class="w-1/4 p-3 border-r border-b border-gray-300 align-middle text-center"
+              >
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Rate / Hour</span
+                >
+                <div class="text-lg font-bold text-gray-900">
+                  <?= clientData.hourlyRate || '-' ?>
+                </div>
+              </td>
+              <td
+                class="w-1/4 p-3 border-b border-gray-300 align-middle text-center relative"
+              >
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Overtime</span
+                >
+                <div class="flex justify-center items-center gap-3 mt-1">
+                  <div class="flex items-center">
+                    <span
+                      class="w-4 h-4 border border-gray-600 flex items-center justify-center mr-1 bg-white text-xs"
+                    >
+                      <?= (clientData.overtime === 'Yes' || clientData.overtime === 'on' ? '✓' : '') ?>
+                    </span>
+                    <span class="text-xs font-bold">YES</span>
+                  </div>
+                  <div class="flex items-center">
+                    <span
+                      class="w-4 h-4 border border-gray-600 flex items-center justify-center mr-1 bg-white text-xs"
+                    >
+                      <?= (clientData.overtime === 'No' ? '✓' : '') ?>
+                    </span>
+                    <span class="text-xs font-bold">NO</span>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 2: Costs -->
+            <tr>
+              <td
+                colspan="2"
+                class="p-3 border-r border-gray-300 align-middle text-center bg-white"
+              >
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Projected Weekly Cost</span
+                >
+                <div class="text-xl font-bold text-green-700">
+                  <?= clientData.weeklyCost || '-' ?>
+                </div>
+              </td>
+              <td colspan="2" class="p-3 align-middle text-center bg-white">
+                <span
+                  class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-1"
+                  >Projected Monthly Cost</span
+                >
+                <div class="text-xl font-bold text-green-700">
+                  <?= clientData.monthlyCost || '-' ?>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 3: Billing Address -->
+            <tr>
+              <td colspan="4" class="p-4 bg-gray-100 border-t border-gray-300">
+                <div class="flex items-start">
+                  <span
+                    class="text-xs font-bold text-gray-500 uppercase tracking-wider mr-2 mt-1 shrink-0"
+                    >Billing Address:</span
+                  >
+                  <div class="text-base font-medium text-gray-800 break-words">
+                    <?= [clientData.billingAddress, clientData.billingApt, clientData.billingCity, clientData.billingState, clientData.billingZip].filter(Boolean).join(', ') || 'Not provided' ?>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </table>
         </div>
 
         <h3 class="font-semibold underline mt-6 mb-4">Initial Deposit</h3>
         <div class="flex gap-4 mb-4">
-            <div style="flex: 1;">
-                <span>Initial Deposit Amount:</span>
-                <div class="field"></div>
-            </div>
-             <div style="flex: 1;">
-                <span>Date:</span>
-                <div class="field"></div>
-            </div>
+          <div style="flex: 1">
+            <span>Initial Deposit Amount:</span>
+            <div class="field"></div>
+          </div>
+          <div style="flex: 1">
+            <span>Date:</span>
+            <div class="field"></div>
+          </div>
         </div>
 
         <h3 class="font-semibold underline mt-6 mb-4">Payment Method:</h3>
-        
+
         <!-- Visa -->
         <div class="mb-4">
-            <div class="flex items-center mb-2">
-                 <span class="checkbox"></span> <span class="ml-2 font-semibold">VISA #:</span>
-            </div>
-            <div class="field w-full"></div>
+          <div class="flex items-center mb-2">
+            <span class="checkbox"></span>
+            <span class="ml-2 font-semibold">VISA #:</span>
+          </div>
+          <div class="field w-full"></div>
         </div>
-        
+
         <div class="mb-4">
-            <span>Name as it Appears on Credit Card:</span>
-            <div class="field w-full"></div>
+          <span>Name as it Appears on Credit Card:</span>
+          <div class="field w-full"></div>
         </div>
-        
-         <!-- Mastercard -->
+
+        <!-- Mastercard -->
         <div class="mb-4 flex gap-4">
-            <div style="flex: 1;">
-                <div class="flex items-center mb-2">
-                    <span class="checkbox"></span> <span class="ml-2 font-semibold">MasterCard #:</span>
-                </div>
-                <div class="field w-full"></div>
+          <div style="flex: 1">
+            <div class="flex items-center mb-2">
+              <span class="checkbox"></span>
+              <span class="ml-2 font-semibold">MasterCard #:</span>
             </div>
-             <div style="flex: 1;">
-                 <div class="mb-2">Credit Card Exp. Date:</div>
-                 <div class="field w-full"></div>
-             </div>
+            <div class="field w-full"></div>
+          </div>
+          <div style="flex: 1">
+            <div class="mb-2">Credit Card Exp. Date:</div>
+            <div class="field w-full"></div>
+          </div>
         </div>
 
         <!-- Check -->
-         <div class="mb-6">
-            <span>Check #:</span>
-            <div class="field w-full"></div>
+        <div class="mb-6">
+          <span>Check #:</span>
+          <div class="field w-full"></div>
         </div>
 
         <!-- Insurance -->
         <div class="mt-6 border-t pt-4">
-            <div class="flex items-center mb-4">
-                 <span class="checkbox"></span> <span class="ml-2 font-semibold">Insurance Payment</span>
-            </div>
-            
-            <div style="padding-left: 1.5rem;" class="space-y-4">
-                <div class="flex gap-4">
-                     <div style="flex: 1;">
-                        <span>Insurance Company Name:</span>
-                        <div class="field"></div>
-                     </div>
-                      <div style="flex: 1;">
-                        <span>Policy Number:</span>
-                        <div class="field"></div>
-                     </div>
-                </div>
-                
-                 <div>
-                    <span>Insurance Company Address:</span>
-                    <div class="field"></div>
-                 </div>
+          <div class="flex items-center mb-4">
+            <span class="checkbox"></span>
+            <span class="ml-2 font-semibold">Insurance Payment</span>
+          </div>
 
-                 <div class="flex gap-4">
-                     <div style="flex: 1;">
-                        <span>Contact Name:</span>
-                        <div class="field"></div>
-                     </div>
-                      <div style="flex: 1;">
-                        <span>Contact Phone #:</span>
-                        <div class="field"></div>
-                     </div>
-                </div>
+          <div style="padding-left: 1.5rem" class="space-y-4">
+            <div class="flex gap-4">
+              <div style="flex: 1">
+                <span>Insurance Company Name:</span>
+                <div class="field"></div>
+              </div>
+              <div style="flex: 1">
+                <span>Policy Number:</span>
+                <div class="field"></div>
+              </div>
             </div>
+
+            <div>
+              <span>Insurance Company Address:</span>
+              <div class="field"></div>
+            </div>
+
+            <div class="flex gap-4">
+              <div style="flex: 1">
+                <span>Contact Name:</span>
+                <div class="field"></div>
+              </div>
+              <div style="flex: 1">
+                <span>Contact Phone #:</span>
+                <div class="field"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        
+
         <p class="mt-8 italic">
           Executed and applicable as of the Effective Date of the Agreement.
         </p>
 
         <!-- Signing Form Section (Same as Agreement) -->
         <form id="clientAgreementForm" class="space-y-6 mt-8 border-t pt-6">
-           <div class="space-y-2 mt-2 pt-4">
+          <div class="space-y-2 mt-2 pt-4">
             <? if (isPdf) { ?>
             <div class="flex gap-3 items-start">
               <span style="font-size: 18px; line-height: 1">☑</span>
@@ -352,10 +431,10 @@
               Sign Agreement
             </button>
           </div>
-        </form>       
+        </form>
       </div>
     </div>
-    
+
     <script>
       // Set default local date-time to now (for user convenience)
       (function setDefaultDateTimeLocal() {

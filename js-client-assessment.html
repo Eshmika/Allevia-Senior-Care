@@ -343,7 +343,9 @@
         setVal("as-hourlyRate", data.hourlyRate);
         setVal("as-levelOfCare", data.levelOfCare);
         document.getElementById("as-overtime").checked =
-          data.overtime === "on" || data.overtime === true;
+          data.overtime === "on" ||
+          data.overtime === true ||
+          data.overtime === "Yes";
 
         calculateProjectCosts();
 
@@ -828,11 +830,17 @@
           "careCertifications",
           "carePetsList",
           "petsList",
+          "overtime",
         ].includes(key)
       ) {
         data[key] = value;
       }
     });
+
+    // Handle Overtime
+    data.overtime = document.getElementById("as-overtime").checked
+      ? "Yes"
+      : "No";
 
     // Handle Mental Status Other
     if (data.mentalStatus_select === "Other") {
