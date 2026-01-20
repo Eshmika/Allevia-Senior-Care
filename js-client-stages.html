@@ -214,11 +214,27 @@
           docButtons = `<span class="text-xs text-gray-400 italic">No docs signed</span>`;
         }
 
+        // Check if all documents are signed (have a link)
+        const signedCount = docs.filter(
+          (doc) => doc.link && doc.link.trim() !== ""
+        ).length;
+        const allSigned = signedCount === 6;
+
+        let passFailButtons = "";
+        if (allSigned) {
+          passFailButtons = `
+                <div class="h-6 w-px bg-gray-300"></div>
+                <button onclick="passClientAgreement('${client.id}')" class="px-2 py-1 bg-green-100 text-green-700 rounded text-xs font-bold hover:bg-green-200">Pass</button>
+                <button onclick="failClientAgreement('${client.id}')" class="px-2 py-1 bg-red-100 text-red-700 rounded text-xs font-bold hover:bg-red-200">Fail</button>
+            `;
+        }
+
         actionHtml = `
             <div class="flex items-center justify-end gap-3 px-4">
                 <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg border border-gray-100">
                     ${docButtons}
                 </div>
+                ${passFailButtons}
                 <div class="h-6 w-px bg-gray-300"></div>
                 <button onclick="resendIntakeEmail('${client.id}')" title="Resend Intake Email" class="w-8 h-8 flex items-center justify-center bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 border border-orange-100 transition-colors">
                     <i class="ph-bold ph-envelope-simple"></i>
@@ -722,6 +738,65 @@
             }
           })
           .restoreClientFromArchive(clientId, targetStage);
+      }
+    });
+  }
+
+  function passClientAgreement(clientId) {
+    Swal.fire({
+      title: "Pass Agreement Stage",
+      text: "Are you sure you want to move this client to 'Convert Clients'?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#22c55e",
+      confirmButtonText: "Yes, Pass",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire("Success", res.message, "success");
+              loadClientStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .updateClientStage(clientId, "Convert Clients");
+      }
+    });
+  }
+
+  function failClientAgreement(clientId) {
+    Swal.fire({
+      title: "Fail Client Agreement",
+      text: "Please enter a reason for failing this client (will be archived):",
+      input: "textarea",
+      inputPlaceholder: "Enter note...",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      confirmButtonText: "Fail & Archive",
+      inputValidator: (value) => {
+        if (!value) {
+          return "You need to write something!";
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const note = result.value;
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire(
+                "Archived",
+                "Client failed agreements and archived.",
+                "info"
+              );
+              loadClientStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .archiveClient(clientId, note);
       }
     });
   }
