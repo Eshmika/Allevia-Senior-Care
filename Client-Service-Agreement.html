@@ -76,11 +76,15 @@
             <p class="text-justify">
               <b>THIS</b> Client Services Agreement ("Agreement") is entered
               into as of
-              <?= Utilities.formatDate(new Date(),
-              'America/New_York', 'EEEE MMM dd, yyyy') ?>
+              <u
+                ><?= Utilities.formatDate(new Date(),
+              'America/New_York', 'EEEE MMM dd, yyyy') ?></u
+              >
               <b>("Effective Date")</b>, by and between Client and Allevia
               Senior Care (Allevia, An Ohio LLC) and
-              <?= [clientData.firstName, clientData.middleName, clientData.lastName].filter(Boolean).join(' ') ?>
+              <b
+                ><?= [clientData.firstName, clientData.middleName, clientData.lastName].filter(Boolean).join(' ') ?></b
+              >
               ("CLIENT"). CLIENT desires to hire Allevia to provide Services,
               and Allevia offers and desires to provide and/or perform such
               Services for the CLIENT under the terms and conditions stated
