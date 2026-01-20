@@ -320,8 +320,15 @@ function sendIntakePacketEmail(clientId) {
     const webAppUrl = ScriptApp.getService().getUrl();
     // Link to the step-by-step signing page
     const signLink = `${webAppUrl}?page=client-intake-steps&id=${clientId}`;
-    // Assuming a page/link for downloading records exists
-    const downloadLink = `${webAppUrl}?page=client-intake-records&id=${clientId}`;
+    // Get Client Folder Link
+    const parentFolderId = "1VKJ2B4LtUmysr6bAEQqRsMwsMEySU_0f";
+    let downloadLink = "#";
+    try {
+      const folder = getClientFolder(parentFolderId, details);
+      downloadLink = folder.getUrl();
+    } catch (err) {
+      console.error("Error fetching client folder in email: " + err);
+    }
 
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
@@ -362,10 +369,9 @@ function sendIntakePacketEmail(clientId) {
             <p style="font-weight: bold; color: #2563eb; margin-bottom: 10px;">📘 For Your Records:</p>
             <ul style="color: #555; font-size: 14px; line-height: 1.6;">
               <li><a href="https://drive.google.com/file/d/1ImB8W3OQ9AsZMJZL5cfe1fgB3zj2jO7Y/view?usp=sharing" style="color: #2563eb; text-decoration: none;">Policies and Procedures</a></li>
-              <li>Health Information Sheet for Emergency</li>
             </ul>
              <div style="text-align: center; margin-top: 15px;">
-              <a href="" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block;">
+              <a href="${downloadLink}" style="background-color: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 14px; display: inline-block;">
                   Download For Your Records
               </a>
             </div>
