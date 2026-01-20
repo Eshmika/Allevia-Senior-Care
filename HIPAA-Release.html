@@ -27,9 +27,9 @@
       .mt-2 { margin-top: 0.5rem; }
       .mt-4 { margin-top: 1rem; }
       .mt-6 { margin-top: 1.5rem; }
-      .p-8 { padding-top: 0.2rem; padding-left: 2rem; padding-right: 2rem; padding-bottom: 0.5rem; }
+      .p-8 { padding-left: 2rem; padding-right: 2rem; padding-bottom: 0.5rem; }
       .px-8 { padding-left: 2rem; padding-right: 2rem; }
-      .space-y-2 > * + * { margin-top: 0.5rem; }
+      .space-y-2 > * + * { margin-top: 0.2rem; }
       .list-none { list-style: none; padding: 0; margin: 0; }
       .w-full { width: 100%; }
       .border { border-width: 1px; border-style: solid; }
@@ -39,14 +39,14 @@
       .p-2 { padding: 0.5rem; }
       .block { display: block; }
       .flex { display: flex; }
-      .gap-3 { gap: 0.75rem; }
+      .gap-3 { gap: 0.2rem; }
       .items-start { align-items: flex-start; }
       .text-red-500 { color: #ef4444; }
       .rounded-xl { border-radius: 0.75rem; }
       .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
       .min-h-screen { min-height: 100vh; }
       .bg-gray-50 { background-color: #f9fafb; }
-      .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+      .py-10 { padding-top: 1.5rem; }
       .px-4 { padding-left: 1rem; padding-right: 1rem; }
       .mx-auto { margin-left: auto; margin-right: auto; }
       .max-w-3xl { max-width: 48rem; }
@@ -56,14 +56,13 @@
       .ml-6 { margin-left: 1.5rem; }
       .space-y-1 > * + * { margin-top: 0.25rem; }
       .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
-      .pt-6 { padding-top: 0.2rem; }
       .border-t-2 { border-top-width: 2px; }
       .shrink-0 { flex-shrink: 0; }
-      .mt-8 { margin-top: 0.5rem; }
+      .mt-8 { margin-top: 0.1rem; }
 
       /* PDF Specific Overrides */
       <? if (isPdf) { ?>
-        body { background-color: white !important; padding: 0 !important; }
+        body { background-color: white !important; padding: 0 !important; min-height: auto !important; }
         .shadow-lg { box-shadow: none !important; }
         .rounded-xl { border-radius: 0 !important; }
         .no-pdf { display: none !important; }
