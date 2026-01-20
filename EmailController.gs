@@ -413,3 +413,71 @@ function sendIntakePacketEmail(clientId) {
     return { success: false, message: e.toString() };
   }
 }
+
+function sendWelcomeClientEmail(clientId) {
+  try {
+    const details = getClientDetails(clientId);
+    if (!details) return { success: false, message: "Client not found" };
+
+    const subject = `Your Care Journey Begins with Allevia Senior Care`;
+
+    // Check if website, phone, email are available or use defaults
+    const website = "www.alleviaseniorcare.com";
+    const phone = "440-907-9599";
+    const email = "contact@alleviaseniorcare.com";
+
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+        <!-- Header -->
+        <div style="background-color: #65c027; padding: 24px; text-align: center;">
+          <h2 style="color: white; margin: 0; font-size: 24px;">Allevia Senior Care</h2>
+          <p style="color: #f0fdf4; margin: 5px 0 0; font-style: italic;">Welcome Home</p>
+        </div>
+        
+        <!-- Body -->
+        <div style="padding: 30px; background-color: #ffffff;">
+          <p style="margin-top: 0;">Dear <strong>${details.firstName} ${details.lastName}</strong>,</p>
+          
+          <p>Welcome to Allevia Senior Care! We are honored that you’ve chosen us to be part of your care journey. Our mission is to provide compassionate, reliable, and personalized support that helps you or your loved one feel safe, respected, and truly cared for at home.</p>
+          
+          <p>Here’s what you can expect as a valued client:</p>
+          <ul style="color: #555; font-size: 14px; line-height: 1.6; list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 8px;">✅ <strong>Personalized Care Plans</strong> designed around your unique needs and preferences</li>
+            <li style="margin-bottom: 8px;">✅ <strong>Professional, compassionate caregivers</strong> trained in senior care and dedicated to your comfort</li>
+            <li style="margin-bottom: 8px;">✅ <strong>Reliable communication</strong> so you always feel informed and supported</li>
+            <li style="margin-bottom: 8px;">✅ <strong>Peace of mind</strong> knowing your well-being is our top priority</li>
+          </ul>
+          
+          <p>We’ll be reaching out shortly to confirm your care schedule and answer any questions you may have. In the meantime, please don’t hesitate to contact our office. We look forward to serving you.</p>
+
+          <br>
+          <p style="margin-bottom: 5px;">Warm regards,</p>
+          <p style="margin: 0; font-weight: bold;">The Allevia Senior Care Team</p>
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            <a href="https://${website}" style="color: #65c027; text-decoration: none;">${website}</a> | ${phone} | <a href="mailto:${email}" style="color: #65c027; text-decoration: none;">${email}</a>
+          </p>
+        </div>
+
+        <!-- Footer -->
+        <div style="background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 12px; color: #9ca3af;">
+          &copy; 2025 Allevia Senior Care. All rights reserved.
+        </div>
+      </div>
+    `;
+
+    // Only send if email is present
+    if (details.email && details.email.includes("@")) {
+      MailApp.sendEmail({
+        to: details.email,
+        subject: subject,
+        htmlBody: htmlBody,
+      });
+      return { success: true, message: "Welcome email sent successfully!" };
+    } else {
+      return { success: false, message: "Client email invalid or missing." };
+    }
+  } catch (e) {
+    console.error(e);
+    return { success: false, message: e.toString() };
+  }
+}

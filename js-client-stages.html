@@ -244,6 +244,14 @@
                 </button>
             </div>
         `;
+      } else if (stage === "Convert Clients") {
+        actionHtml = `
+            <div class="flex items-center justify-end gap-2 px-4">
+                <button onclick="resendWelcomeEmail('${client.id}')" class="flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded text-xs font-bold hover:bg-green-100 transition-colors border border-green-100">
+                    <i class="ph-bold ph-envelope-simple"></i> Resend Welcome Email
+                </button>
+            </div>
+        `;
       } else if (stage === "Archived") {
         actionHtml = `
                     <div class="flex items-center justify-end gap-2 px-4">
@@ -749,9 +757,18 @@
       icon: "question",
       showCancelButton: true,
       confirmButtonColor: "#22c55e",
-      confirmButtonText: "Yes, Pass",
+      confirmButtonText: "Yes, Pass & Send Email",
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Processing",
+          text: "Updating stage and sending welcome email...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
         google.script.run
           .withSuccessHandler((res) => {
             if (res.success) {
@@ -761,9 +778,30 @@
               Swal.fire("Error", res.message, "error");
             }
           })
-          .updateClientStage(clientId, "Convert Clients");
+          .processClientConversion(clientId);
       }
     });
+  }
+
+  function resendWelcomeEmail(clientId) {
+    Swal.fire({
+      title: "Resend Email",
+      text: "Sending welcome email to client...",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        if (res.success) {
+          Swal.fire("Sent!", "Welcome email has been sent.", "success");
+        } else {
+          Swal.fire("Error", res.message, "error");
+        }
+      })
+      .sendWelcomeClientEmail(clientId);
   }
 
   function failClientAgreement(clientId) {

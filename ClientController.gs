@@ -1077,3 +1077,22 @@ function archiveClient(clientId, reason) {
 
   return { success: true, message: "Client has been moved to Archives." };
 }
+
+function processClientConversion(clientId) {
+  // 1. Update Stage
+  const updateRes = updateClientStage(clientId, "Convert Clients");
+  if (!updateRes.success) return updateRes;
+
+  // 2. Send Welcome Email
+  const emailRes = sendWelcomeClientEmail(clientId);
+
+  // Return combined result
+  if (emailRes.success) {
+    return { success: true, message: "Client passed and welcome email sent!" };
+  } else {
+    return {
+      success: true,
+      message: "Client passed, but email failed: " + emailRes.message,
+    };
+  }
+}
