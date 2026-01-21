@@ -15,26 +15,42 @@
       interview: [],
       background: [],
       active: [],
+      archived: [],
     };
 
+    const archiveSearch =
+      document.getElementById("cgArchiveSearch")?.value.toLowerCase() || "";
+
     cgData.forEach((cg) => {
+      // Archived
+      if (
+        cg.appStatus === "Archived" ||
+        cg.interviewStatus === "Failed" ||
+        cg.backgroundCheck === "Failed"
+      ) {
+        if (archiveSearch) {
+          const match =
+            cg.name.toLowerCase().includes(archiveSearch) ||
+            cg.id.toLowerCase().includes(archiveSearch);
+          if (!match) return;
+        }
+        stages.archived.push(cg);
+      }
       // Stage 4: Active / Inactive / No call / Vacation
-      // Condition: Status is one of the final states.
-      if (["Active", "Inactive", "No call", "Vacation"].includes(cg.status)) {
+      else if (
+        ["Active", "Inactive", "No call", "Vacation"].includes(cg.status)
+      ) {
         stages.active.push(cg);
       }
       // Stage 3: Passed Background Check
-      // Condition: Interview Passed, but not yet Active
       else if (cg.interviewStatus === "Passed") {
         stages.background.push(cg);
       }
       // Stage 2: Interview Completed
-      // Condition: App Completed
       else if (cg.appStatus === "Application Completed") {
         stages.interview.push(cg);
       }
       // Stage 1: New Application
-      // Condition: Pending OR Applicant
       else if (
         cg.appStatus === "Pending Application" ||
         cg.status === "Applicant"
@@ -47,6 +63,7 @@
     renderStageList("interview", stages.interview);
     renderStageList("background", stages.background);
     renderStageList("active", stages.active);
+    renderStageList("caregiver-archives", stages.archived);
 
     document.getElementById("count-stage-new").textContent = stages.new.length;
     document.getElementById("count-stage-interview").textContent =
@@ -55,6 +72,10 @@
       stages.background.length;
     document.getElementById("count-stage-active").textContent =
       stages.active.length;
+    if (document.getElementById("count-caregiver-archives")) {
+      document.getElementById("count-caregiver-archives").textContent =
+        stages.archived.length;
+    }
   }
 
   function renderStageList(stage, list) {
@@ -159,6 +180,15 @@
               <i class="ph ph-arrow-u-up-left"></i> Undo
             </button>
           </div>`;
+      } else if (stage === "caregiver-archives") {
+        const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1"><i class="ph ph-eye"></i> View Details</button>`;
+        actionHtml = `
+          <div class="flex justify-end items-center gap-2">
+            ${viewDetailsBtn}
+            <button onclick="restoreCaregiver('${cg.id}')" class="text-xs bg-gray-50 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100 font-bold border border-gray-200 flex items-center gap-1">
+              <i class="ph ph-arrow-u-up-left"></i> Restore
+            </button>
+          </div>`;
       }
 
       tbody.innerHTML += `
@@ -172,8 +202,8 @@
                       stage === "interview"
                         ? cg.interviewStatus
                         : stage === "background"
-                        ? cg.backgroundCheck
-                        : cg.status
+                          ? cg.backgroundCheck
+                          : cg.status
                     }
                 </td>
                 <td class="p-3 text-right">${actionHtml}</td>
@@ -200,7 +230,7 @@
               Swal.fire(
                 "Success",
                 "Caregiver Activated & Payment Email Sent",
-                "success"
+                "success",
               );
               loadCaregiverStages();
             })
@@ -210,6 +240,29 @@
         }
       })
       .updateCaregiverStage(id, stage, value);
+  }
+
+  function restoreCaregiver(id) {
+    Swal.fire({
+      title: "Restore Caregiver?",
+      text: "This will move the caregiver back to the Interview stage.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, restore",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res.success) {
+              Swal.fire("Restored", res.message, "success");
+              loadCaregiverStages();
+            } else {
+              Swal.fire("Error", res.message, "error");
+            }
+          })
+          .restoreCaregiverFromArchive(id);
+      }
+    });
   }
 
   function resendPaymentEmail(id) {

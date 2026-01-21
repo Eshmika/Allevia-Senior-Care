@@ -1,0 +1,94 @@
+<div id="view-caregiver-archives" class="view-section hidden">
+  <div class="mb-8 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Caregiver Archives</h1>
+      <p class="text-gray-500 mt-1">
+        Historical caregiver records and rejected applicants.
+      </p>
+    </div>
+    <div class="p-3 bg-orange-100 rounded-2xl">
+      <i class="ph-duotone ph-users-four text-3xl text-orange-400"></i>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-6">
+    <!-- Stats Card -->
+    <div
+      class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between"
+    >
+      <div class="flex items-center gap-4">
+        <div
+          class="w-12 h-12 rounded-xl bg-orange-600 text-white flex items-center justify-center"
+        >
+          <i class="ph-bold ph-user-minus text-xl"></i>
+        </div>
+        <div>
+          <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">
+            Total Archived
+          </p>
+          <h3
+            id="count-caregiver-archives"
+            class="text-2xl font-black text-gray-900"
+          >
+            0
+          </h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Card -->
+    <div
+      class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+    >
+      <div
+        class="px-6 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between"
+      >
+        <h2 class="font-bold text-gray-700 flex items-center gap-2">
+          <i class="ph ph-list-bullets text-gray-400"></i>
+          Archived Caregivers
+        </h2>
+        <div class="relative">
+          <input
+            id="cgArchiveSearch"
+            oninput="renderCaregiverStages()"
+            type="text"
+            placeholder="Search archives..."
+            class="pl-8 pr-4 py-1.5 text-xs bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-all outline-none"
+          />
+          <i
+            class="ph ph-magnifying-glass absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"
+          ></i>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-50/50">
+            <tr>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400"
+              >
+                Caregiver Info
+              </th>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400"
+              >
+                Status
+              </th>
+              <th
+                class="px-6 py-4 font-bold uppercase text-[10px] tracking-widest text-gray-400 text-right"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            id="list-stage-caregiver-archives"
+            class="divide-y divide-gray-50"
+          >
+            <!-- Populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

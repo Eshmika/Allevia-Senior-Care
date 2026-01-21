@@ -342,7 +342,7 @@ function submitFullApplication(form) {
 
     // Find Row
     const rowIndex = data.findIndex(
-      (r) => String(r[0]).trim().toUpperCase() === targetId
+      (r) => String(r[0]).trim().toUpperCase() === targetId,
     );
 
     if (rowIndex === -1)
@@ -642,7 +642,7 @@ function getCaregiverDetails(id) {
   const searchId = String(id).trim().toUpperCase();
 
   const rowIndex = data.findIndex(
-    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
   );
 
   if (rowIndex === -1) return null;
@@ -712,7 +712,7 @@ function updateCaregiverStage(id, stage, value) {
 
   const searchId = String(id).trim().toUpperCase();
   const rowIndex = data.findIndex(
-    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
   );
 
   if (rowIndex === -1) return { success: false, message: "ID not found" };
@@ -730,6 +730,14 @@ function updateCaregiverStage(id, stage, value) {
 
   sheet.getRange(r, colIndex + 1).setValue(value);
 
+  // If failed, move to Archived
+  if (value === "Failed") {
+    const appStatusIdx = headers.indexOf("App Status");
+    if (appStatusIdx > -1) {
+      sheet.getRange(r, appStatusIdx + 1).setValue("Archived");
+    }
+  }
+
   // Check for Activation + Payment to set Started Date
   if (stage === "Active" && value === "Active") {
     const payMethodIdx = headers.indexOf("Payment Method");
@@ -746,6 +754,34 @@ function updateCaregiverStage(id, stage, value) {
   }
 
   return { success: true, newValue: value };
+}
+
+function restoreCaregiverFromArchive(id) {
+  const sheet = getOrCreateSheet();
+  const data = sheet.getDataRange().getDisplayValues();
+  const headers = data[0];
+
+  const searchId = String(id).trim().toUpperCase();
+  const rowIndex = data.findIndex(
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
+  );
+
+  if (rowIndex === -1) return { success: false, message: "ID not found" };
+
+  const r = rowIndex + 1;
+
+  const interviewIdx = headers.indexOf("Interview Status");
+  const backgroundIdx = headers.indexOf("Background Check");
+  const appStatusIdx = headers.indexOf("App Status");
+
+  if (interviewIdx > -1)
+    sheet.getRange(r, interviewIdx + 1).setValue("Pending");
+  if (backgroundIdx > -1)
+    sheet.getRange(r, backgroundIdx + 1).setValue("Pending");
+  if (appStatusIdx > -1)
+    sheet.getRange(r, appStatusIdx + 1).setValue("Application Completed");
+
+  return { success: true, message: "Caregiver restored to Interview stage." };
 }
 
 function getDashboardStats() {
@@ -778,7 +814,7 @@ function submitPaymentDetails(form) {
     const headers = data[0];
 
     const rowIndex = data.findIndex(
-      (r) => String(r[0]).trim().toUpperCase() === targetId
+      (r) => String(r[0]).trim().toUpperCase() === targetId,
     );
 
     if (rowIndex === -1)
@@ -834,11 +870,11 @@ function submitPaymentDetails(form) {
         idFile.setName(
           `CHECK_ID_PROOF - ${details["First Name"]} ${
             details["Last Name"]
-          } - ${idBlob.getName()}`
+          } - ${idBlob.getName()}`,
         );
         idFile.setSharing(
           DriveApp.Access.ANYONE_WITH_LINK,
-          DriveApp.Permission.VIEW
+          DriveApp.Permission.VIEW,
         );
         setVal("Check ID Proof", idFile.getUrl());
       }
@@ -854,11 +890,11 @@ function submitPaymentDetails(form) {
         addrFile.setName(
           `CHECK_ADDRESS_PROOF - ${details["First Name"]} ${
             details["Last Name"]
-          } - ${addrBlob.getName()}`
+          } - ${addrBlob.getName()}`,
         );
         addrFile.setSharing(
           DriveApp.Access.ANYONE_WITH_LINK,
-          DriveApp.Permission.VIEW
+          DriveApp.Permission.VIEW,
         );
         setVal("Check Address Proof", addrFile.getUrl());
       }
