@@ -28,33 +28,10 @@
           type="text"
           id="clSearch"
           onkeyup="renderClTable()"
-          placeholder="Search clients..."
+          placeholder="Search by name or email..."
           class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-full focus:outline-none focus:border-[#65c027]"
         />
       </div>
-      <select
-        id="clFilterStatus"
-        onchange="renderClTable()"
-        class="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2 focus:border-[#65c027]"
-      >
-        <option value="All">All Status</option>
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-        <option value="Cancelled service">Cancelled</option>
-        <option value="Temporary hospital stay">Hospital Stay</option>
-      </select>
-      <select
-        id="clFilterType"
-        onchange="renderClTable()"
-        class="bg-gray-50 border border-gray-200 text-sm rounded-lg p-2 focus:border-[#65c027]"
-      >
-        <option value="All">All Types</option>
-        <option value="Lead Agency">Lead Agency</option>
-        <option value="LTCI">LTCI</option>
-        <option value="Medicare">Medicare</option>
-        <option value="Private Pay">Private Pay</option>
-        <option value="VA">VA</option>
-      </select>
     </div>
 
     <!-- Table -->

@@ -68,23 +68,17 @@
 
   function renderClTable() {
     const searchEl = document.getElementById("clSearch");
-    const statusEl = document.getElementById("clFilterStatus");
-    const typeEl = document.getElementById("clFilterType");
 
     if (!searchEl) return;
 
     const search = searchEl.value.toLowerCase();
-    const statusFilter = statusEl.value;
-    const typeFilter = typeEl.value;
-
     const filtered = clData.filter((item) => {
       const matchSearch =
         item.name.toLowerCase().includes(search) ||
         item.email.toLowerCase().includes(search);
-      const matchStatus =
-        statusFilter === "All" || item.status === statusFilter;
-      const matchType = typeFilter === "All" || item.type === typeFilter;
-      return matchSearch && matchStatus && matchType;
+      const isConvertActive =
+        item.stage === "Convert Clients" && item.status === "Active";
+      return matchSearch && isConvertActive;
     });
 
     const totalPages = Math.ceil(filtered.length / clRowsPerPage);
@@ -137,8 +131,8 @@
           </td>
           <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
           <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
-          row.status
-        }</span></td>
+            row.status
+          }</span></td>
           <td class="p-4 text-right">
              <button onclick="loadClientProfile('${
                row.id
@@ -272,8 +266,8 @@
         data.clientApt,
         data.clientCity,
         data.clientState,
-        data.clientZip
-      )
+        data.clientZip,
+      ),
     );
     set(
       "cp-billingAddressFull",
@@ -282,8 +276,8 @@
         data.billingApt,
         data.billingCity,
         data.billingState,
-        data.billingZip
-      )
+        data.billingZip,
+      ),
     );
 
     // 4. Representative
@@ -298,17 +292,17 @@
     set(
       "cp-allergies",
       data.allergies +
-        (data.allergiesDetail ? ` (${data.allergiesDetail})` : "")
+        (data.allergiesDetail ? ` (${data.allergiesDetail})` : ""),
     );
     set(
       "cp-covidVaccine",
       data.covidVaccine +
-        (data.covidVaccineDetail ? ` (${data.covidVaccineDetail})` : "")
+        (data.covidVaccineDetail ? ` (${data.covidVaccineDetail})` : ""),
     );
     set(
       "cp-fluVaccine",
       data.fluVaccine +
-        (data.fluVaccineDetail ? ` (${data.fluVaccineDetail})` : "")
+        (data.fluVaccineDetail ? ` (${data.fluVaccineDetail})` : ""),
     );
 
     // 6. Care Needs
@@ -328,8 +322,8 @@
         data.emergencyApt,
         data.emergencyCity,
         data.emergencyState,
-        data.emergencyZip
-      )
+        data.emergencyZip,
+      ),
     );
 
     // 8. Service Plan

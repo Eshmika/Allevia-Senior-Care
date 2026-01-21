@@ -6,9 +6,14 @@
     google.script.run
       .withSuccessHandler((data) => {
         let html = '<option value="">Select Client...</option>';
-        data.forEach((item) => {
-          html += `<option value="${item.id}">${item.name}</option>`;
-        });
+        data
+          .filter(
+            (item) =>
+              item.stage === "Convert Clients" && item.status === "Active",
+          )
+          .forEach((item) => {
+            html += `<option value="${item.id}">${item.name}</option>`;
+          });
         clientSelect.innerHTML = html;
       })
       .getClientList();
