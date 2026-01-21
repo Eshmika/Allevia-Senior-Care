@@ -181,10 +181,8 @@
             </button>
           </div>`;
       } else if (stage === "caregiver-archives") {
-        const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1"><i class="ph ph-eye"></i> View Details</button>`;
         actionHtml = `
           <div class="flex justify-end items-center gap-2">
-            ${viewDetailsBtn}
             <button onclick="restoreCaregiver('${cg.id}')" class="text-xs bg-gray-50 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100 font-bold border border-gray-200 flex items-center gap-1">
               <i class="ph ph-arrow-u-up-left"></i> Restore
             </button>
