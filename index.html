@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
     <base target="_top" />
@@ -113,9 +113,6 @@
             >
               <i class="ph ph-calendar text-xl"></i>
               Caregiver Calendar
-              <span class="ml-2 text-xs italic text-gray-400"
-                >This is not complete under developing yet</span
-              >
             </button>
           </div>
 
@@ -184,22 +181,38 @@
 
         <!-- VIEWS -->
         <div id="content-area">
-          <?!= include('page-dashboard'); ?> <?!= include('page-caregivers'); ?>
-          <?!= include('page-clients'); ?> <?!= include('page-client-stages');
-          ?> <?!= include('page-shifts'); ?> <?!=
-          include('page-caregiver-calendar'); ?> <?!=
-          include('page-communication'); ?> <?!=
-          include('page-client-archives'); ?> <?!=
+          <?!= include('page-dashboard'); ?>
+          <?!= include('page-caregivers'); ?>
+          <?!= include('page-clients'); ?>
+          <?!= include('page-client-stages');
+          ?>
+          <?!= include('page-shifts'); ?>
+          <?!=
+          include('page-caregiver-calendar'); ?>
+          <?!=
+          include('page-communication'); ?>
+          <?!=
+          include('page-client-archives'); ?>
+          <?!=
           include('page-caregiver-archives'); ?>
         </div>
       </main>
     </div>
 
-    <?!= include('js-utils'); ?> <?!= include('js-caregivers'); ?> <?!=
-    include('js-navigation'); ?> <?!= include('js-dashboard'); ?> <?!=
-    include('js-clients'); ?> <?!= include('js-caregiver-stages'); ?> <?!=
-    include('js-client-stages'); ?> <?!= include('js-client-assessment'); ?>
-    <?!= include('js-communication'); ?> <?!= include('js-shifts'); ?> <?!=
+    <?!= include('js-utils'); ?>
+    <?!= include('js-caregivers'); ?>
+    <?!=
+    include('js-navigation'); ?>
+    <?!= include('js-dashboard'); ?>
+    <?!=
+    include('js-clients'); ?>
+    <?!= include('js-caregiver-stages'); ?>
+    <?!=
+    include('js-client-stages'); ?>
+    <?!= include('js-client-assessment'); ?>
+    <?!= include('js-communication'); ?>
+    <?!= include('js-shifts'); ?>
+    <?!=
     include('js-calendar'); ?>
   </body>
 </html>
