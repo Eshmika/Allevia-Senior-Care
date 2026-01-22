@@ -9,7 +9,7 @@
       .forEach((el) => el.classList.remove("active"));
 
     const btn = document.querySelector(
-      `button[onclick="appNavigate('${viewName}')"]`,
+      `button[onclick="appNavigate('${viewName}')"]`
     );
     if (btn) btn.classList.add("active");
 
@@ -37,7 +37,10 @@
       document.getElementById("view-clients").classList.add("active");
       switchClView("add");
     } else if (viewName === "client-stages") {
-      document.getElementById("view-client-stages").classList.add("active");
+      const clientStagesView = document.getElementById("view-client-stages");
+      if (clientStagesView) {
+        clientStagesView.classList.add("active");
+      }
       loadClientStages();
     } else if (viewName === "dashboard") {
       loadDashboardStats();

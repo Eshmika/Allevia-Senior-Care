@@ -3790,30 +3790,24 @@
 
 <script>
   function updateCodeStatusColor(select) {
-    // Remove all color classes
-    select.classList.remove(
-      "text-green-700",
-      "bg-green-50",
-      "border-green-200",
-      "text-red-700",
-      "bg-red-50",
-      "border-red-200",
-      "text-yellow-700",
-      "bg-yellow-50",
-      "border-yellow-200"
-    );
+    // Reset inline styles
+    select.style.color = "";
+    select.style.backgroundColor = "";
+    select.style.borderColor = "";
 
     const val = select.value;
     if (val === "Full code") {
-      select.classList.add("text-green-700", "bg-green-50", "border-green-200");
+      select.style.color = "#FFFFFF";
+      select.style.backgroundColor = "#1E8449";
+      select.style.borderColor = "#1E8449";
     } else if (val === "DNR") {
-      select.classList.add("text-red-700", "bg-red-50", "border-red-200");
+      select.style.color = "#FFFFFF";
+      select.style.backgroundColor = "#7B241C";
+      select.style.borderColor = "#7B241C";
     } else if (val === "Comfort care") {
-      select.classList.add(
-        "text-yellow-700",
-        "bg-yellow-50",
-        "border-yellow-200"
-      );
+      select.style.color = "#FFFFFF";
+      select.style.backgroundColor = "#AF7AC5";
+      select.style.borderColor = "#AF7AC5";
     }
   }
 
