@@ -8,7 +8,7 @@
       .withSuccessHandler((data) => {
         renderCommList(data, "comm-cg-list", "cg");
       })
-      .getCaregiverList();
+      .getCaregiverListForCommunication();
 
     // Load Clients
     const clList = document.getElementById("comm-cl-list");
@@ -18,7 +18,7 @@
       .withSuccessHandler((data) => {
         renderCommList(data, "comm-cl-list", "cl");
       })
-      .getClientList();
+      .getClientListForCommunication();
   }
 
   function renderCommList(data, containerId, prefix) {
@@ -69,7 +69,7 @@
     const checkboxes = list.querySelectorAll('input[type="checkbox"]');
     // Check if all visible are checked
     const visible = Array.from(checkboxes).filter(
-      (cb) => cb.closest("label").style.display !== "none"
+      (cb) => cb.closest("label").style.display !== "none",
     );
     const allChecked = visible.every((cb) => cb.checked);
 
@@ -88,10 +88,10 @@
 
     // Gather IDs
     const cgIds = Array.from(
-      document.querySelectorAll('input[name="cg_ids"]:checked')
+      document.querySelectorAll('input[name="cg_ids"]:checked'),
     ).map((cb) => cb.value);
     const clIds = Array.from(
-      document.querySelectorAll('input[name="cl_ids"]:checked')
+      document.querySelectorAll('input[name="cl_ids"]:checked'),
     ).map((cb) => cb.value);
 
     if (cgIds.length === 0 && clIds.length === 0) {

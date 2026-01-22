@@ -416,6 +416,7 @@ function getClientList() {
   const billOfRightsLinkIdx = headers.indexOf("Bill of Rights Link");
   const hipaaLinkIdx = headers.indexOf("HIPAA Link");
   const privacyLinkIdx = headers.indexOf("Privacy Link");
+  const emailIdx = headers.indexOf("Email");
 
   return data
     .filter((row) => row[0] !== "")
@@ -431,7 +432,7 @@ function getClientList() {
         firstName: fName,
         middleName: mName,
         lastName: lName,
-        email: "--",
+        email: emailIdx > -1 ? row[emailIdx] : "--",
         phone: row[10] || "--", // Client Phone
         status: row[11] || "Pending", // Status
         type: "Lead",
@@ -457,6 +458,52 @@ function getClientList() {
           billOfRightsLinkIdx > -1 ? row[billOfRightsLinkIdx] : "",
         hipaaLink: hipaaLinkIdx > -1 ? row[hipaaLinkIdx] : "",
         privacyLink: privacyLinkIdx > -1 ? row[privacyLinkIdx] : "",
+      };
+    })
+    .reverse();
+}
+
+function getClientListForCommunication() {
+  const sheet = getOrCreateClientSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return [];
+
+  const data = sheet
+    .getRange(2, 1, lastRow - 1, sheet.getLastColumn())
+    .getDisplayValues();
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+  const stageIdx = headers.indexOf("Stage");
+  const statusIdx = headers.indexOf("Status");
+  const emailIdx = headers.indexOf("Email");
+  const firstNameIdx = headers.indexOf("First Name");
+  const middleNameIdx = headers.indexOf("Middle Name");
+  const lastNameIdx = headers.indexOf("Last Name");
+
+  return data
+    .filter((row) => {
+      const stage = stageIdx > -1 ? row[stageIdx] : "";
+      const status = statusIdx > -1 ? row[statusIdx] : "";
+      const email = emailIdx > -1 ? row[emailIdx] : "";
+      // Filter: Stage must be "Convert Clients" AND Status must be "Active"
+      return (
+        row[0] !== "" &&
+        stage === "Convert Clients" &&
+        status === "Active" &&
+        email &&
+        email.includes("@")
+      );
+    })
+    .map((row) => {
+      const fName = firstNameIdx > -1 ? row[firstNameIdx] : "";
+      const mName = middleNameIdx > -1 ? row[middleNameIdx] : "";
+      const lName = lastNameIdx > -1 ? row[lastNameIdx] : "";
+      const fullName = [fName, mName, lName].filter(Boolean).join(" ");
+
+      return {
+        id: row[0],
+        name: fullName || "Unknown",
+        email: emailIdx > -1 ? row[emailIdx] : "--",
       };
     })
     .reverse();

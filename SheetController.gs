@@ -633,6 +633,44 @@ function getCaregiverList() {
     .reverse();
 }
 
+function getCaregiverListForCommunication() {
+  const sheet = getOrCreateSheet();
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) return [];
+
+  const data = sheet
+    .getRange(2, 1, lastRow - 1, sheet.getLastColumn())
+    .getDisplayValues();
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+
+  const statusIdx = headers.indexOf("Status");
+  const emailIdx = headers.indexOf("Email");
+  const firstNameIdx = headers.indexOf("First Name");
+  const lastNameIdx = headers.indexOf("Last Name");
+
+  return data
+    .filter((row) => {
+      const status = statusIdx > -1 ? row[statusIdx] : "";
+      const email = emailIdx > -1 ? row[emailIdx] : "";
+      // Filter: Status must be "Active" and must have a valid email
+      return (
+        row[0] !== "" && status === "Active" && email && email.includes("@")
+      );
+    })
+    .map((row) => {
+      const fName = firstNameIdx > -1 ? row[firstNameIdx] : "";
+      const lName = lastNameIdx > -1 ? row[lastNameIdx] : "";
+      const fullName = (fName + " " + lName).trim();
+
+      return {
+        id: row[0].trim(),
+        name: fullName || "Unknown",
+        email: emailIdx > -1 ? row[emailIdx] : "--",
+      };
+    })
+    .reverse();
+}
+
 // 4. GET DETAILS
 function getCaregiverDetails(id) {
   const sheet = getOrCreateSheet();
