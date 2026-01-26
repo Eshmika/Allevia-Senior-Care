@@ -31,6 +31,7 @@
           id="pay-paymentType"
           required
           class="input-field text-sm py-2"
+          onchange="toggleOtherPaymentField()"
         >
           <option value="">Select Payment Type...</option>
           <option value="Private pay">Private pay</option>
@@ -39,6 +40,14 @@
           <option value="VA">VA</option>
           <option value="Other">Other</option>
         </select>
+        <div id="pay-paymentTypeOtherContainer" class="hidden mt-2">
+          <input
+            type="text"
+            id="pay-paymentTypeOther"
+            class="input-field text-sm py-2"
+            placeholder="Enter other payment type"
+          />
+        </div>
       </div>
 
       <!-- Payment Options -->

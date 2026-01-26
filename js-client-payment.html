@@ -29,12 +29,28 @@
   function toggleBusinessName() {
     const holderType = document.getElementById("pay-holderType").value;
     const businessNameContainer = document.getElementById(
-      "pay-businessNameContainer",
+      "pay-businessNameContainer"
     );
     if (holderType === "Business") {
       businessNameContainer.classList.remove("hidden");
     } else {
       businessNameContainer.classList.add("hidden");
+    }
+  }
+
+  function toggleOtherPaymentField() {
+    const typeSelect = document.getElementById("pay-paymentType");
+    const otherContainer = document.getElementById(
+      "pay-paymentTypeOtherContainer"
+    );
+    const otherInput = document.getElementById("pay-paymentTypeOther");
+
+    if (typeSelect.value === "Other") {
+      otherContainer.classList.remove("hidden");
+      otherInput.setAttribute("required", "true");
+    } else {
+      otherContainer.classList.add("hidden");
+      otherInput.removeAttribute("required");
     }
   }
 
@@ -82,8 +98,28 @@
 
         // Select payment type
         const typeSelect = document.getElementById("pay-paymentType");
+        const otherContainer = document.getElementById(
+          "pay-paymentTypeOtherContainer"
+        );
+        const otherInput = document.getElementById("pay-paymentTypeOther");
+        const standardOptions = [
+          "Private pay",
+          "Lead Insurance",
+          "Medicaid",
+          "VA",
+        ];
+
         if (data.paymentType) {
-          typeSelect.value = data.paymentType;
+          if (standardOptions.includes(data.paymentType)) {
+            typeSelect.value = data.paymentType;
+            otherContainer.classList.add("hidden");
+            otherInput.value = "";
+          } else {
+            typeSelect.value = "Other";
+            otherContainer.classList.remove("hidden");
+            otherInput.value =
+              data.paymentType === "Other" ? "" : data.paymentType;
+          }
         }
 
         // Check payment options
@@ -179,9 +215,16 @@
     const form = document.getElementById("paymentDetailsForm");
     const formData = new FormData(form);
 
-    const paymentType = formData.get("paymentType");
+    let paymentType = formData.get("paymentType");
+    if (paymentType === "Other") {
+      const otherVal = document.getElementById("pay-paymentTypeOther").value;
+      if (otherVal && otherVal.trim() !== "") {
+        paymentType = otherVal.trim();
+      }
+    }
+
     const selectedRadio = Array.from(
-      document.getElementsByName("payOption"),
+      document.getElementsByName("payOption")
     ).find((rb) => rb.checked);
     const paymentOptions = selectedRadio ? selectedRadio.value : "";
 

@@ -158,10 +158,10 @@
                         <button onclick="openPaymentForm('${client.id}')" class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-bold hover:bg-blue-200 flex items-center gap-1">
                             <i class="ph ph-credit-card"></i> Add Payment
                         </button>
-                        <button onclick="undoInsuranceVerification('${client.id}')" title="Return to Assessment" class="w-8 h-8 flex items-center justify-center text-white rounded-lg hover:opacity-90 border border-0 transition-colors" style="background-color: #5C6BC0;">
-                            <i class="ph-bold ph-arrow-u-up-left"></i>
+                        <button onclick="undoInsuranceVerification('${client.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;">
+                            <i class="ph-bold ph-arrow-u-up-left"></i> Undo
                         </button>
-                    </div>
+                    </div>  
                 `;
         }
       } else if (stage === "Client Agreements") {
