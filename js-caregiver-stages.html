@@ -94,67 +94,67 @@
         actionHtml = `
               <div class="flex justify-end items-center gap-2">
                 <span class="text-xs text-gray-400 italic mr-2">Waiting for submission...</span>
-                <button onclick="resendEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 transition-colors flex items-center gap-1">
+                <button onclick="resendEmail('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #607D8B;">
                   <i class="ph ph-paper-plane-right"></i> Resend Email
                 </button>
               </div>`;
       } else if (stage === "interview") {
-        const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1"><i class="ph ph-eye"></i> View Details</button>`;
-        const rejectBtn = `<button onclick="sendRejectionEmail('${cg.id}')" class="text-xs bg-orange-50 text-orange-600 px-3 py-1 rounded-full hover:bg-orange-100 font-bold border border-orange-200 mr-2 flex items-center gap-1" title="Send Rejection Email"><i class="ph ph-envelope-simple"></i> Send Reject</button>`;
+        const viewDetailsBtn = `<button onclick="openProfile('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-2 flex items-center gap-1" style="background-color: #607D8B;"><i class="ph ph-eye"></i> View Details</button>`;
+        const rejectBtn = `<button onclick="sendRejectionEmail('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-2 flex items-center gap-1" style="background-color: #E74C3C;" title="Send Rejection Email"><i class="ph ph-envelope-simple"></i> Send Reject</button>`;
 
         // If already passed/failed, show status, else show buttons
         if (cg.interviewStatus === "Passed") {
-          actionHtml = `${viewDetailsBtn} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-purple-100 text-purple-600 px-3 py-1 rounded-full hover:bg-purple-200 font-bold">Start Background Check</button>`;
+          actionHtml = `${viewDetailsBtn} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #1ABC9C;">Start Background Check</button>`;
         } else if (cg.interviewStatus === "Failed") {
-          actionHtml = `${viewDetailsBtn} <span class="text-xs text-red-600 font-bold mr-2">Interview Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1"><i class="ph ph-arrow-u-up-left"></i> Undo</button>`;
+          actionHtml = `${viewDetailsBtn} <span class="text-xs text-red-600 font-bold mr-2">Interview Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Pending')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;"><i class="ph ph-arrow-u-up-left"></i> Undo</button>`;
         } else {
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
                         ${viewDetailsBtn}
                         ${rejectBtn}
-                        <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
-                        <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
+                        <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Passed')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #1ABC9C;">Pass</button>
+                        <button onclick="updateStageStatus('${cg.id}', 'Interview', 'Failed')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #E74C3C;">Fail</button>
                     </div>`;
         }
       } else if (stage === "background") {
         let docsHtml = "";
         if (cg.contractLink)
-          docsHtml += `<a href="${cg.contractLink}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View Contract"><i class="ph ph-file-text"></i> Contract</a>`;
+          docsHtml += `<a href="${cg.contractLink}" target="_blank" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-1 flex items-center gap-1" style="background-color: #607D8B;" title="View Contract"><i class="ph ph-file-text"></i> Contract</a>`;
         if (cg.w9Link)
-          docsHtml += `<a href="${cg.w9Link}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View W9"><i class="ph ph-file-text"></i> W9</a>`;
+          docsHtml += `<a href="${cg.w9Link}" target="_blank" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-1 flex items-center gap-1" style="background-color: #607D8B;" title="View W9"><i class="ph ph-file-text"></i> W9</a>`;
         if (cg.backgroundLink)
-          docsHtml += `<a href="${cg.backgroundLink}" target="_blank" class="text-xs bg-gray-50 text-gray-600 px-2 py-1 rounded border border-gray-200 hover:bg-gray-100 mr-1 flex items-center gap-1" title="View Background"><i class="ph ph-file-text"></i> Background</a>`;
+          docsHtml += `<a href="${cg.backgroundLink}" target="_blank" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-1 flex items-center gap-1" style="background-color: #607D8B;" title="View Background"><i class="ph ph-file-text"></i> Background</a>`;
 
         // Hide "Send Consent" if Background Link exists (Consent Form submitted)
         // or if all docs are submitted. Let's use backgroundLink as the main indicator for "Consent".
         const showSendConsent = !cg.backgroundLink;
 
         if (cg.backgroundCheck === "Passed") {
-          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1 mr-2"><i class="ph ph-arrow-u-up-left"></i> Undo</button> <button onclick="updateStageStatus('${cg.id}', 'Active', 'Active')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Activate Caregiver</button></div>`;
+          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-green-600 font-bold mr-2">Passed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 mr-2" style="background-color: #5C6BC0;"><i class="ph ph-arrow-u-up-left"></i> Undo</button> <button onclick="updateStageStatus('${cg.id}', 'Active', 'Active')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #1ABC9C;">Activate Caregiver</button></div>`;
         } else if (cg.backgroundCheck === "Failed") {
-          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-red-600 font-bold mr-2">Background Check Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1"><i class="ph ph-arrow-u-up-left"></i> Undo</button></div>`;
+          actionHtml = `<div class="flex items-center justify-end gap-2">${docsHtml} <span class="text-xs text-red-600 font-bold mr-2">Background Check Failed</span> <button onclick="updateStageStatus('${cg.id}', 'Background', 'Pending')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;"><i class="ph ph-arrow-u-up-left"></i> Undo</button></div>`;
         } else {
           actionHtml = `
                     <div class="flex justify-end gap-2 items-center">
                         ${docsHtml}
                         <button onclick="updateStageStatus('${
                           cg.id
-                        }', 'Interview', 'Pending')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 mr-2 flex items-center gap-1" title="Return to Interview Stage">
+                        }', 'Interview', 'Pending')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 mr-2 flex items-center gap-1" style="background-color: #5C6BC0;" title="Return to Interview Stage">
                             <i class="ph ph-arrow-u-up-left"></i> Undo
                         </button>
                         ${
                           showSendConsent
-                            ? `<button onclick="sendOnboardingEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 transition-colors flex items-center gap-1 mr-2">
+                            ? `<button onclick="sendOnboardingEmail('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 mr-2" style="background-color: #607D8B;">
                           <i class="ph ph-envelope-simple"></i> Send Consent
                         </button>`
                             : ""
                         }
                         <button onclick="updateStageStatus('${
                           cg.id
-                        }', 'Background', 'Passed')" class="text-xs bg-green-100 text-green-600 px-3 py-1 rounded-full hover:bg-green-200 font-bold">Pass</button>
+                        }', 'Background', 'Passed')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #1ABC9C;">Pass</button>
                         <button onclick="updateStageStatus('${
                           cg.id
-                        }', 'Background', 'Failed')" class="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full hover:bg-red-200 font-bold">Fail</button>
+                        }', 'Background', 'Failed')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #E74C3C;">Fail</button>
                     </div>`;
         }
       } else if (stage === "active") {
@@ -169,21 +169,21 @@
 
         let paymentBtn = "";
         if (!cg.hasPaymentInfo) {
-          paymentBtn = `<button onclick="resendPaymentEmail('${cg.id}')" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded-full hover:bg-blue-100 font-bold border border-blue-200 flex items-center gap-1 mr-2"><i class="ph ph-envelope-simple"></i> Resend Payment Email</button>`;
+          paymentBtn = `<button onclick="resendPaymentEmail('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 mr-2" style="background-color: #607D8B;"><i class="ph ph-envelope-simple"></i> Resend Payment Email</button>`;
         }
 
         actionHtml = `
           <div class="flex items-center justify-end gap-2">
             ${paymentBtn}
             <span class="text-xs ${statusColor} px-2 py-1 rounded font-bold">${cg.status}</span>
-            <button onclick="updateStageStatus('${cg.id}', 'Active', 'Applicant')" class="text-xs bg-gray-100 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-200 font-bold border border-gray-200 flex items-center gap-1" title="Return to Background Stage">
+            <button onclick="updateStageStatus('${cg.id}', 'Active', 'Applicant')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;" title="Return to Background Stage">
               <i class="ph ph-arrow-u-up-left"></i> Undo
             </button>
           </div>`;
       } else if (stage === "caregiver-archives") {
         actionHtml = `
           <div class="flex justify-end items-center gap-2">
-            <button onclick="restoreCaregiver('${cg.id}')" class="text-xs bg-gray-50 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100 font-bold border border-gray-200 flex items-center gap-1">
+            <button onclick="restoreCaregiver('${cg.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;">
               <i class="ph ph-arrow-u-up-left"></i> Restore
             </button>
           </div>`;
@@ -200,8 +200,8 @@
                       stage === "interview"
                         ? cg.interviewStatus
                         : stage === "background"
-                          ? cg.backgroundCheck
-                          : cg.status
+                        ? cg.backgroundCheck
+                        : cg.status
                     }
                 </td>
                 <td class="p-3 text-right">${actionHtml}</td>
@@ -228,7 +228,7 @@
               Swal.fire(
                 "Success",
                 "Caregiver Activated & Payment Email Sent",
-                "success",
+                "success"
               );
               loadCaregiverStages();
             })
