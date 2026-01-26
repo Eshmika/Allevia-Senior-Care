@@ -242,11 +242,11 @@
                 </div>
                 ${passFailButtons}
                 <div class="h-6 w-px bg-gray-300"></div>
-                <button onclick="resendIntakeEmail('${client.id}')" title="Resend Intake Email" class="w-8 h-8 flex items-center justify-center bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 border border-orange-100 transition-colors">
+                <button onclick="resendIntakeEmail('${client.id}')" title="Resend Intake Email" class="w-8 h-8 flex items-center justify-center bg-green-50 text-green-700 rounded-lg hover:bg-green-100 border border-green-100 transition-colors">
                     <i class="ph-bold ph-envelope-simple"></i>
                 </button>
-                <button onclick="undoClientAgreement('${client.id}')" title="Return to Insurance Stage" class="w-8 h-8 flex items-center justify-center text-white rounded-lg hover:opacity-90 border border-0 transition-colors" style="background-color: #5C6BC0;">
-                    <i class="ph-bold ph-arrow-u-up-left"></i>
+                <button onclick="undoClientAgreement('${client.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1" style="background-color: #5C6BC0;">
+                    <i class="ph-bold ph-arrow-u-up-left"></i> Undo
                 </button>
             </div>
         `;
