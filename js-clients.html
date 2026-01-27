@@ -96,14 +96,25 @@
         '<tr><td colspan="7" class="p-8 text-center text-gray-400">No clients found.</td></tr>';
     } else {
       pageData.forEach((row) => {
-        let statusColor = "bg-gray-100 text-gray-600";
-        if (row.status === "Active")
-          statusColor = "bg-green-100 text-green-700";
-        if (row.status === "Inactive") statusColor = "bg-red-100 text-red-700";
-        if (row.status === "Cancelled service")
-          statusColor = "bg-gray-200 text-gray-800";
-        if (row.status === "Temporary hospital stay")
-          statusColor = "bg-orange-100 text-orange-800";
+        let statusColor = "text-white";
+        let statusStyle = "";
+
+        if (row.status === "Active") {
+          statusColor = "text-white";
+          statusStyle = "background-color: #2ECC71;";
+        }
+        if (row.status === "Inactive") {
+          statusColor = "text-white";
+          statusStyle = "background-color: #95A5A6;";
+        }
+        if (row.status === "Cancelled service") {
+          statusColor = "text-white";
+          statusStyle = "background-color: #8E2A2A;";
+        }
+        if (row.status === "Temporary hospital stay") {
+          statusColor = "text-white";
+          statusStyle = "background-color: #1A5276;";
+        }
 
         tbody.innerHTML += `
         <tr class="hover:bg-gray-50 border-b border-gray-50">
@@ -130,13 +141,13 @@
             </div>
           </td>
           <td class="p-4 text-xs text-gray-500">${row.lastReviewed || "--"}</td>
-          <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}">${
+          <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}" style="${statusStyle}">${
           row.status
         }</span></td>
           <td class="p-4 text-right">
              <button onclick="loadClientProfile('${
                row.id
-             }')" class="text-xs bg-gray-50 text-gray-600 px-3 py-1 rounded-full hover:bg-gray-100 font-bold border border-gray-200 transition-colors">Details</button>
+             }')" class="text-xs text-white px-3 py-1 rounded-full hover:opacity-90 font-bold transition-colors" style="background-color: #00BCD4;">Details</button>
           </td>
         </tr>
       `;
@@ -246,6 +257,25 @@
     set("cp-initials", (fName[0] || "") + (lName[0] || fName[0] || "?"));
     set("cp-id", data.id);
     set("cp-status", data.status);
+    const statusEl = document.getElementById("cp-status");
+    if (statusEl) {
+      if (data.status === "Active") {
+        statusEl.style.backgroundColor = "#2ECC71";
+        statusEl.style.color = "white";
+      } else if (data.status === "Inactive") {
+        statusEl.style.backgroundColor = "#95A5A6";
+        statusEl.style.color = "white";
+      } else if (data.status === "Cancelled service") {
+        statusEl.style.backgroundColor = "#8E2A2A";
+        statusEl.style.color = "white";
+      } else if (data.status === "Temporary hospital stay") {
+        statusEl.style.backgroundColor = "#1A5276";
+        statusEl.style.color = "white";
+      } else {
+        statusEl.style.backgroundColor = "";
+        statusEl.style.color = "";
+      }
+    }
     set("cp-type", data.serviceTypes || "Client");
     set("cp-username", data.username);
 
