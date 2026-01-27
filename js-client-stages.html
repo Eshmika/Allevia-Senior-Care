@@ -279,31 +279,56 @@
         statusTextColor = "#FFFFFF";
       }
 
-      const statusHtml = `
-                    <div class="flex flex-col gap-1">
-                        <span class="inline-block w-fit px-2 py-0.5 rounded-full text-[10px] font-bold" style="background-color: ${statusBgColor}; color: ${statusTextColor};">${
-        client.status
-      }</span>
-                        ${
-                          client.insuranceNote
-                            ? `<div class="text-[10px] text-gray-400 italic whitespace-pre-wrap break-words mt-1 leading-relaxed">${client.insuranceNote}</div>`
-                            : ""
-                        }
-                    </div>
-                `;
+      const statusBadge = `<span class="inline-block w-fit px-2 py-0.5 rounded-full text-[10px] font-bold" style="background-color: ${statusBgColor}; color: ${statusTextColor};">${client.status}</span>`;
 
-      row.innerHTML = `
-                    <td class="${tdClass}">
-                        <div class="font-medium text-gray-800">${client.name}</div>
-                        <div class="text-[10px] text-gray-400">${client.id}</div>
-                    </td>
-                    <td class="${tdClass}">
-                        ${statusHtml}
-                    </td>
-                    <td class="${tdClass} text-right">
-                        ${actionHtml}
-                    </td>
-                `;
+      const noteHtml = client.insuranceNote
+        ? `<div class="text-[10px] text-gray-400 italic whitespace-pre-wrap break-words mt-1 leading-relaxed">${client.insuranceNote}</div>`
+        : "";
+
+      const fourColumnStages = [
+        "Insurance Verification",
+        "Client Agreements",
+        "Convert Clients",
+        "Archived",
+      ];
+
+      if (fourColumnStages.includes(stage)) {
+        row.innerHTML = `
+            <td class="${tdClass}">
+                <div class="font-medium text-gray-800">${client.name}</div>
+                <div class="text-[10px] text-gray-400">${client.id}</div>
+            </td>
+            <td class="${tdClass} align-top">
+                ${statusBadge}
+            </td>
+            <td class="${tdClass} align-top">
+                ${noteHtml}
+            </td>
+            <td class="${tdClass} text-right align-top">
+                ${actionHtml}
+            </td>
+        `;
+      } else {
+        const statusHtml = `
+            <div class="flex flex-col gap-1">
+                ${statusBadge}
+                ${noteHtml}
+            </div>
+        `;
+
+        row.innerHTML = `
+            <td class="${tdClass}">
+                <div class="font-medium text-gray-800">${client.name}</div>
+                <div class="text-[10px] text-gray-400">${client.id}</div>
+            </td>
+            <td class="${tdClass}">
+                ${statusHtml}
+            </td>
+            <td class="${tdClass} text-right">
+                ${actionHtml}
+            </td>
+        `;
+      }
       stages[stage].appendChild(row);
     });
 
