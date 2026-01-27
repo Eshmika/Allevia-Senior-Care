@@ -980,4 +980,99 @@
   } else {
     setupPhoneMasks();
   }
+
+  // --- Archive Caregiver Functions ---
+
+  function openArchiveCaregiverModal() {
+    document.getElementById("archiveCaregiverModal").classList.remove("hidden");
+    document.getElementById("cgArchiveReason").value = "";
+    document.getElementById("cgArchiveNote").value = "";
+    toggleCgArchiveOtherInput();
+  }
+
+  function closeArchiveCaregiverModal() {
+    document.getElementById("archiveCaregiverModal").classList.add("hidden");
+  }
+
+  function toggleCgArchiveOtherInput() {
+    const reason = document.getElementById("cgArchiveReason").value;
+    const otherContainer = document.getElementById("cgArchiveOtherContainer");
+    if (reason === "Other") {
+      otherContainer.classList.remove("hidden");
+    } else {
+      otherContainer.classList.add("hidden");
+    }
+  }
+
+  function submitArchiveCaregiver() {
+    const reason = document.getElementById("cgArchiveReason").value;
+    const note = document.getElementById("cgArchiveNote").value.trim();
+
+    if (!reason) {
+      Swal.fire("Error", "Please select a reason.", "error");
+      return;
+    }
+
+    let finalReason = reason;
+    if (reason === "Other") {
+      if (!note) {
+        Swal.fire(
+          "Error",
+          "Please provide a note for 'Other' reason.",
+          "error"
+        );
+        return;
+      }
+      finalReason = `Other: ${note}`;
+    } else if (note) {
+      finalReason = `${reason} - ${note}`;
+    }
+
+    const caregiverId = document.getElementById("p-id").textContent;
+    if (!caregiverId || caregiverId === "--") {
+      Swal.fire("Error", "No Caregiver ID found.", "error");
+      return;
+    }
+
+    const submitBtn = document.querySelector(
+      "#archiveCaregiverModal button.bg-red-600"
+    );
+    const originalText = submitBtn.innerText;
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Archiving...";
+
+    google.script.run
+      .withSuccessHandler((res) => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+        closeArchiveCaregiverModal();
+        if (res.success) {
+          Swal.fire(
+            "Success",
+            "Caregiver moved to archive successfully.",
+            "success"
+          ).then(() => {
+            switchCgView("list");
+            loadCaregiverList();
+          });
+        } else {
+          Swal.fire(
+            "Error",
+            res.message || "Failed to archive caregiver.",
+            "error"
+          );
+        }
+      })
+      .withFailureHandler((err) => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = originalText;
+        console.error(err);
+        Swal.fire(
+          "Error",
+          "An unexpected error occurred: " + err.message,
+          "error"
+        );
+      })
+      .archiveCaregiver(caregiverId, finalReason);
+  }
 </script>

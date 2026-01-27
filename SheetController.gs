@@ -95,6 +95,13 @@ function getOrCreateSheet() {
       sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Last Reviewed");
     }
 
+    const archiveReasonHeaders = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    if (!archiveReasonHeaders.includes("Archive Reason")) {
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue("Archive Reason");
+    }
+
     // Add Document Link Columns
     const finalHeaders = sheet
       .getRange(1, 1, 1, sheet.getLastColumn())
@@ -342,7 +349,7 @@ function submitFullApplication(form) {
 
     // Find Row
     const rowIndex = data.findIndex(
-      (r) => String(r[0]).trim().toUpperCase() === targetId,
+      (r) => String(r[0]).trim().toUpperCase() === targetId
     );
 
     if (rowIndex === -1)
@@ -600,6 +607,7 @@ function getCaregiverList() {
   const paymentIdx = headers.indexOf("Payment Method");
   const interviewIdx = headers.indexOf("Interview Status");
   const backgroundCheckIdx = headers.indexOf("Background Check");
+  const archiveReasonIdx = headers.indexOf("Archive Reason");
 
   // Pre-fetch Last Client Seen Map
   const lastClientMap = getAllLastClientsSeen();
@@ -629,6 +637,7 @@ function getCaregiverList() {
       w9Link: w9Idx > -1 ? row[w9Idx] : "",
       backgroundLink: backgroundIdx > -1 ? row[backgroundIdx] : "",
       hasPaymentInfo: paymentIdx > -1 && row[paymentIdx] ? true : false,
+      archiveReason: archiveReasonIdx > -1 ? row[archiveReasonIdx] : "",
     }))
     .reverse();
 }
@@ -680,7 +689,7 @@ function getCaregiverDetails(id) {
   const searchId = String(id).trim().toUpperCase();
 
   const rowIndex = data.findIndex(
-    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
   );
 
   if (rowIndex === -1) return null;
@@ -750,7 +759,7 @@ function updateCaregiverStage(id, stage, value) {
 
   const searchId = String(id).trim().toUpperCase();
   const rowIndex = data.findIndex(
-    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
   );
 
   if (rowIndex === -1) return { success: false, message: "ID not found" };
@@ -801,7 +810,7 @@ function restoreCaregiverFromArchive(id) {
 
   const searchId = String(id).trim().toUpperCase();
   const rowIndex = data.findIndex(
-    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId,
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
   );
 
   if (rowIndex === -1) return { success: false, message: "ID not found" };
@@ -852,7 +861,7 @@ function submitPaymentDetails(form) {
     const headers = data[0];
 
     const rowIndex = data.findIndex(
-      (r) => String(r[0]).trim().toUpperCase() === targetId,
+      (r) => String(r[0]).trim().toUpperCase() === targetId
     );
 
     if (rowIndex === -1)
@@ -908,11 +917,11 @@ function submitPaymentDetails(form) {
         idFile.setName(
           `CHECK_ID_PROOF - ${details["First Name"]} ${
             details["Last Name"]
-          } - ${idBlob.getName()}`,
+          } - ${idBlob.getName()}`
         );
         idFile.setSharing(
           DriveApp.Access.ANYONE_WITH_LINK,
-          DriveApp.Permission.VIEW,
+          DriveApp.Permission.VIEW
         );
         setVal("Check ID Proof", idFile.getUrl());
       }
@@ -928,11 +937,11 @@ function submitPaymentDetails(form) {
         addrFile.setName(
           `CHECK_ADDRESS_PROOF - ${details["First Name"]} ${
             details["Last Name"]
-          } - ${addrBlob.getName()}`,
+          } - ${addrBlob.getName()}`
         );
         addrFile.setSharing(
           DriveApp.Access.ANYONE_WITH_LINK,
-          DriveApp.Permission.VIEW,
+          DriveApp.Permission.VIEW
         );
         setVal("Check Address Proof", addrFile.getUrl());
       }
@@ -963,4 +972,46 @@ function submitPaymentDetails(form) {
   } catch (e) {
     return { success: false, message: e.toString() };
   }
+}
+
+// NEW: ARCHIVE CAREGIVER
+function archiveCaregiver(id, reason) {
+  const sheet = getOrCreateSheet();
+  const data = sheet.getDataRange().getDisplayValues();
+  const headers = data[0];
+
+  const searchId = String(id).trim().toUpperCase();
+  const rowIndex = data.findIndex(
+    (r, i) => i > 0 && String(r[0]).trim().toUpperCase() === searchId
+  );
+
+  if (rowIndex === -1)
+    return { success: false, message: "Caregiver not found" };
+  const r = rowIndex + 1;
+
+  // 1. Set Status to Archived
+  const statusIdx = headers.indexOf("Status");
+  if (statusIdx > -1) {
+    sheet.getRange(r, statusIdx + 1).setValue("Archived");
+  }
+
+  // 2. Set App Status to Archived
+  const appStatusIdx = headers.indexOf("App Status");
+  if (appStatusIdx > -1) {
+    sheet.getRange(r, appStatusIdx + 1).setValue("Archived");
+  }
+
+  // 3. Save Reason
+  const reasonIdx = headers.indexOf("Archive Reason");
+  if (reasonIdx > -1 && reason) {
+    sheet.getRange(r, reasonIdx + 1).setValue(reason);
+  }
+
+  // 4. Update Last Reviewed
+  const reviewIdx = headers.indexOf("Last Reviewed");
+  if (reviewIdx > -1) {
+    sheet.getRange(r, reviewIdx + 1).setValue(new Date());
+  }
+
+  return { success: true };
 }

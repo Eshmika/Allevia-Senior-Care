@@ -189,6 +189,13 @@
           </div>`;
       }
 
+      let extraCols = "";
+      if (stage === "caregiver-archives") {
+        extraCols = `<td class="p-3 text-gray-500 text-xs">${
+          cg.archiveReason || "-"
+        }</td>`;
+      }
+
       tbody.innerHTML += `
             <tr class="hover:bg-gray-50">
                 <td class="p-3 font-medium text-gray-700">
@@ -204,6 +211,7 @@
                         : cg.status
                     }
                 </td>
+                ${extraCols}
                 <td class="p-3 text-right">${actionHtml}</td>
             </tr>
         `;
