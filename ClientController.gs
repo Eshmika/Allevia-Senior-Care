@@ -417,6 +417,7 @@ function getClientList() {
   const hipaaLinkIdx = headers.indexOf("HIPAA Link");
   const privacyLinkIdx = headers.indexOf("Privacy Link");
   const emailIdx = headers.indexOf("Email");
+  const codeStatusIdx = headers.indexOf("Code Status");
 
   const cityIdx = headers.indexOf("Client City");
   const zipIdx = headers.indexOf("Client Zip");
@@ -444,6 +445,7 @@ function getClientList() {
             : "Lead",
         city: cityIdx > -1 ? row[cityIdx] : "--",
         zip: zipIdx > -1 ? row[zipIdx] : "--",
+        codeStatus: codeStatusIdx > -1 ? row[codeStatusIdx] : "",
         stage: headers.includes("Stage")
           ? row[headers.indexOf("Stage")]
           : "New leads",
