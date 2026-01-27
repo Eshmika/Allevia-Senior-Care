@@ -1,4 +1,6 @@
 <script>
+  // Globals (currentClientData, clData, etc) are defined in js-utils.html
+
   function switchClView(subView) {
     const list = document.getElementById("cl-subview-list");
     const add = document.getElementById("cl-subview-add");
@@ -677,150 +679,159 @@
   }
 
   function editClientProfile() {
-    if (!currentClientData) return;
-    switchClView("edit");
+    if (!currentClientData) {
+      console.warn("No client data found for editing.");
+      return;
+    }
 
-    const d = currentClientData;
-    const setVal = (id, val) => {
-      const el = document.getElementById(id);
-      if (el) el.value = val === undefined || val === null ? "" : val;
-    };
+    try {
+      switchClView("edit");
 
-    setVal("ce-id", d.id);
+      const d = currentClientData;
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val === undefined || val === null ? "" : val;
+      };
 
-    // Dates helpers
-    const setDate = (id, val) => {
-      if (!val) {
-        setVal(id, "");
-        return;
-      }
-      const dt = new Date(val);
-      if (isNaN(dt.getTime())) {
-        setVal(id, val);
-        return;
-      } // fallback if not date string
-      setVal(id, dt.toISOString().split("T")[0]);
-    };
-    const setDateTime = (id, val) => {
-      if (!val) {
-        setVal(id, "");
-        return;
-      }
-      const dt = new Date(val);
-      if (isNaN(dt.getTime())) {
-        setVal(id, "");
-        return;
-      }
-      // Create local ISO string manually to keep local time
-      const pad = (n) => (n < 10 ? "0" + n : n);
-      const localIso =
-        dt.getFullYear() +
-        "-" +
-        pad(dt.getMonth() + 1) +
-        "-" +
-        pad(dt.getDate()) +
-        "T" +
-        pad(dt.getHours()) +
-        ":" +
-        pad(dt.getMinutes());
-      setVal(id, localIso);
-    };
+      setVal("ce-id", d.id);
 
-    // 1. Admin
-    setVal("ce-status", d.status);
-    setVal("ce-coordinator", d.coordinator);
-    setDate("ce-contactDate", d.contactDate);
-    setDateTime("ce-assessmentDateTime", d.assessmentDateTime);
+      // Dates helpers
+      const setDate = (id, val) => {
+        if (!val) {
+          setVal(id, "");
+          return;
+        }
+        const dt = new Date(val);
+        if (isNaN(dt.getTime())) {
+          setVal(id, val);
+          return;
+        } // fallback if not date string
+        setVal(id, dt.toISOString().split("T")[0]);
+      };
+      const setDateTime = (id, val) => {
+        if (!val) {
+          setVal(id, "");
+          return;
+        }
+        const dt = new Date(val);
+        if (isNaN(dt.getTime())) {
+          setVal(id, "");
+          return;
+        }
+        // Create local ISO string manually to keep local time
+        const pad = (n) => (n < 10 ? "0" + n : n);
+        const localIso =
+          dt.getFullYear() +
+          "-" +
+          pad(dt.getMonth() + 1) +
+          "-" +
+          pad(dt.getDate()) +
+          "T" +
+          pad(dt.getHours()) +
+          ":" +
+          pad(dt.getMinutes());
+        setVal(id, localIso);
+      };
 
-    // 2. Personal
-    setVal("ce-firstName", d.firstName);
-    setVal("ce-middleName", d.middleName);
-    setVal("ce-lastName", d.lastName);
-    setDate("ce-dob", d.dob);
-    setVal("ce-gender", d.gender);
-    setVal("ce-maritalStatus", d.maritalStatus);
-    setVal("ce-spouseName", d.spouseName);
-    setVal("ce-ssn", d.ssn);
-    setVal("ce-height", d.height);
-    setVal("ce-weight", d.weight);
-    setVal("ce-codeStatus", d.codeStatus);
-    setVal("ce-languages", d.languages);
+      // 1. Admin
+      setVal("ce-status", d.status);
+      setVal("ce-coordinator", d.coordinator);
+      setDate("ce-contactDate", d.contactDate);
+      setDateTime("ce-assessmentDateTime", d.assessmentDateTime);
 
-    // 3. Contact
-    setVal("ce-clientPhone", d.clientPhone);
-    setVal("ce-email", d.email);
-    setVal("ce-clientAddress", d.clientAddress);
-    setVal("ce-clientApt", d.clientApt);
-    setVal("ce-clientCity", d.clientCity);
-    setVal("ce-clientState", d.clientState);
-    setVal("ce-clientZip", d.clientZip);
+      // 2. Personal
+      setVal("ce-firstName", d.firstName);
+      setVal("ce-middleName", d.middleName);
+      setVal("ce-lastName", d.lastName);
+      setDate("ce-dob", d.dob);
+      setVal("ce-gender", d.gender);
+      setVal("ce-maritalStatus", d.maritalStatus);
+      setVal("ce-spouseName", d.spouseName);
+      setVal("ce-ssn", d.ssn);
+      setVal("ce-height", d.height);
+      setVal("ce-weight", d.weight);
+      setVal("ce-codeStatus", d.codeStatus);
+      setVal("ce-languages", d.languages);
 
-    setVal("ce-billingAddress", d.billingAddress);
-    setVal("ce-billingApt", d.billingApt);
-    setVal("ce-billingCity", d.billingCity);
-    setVal("ce-billingState", d.billingState);
-    setVal("ce-billingZip", d.billingZip);
+      // 3. Contact
+      setVal("ce-clientPhone", d.clientPhone);
+      setVal("ce-email", d.email);
+      setVal("ce-clientAddress", d.clientAddress);
+      setVal("ce-clientApt", d.clientApt);
+      setVal("ce-clientCity", d.clientCity);
+      setVal("ce-clientState", d.clientState);
+      setVal("ce-clientZip", d.clientZip);
 
-    // 4. Key Contacts
-    setVal("ce-repName", d.repName);
-    setVal("ce-repRelationship", d.repRelationship);
-    setVal("ce-repPhone", d.repPhone);
+      setVal("ce-billingAddress", d.billingAddress);
+      setVal("ce-billingApt", d.billingApt);
+      setVal("ce-billingCity", d.billingCity);
+      setVal("ce-billingState", d.billingState);
+      setVal("ce-billingZip", d.billingZip);
 
-    setVal("ce-emergencyName", d.emergencyName);
-    setVal("ce-emergencyRelationship", d.emergencyRelationship);
-    setVal("ce-emergencyPhone", d.emergencyPhone);
-    setVal("ce-emergencyEmail", d.emergencyEmail);
-    setVal("ce-emergencyAddress", d.emergencyAddress);
+      // 4. Key Contacts
+      setVal("ce-repName", d.repName);
+      setVal("ce-repRelationship", d.repRelationship);
+      setVal("ce-repPhone", d.repPhone);
 
-    setVal("ce-authName", d.authName);
-    setVal("ce-authRelationship", d.authRelationship);
-    setVal("ce-authPhone", d.authPhone);
-    setVal("ce-authEmail", d.authEmail);
-    setVal("ce-authAddress", d.authAddress);
+      setVal("ce-emergencyName", d.emergencyName);
+      setVal("ce-emergencyRelationship", d.emergencyRelationship);
+      setVal("ce-emergencyPhone", d.emergencyPhone);
+      setVal("ce-emergencyEmail", d.emergencyEmail);
+      setVal("ce-emergencyAddress", d.emergencyAddress);
 
-    // 5. Medical
-    setVal("ce-diagnosis", d.diagnosis);
-    setVal("ce-allergies", d.allergies);
-    setVal("ce-medicalHistory", d.medicalHistory);
-    setVal("ce-medicalAids", d.medicalAids);
+      setVal("ce-authName", d.authName);
+      setVal("ce-authRelationship", d.authRelationship);
+      setVal("ce-authPhone", d.authPhone);
+      setVal("ce-authEmail", d.authEmail);
+      setVal("ce-authAddress", d.authAddress);
 
-    setVal("ce-medList", d.medList);
-    setVal("ce-assistDirections", d.assistDirections);
-    setVal("ce-pharmacyName", d.pharmacyName);
-    setVal("ce-pharmacyPhone", d.pharmacyPhone);
-    setVal("ce-primaryDrName", d.primaryDrName);
-    setVal("ce-drPhone", d.drPhone);
+      // 5. Medical
+      setVal("ce-diagnosis", d.diagnosis);
+      setVal("ce-allergies", d.allergies);
+      setVal("ce-medicalHistory", d.medicalHistory);
+      setVal("ce-medicalAids", d.medicalAids);
 
-    // 6. Care Plan
-    setVal("ce-levelOfCare", d.levelOfCare);
-    setVal("ce-serviceTypes", d.serviceTypes);
-    setVal("ce-careNeeds", d.careNeeds);
+      setVal("ce-medList", d.medList);
+      setVal("ce-assistDirections", d.assistDirections);
+      setVal("ce-pharmacyName", d.pharmacyName);
+      setVal("ce-pharmacyPhone", d.pharmacyPhone);
+      setVal("ce-primaryDrName", d.primaryDrName);
+      setVal("ce-drPhone", d.drPhone);
 
-    setVal("ce-schMO", d.schMO);
-    setVal("ce-schT", d.schT);
-    setVal("ce-schW", d.schW);
-    setVal("ce-schTH", d.schTH);
-    setVal("ce-schFR", d.schFR);
-    setVal("ce-schSA", d.schSA);
-    setVal("ce-schSU", d.schSU);
+      // 6. Care Plan
+      setVal("ce-levelOfCare", d.levelOfCare);
+      setVal("ce-serviceTypes", d.serviceTypes);
+      setVal("ce-careNeeds", d.careNeeds);
 
-    // 7. Financials
-    setVal("ce-paymentOptions", d.paymentOptions);
-    setVal("ce-hourlyRate", d.hourlyRate);
-    setVal("ce-weeklyCost", d.weeklyCost);
-    setVal("ce-monthlyCost", d.monthlyCost);
+      setVal("ce-schMO", d.schMO);
+      setVal("ce-schT", d.schT);
+      setVal("ce-schW", d.schW);
+      setVal("ce-schTH", d.schTH);
+      setVal("ce-schFR", d.schFR);
+      setVal("ce-schSA", d.schSA);
+      setVal("ce-schSU", d.schSU);
 
-    setVal("ce-insuranceCompany", d.insuranceCompany);
-    setVal("ce-insurancePolicy", d.insurancePolicy);
-    setVal("ce-insuranceMemberId", d.insuranceMemberId);
+      // 7. Financials
+      setVal("ce-paymentOptions", d.paymentOptions);
+      setVal("ce-hourlyRate", d.hourlyRate);
+      setVal("ce-weeklyCost", d.weeklyCost);
+      setVal("ce-monthlyCost", d.monthlyCost);
 
-    // 8. Documents
-    setVal("ce-agreementLink", d.agreementLink);
-    setVal("ce-exhibitALink", d.exhibitALink);
-    setVal("ce-exhibitBLink", d.exhibitBLink);
-    setVal("ce-billOfRightsLink", d.billOfRightsLink);
-    setVal("ce-hipaaLink", d.hipaaLink);
-    setVal("ce-privacyLink", d.privacyLink);
+      setVal("ce-insuranceCompany", d.insuranceCompany);
+      setVal("ce-insurancePolicy", d.insurancePolicy);
+      setVal("ce-insuranceMemberId", d.insuranceMemberId);
+
+      // 8. Documents
+      setVal("ce-agreementLink", d.agreementLink);
+      setVal("ce-exhibitALink", d.exhibitALink);
+      setVal("ce-exhibitBLink", d.exhibitBLink);
+      setVal("ce-billOfRightsLink", d.billOfRightsLink);
+      setVal("ce-hipaaLink", d.hipaaLink);
+      setVal("ce-privacyLink", d.privacyLink);
+    } catch (e) {
+      console.error("Error in editClientProfile:", e);
+      Swal.fire("Error", "Failed to prepare edit form: " + e.message, "error");
+    }
   }
 
   function submitEditClientForm(e) {
