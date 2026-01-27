@@ -41,6 +41,29 @@
             Dashboard
           </button>
 
+          <!-- Shifts Section -->
+          <div class="space-y-1">
+            <div
+              class="px-4 py-2 text-xs font-bold text-black uppercase tracking-wider"
+            >
+              Shifts
+            </div>
+            <button
+              onclick="appNavigate('shifts')"
+              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
+            >
+              <i class="ph ph-calendar-plus text-xl"></i>
+              Add Shift
+            </button>
+            <button
+              onclick="appNavigate('caregiver-calendar')"
+              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
+            >
+              <i class="ph ph-calendar text-xl"></i>
+              Calendar
+            </button>
+          </div>
+
           <!-- Clients Section -->
           <div class="space-y-1">
             <div
@@ -91,28 +114,6 @@
             >
               <i class="ph ph-steps text-xl"></i>
               Application
-            </button>
-          </div>
-          <!-- Shifts Section -->
-          <div class="space-y-1">
-            <div
-              class="px-4 py-2 text-xs font-bold text-black uppercase tracking-wider"
-            >
-              Shifts
-            </div>
-            <button
-              onclick="appNavigate('shifts')"
-              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
-            >
-              <i class="ph ph-calendar-plus text-xl"></i>
-              Add Shift
-            </button>
-            <button
-              onclick="appNavigate('caregiver-calendar')"
-              class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium text-gray-400"
-            >
-              <i class="ph ph-calendar text-xl"></i>
-              Calendar
             </button>
           </div>
 

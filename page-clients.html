@@ -1323,160 +1323,23 @@
         <form
           id="clientEditForm"
           onsubmit="submitEditClientForm(event)"
-          class="max-w-4xl bg-white p-8 rounded-xl shadow-sm border border-gray-100 space-y-8"
+          class="max-w-7xl mx-auto bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-8"
         >
           <input type="hidden" name="id" id="ce-id" />
 
-          <!-- Initial Contact Information -->
-          <div>
-            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-              Initial Contact Information
+          <!-- 1. Administrative & Status -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"
+            >
+              <i class="ph ph-briefcase text-blue-600"></i> Administrative &
+              Status
             </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label class="input-label">Date</label>
-                <input
-                  type="date"
-                  name="contactDate"
-                  id="ce-contactDate"
-                  required
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Free Assessment Date/Time</label>
-                <input
-                  type="datetime-local"
-                  name="assessmentDateTime"
-                  id="ce-assessmentDateTime"
-                  required
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Coordinator</label>
-                <input
-                  type="text"
-                  name="coordinator"
-                  id="ce-coordinator"
-                  required
-                  class="input-field"
-                  placeholder="Enter coordinator name"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Representative -->
-          <div>
-            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-              Representative
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <label class="input-label">Name of Person Calling</label>
-                <input
-                  type="text"
-                  name="repName"
-                  id="ce-repName"
-                  required
-                  class="input-field"
-                  placeholder="Enter representative name"
-                />
-              </div>
-              <div>
-                <label class="input-label">Phone</label>
-                <input
-                  type="tel"
-                  name="repPhone"
-                  id="ce-repPhone"
-                  required
-                  maxlength="14"
-                  class="input-field"
-                  placeholder="(XXX) XXX-XXXX"
-                  oninput="formatPhone(this)"
-                  pattern="\(\d{3}\) \d{3}-\d{4}"
-                  title="Phone number must be in the format (XXX) XXX-XXXX"
-                />
-              </div>
-              <div>
-                <label class="input-label">Relationship to Client</label>
-                <input
-                  type="text"
-                  name="repRelationship"
-                  id="ce-repRelationship"
-                  required
-                  class="input-field"
-                  placeholder="e.g., Daughter, Son, Spouse"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- New Lead Information -->
-          <div>
-            <h2 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">
-              New Lead Information
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                  <label class="input-label">First Name</label>
-                  <input
-                    type="text"
-                    name="firstName"
-                    id="ce-firstName"
-                    required
-                    class="input-field"
-                    placeholder="First Name"
-                  />
-                </div>
-                <div>
-                  <label class="input-label">Middle Name</label>
-                  <input
-                    type="text"
-                    name="middleName"
-                    id="ce-middleName"
-                    class="input-field"
-                    placeholder="Middle Name"
-                  />
-                </div>
-                <div>
-                  <label class="input-label">Last Name</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    id="ce-lastName"
-                    required
-                    class="input-field"
-                    placeholder="Last Name"
-                  />
-                </div>
-              </div>
-              <div>
-                <label class="input-label">Phone</label>
-                <input
-                  type="tel"
-                  name="clientPhone"
-                  id="ce-clientPhone"
-                  required
-                  maxlength="14"
-                  class="input-field"
-                  placeholder="(XXX) XXX-XXXX"
-                  oninput="formatPhone(this)"
-                  pattern="\(\d{3}\) \d{3}-\d{4}"
-                  title="Phone number must be in the format (XXX) XXX-XXXX"
-                />
-              </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div>
                 <label class="input-label">Status</label>
-                <select
-                  name="status"
-                  id="ce-status"
-                  required
-                  class="input-field"
-                >
-                  <option value="">Select status...</option>
+                <select name="status" id="ce-status" class="input-field">
+                  <option value="">Select...</option>
                   <option value="Active">Active</option>
                   <option value="Inactive">Inactive</option>
                   <option value="Hospital stay">Hospital stay</option>
@@ -1484,89 +1347,814 @@
                   <option value="Insurance approval">Insurance approval</option>
                 </select>
               </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Address</label>
+              <div>
+                <label class="input-label">Coordinator</label>
                 <input
                   type="text"
-                  name="clientAddress"
-                  id="ce-clientAddress"
-                  required
+                  name="coordinator"
+                  id="ce-coordinator"
                   class="input-field"
-                  placeholder="Street address"
                 />
               </div>
               <div>
-                <label class="input-label">Apt/Unit</label>
+                <label class="input-label">Initial Contact Date</label>
                 <input
-                  type="text"
-                  name="clientApt"
-                  id="ce-clientApt"
+                  type="date"
+                  name="contactDate"
+                  id="ce-contactDate"
                   class="input-field"
-                  placeholder="Apt #"
                 />
               </div>
               <div>
-                <label class="input-label">City</label>
+                <label class="input-label">Assessment Date/Time</label>
                 <input
-                  type="text"
-                  name="clientCity"
-                  id="ce-clientCity"
-                  required
+                  type="datetime-local"
+                  name="assessmentDateTime"
+                  id="ce-assessmentDateTime"
                   class="input-field"
-                  placeholder="City"
-                />
-              </div>
-              <div>
-                <label class="input-label">State</label>
-                <input
-                  type="text"
-                  name="clientState"
-                  id="ce-clientState"
-                  required
-                  maxlength="14"
-                  class="input-field"
-                  placeholder="CA"
-                />
-              </div>
-              <div>
-                <label class="input-label">Zip</label>
-                <input
-                  type="text"
-                  name="clientZip"
-                  id="ce-clientZip"
-                  required
-                  maxlength="5"
-                  class="input-field"
-                  placeholder="12345"
-                  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Client Care Needs</label>
-                <textarea
-                  name="careNeeds"
-                  id="ce-careNeeds"
-                  rows="3"
-                  class="input-field resize-none"
-                  placeholder="Describe the client's care needs..."
-                ></textarea>
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Referred By</label>
-                <input
-                  type="text"
-                  name="referredBy"
-                  id="ce-referredBy"
-                  class="input-field"
-                  placeholder="Enter referral source (optional)"
                 />
               </div>
             </div>
           </div>
 
-          <div class="flex justify-end pt-4">
-            <button type="submit" id="updateClientBtn" class="btn-primary">
-              Update Client Information
+          <!-- 2. Personal Information -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-user text-green-600"></i> Personal Information
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="input-label">First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  id="ce-firstName"
+                  required
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Middle Name</label>
+                <input
+                  type="text"
+                  name="middleName"
+                  id="ce-middleName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Last Name</label>
+                <input
+                  type="text"
+                  name="lastName"
+                  id="ce-lastName"
+                  required
+                  class="input-field"
+                />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label class="input-label">Date of Birth</label>
+                <input type="date" name="dob" id="ce-dob" class="input-field" />
+              </div>
+              <div>
+                <label class="input-label">Gender</label>
+                <select name="gender" id="ce-gender" class="input-field">
+                  <option value="">Select...</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Marital Status</label>
+                <select
+                  name="maritalStatus"
+                  id="ce-maritalStatus"
+                  class="input-field"
+                >
+                  <option value="">Select...</option>
+                  <option value="Single">Single</option>
+                  <option value="Married">Married</option>
+                  <option value="Widowed">Widowed</option>
+                  <option value="Divorced">Divorced</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Spouse Name</label>
+                <input
+                  type="text"
+                  name="spouseName"
+                  id="ce-spouseName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">SSN (Last 4)</label>
+                <input
+                  type="text"
+                  name="ssn"
+                  id="ce-ssn"
+                  class="input-field"
+                  placeholder="XXXX"
+                />
+              </div>
+              <div>
+                <label class="input-label">Height</label>
+                <input
+                  type="text"
+                  name="height"
+                  id="ce-height"
+                  class="input-field"
+                  placeholder="e.g. 5'7"
+                />
+              </div>
+              <div>
+                <label class="input-label">Weight</label>
+                <input
+                  type="text"
+                  name="weight"
+                  id="ce-weight"
+                  class="input-field"
+                  placeholder="e.g. 150 lbs"
+                />
+              </div>
+              <div>
+                <label class="input-label">Code Status</label>
+                <select
+                  name="codeStatus"
+                  id="ce-codeStatus"
+                  class="input-field"
+                >
+                  <option value="">Select...</option>
+                  <option value="Full code">Full code</option>
+                  <option value="Comfort care">Comfort care</option>
+                  <option value="DNR">DNR</option>
+                </select>
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Languages Spoken</label>
+                <input
+                  type="text"
+                  name="languages"
+                  id="ce-languages"
+                  class="input-field"
+                  placeholder="e.g. English, Spanish"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Contact Information -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Home Address -->
+            <div>
+              <h3 class="font-bold text-gray-700 mb-3 border-b pb-1">
+                Home Contact
+              </h3>
+              <div class="space-y-3">
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="input-label">Phone</label>
+                    <input
+                      type="tel"
+                      name="clientPhone"
+                      id="ce-clientPhone"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">Email</label>
+                    <input
+                      type="email"
+                      name="email"
+                      id="ce-email"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="input-label">Address</label>
+                  <input
+                    type="text"
+                    name="clientAddress"
+                    id="ce-clientAddress"
+                    class="input-field"
+                  />
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                  <div>
+                    <label class="input-label">Apt</label>
+                    <input
+                      type="text"
+                      name="clientApt"
+                      id="ce-clientApt"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">City</label>
+                    <input
+                      type="text"
+                      name="clientCity"
+                      id="ce-clientCity"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">State</label>
+                    <input
+                      type="text"
+                      name="clientState"
+                      id="ce-clientState"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="input-label">Zip</label>
+                  <input
+                    type="text"
+                    name="clientZip"
+                    id="ce-clientZip"
+                    class="input-field"
+                  />
+                </div>
+              </div>
+            </div>
+            <!-- Billing Address -->
+            <div>
+              <h3 class="font-bold text-gray-700 mb-3 border-b pb-1">
+                Billing Address
+              </h3>
+              <div class="space-y-3">
+                <div>
+                  <label class="input-label">Address</label>
+                  <input
+                    type="text"
+                    name="billingAddress"
+                    id="ce-billingAddress"
+                    class="input-field"
+                  />
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                  <div>
+                    <label class="input-label">Apt</label>
+                    <input
+                      type="text"
+                      name="billingApt"
+                      id="ce-billingApt"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">City</label>
+                    <input
+                      type="text"
+                      name="billingCity"
+                      id="ce-billingCity"
+                      class="input-field"
+                    />
+                  </div>
+                  <div>
+                    <label class="input-label">State</label>
+                    <input
+                      type="text"
+                      name="billingState"
+                      id="ce-billingState"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="input-label">Zip</label>
+                  <input
+                    type="text"
+                    name="billingZip"
+                    id="ce-billingZip"
+                    class="input-field"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4. Key Contacts -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-users text-purple-600"></i> Key Contacts
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Representative -->
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-bold text-gray-600 mb-2">Representative</h4>
+                <div class="space-y-2">
+                  <input
+                    type="text"
+                    name="repName"
+                    id="ce-repName"
+                    placeholder="Name"
+                    class="input-field"
+                  />
+                  <input
+                    type="text"
+                    name="repRelationship"
+                    id="ce-repRelationship"
+                    placeholder="Relationship"
+                    class="input-field"
+                  />
+                  <input
+                    type="tel"
+                    name="repPhone"
+                    id="ce-repPhone"
+                    placeholder="Phone"
+                    class="input-field"
+                  />
+                </div>
+              </div>
+              <!-- Emergency -->
+              <div class="bg-red-50 p-4 rounded-lg">
+                <h4 class="font-bold text-red-600 mb-2">Emergency Contact</h4>
+                <div class="space-y-2">
+                  <input
+                    type="text"
+                    name="emergencyName"
+                    id="ce-emergencyName"
+                    placeholder="Name"
+                    class="input-field"
+                  />
+                  <input
+                    type="text"
+                    name="emergencyRelationship"
+                    id="ce-emergencyRelationship"
+                    placeholder="Relationship"
+                    class="input-field"
+                  />
+                  <input
+                    type="tel"
+                    name="emergencyPhone"
+                    id="ce-emergencyPhone"
+                    placeholder="Phone"
+                    class="input-field"
+                  />
+                  <input
+                    type="email"
+                    name="emergencyEmail"
+                    id="ce-emergencyEmail"
+                    placeholder="Email"
+                    class="input-field"
+                  />
+                  <input
+                    type="text"
+                    name="emergencyAddress"
+                    id="ce-emergencyAddress"
+                    placeholder="Address"
+                    class="input-field"
+                  />
+                </div>
+              </div>
+              <!-- Authorization -->
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-bold text-blue-600 mb-2">
+                  Authorization/Billing
+                </h4>
+                <div class="space-y-2">
+                  <input
+                    type="text"
+                    name="authName"
+                    id="ce-authName"
+                    placeholder="Name"
+                    class="input-field"
+                  />
+                  <input
+                    type="text"
+                    name="authRelationship"
+                    id="ce-authRelationship"
+                    placeholder="Relationship"
+                    class="input-field"
+                  />
+                  <input
+                    type="tel"
+                    name="authPhone"
+                    id="ce-authPhone"
+                    placeholder="Phone"
+                    class="input-field"
+                  />
+                  <input
+                    type="email"
+                    name="authEmail"
+                    id="ce-authEmail"
+                    placeholder="Email"
+                    class="input-field"
+                  />
+                  <input
+                    type="text"
+                    name="authAddress"
+                    id="ce-authAddress"
+                    placeholder="Address"
+                    class="input-field"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 5. Medical & Health -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-heartbeat text-red-500"></i> Medical & Health
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <div>
+                  <label class="input-label">Primary Diagnosis</label>
+                  <input
+                    type="text"
+                    name="diagnosis"
+                    id="ce-diagnosis"
+                    class="input-field"
+                  />
+                </div>
+                <div>
+                  <label class="input-label">Allergies</label>
+                  <input
+                    type="text"
+                    name="allergies"
+                    id="ce-allergies"
+                    class="input-field"
+                    placeholder="None known"
+                  />
+                </div>
+                <div>
+                  <label class="input-label">Medical History</label>
+                  <textarea
+                    name="medicalHistory"
+                    id="ce-medicalHistory"
+                    rows="3"
+                    class="input-field"
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="input-label">Physical Aids</label>
+                  <input
+                    type="text"
+                    name="medicalAids"
+                    id="ce-medicalAids"
+                    placeholder="Walker, Cane, Hearing Aid..."
+                    class="input-field"
+                  />
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div>
+                  <label class="input-label">Medication List</label>
+                  <textarea
+                    name="medList"
+                    id="ce-medList"
+                    rows="3"
+                    class="input-field"
+                    placeholder="List medications..."
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="input-label">Assistance Directions</label>
+                  <textarea
+                    name="assistDirections"
+                    id="ce-assistDirections"
+                    rows="2"
+                    class="input-field"
+                  ></textarea>
+                </div>
+                <div>
+                  <label class="input-label">Pharmacy Name & Phone</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      name="pharmacyName"
+                      id="ce-pharmacyName"
+                      placeholder="Name"
+                      class="input-field"
+                    />
+                    <input
+                      type="text"
+                      name="pharmacyPhone"
+                      id="ce-pharmacyPhone"
+                      placeholder="Phone"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="input-label">Primary Doctor</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      name="primaryDrName"
+                      id="ce-primaryDrName"
+                      placeholder="Dr. Name"
+                      class="input-field"
+                    />
+                    <input
+                      type="text"
+                      name="drPhone"
+                      id="ce-drPhone"
+                      placeholder="Office Phone"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Checkboxes for specific conditions could go here -->
+          </div>
+
+          <!-- 6. Care Plan & Schedule -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-calendar-check text-indigo-600"></i> Service &
+              Care Plan
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="input-label">Level of Care</label>
+                <select
+                  name="levelOfCare"
+                  id="ce-levelOfCare"
+                  class="input-field"
+                >
+                  <option value="">Select...</option>
+                  <option value="1">Level 1</option>
+                  <option value="2">Level 2</option>
+                  <option value="3">Level 3</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Service Types</label>
+                <input
+                  type="text"
+                  name="serviceTypes"
+                  id="ce-serviceTypes"
+                  class="input-field"
+                  placeholder="e.g. Respite, Personal Care"
+                />
+              </div>
+              <div>
+                <label class="input-label">Care Needs Description</label>
+                <textarea
+                  name="careNeeds"
+                  id="ce-careNeeds"
+                  rows="1"
+                  class="input-field"
+                  style="min-height: 42px"
+                ></textarea>
+              </div>
+            </div>
+            <!-- Schedule -->
+            <div class="bg-indigo-50 p-4 rounded-lg">
+              <h4 class="font-bold text-indigo-700 mb-2 text-sm uppercase">
+                Typical Weekly Schedule
+              </h4>
+              <div class="grid grid-cols-7 gap-2">
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Mon</label>
+                  <input
+                    type="text"
+                    name="schMO"
+                    id="ce-schMO"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Tue</label>
+                  <input
+                    type="text"
+                    name="schT"
+                    id="ce-schT"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Wed</label>
+                  <input
+                    type="text"
+                    name="schW"
+                    id="ce-schW"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Thu</label>
+                  <input
+                    type="text"
+                    name="schTH"
+                    id="ce-schTH"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Fri</label>
+                  <input
+                    type="text"
+                    name="schFR"
+                    id="ce-schFR"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Sat</label>
+                  <input
+                    type="text"
+                    name="schSA"
+                    id="ce-schSA"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+                <div class="text-center">
+                  <label class="text-xs font-bold text-gray-500">Sun</label>
+                  <input
+                    type="text"
+                    name="schSU"
+                    id="ce-schSU"
+                    class="input-field text-center text-xs px-1"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 7. Financials -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-currency-dollar text-green-600"></i> Financials
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div>
+                <label class="input-label">Payment Method</label>
+                <input
+                  type="text"
+                  name="paymentOptions"
+                  id="ce-paymentOptions"
+                  class="input-field"
+                  placeholder="e.g. Direct Deposit"
+                />
+              </div>
+              <div>
+                <label class="input-label">Hourly Rate ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="hourlyRate"
+                  id="ce-hourlyRate"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Weekly Cost ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="weeklyCost"
+                  id="ce-weeklyCost"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Monthly Cost ($)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="monthlyCost"
+                  id="ce-monthlyCost"
+                  class="input-field"
+                />
+              </div>
+            </div>
+            <div class="mt-4">
+              <label class="input-label">Insurance Company</label>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <input
+                  type="text"
+                  name="insuranceCompany"
+                  id="ce-insuranceCompany"
+                  placeholder="Company Name"
+                  class="input-field"
+                />
+                <input
+                  type="text"
+                  name="insurancePolicy"
+                  id="ce-insurancePolicy"
+                  placeholder="Policy #"
+                  class="input-field"
+                />
+                <input
+                  type="text"
+                  name="insuranceMemberId"
+                  id="ce-insuranceMemberId"
+                  placeholder="Member ID"
+                  class="input-field"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- 8. Documents Links -->
+          <div>
+            <h2
+              class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+            >
+              <i class="ph ph-link text-orange-500"></i> Document Links
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="input-label">Service Agreement URL</label>
+                <input
+                  type="text"
+                  name="agreementLink"
+                  id="ce-agreementLink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label class="input-label">Exhibit A URL</label>
+                <input
+                  type="text"
+                  name="exhibitALink"
+                  id="ce-exhibitALink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label class="input-label">Exhibit B URL</label>
+                <input
+                  type="text"
+                  name="exhibitBLink"
+                  id="ce-exhibitBLink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label class="input-label">Bill of Rights URL</label>
+                <input
+                  type="text"
+                  name="billOfRightsLink"
+                  id="ce-billOfRightsLink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label class="input-label">HIPAA Release URL</label>
+                <input
+                  type="text"
+                  name="hipaaLink"
+                  id="ce-hipaaLink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+              <div>
+                <label class="input-label">Privacy Practices URL</label>
+                <input
+                  type="text"
+                  name="privacyLink"
+                  id="ce-privacyLink"
+                  class="input-field"
+                  placeholder="https://..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="sticky bottom-0 bg-white pt-4 border-t border-gray-100 flex justify-end gap-3 z-10 p-4 shadow-lg rounded-b-xl -mx-6 -mb-6 mt-8"
+          >
+            <button
+              type="button"
+              onclick="switchClView('profile')"
+              class="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              id="updateClientBtn"
+              class="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-bold shadow-lg shadow-green-200 transition-all flex items-center gap-2"
+            >
+              <i class="ph ph-floppy-disk"></i> Save Changes
             </button>
           </div>
         </form>
