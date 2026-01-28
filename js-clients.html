@@ -55,6 +55,41 @@
     input.setSelectionRange(newCursorPos, newCursorPos);
   }
 
+  // Format EIN as XX-XXXXXXX
+  function formatEIN(input) {
+    let value = input.value.replace(/\D/g, "");
+    if (value.length > 9) value = value.substring(0, 9);
+
+    if (value.length > 2) {
+      input.value = value.substring(0, 2) + "-" + value.substring(2);
+    } else {
+      input.value = value;
+    }
+  }
+
+  function toggleClientOtherLang(checkbox) {
+    const otherInput = document.getElementById("ce-otherLangInput");
+    if (checkbox.checked) {
+      otherInput.classList.remove("hidden");
+    } else {
+      otherInput.classList.add("hidden");
+      otherInput.value = "";
+    }
+  }
+
+  function calculateEditClientCosts() {
+    const hours =
+      parseFloat(document.getElementById("ce-projectHours").value) || 0;
+    const rate =
+      parseFloat(document.getElementById("ce-hourlyRate").value) || 0;
+
+    const weekly = hours * rate;
+    const monthly = weekly * 4.33; // Avg weeks/month
+
+    document.getElementById("ce-weeklyCost").value = weekly.toFixed(2);
+    document.getElementById("ce-monthlyCost").value = monthly.toFixed(2);
+  }
+
   function loadClientList() {
     const tbody = document.getElementById("clTableBody");
     if (tbody)
@@ -736,6 +771,8 @@
       // 1. Admin
       setVal("ce-status", d.status);
       setVal("ce-coordinator", d.coordinator);
+      setVal("ce-referredBy", d.referredBy);
+      setVal("ce-username", d.username);
       setDate("ce-contactDate", d.contactDate);
       setDateTime("ce-assessmentDateTime", d.assessmentDateTime);
 
@@ -748,10 +785,49 @@
       setVal("ce-maritalStatus", d.maritalStatus);
       setVal("ce-spouseName", d.spouseName);
       setVal("ce-ssn", d.ssn);
+      setVal("ce-ein", d.ein);
       setVal("ce-height", d.height);
       setVal("ce-weight", d.weight);
       setVal("ce-codeStatus", d.codeStatus);
-      setVal("ce-languages", d.languages);
+
+      // Handle languages (checkboxes + other input)
+      const langContainer = document.getElementById("ce-languages-container");
+      if (langContainer) {
+        const checkboxes = langContainer.querySelectorAll(
+          'input[type="checkbox"]'
+        );
+        checkboxes.forEach((cb) => (cb.checked = false)); // Reset
+
+        const otherInput = document.getElementById("ce-otherLangInput");
+        if (otherInput) {
+          otherInput.value = "";
+          otherInput.classList.add("hidden");
+        }
+
+        if (d.languages) {
+          const langs = d.languages.split(",").map((s) => s.trim());
+          const checkValues = Array.from(checkboxes).map((cb) => cb.value);
+          const otherLangs = [];
+
+          langs.forEach((lang) => {
+            if (checkValues.includes(lang)) {
+              const cb = langContainer.querySelector(`input[value="${lang}"]`);
+              if (cb) cb.checked = true;
+            } else {
+              otherLangs.push(lang);
+            }
+          });
+
+          if (otherLangs.length > 0) {
+            const otherCb = langContainer.querySelector('input[value="Other"]');
+            if (otherCb) {
+              otherCb.checked = true;
+              toggleClientOtherLang(otherCb);
+              if (otherInput) otherInput.value = otherLangs.join(", ");
+            }
+          }
+        }
+      }
 
       // 3. Contact
       setVal("ce-clientPhone", d.clientPhone);
@@ -778,12 +854,20 @@
       setVal("ce-emergencyPhone", d.emergencyPhone);
       setVal("ce-emergencyEmail", d.emergencyEmail);
       setVal("ce-emergencyAddress", d.emergencyAddress);
+      setVal("ce-emergencyApt", d.emergencyApt);
+      setVal("ce-emergencyCity", d.emergencyCity);
+      setVal("ce-emergencyState", d.emergencyState);
+      setVal("ce-emergencyZip", d.emergencyZip);
 
       setVal("ce-authName", d.authName);
       setVal("ce-authRelationship", d.authRelationship);
       setVal("ce-authPhone", d.authPhone);
       setVal("ce-authEmail", d.authEmail);
       setVal("ce-authAddress", d.authAddress);
+      setVal("ce-authApt", d.authApt);
+      setVal("ce-authCity", d.authCity);
+      setVal("ce-authState", d.authState);
+      setVal("ce-authZip", d.authZip);
 
       // 5. Medical
       setVal("ce-diagnosis", d.diagnosis);
@@ -802,6 +886,7 @@
       setVal("ce-levelOfCare", d.levelOfCare);
       setVal("ce-serviceTypes", d.serviceTypes);
       setVal("ce-careNeeds", d.careNeeds);
+      setVal("ce-projectHours", d.projectHours);
 
       setVal("ce-schMO", d.schMO);
       setVal("ce-schT", d.schT);
@@ -815,6 +900,11 @@
       setVal("ce-paymentType", d.paymentType);
       setVal("ce-paymentOptions", d.paymentOptions);
       setVal("ce-hourlyRate", d.hourlyRate);
+
+      const overtimeCheckbox = document.getElementById("ce-overtime");
+      if (overtimeCheckbox)
+        overtimeCheckbox.checked = d.overtime === "Yes" || d.overtime === true;
+
       setVal("ce-weeklyCost", d.weeklyCost);
       setVal("ce-monthlyCost", d.monthlyCost);
 
@@ -844,7 +934,45 @@
     const form = document.getElementById("clientEditForm");
     const formData = new FormData(form);
     const data = {};
-    formData.forEach((value, key) => (data[key] = value));
+    formData.forEach((value, key) => {
+      if (key !== "languages" && key !== "overtime") {
+        // Handled manually
+        data[key] = value;
+      }
+    });
+
+    // Handle Languages
+    const langContainer = document.getElementById("ce-languages-container");
+    if (langContainer) {
+      const checked = Array.from(
+        langContainer.querySelectorAll('input[type="checkbox"]:checked')
+      ).map((cb) => cb.value);
+      // Check if 'Other' is checked
+      if (checked.includes("Other")) {
+        const otherInput = document.getElementById("ce-otherLangInput");
+        const otherText = otherInput ? otherInput.value.trim() : "";
+        // Remove "Other" from array and add the text
+        const index = checked.indexOf("Other");
+        if (index > -1) checked.splice(index, 1);
+        if (otherText) {
+          const others = otherText
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean);
+          checked.push(...others);
+        }
+      }
+      data.languages = checked.join(", ");
+    } else {
+      // Fallback if container not found (e.g. older version), though we edited HTML
+      data.languages = formData.get("languages");
+    }
+
+    // Handle Overtime
+    const overtimeCheckbox = document.getElementById("ce-overtime");
+    if (overtimeCheckbox) {
+      data.overtime = overtimeCheckbox.checked ? "Yes" : "No";
+    }
 
     google.script.run
       .withSuccessHandler((res) => {
