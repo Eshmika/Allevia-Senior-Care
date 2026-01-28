@@ -713,6 +713,80 @@
     document.getElementById("clProfileContent").classList.remove("hidden");
   }
 
+  /* Financial Logic Wrappers for Edit View - using 'ce-' prefix */
+  function toggleEditClientPaymentOther() {
+    const el = document.getElementById("ce-paymentType");
+    if (!el) return;
+    const val = el.value;
+    const cont = document.getElementById("ce-paymentTypeOtherContainer");
+    if (cont) {
+      if (val === "Other") cont.classList.remove("hidden");
+      else cont.classList.add("hidden");
+    }
+  }
+
+  function toggleEditClientPaymentDetails() {
+    const opts = document.getElementsByName("paymentOptions");
+    let selected = "";
+    opts.forEach((r) => {
+      if (r.checked) selected = r.value.toLowerCase();
+    });
+
+    const bank = document.getElementById("ce-bankDetails");
+    const digital = document.getElementById("ce-digitalDetails");
+    const card = document.getElementById("ce-cardDetails");
+    const check = document.getElementById("ce-checkDetails");
+
+    if (bank) bank.classList.add("hidden");
+    if (digital) digital.classList.add("hidden");
+    if (card) card.classList.add("hidden");
+    if (check) check.classList.add("hidden");
+
+    if (["direct deposit", "bank deposit"].includes(selected)) {
+      if (bank) bank.classList.remove("hidden");
+    } else if (["zelle", "apple pay"].includes(selected)) {
+      if (digital) digital.classList.remove("hidden");
+    } else if (["credit/debit card"].includes(selected)) {
+      if (card) card.classList.remove("hidden");
+    } else if (["check"].includes(selected)) {
+      if (check) check.classList.remove("hidden");
+    }
+  }
+
+  function toggleEditClientBusinessName() {
+    const el = document.getElementById("ce-payHolderType");
+    if (!el) return;
+    const type = el.value;
+    const cont = document.getElementById("ce-payBusinessNameContainer");
+    if (cont) {
+      if (type === "Business") cont.classList.remove("hidden");
+      else cont.classList.add("hidden");
+    }
+  }
+
+  function toggleEditClientDigitalInputs() {
+    const type = document.querySelector(
+      'input[name="payDigitalType"]:checked'
+    )?.value;
+    const lbl = document.getElementById("ce-payDigitalValueLabel");
+    if (lbl) {
+      lbl.textContent = type === "email" ? "Email Address" : "Phone Number";
+    }
+  }
+
+  function calculateEditClientCosts() {
+    const hrs =
+      parseFloat(document.getElementById("ce-projectHours").value) || 0;
+    const rate =
+      parseFloat(document.getElementById("ce-hourlyRate").value) || 0;
+
+    const weekly = hrs * rate;
+    const monthly = weekly * 4.33; // Standard avg
+
+    document.getElementById("ce-weeklyCost").value = weekly.toFixed(2);
+    document.getElementById("ce-monthlyCost").value = monthly.toFixed(2);
+  }
+
   function editClientProfile() {
     if (!currentClientData) {
       console.warn("No client data found for editing.");
@@ -1118,8 +1192,73 @@
       setVal("ce-schSU", d.schSU);
 
       // 7. Financials
-      setVal("ce-paymentType", d.paymentType);
-      setVal("ce-paymentOptions", d.paymentOptions);
+      // Payment Type
+      const payTypeSelect = document.getElementById("ce-paymentType");
+      if (payTypeSelect) {
+        // Check if value is one of the options
+        const stdOpts = [
+          "Private pay",
+          "Lead Insurance",
+          "Medicaid",
+          "VA",
+          "Other",
+        ];
+        const val = d.paymentType || "";
+        if (stdOpts.includes(val) && val !== "Other") {
+          payTypeSelect.value = val;
+          setVal("ce-paymentTypeOther", "");
+        } else if (val !== "") {
+          // It's a custom value -> Toggle Other
+          payTypeSelect.value = "Other";
+          setVal("ce-paymentTypeOther", val);
+        } else {
+          payTypeSelect.value = "";
+          setVal("ce-paymentTypeOther", "");
+        }
+        toggleEditClientPaymentOther();
+      }
+
+      // Payment Options (Radio)
+      const payOpts = document.getElementsByName("paymentOptions");
+      // Reset first
+      payOpts.forEach((r) => (r.checked = false));
+      if (d.paymentOptions) {
+        payOpts.forEach((r) => {
+          if (r.value.toLowerCase() === d.paymentOptions.toLowerCase())
+            r.checked = true;
+        });
+      }
+      toggleEditClientPaymentDetails();
+
+      // Bank Details
+      setVal("ce-payBankName", d.payBankName);
+      setVal("ce-payHolderName", d.payHolderName);
+      setVal("ce-payAccountType", d.payAccountType);
+      setVal("ce-payHolderType", d.payHolderType);
+      setVal("ce-payBusinessName", d.payBusinessName);
+      toggleEditClientBusinessName();
+      setVal("ce-payAccountNum", d.payAccountNum);
+      setVal("ce-payAccountNumConfirm", d.payAccountNum);
+      setVal("ce-payRoutingNum", d.payRoutingNum);
+      setVal("ce-payRoutingNumConfirm", d.payRoutingNum);
+
+      // Digital Details
+      setVal("ce-payDigitalFullName", d.payDigitalFullName);
+      // Radio for Digital Type
+      const digTypes = document.getElementsByName("payDigitalType");
+      if (d.payDigitalType) {
+        digTypes.forEach((r) => (r.checked = r.value === d.payDigitalType));
+      }
+      setVal("ce-payDigitalValue", d.payDigitalValue);
+      toggleEditClientDigitalInputs();
+
+      // Card Details
+      setVal("ce-payCardName", d.payCardName);
+      setVal("ce-payCardNumber", d.payCardNumber);
+      setVal("ce-payCardExpiry", d.payCardExpiry);
+      setVal("ce-payCardCVV", d.payCardCVV);
+
+      // Hourly/Costs
       setVal("ce-hourlyRate", d.hourlyRate);
 
       const overtimeCheckbox = document.getElementById("ce-overtime");
@@ -1129,9 +1268,22 @@
       setVal("ce-weeklyCost", d.weeklyCost);
       setVal("ce-monthlyCost", d.monthlyCost);
 
+      // Insurance (Expanded)
       setVal("ce-insuranceCompany", d.insuranceCompany);
+      setVal("ce-insuranceAddress", d.insuranceAddress);
+      setVal("ce-insuranceApt", d.insuranceApt);
+      setVal("ce-insuranceCity", d.insuranceCity);
+      setVal("ce-insuranceState", d.insuranceState);
+      setVal("ce-insuranceZip", d.insuranceZip);
+
       setVal("ce-insurancePolicy", d.insurancePolicy);
       setVal("ce-insuranceMemberId", d.insuranceMemberId);
+      setVal("ce-insuranceCase", d.insuranceCase);
+      setVal("ce-insuranceClaim", d.insuranceClaim);
+
+      setVal("ce-insuranceContactName", d.insuranceContactName);
+      setVal("ce-insuranceContactPhone", d.insuranceContactPhone);
+      setVal("ce-insuranceAddNote", d.insuranceAddNote);
 
       // 8. Documents
       setVal("ce-agreementLink", d.agreementLink);
@@ -1161,6 +1313,34 @@
         data[key] = value;
       }
     });
+
+    // Handle Payment Type Other Override
+    if (data.paymentType === "Other") {
+      const ptOther = document
+        .getElementById("ce-paymentTypeOther")
+        .value.trim();
+      if (ptOther) data.paymentType = ptOther;
+    }
+
+    // Validation for Financials
+    if (data.payAccountNum) {
+      const confirm = document.getElementById("ce-payAccountNumConfirm").value;
+      if (data.payAccountNum !== confirm) {
+        Swal.fire("Error", "Bank Account Numbers do not match.", "error");
+        btn.disabled = false;
+        btn.textContent = "Update Client";
+        return;
+      }
+    }
+    if (data.payRoutingNum) {
+      const confirm = document.getElementById("ce-payRoutingNumConfirm").value;
+      if (data.payRoutingNum !== confirm) {
+        Swal.fire("Error", "Bank Routing Numbers do not match.", "error");
+        btn.disabled = false;
+        btn.textContent = "Update Client";
+        return;
+      }
+    }
 
     // Handle Mental Status
     const msSelect = document.getElementById("ce-mentalStatus");
