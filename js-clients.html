@@ -873,7 +873,16 @@
 
       // 5. Medical
       setVal("ce-diagnosis", d.diagnosis);
+
       setVal("ce-allergies", d.allergies);
+      setVal("ce-allergiesDetail", d.allergiesDetail);
+      if (document.getElementById("ce-allergies")) {
+        toggleDetailInput(
+          document.getElementById("ce-allergies"),
+          "ce-allergies-detail",
+          "Yes"
+        );
+      }
 
       // Checkboxes for Medical
       setCheckboxes("ce-medicalHistory-container", d.medicalHistory);
@@ -907,7 +916,20 @@
       }
 
       setVal("ce-medList", d.medList);
+      setVal("ce-medReminder", d.medReminder);
+      setVal("ce-selfAdminMed", d.selfAdminMed);
+      setVal("ce-takingMed", d.takingMed);
+      setVal("ce-medOverseer", d.medOverseer);
+
       setVal("ce-assistDirections", d.assistDirections);
+      setVal("ce-assistDirectionsDetail", d.assistDirectionsDetail);
+      if (document.getElementById("ce-assistDirections")) {
+        toggleDetailInput(
+          document.getElementById("ce-assistDirections"),
+          "ce-assistDirections-detail",
+          "Yes"
+        );
+      }
 
       // Sensory & Continent
       setVal("ce-blind", d.blind);
@@ -976,6 +998,9 @@
       setVal("ce-liveRehabName", d.liveRehabName);
       setVal("ce-liveRehabAddress", d.liveRehabAddress);
 
+      setVal("ce-smoke", d.smoke);
+      setVal("ce-drink", d.drink);
+
       setVal("ce-pets", d.pets);
       const petsDetail = document.getElementById("ce-pets-detail");
       if (petsDetail) {
@@ -986,6 +1011,30 @@
       setVal("ce-petsNote", d.petsNote);
 
       setVal("ce-pharmacyName", d.pharmacyName);
+
+      setVal("ce-hospitalName", d.hospitalName);
+      setVal("ce-hospitalPhone", d.hospitalPhone);
+      setVal("ce-hospitalAddress", d.hospitalAddress);
+
+      setVal("ce-covidVaccine", d.covidVaccine);
+      setVal("ce-covidVaccineDetail", d.covidVaccineDetail);
+      if (document.getElementById("ce-covidVaccine")) {
+        toggleDetailInput(
+          document.getElementById("ce-covidVaccine"),
+          "ce-covidVaccine-detail",
+          "Yes"
+        );
+      }
+
+      setVal("ce-fluVaccine", d.fluVaccine);
+      setVal("ce-fluVaccineDetail", d.fluVaccineDetail);
+      if (document.getElementById("ce-fluVaccine")) {
+        toggleDetailInput(
+          document.getElementById("ce-fluVaccine"),
+          "ce-fluVaccine-detail",
+          "Yes"
+        );
+      }
       setVal("ce-pharmacyPhone", d.pharmacyPhone);
       setVal("ce-primaryDrName", d.primaryDrName);
       setVal("ce-drPhone", d.drPhone);

@@ -2012,13 +2012,24 @@
             </div>
             <div>
               <label class="input-label">Allergies</label>
-              <input
-                type="text"
+              <select
                 name="allergies"
                 id="ce-allergies"
                 class="input-field"
-                placeholder="None known"
-              />
+                onchange="toggleDetailInput(this, 'ce-allergies-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="ce-allergies-detail" class="mt-2 hidden">
+                <input
+                  type="text"
+                  name="allergiesDetail"
+                  id="ce-allergiesDetail"
+                  class="input-field"
+                  placeholder="Type in answer"
+                />
+              </div>
             </div>
             <div>
               <label class="input-label">Medical History</label>
@@ -2347,14 +2358,77 @@
                 placeholder="List medications..."
               ></textarea>
             </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="input-label">Medication reminder</label>
+                <select
+                  name="medReminder"
+                  id="ce-medReminder"
+                  class="input-field"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Self-administered medication</label>
+                <select
+                  name="selfAdminMed"
+                  id="ce-selfAdminMed"
+                  class="input-field"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="input-label"
+                  >Is consumer in taking medication</label
+                >
+                <select name="takingMed" id="ce-takingMed" class="input-field">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+            </div>
+
             <div>
-              <label class="input-label">Assistance Directions</label>
+              <label class="input-label"
+                >Who is responsible for overseeing medications &
+                location?</label
+              >
               <textarea
-                name="assistDirections"
-                id="ce-assistDirections"
+                name="medOverseer"
+                id="ce-medOverseer"
                 rows="2"
                 class="input-field"
               ></textarea>
+            </div>
+
+            <div>
+              <label class="input-label">Assistance Directions</label>
+              <select
+                name="assistDirections"
+                id="ce-assistDirections"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-assistDirections-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="ce-assistDirections-detail" class="mt-2 hidden">
+                <input
+                  type="text"
+                  name="assistDirectionsDetail"
+                  id="ce-assistDirectionsDetail"
+                  class="input-field"
+                  placeholder="Type in answer"
+                />
+              </div>
             </div>
 
             <div>
@@ -3172,6 +3246,25 @@
                 />
               </div>
             </div>
+          </div>
+
+          <!-- Smoke -->
+          <div>
+            <label class="input-label">Smoke</label>
+            <select name="smoke" id="ce-smoke" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <!-- Drink -->
+          <div>
+            <label class="input-label">Drink</label>
+            <select name="drink" id="ce-drink" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+              <option value="Sober">Sober</option>
+            </select>
           </div>
         </div>
       </div>
