@@ -1495,24 +1495,40 @@
             />
           </div>
           <div>
-            <label class="input-label">Height</label>
-            <input
-              type="text"
-              name="height"
-              id="ce-height"
-              class="input-field"
-              placeholder="e.g. 5'7"
-            />
+            <label class="input-label">Height (ft'in")</label>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                name="height"
+                id="ce-height"
+                class="input-field"
+                placeholder="e.g. 5'7"
+                oninput="convertHeight(this)"
+              />
+              <span
+                id="ce-height-m"
+                class="text-xs text-gray-400 whitespace-nowrap"
+                >-- m</span
+              >
+            </div>
           </div>
           <div>
-            <label class="input-label">Weight</label>
-            <input
-              type="text"
-              name="weight"
-              id="ce-weight"
-              class="input-field"
-              placeholder="e.g. 150 lbs"
-            />
+            <label class="input-label">Weight (lbs)</label>
+            <div class="flex items-center gap-2">
+              <input
+                type="number"
+                name="weight"
+                id="ce-weight"
+                class="input-field"
+                placeholder="lbs"
+                oninput="convertWeight(this.value)"
+              />
+              <span
+                id="ce-weight-kg"
+                class="text-xs text-gray-400 whitespace-nowrap"
+                >-- kg</span
+              >
+            </div>
           </div>
           <div>
             <label class="input-label">Code Status</label>
@@ -2014,6 +2030,35 @@
               ></textarea>
             </div>
             <div>
+              <label class="input-label">Mental Status</label>
+              <select
+                name="mentalStatus"
+                id="ce-mentalStatus"
+                class="input-field"
+                onchange="toggleOtherInput(this, 'ce-mental-other-container')"
+              >
+                <option value="Alert">Alert</option>
+                <option value="Alzheimer/Dementia">Alzheimer/Dementia</option>
+                <option value="Confused">Confused</option>
+                <option value="Forgetful">Forgetful</option>
+                <option value="Never oriented">Never oriented</option>
+                <option value="Combative">Combative</option>
+                <option value="Comatose">Comatose</option>
+                <option value="Agitated">Agitated</option>
+                <option value="Lethargic">Lethargic</option>
+                <option value="Stuporous">Stuporous</option>
+                <option value="Other">Other</option>
+              </select>
+              <div id="ce-mental-other-container" class="mt-2 hidden">
+                <input
+                  type="text"
+                  id="ce-mentalStatus-other"
+                  class="input-field"
+                  placeholder="Please specify..."
+                />
+              </div>
+            </div>
+            <div>
               <label class="input-label">Physical Aids</label>
               <input
                 type="text"
@@ -2044,6 +2089,86 @@
                 class="input-field"
               ></textarea>
             </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <div>
+                <label class="input-label text-xs">Blind</label>
+                <select
+                  name="blind"
+                  id="ce-blind"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label text-xs">Glasses</label>
+                <select
+                  name="glasses"
+                  id="ce-glasses"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label text-xs">Dentures</label>
+                <select
+                  name="dentures"
+                  id="ce-dentures"
+                  class="input-field text-sm py-1"
+                >
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-2 bg-green-50 rounded border border-green-100">
+                <label
+                  class="block text-xs text-green-700 font-bold uppercase mb-1"
+                  >Continent</label
+                >
+                <div class="flex flex-col gap-1" id="ce-continent-container">
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Stool" class="rounded" />
+                    Stool</label
+                  >
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Urine" class="rounded" />
+                    Urine</label
+                  >
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Both" class="rounded" />
+                    Both</label
+                  >
+                </div>
+              </div>
+              <div class="p-2 bg-red-50 rounded border border-red-100">
+                <label
+                  class="block text-xs text-red-700 font-bold uppercase mb-1"
+                  >Incontinent</label
+                >
+                <div class="flex flex-col gap-1" id="ce-incontinent-container">
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Stool" class="rounded" />
+                    Stool</label
+                  >
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Urine" class="rounded" />
+                    Urine</label
+                  >
+                  <label class="flex items-center gap-1 text-xs text-gray-600"
+                    ><input type="checkbox" value="Both" class="rounded" />
+                    Both</label
+                  >
+                </div>
+              </div>
+            </div>
+
             <div>
               <label class="input-label">Pharmacy Name & Phone</label>
               <div class="grid grid-cols-2 gap-2">
@@ -2095,7 +2220,7 @@
           <i class="ph ph-calendar-check text-indigo-600"></i> Service & Care
           Plan
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="input-label">Level of Care</label>
             <input
@@ -2107,16 +2232,6 @@
             />
           </div>
           <div>
-            <label class="input-label">Service Types</label>
-            <input
-              type="text"
-              name="serviceTypes"
-              id="ce-serviceTypes"
-              class="input-field"
-              placeholder="e.g. Respite, Personal Care"
-            />
-          </div>
-          <div>
             <label class="input-label">Care Needs Description</label>
             <textarea
               name="careNeeds"
@@ -2125,6 +2240,84 @@
               class="input-field"
               style="min-height: 42px"
             ></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="input-label">Service Needs</label>
+            <textarea
+              name="serviceNeedsText"
+              id="ce-serviceNeedsText"
+              rows="2"
+              class="input-field"
+            ></textarea>
+          </div>
+          <div>
+            <label class="input-label">Goals</label>
+            <textarea
+              name="goals"
+              id="ce-goals"
+              rows="2"
+              class="input-field"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="input-label">Service Types</label>
+          <div
+            class="grid grid-cols-2 lg:grid-cols-3 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+            id="ce-serviceTypes-container"
+          >
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="Respite care"
+                class="rounded text-purple-600"
+              />
+              Respite care
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="Hourly routine care"
+                class="rounded text-purple-600"
+              />
+              Hourly routine care
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="On call care"
+                class="rounded text-purple-600"
+              />
+              On call care
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="Overnight"
+                class="rounded text-purple-600"
+              />
+              Overnight
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="24/7 care live out"
+                class="rounded text-purple-600"
+              />
+              24/7 care live out
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                value="24/7 care live in"
+                class="rounded text-purple-600"
+              />
+              24/7 care live in
+            </label>
           </div>
         </div>
         <!-- Schedule -->

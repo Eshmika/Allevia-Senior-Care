@@ -787,7 +787,9 @@
       setVal("ce-ssn", d.ssn);
       setVal("ce-ein", d.ein);
       setVal("ce-height", d.height);
+      if (d.height) convertHeight(document.getElementById("ce-height"));
       setVal("ce-weight", d.weight);
+      if (d.weight) convertWeight(d.weight);
       setVal("ce-codeStatus", d.codeStatus);
 
       // Handle languages (checkboxes + other input)
@@ -873,10 +875,57 @@
       setVal("ce-diagnosis", d.diagnosis);
       setVal("ce-allergies", d.allergies);
       setVal("ce-medicalHistory", d.medicalHistory);
+
+      // Mental Status
+      const mentalStatus = d.mentalStatus || "";
+      const mentalSelect = document.getElementById("ce-mentalStatus");
+      const mentalOtherInput = document.getElementById("ce-mentalStatus-other");
+      const mentalOtherContainer = document.getElementById(
+        "ce-mental-other-container"
+      );
+      if (mentalSelect) {
+        const mOpts = Array.from(mentalSelect.options).map((o) => o.value);
+        if (mOpts.includes(mentalStatus)) {
+          mentalSelect.value = mentalStatus;
+          if (mentalOtherContainer)
+            mentalOtherContainer.classList.add("hidden");
+          if (mentalOtherInput) mentalOtherInput.value = "";
+        } else if (mentalStatus.startsWith("Other: ")) {
+          mentalSelect.value = "Other";
+          if (mentalOtherContainer)
+            mentalOtherContainer.classList.remove("hidden");
+          if (mentalOtherInput)
+            mentalOtherInput.value = mentalStatus.substring(7);
+        } else {
+          mentalSelect.value = "";
+        }
+      }
+
       setVal("ce-medicalAids", d.medicalAids);
 
       setVal("ce-medList", d.medList);
       setVal("ce-assistDirections", d.assistDirections);
+
+      // Sensory & Continent
+      setVal("ce-blind", d.blind);
+      setVal("ce-glasses", d.glasses);
+      setVal("ce-dentures", d.dentures);
+
+      const setCheckboxes = (containerId, valString) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((cb) => (cb.checked = false));
+        if (!valString) return;
+        const vals = valString.split(",").map((s) => s.trim());
+        vals.forEach((v) => {
+          const cb = container.querySelector(`input[value="${v}"]`);
+          if (cb) cb.checked = true;
+        });
+      };
+      setCheckboxes("ce-continent-container", d.continent);
+      setCheckboxes("ce-incontinent-container", d.incontinent);
+
       setVal("ce-pharmacyName", d.pharmacyName);
       setVal("ce-pharmacyPhone", d.pharmacyPhone);
       setVal("ce-primaryDrName", d.primaryDrName);
@@ -884,8 +933,13 @@
 
       // 6. Care Plan
       setVal("ce-levelOfCare", d.levelOfCare);
-      setVal("ce-serviceTypes", d.serviceTypes);
+
       setVal("ce-careNeeds", d.careNeeds);
+      setVal("ce-serviceNeedsText", d.serviceNeedsText);
+      setVal("ce-goals", d.goals);
+
+      setCheckboxes("ce-serviceTypes-container", d.serviceTypes);
+
       setVal("ce-projectHours", d.projectHours);
 
       setVal("ce-schMO", d.schMO);
@@ -935,11 +989,37 @@
     const formData = new FormData(form);
     const data = {};
     formData.forEach((value, key) => {
-      if (key !== "languages" && key !== "overtime") {
+      if (key !== "languages" && key !== "overtime" && key !== "mentalStatus") {
         // Handled manually
         data[key] = value;
       }
     });
+
+    // Handle Mental Status
+    const msSelect = document.getElementById("ce-mentalStatus");
+    if (msSelect) {
+      if (msSelect.value === "Other") {
+        const msOther = document
+          .getElementById("ce-mentalStatus-other")
+          .value.trim();
+        data.mentalStatus = msOther ? "Other: " + msOther : "Other";
+      } else {
+        data.mentalStatus = msSelect.value;
+      }
+    }
+
+    // Helper for joining checkboxes
+    const getChecked = (id) => {
+      const c = document.getElementById(id);
+      if (!c) return "";
+      return Array.from(c.querySelectorAll('input[type="checkbox"]:checked'))
+        .map((cb) => cb.value)
+        .join(", ");
+    };
+
+    data.serviceTypes = getChecked("ce-serviceTypes-container");
+    data.continent = getChecked("ce-continent-container");
+    data.incontinent = getChecked("ce-incontinent-container");
 
     // Handle Languages
     const langContainer = document.getElementById("ce-languages-container");
@@ -1081,5 +1161,52 @@
         );
       })
       .archiveClient(clientId, finalReason);
+  }
+  function toggleOtherInput(select, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    if (select.value === "Other") {
+      container.classList.remove("hidden");
+    } else {
+      container.classList.add("hidden");
+    }
+  }
+
+  function convertHeight(input) {
+    const val = input.value;
+    const span = document.getElementById(input.id + "-m");
+    if (!span) return;
+    if (!val) {
+      span.textContent = "-- m";
+      return;
+    }
+
+    let inches = 0;
+    if (val.includes("'")) {
+      const parts = val.split("'");
+      const ft = parseFloat(parts[0]) || 0;
+      const inc = parseFloat(parts[1]) || 0;
+      inches = ft * 12 + inc;
+    } else {
+      inches = parseFloat(val) || 0;
+    }
+
+    if (inches > 0) {
+      const m = inches * 0.0254;
+      span.textContent = m.toFixed(2) + " m";
+    } else {
+      span.textContent = "-- m";
+    }
+  }
+
+  function convertWeight(lbs) {
+    const span = document.getElementById("ce-weight-kg");
+    if (!span) return;
+    if (!lbs || isNaN(lbs)) {
+      span.textContent = "-- kg";
+      return;
+    }
+    const kg = parseFloat(lbs) * 0.453592;
+    span.textContent = `${kg.toFixed(1)} kg`;
   }
 </script>
