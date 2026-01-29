@@ -802,6 +802,19 @@
         if (el) el.value = val === undefined || val === null ? "" : val;
       };
 
+      const setCheckboxes = (containerId, valString) => {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach((cb) => (cb.checked = false));
+        if (!valString) return;
+        const vals = valString.split(",").map((s) => s.trim());
+        vals.forEach((v) => {
+          const cb = container.querySelector(`input[value="\${v}"]`);
+          if (cb) cb.checked = true;
+        });
+      };
+
       setVal("ce-id", d.id);
 
       // Dates helpers
@@ -1010,31 +1023,6 @@
       setVal("ce-glasses", d.glasses);
       setVal("ce-dentures", d.dentures);
 
-      // Helper function defined in editClientProfile context (hoisted or closure)
-      // Re-defining setCheckboxes internal if not global?
-      // It was defined right below in original code. I must ensure I don't break it.
-      // But I am replacing lines BEFORE setCheckboxes definition?
-
-      // Let's look at original code:
-      /*
-      setVal("ce-medicalAids", d.medicalAids);  <-- I am removing this
-      ...
-      const setCheckboxes = (containerId, valString) => { ... }
-      setCheckboxes("ce-continent-container", d.continent);
-      */
-
-      const setCheckboxes = (containerId, valString) => {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach((cb) => (cb.checked = false));
-        if (!valString) return;
-        const vals = valString.split(",").map((s) => s.trim());
-        vals.forEach((v) => {
-          const cb = container.querySelector(`input[value="${v}"]`);
-          if (cb) cb.checked = true;
-        });
-      };
       setCheckboxes("ce-continent-container", d.continent);
       setCheckboxes("ce-incontinent-container", d.incontinent);
 
