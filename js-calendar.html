@@ -219,6 +219,10 @@
         ? `${shift.clockIn} - ${shift.clockOut}`
         : "Time TBD";
 
+    const dateRangeDisplay = shift.endDate
+      ? `${shift.date} to ${shift.endDate}`
+      : `${shift.date}`;
+
     const card = document.createElement("div");
     card.className =
       "p-2 rounded border shadow-sm text-xs hover:shadow-md transition cursor-pointer mb-1";
@@ -235,8 +239,9 @@
     card.innerHTML = `
       <div class="font-bold text-gray-800 truncate" title="${clName}">${clName}</div>
       <div class="text-gray-700 truncate font-medium" title="${cgName}">${cgName}</div>
-      <div class="mt-1 flex justify-between text-[10px] text-gray-600 font-semibold border-t border-black/10 pt-1">
+      <div class="mt-1 flex flex-col text-[10px] text-gray-600 font-semibold border-t border-black/10 pt-1">
         <span>${timeDisplay}</span>
+        <span class="opacity-80">${dateRangeDisplay}</span>
       </div>
     `;
     return card;
@@ -332,9 +337,14 @@
     div.style.zIndex = shift.zIndex;
     div.style.color = "#1f2937";
 
+    const dateRangeDisplay = shift.endDate
+      ? `${shift.date} to ${shift.endDate}`
+      : `${shift.date}`;
+
     div.innerHTML = `
        <div class="font-bold text-xs truncate">${clName}</div>
        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
+       <div class="text-[8px] truncate opacity-70 mt-0.5">${dateRangeDisplay}</div>
     `;
 
     div.onclick = (e) => {

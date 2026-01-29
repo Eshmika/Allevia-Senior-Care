@@ -45,6 +45,7 @@ function getShifts(startDateStr, endDateStr) {
 
   // Indices
   const dateIdx = headers.indexOf("Start Date");
+  const endDateIdx = headers.indexOf("End Date");
   const clientIdx = headers.indexOf("Client ID");
   const cgIdx = headers.indexOf("Caregiver ID");
   const startIdx = headers.indexOf("Clock In");
@@ -53,6 +54,8 @@ function getShifts(startDateStr, endDateStr) {
   if (dateIdx === -1) return [];
   if (data.length <= 1) return []; // No data rows
 
+  const timeZone =
+    SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
   const start = new Date(startDateStr);
   start.setHours(0, 0, 0, 0);
   const end = new Date(endDateStr);
@@ -80,31 +83,24 @@ function getShifts(startDateStr, endDateStr) {
     if (rowDate >= start && rowDate <= end) {
       const clockInVal = row[startIdx];
       const clockOutVal = row[endIdx];
+      const endDateVal = row[endDateIdx];
 
       shifts.push({
         id: row[0],
         clientId: row[clientIdx],
         caregiverId: row[cgIdx],
-        date: Utilities.formatDate(
-          rowDate,
-          Session.getScriptTimeZone(),
-          "yyyy-MM-dd"
-        ),
+        date: Utilities.formatDate(rowDate, timeZone, "yyyy-MM-dd"),
+        endDate:
+          endDateVal instanceof Date
+            ? Utilities.formatDate(endDateVal, timeZone, "yyyy-MM-dd")
+            : String(endDateVal || ""),
         clockIn:
           clockInVal instanceof Date
-            ? Utilities.formatDate(
-                clockInVal,
-                Session.getScriptTimeZone(),
-                "HH:mm"
-              )
+            ? Utilities.formatDate(clockInVal, timeZone, "HH:mm")
             : String(clockInVal || ""),
         clockOut:
           clockOutVal instanceof Date
-            ? Utilities.formatDate(
-                clockOutVal,
-                Session.getScriptTimeZone(),
-                "HH:mm"
-              )
+            ? Utilities.formatDate(clockOutVal, timeZone, "HH:mm")
             : String(clockOutVal || ""),
         // Add names if possible, but for now IDs are fine, frontend can map them
       });
