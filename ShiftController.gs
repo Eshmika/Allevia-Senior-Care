@@ -85,15 +85,41 @@ function getShifts(startDateStr, endDateStr) {
       const clockOutVal = row[endIdx];
       const endDateVal = row[endDateIdx];
 
+      // Fix: Use original string if available to avoid timezone shifts
+      let dateOutput = "";
+      if (rowDateStr instanceof Date) {
+        dateOutput = Utilities.formatDate(rowDate, timeZone, "yyyy-MM-dd");
+      } else if (
+        typeof rowDateStr === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(rowDateStr)
+      ) {
+        dateOutput = rowDateStr;
+      } else {
+        dateOutput = Utilities.formatDate(rowDate, timeZone, "yyyy-MM-dd");
+      }
+
+      let endDateOutput = "";
+      if (endDateVal instanceof Date) {
+        endDateOutput = Utilities.formatDate(
+          endDateVal,
+          timeZone,
+          "yyyy-MM-dd"
+        );
+      } else if (
+        typeof endDateVal === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(endDateVal)
+      ) {
+        endDateOutput = endDateVal;
+      } else {
+        endDateOutput = String(endDateVal || "");
+      }
+
       shifts.push({
         id: row[0],
         clientId: row[clientIdx],
         caregiverId: row[cgIdx],
-        date: Utilities.formatDate(rowDate, timeZone, "yyyy-MM-dd"),
-        endDate:
-          endDateVal instanceof Date
-            ? Utilities.formatDate(endDateVal, timeZone, "yyyy-MM-dd")
-            : String(endDateVal || ""),
+        date: dateOutput,
+        endDate: endDateOutput,
         clockIn:
           clockInVal instanceof Date
             ? Utilities.formatDate(clockInVal, timeZone, "HH:mm")

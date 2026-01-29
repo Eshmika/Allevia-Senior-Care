@@ -188,6 +188,13 @@
     return a && b && a.toDateString() === b.toDateString();
   }
 
+  function isShiftOnDate(shift, dateStr) {
+    if (shift.date === dateStr) return true;
+    if (shift.endDate && shift.endDate >= dateStr && shift.date <= dateStr)
+      return true;
+    return false;
+  }
+
   function updateCalendarViewToggle() {
     const buttons = document.querySelectorAll(
       "#calendarViewToggle .calendar-view-btn"
@@ -414,7 +421,7 @@
     google.script.run
       .withSuccessHandler((shifts) => {
         const dayShifts = (shifts || []).filter((s) => {
-          if (s.date !== dateStr) return false;
+          if (!isShiftOnDate(s, dateStr)) return false;
           if (
             selectedCaregiverId !== "all" &&
             s.caregiverId !== selectedCaregiverId
@@ -557,7 +564,7 @@
           const dateStr = col.dataset.date;
           const myShifts = shifts.filter(
             (s) =>
-              s.date === dateStr &&
+              isShiftOnDate(s, dateStr) &&
               (selectedCaregiverId === "all" ||
                 s.caregiverId === selectedCaregiverId)
           );
@@ -645,7 +652,7 @@
           grid.appendChild(col);
 
           const dayShifts = shifts.filter((s) => {
-            if (s.date !== dateStr) return false;
+            if (!isShiftOnDate(s, dateStr)) return false;
             if (
               selectedCaregiverId !== "all" &&
               s.caregiverId !== selectedCaregiverId
@@ -701,11 +708,38 @@
         shifts = shifts || [];
         grid.innerHTML = "";
 
-        const shiftMap = shifts.reduce((acc, s) => {
-          acc[s.date] = acc[s.date] || [];
-          acc[s.date].push(s);
-          return acc;
-        }, {});
+        const shiftMap = {};
+        shifts.forEach((s) => {
+          if (!s.endDate || s.endDate === s.date) {
+            shiftMap[s.date] = shiftMap[s.date] || [];
+            shiftMap[s.date].push(s);
+          } else {
+            // Multi-day expansion
+            const partsStart = s.date.split("-");
+            const partsEnd = s.endDate.split("-");
+            if (partsStart.length === 3 && partsEnd.length === 3) {
+              const current = new Date(
+                partsStart[0],
+                partsStart[1] - 1,
+                partsStart[2]
+              );
+              const end = new Date(partsEnd[0], partsEnd[1] - 1, partsEnd[2]);
+
+              let safe = 0;
+              while (current <= end && safe < 365) {
+                const dStr = toISODate(current);
+                shiftMap[dStr] = shiftMap[dStr] || [];
+                shiftMap[dStr].push(s);
+                current.setDate(current.getDate() + 1);
+                safe++;
+              }
+            } else {
+              // Fallback
+              shiftMap[s.date] = shiftMap[s.date] || [];
+              shiftMap[s.date].push(s);
+            }
+          }
+        });
 
         const totalDays = Math.round((endGrid - startGrid) / DAY_MS) + 1;
 
