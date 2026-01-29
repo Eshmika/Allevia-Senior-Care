@@ -88,7 +88,7 @@ function getShifts(startDateStr, endDateStr) {
       // Fix: Use original string if available to avoid timezone shifts
       let dateOutput = "";
       if (rowDateStr instanceof Date) {
-        dateOutput = Utilities.formatDate(rowDate, timeZone, "yyyy-MM-dd");
+        dateOutput = Utilities.formatDate(rowDateStr, timeZone, "yyyy-MM-dd");
       } else if (
         typeof rowDateStr === "string" &&
         /^\d{4}-\d{2}-\d{2}$/.test(rowDateStr)
