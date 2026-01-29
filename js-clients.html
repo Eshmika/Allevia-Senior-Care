@@ -810,8 +810,17 @@
         if (!valString) return;
         const vals = valString.split(",").map((s) => s.trim());
         vals.forEach((v) => {
-          const cb = container.querySelector(`input[value="\${v}"]`);
-          if (cb) cb.checked = true;
+          const cb = container.querySelector(`input[value="${v}"]`);
+          if (cb) {
+            cb.checked = true;
+            // Trigger change event so any toggles (like "Other" inputs) work
+            if (
+              typeof cb.onchange === "function" ||
+              cb.hasAttribute("onchange")
+            ) {
+              cb.dispatchEvent(new Event("change"));
+            }
+          }
         });
       };
 
@@ -1553,7 +1562,15 @@
   function toggleOtherInput(select, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
-    if (select.value === "Other") {
+
+    let isOther = false;
+    if (select.type === "checkbox") {
+      isOther = select.checked;
+    } else {
+      isOther = select.value === "Other";
+    }
+
+    if (isOther) {
       container.classList.remove("hidden");
     } else {
       container.classList.add("hidden");
