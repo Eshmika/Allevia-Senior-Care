@@ -1682,776 +1682,6 @@
         </div>
       </div>
 
-      <!-- Living Environment -->
-      <div>
-        <h2
-          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
-        >
-          <i class="ph ph-house-line text-purple-600"></i> Living Environment
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Live Alone -->
-          <div>
-            <label class="input-label">Lives at home alone</label>
-            <select name="liveAlone" id="ce-liveAlone" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-          <!-- Live Family -->
-          <div>
-            <label class="input-label">Lives with family/friend</label>
-            <select
-              name="liveFamily"
-              id="ce-liveFamily"
-              class="input-field"
-              onchange="toggleDetailInput(this, 'ce-liveFamily-detail', 'Yes')"
-            >
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-            <div id="ce-liveFamily-detail" class="mt-2 hidden">
-              <input
-                type="text"
-                name="liveFamilyName"
-                id="ce-liveFamilyName"
-                placeholder="Name of person"
-                class="input-field"
-              />
-            </div>
-          </div>
-
-          <!-- Senior Residence -->
-          <div class="md:col-span-2">
-            <label class="input-label"
-              >Private Senior’s/ Disabilities Residence</label
-            >
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="liveSenior"
-                id="ce-liveSenior"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div
-                id="ce-liveSenior-detail"
-                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
-              >
-                <input
-                  type="text"
-                  name="liveSeniorName"
-                  id="ce-liveSeniorName"
-                  placeholder="Facility Name"
-                  class="input-field flex-1"
-                />
-                <input
-                  type="text"
-                  name="liveSeniorAddress"
-                  id="ce-liveSeniorAddress"
-                  placeholder="Address"
-                  class="input-field flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Rehab -->
-          <div class="md:col-span-2">
-            <label class="input-label">Hospital/ Rehabilitation</label>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="liveRehab"
-                id="ce-liveRehab"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-liveRehab-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div
-                id="ce-liveRehab-detail"
-                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
-              >
-                <input
-                  type="text"
-                  name="liveRehabName"
-                  id="ce-liveRehabName"
-                  placeholder="Facility Name"
-                  class="input-field flex-1"
-                />
-                <input
-                  type="text"
-                  name="liveRehabAddress"
-                  id="ce-liveRehabAddress"
-                  placeholder="Address"
-                  class="input-field flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Pets -->
-          <div class="md:col-span-2">
-            <label class="input-label">Pets</label>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="pets"
-                id="ce-pets"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-pets-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div id="ce-pets-detail" class="md:col-span-2 hidden space-y-2">
-                <div class="flex flex-wrap gap-2" id="ce-petsList-container">
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Dogs"
-                      class="rounded text-purple-600"
-                    />
-                    Dogs</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Cats"
-                      class="rounded text-purple-600"
-                    />
-                    Cats</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Birds"
-                      class="rounded text-purple-600"
-                    />
-                    Birds</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Fish"
-                      class="rounded text-purple-600"
-                    />
-                    Fish</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Other"
-                      class="rounded text-purple-600"
-                    />
-                    Other</label
-                  >
-                </div>
-                <input
-                  type="text"
-                  name="petsNote"
-                  id="ce-petsNote"
-                  class="input-field"
-                  placeholder="Pets notes..."
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Smoke -->
-          <div>
-            <label class="input-label">Smoke</label>
-            <select name="smoke" id="ce-smoke" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-
-          <!-- Drink -->
-          <div>
-            <label class="input-label">Drink</label>
-            <select name="drink" id="ce-drink" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-              <option value="Sober">Sober</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. Financials & Insurance -->
-      <div>
-        <h2
-          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
-        >
-          <i class="ph ph-currency-dollar text-green-600"></i> Financials &
-          Insurance
-        </h2>
-        <div class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label class="input-label">Payment Type</label>
-              <select
-                name="paymentType"
-                id="ce-paymentType"
-                class="input-field"
-                onchange="toggleEditClientPaymentOther()"
-              >
-                <option value="">Select Type...</option>
-                <option value="Private pay">Private pay</option>
-                <option value="Lead Insurance">Lead Insurance</option>
-                <option value="Medicaid">Medicaid</option>
-                <option value="VA">VA</option>
-                <option value="Other">Other</option>
-              </select>
-              <div id="ce-paymentTypeOtherContainer" class="hidden mt-2">
-                <input
-                  type="text"
-                  id="ce-paymentTypeOther"
-                  class="input-field"
-                  placeholder="Enter other payment type"
-                />
-              </div>
-            </div>
-
-            <!-- Payment Cost Inputs -->
-            <div>
-              <label class="input-label">Project Hours</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">Hrs</span>
-                </div>
-                <input
-                  type="number"
-                  name="projectHours"
-                  id="ce-projectHours"
-                  class="input-field pl-12"
-                  oninput="calculateEditClientCosts()"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Hourly Rate ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="hourlyRate"
-                  id="ce-hourlyRate"
-                  class="input-field pl-7"
-                  oninput="calculateEditClientCosts()"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Overtime</label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer mt-2"
-              >
-                <input
-                  type="checkbox"
-                  name="overtime"
-                  id="ce-overtime"
-                  class="rounded text-purple-600"
-                />
-                Overtime
-              </label>
-            </div>
-            <div>
-              <label class="input-label">Weekly Cost ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="weeklyCost"
-                  id="ce-weeklyCost"
-                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
-                  readonly
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Monthly Cost ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="monthlyCost"
-                  id="ce-monthlyCost"
-                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Payment Options -->
-          <div class="border-t pt-4">
-            <label class="input-label mb-2">Payment Options</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="cash"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Cash
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="check"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Check
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="zelle"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Zelle
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="direct deposit"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Direct Deposit
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="apple pay"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Apple Pay
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="bank deposit"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Bank Deposit
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="credit/debit card"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Credit/Debit Card
-              </label>
-            </div>
-          </div>
-
-          <!-- Conditional Payment Details -->
-
-          <!-- Bank Details -->
-          <div
-            id="ce-bankDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-bank text-blue-600"></i> Bank Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Bank Name</label>
-                <input
-                  type="text"
-                  name="payBankName"
-                  id="ce-payBankName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Full Account Holder Name</label>
-                <input
-                  type="text"
-                  name="payHolderName"
-                  id="ce-payHolderName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Account Type</label>
-                <select
-                  name="payAccountType"
-                  id="ce-payAccountType"
-                  class="input-field"
-                >
-                  <option value="Checking">Checking</option>
-                  <option value="Savings">Savings</option>
-                </select>
-              </div>
-              <div>
-                <label class="input-label">Holder Type</label>
-                <select
-                  name="payHolderType"
-                  id="ce-payHolderType"
-                  class="input-field"
-                  onchange="toggleEditClientBusinessName()"
-                >
-                  <option value="Personal">Personal</option>
-                  <option value="Business">Business</option>
-                </select>
-              </div>
-              <div
-                id="ce-payBusinessNameContainer"
-                class="hidden md:col-span-2"
-              >
-                <label class="input-label">Business Name</label>
-                <input
-                  type="text"
-                  name="payBusinessName"
-                  id="ce-payBusinessName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Account Number</label>
-                <input
-                  type="password"
-                  name="payAccountNum"
-                  id="ce-payAccountNum"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Confirm Account Number</label>
-                <input
-                  type="text"
-                  id="ce-payAccountNumConfirm"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Routing Number</label>
-                <input
-                  type="password"
-                  name="payRoutingNum"
-                  id="ce-payRoutingNum"
-                  class="input-field"
-                  maxlength="9"
-                />
-              </div>
-              <div>
-                <label class="input-label">Confirm Routing Number</label>
-                <input
-                  type="text"
-                  id="ce-payRoutingNumConfirm"
-                  class="input-field"
-                  maxlength="9"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Digital Details -->
-          <div
-            id="ce-digitalDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-device-mobile text-blue-600"></i> Digital Details
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Full Name</label>
-                <input
-                  type="text"
-                  name="payDigitalFullName"
-                  id="ce-payDigitalFullName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Link Account With</label>
-                <div class="flex gap-4 mt-1">
-                  <label class="flex items-center gap-2 text-sm text-gray-600"
-                    ><input
-                      type="radio"
-                      name="payDigitalType"
-                      value="phone"
-                      checked
-                      onchange="toggleEditClientDigitalInputs()"
-                      class="text-green-600"
-                    />
-                    Phone</label
-                  >
-                  <label class="flex items-center gap-2 text-sm text-gray-600"
-                    ><input
-                      type="radio"
-                      name="payDigitalType"
-                      value="email"
-                      onchange="toggleEditClientDigitalInputs()"
-                      class="text-green-600"
-                    />
-                    Email</label
-                  >
-                </div>
-              </div>
-              <div class="md:col-span-2">
-                <label id="ce-payDigitalValueLabel" class="input-label"
-                  >Phone Number</label
-                >
-                <input
-                  type="text"
-                  name="payDigitalValue"
-                  id="ce-payDigitalValue"
-                  class="input-field"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Details -->
-          <div
-            id="ce-cardDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-credit-card text-blue-600"></i> Card Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Name on Card</label>
-                <input
-                  type="text"
-                  name="payCardName"
-                  id="ce-payCardName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Card Number</label>
-                <input
-                  type="text"
-                  name="payCardNumber"
-                  id="ce-payCardNumber"
-                  class="input-field"
-                  placeholder="0000 0000 0000 0000"
-                  maxlength="19"
-                  oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"
-                />
-              </div>
-              <div>
-                <label class="input-label">Exp (MM/YY)</label>
-                <input
-                  type="text"
-                  name="payCardExpiry"
-                  id="ce-payCardExpiry"
-                  class="input-field"
-                  placeholder="MM/YY"
-                  maxlength="5"
-                />
-              </div>
-              <div>
-                <label class="input-label">CVV</label>
-                <input
-                  type="text"
-                  name="payCardCVV"
-                  id="ce-payCardCVV"
-                  class="input-field"
-                  maxlength="4"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Check Details -->
-          <div
-            id="ce-checkDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <div class="bg-blue-50 p-3 rounded-lg text-blue-800 text-sm">
-              Please ensure all check payments are mailed to the official
-              business address.
-            </div>
-          </div>
-
-          <div class="mt-4 border-t pt-4">
-            <h3 class="text-sm font-bold text-gray-800 mb-2">
-              <i class="ph ph-shield-check text-blue-600"></i> Insurance
-              Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Insurance Company</label>
-                <input
-                  type="text"
-                  name="insuranceCompany"
-                  id="ce-insuranceCompany"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Address</label>
-                <input
-                  type="text"
-                  name="insuranceAddress"
-                  id="ce-insuranceAddress"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Apt</label>
-                <input
-                  type="text"
-                  name="insuranceApt"
-                  id="ce-insuranceApt"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">City</label>
-                <input
-                  type="text"
-                  name="insuranceCity"
-                  id="ce-insuranceCity"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">State</label>
-                <input
-                  type="text"
-                  name="insuranceState"
-                  id="ce-insuranceState"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Zip</label>
-                <input
-                  type="text"
-                  name="insuranceZip"
-                  id="ce-insuranceZip"
-                  class="input-field"
-                  maxlength="5"
-                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
-                />
-              </div>
-
-              <div>
-                <label class="input-label">Policy #</label>
-                <input
-                  type="text"
-                  name="insurancePolicy"
-                  id="ce-insurancePolicy"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Member ID</label>
-                <input
-                  type="text"
-                  name="insuranceMemberId"
-                  id="ce-insuranceMemberId"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Case #</label>
-                <input
-                  type="text"
-                  name="insuranceCase"
-                  id="ce-insuranceCase"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Claim #</label>
-                <input
-                  type="text"
-                  name="insuranceClaim"
-                  id="ce-insuranceClaim"
-                  class="input-field"
-                />
-              </div>
-
-              <div>
-                <label class="input-label">Contact Name</label>
-                <input
-                  type="text"
-                  name="insuranceContactName"
-                  id="ce-insuranceContactName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Contact Phone</label>
-                <input
-                  type="text"
-                  name="insuranceContactPhone"
-                  id="ce-insuranceContactPhone"
-                  class="input-field"
-                  oninput="formatPhone(this)"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Add Note</label>
-                <input
-                  type="text"
-                  name="insuranceAddNote"
-                  id="ce-insuranceAddNote"
-                  class="input-field"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- 3. Contact Information -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Home Address -->
@@ -4535,6 +3765,776 @@
                 id="ce-schSU"
                 class="input-field text-center text-xs px-1"
               />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Living Environment -->
+      <div>
+        <h2
+          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+        >
+          <i class="ph ph-house-line text-purple-600"></i> Living Environment
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Live Alone -->
+          <div>
+            <label class="input-label">Lives at home alone</label>
+            <select name="liveAlone" id="ce-liveAlone" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <!-- Live Family -->
+          <div>
+            <label class="input-label">Lives with family/friend</label>
+            <select
+              name="liveFamily"
+              id="ce-liveFamily"
+              class="input-field"
+              onchange="toggleDetailInput(this, 'ce-liveFamily-detail', 'Yes')"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+            <div id="ce-liveFamily-detail" class="mt-2 hidden">
+              <input
+                type="text"
+                name="liveFamilyName"
+                id="ce-liveFamilyName"
+                placeholder="Name of person"
+                class="input-field"
+              />
+            </div>
+          </div>
+
+          <!-- Senior Residence -->
+          <div class="md:col-span-2">
+            <label class="input-label"
+              >Private Senior’s/ Disabilities Residence</label
+            >
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="liveSenior"
+                id="ce-liveSenior"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div
+                id="ce-liveSenior-detail"
+                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
+              >
+                <input
+                  type="text"
+                  name="liveSeniorName"
+                  id="ce-liveSeniorName"
+                  placeholder="Facility Name"
+                  class="input-field flex-1"
+                />
+                <input
+                  type="text"
+                  name="liveSeniorAddress"
+                  id="ce-liveSeniorAddress"
+                  placeholder="Address"
+                  class="input-field flex-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rehab -->
+          <div class="md:col-span-2">
+            <label class="input-label">Hospital/ Rehabilitation</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="liveRehab"
+                id="ce-liveRehab"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-liveRehab-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div
+                id="ce-liveRehab-detail"
+                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
+              >
+                <input
+                  type="text"
+                  name="liveRehabName"
+                  id="ce-liveRehabName"
+                  placeholder="Facility Name"
+                  class="input-field flex-1"
+                />
+                <input
+                  type="text"
+                  name="liveRehabAddress"
+                  id="ce-liveRehabAddress"
+                  placeholder="Address"
+                  class="input-field flex-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Pets -->
+          <div class="md:col-span-2">
+            <label class="input-label">Pets</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="pets"
+                id="ce-pets"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-pets-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="ce-pets-detail" class="md:col-span-2 hidden space-y-2">
+                <div class="flex flex-wrap gap-2" id="ce-petsList-container">
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Dogs"
+                      class="rounded text-purple-600"
+                    />
+                    Dogs</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Cats"
+                      class="rounded text-purple-600"
+                    />
+                    Cats</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Birds"
+                      class="rounded text-purple-600"
+                    />
+                    Birds</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Fish"
+                      class="rounded text-purple-600"
+                    />
+                    Fish</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Other"
+                      class="rounded text-purple-600"
+                    />
+                    Other</label
+                  >
+                </div>
+                <input
+                  type="text"
+                  name="petsNote"
+                  id="ce-petsNote"
+                  class="input-field"
+                  placeholder="Pets notes..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Smoke -->
+          <div>
+            <label class="input-label">Smoke</label>
+            <select name="smoke" id="ce-smoke" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <!-- Drink -->
+          <div>
+            <label class="input-label">Drink</label>
+            <select name="drink" id="ce-drink" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+              <option value="Sober">Sober</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Financials & Insurance -->
+      <div>
+        <h2
+          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+        >
+          <i class="ph ph-currency-dollar text-green-600"></i> Financials &
+          Insurance
+        </h2>
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="input-label">Payment Type</label>
+              <select
+                name="paymentType"
+                id="ce-paymentType"
+                class="input-field"
+                onchange="toggleEditClientPaymentOther()"
+              >
+                <option value="">Select Type...</option>
+                <option value="Private pay">Private pay</option>
+                <option value="Lead Insurance">Lead Insurance</option>
+                <option value="Medicaid">Medicaid</option>
+                <option value="VA">VA</option>
+                <option value="Other">Other</option>
+              </select>
+              <div id="ce-paymentTypeOtherContainer" class="hidden mt-2">
+                <input
+                  type="text"
+                  id="ce-paymentTypeOther"
+                  class="input-field"
+                  placeholder="Enter other payment type"
+                />
+              </div>
+            </div>
+
+            <!-- Payment Cost Inputs -->
+            <div>
+              <label class="input-label">Project Hours</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">Hrs</span>
+                </div>
+                <input
+                  type="number"
+                  name="projectHours"
+                  id="ce-projectHours"
+                  class="input-field pl-12"
+                  oninput="calculateEditClientCosts()"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Hourly Rate ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="hourlyRate"
+                  id="ce-hourlyRate"
+                  class="input-field pl-7"
+                  oninput="calculateEditClientCosts()"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Overtime</label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer mt-2"
+              >
+                <input
+                  type="checkbox"
+                  name="overtime"
+                  id="ce-overtime"
+                  class="rounded text-purple-600"
+                />
+                Overtime
+              </label>
+            </div>
+            <div>
+              <label class="input-label">Weekly Cost ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="text"
+                  name="weeklyCost"
+                  id="ce-weeklyCost"
+                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
+                  readonly
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Monthly Cost ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="text"
+                  name="monthlyCost"
+                  id="ce-monthlyCost"
+                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Options -->
+          <div class="border-t pt-4">
+            <label class="input-label mb-2">Payment Options</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="cash"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Cash
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="check"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Check
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="zelle"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Zelle
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="direct deposit"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Direct Deposit
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="apple pay"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Apple Pay
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="bank deposit"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Bank Deposit
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="credit/debit card"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Credit/Debit Card
+              </label>
+            </div>
+          </div>
+
+          <!-- Conditional Payment Details -->
+
+          <!-- Bank Details -->
+          <div
+            id="ce-bankDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-bank text-blue-600"></i> Bank Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Bank Name</label>
+                <input
+                  type="text"
+                  name="payBankName"
+                  id="ce-payBankName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Full Account Holder Name</label>
+                <input
+                  type="text"
+                  name="payHolderName"
+                  id="ce-payHolderName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Account Type</label>
+                <select
+                  name="payAccountType"
+                  id="ce-payAccountType"
+                  class="input-field"
+                >
+                  <option value="Checking">Checking</option>
+                  <option value="Savings">Savings</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Holder Type</label>
+                <select
+                  name="payHolderType"
+                  id="ce-payHolderType"
+                  class="input-field"
+                  onchange="toggleEditClientBusinessName()"
+                >
+                  <option value="Personal">Personal</option>
+                  <option value="Business">Business</option>
+                </select>
+              </div>
+              <div
+                id="ce-payBusinessNameContainer"
+                class="hidden md:col-span-2"
+              >
+                <label class="input-label">Business Name</label>
+                <input
+                  type="text"
+                  name="payBusinessName"
+                  id="ce-payBusinessName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Account Number</label>
+                <input
+                  type="password"
+                  name="payAccountNum"
+                  id="ce-payAccountNum"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Confirm Account Number</label>
+                <input
+                  type="text"
+                  id="ce-payAccountNumConfirm"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Routing Number</label>
+                <input
+                  type="password"
+                  name="payRoutingNum"
+                  id="ce-payRoutingNum"
+                  class="input-field"
+                  maxlength="9"
+                />
+              </div>
+              <div>
+                <label class="input-label">Confirm Routing Number</label>
+                <input
+                  type="text"
+                  id="ce-payRoutingNumConfirm"
+                  class="input-field"
+                  maxlength="9"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Digital Details -->
+          <div
+            id="ce-digitalDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-device-mobile text-blue-600"></i> Digital Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Full Name</label>
+                <input
+                  type="text"
+                  name="payDigitalFullName"
+                  id="ce-payDigitalFullName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Link Account With</label>
+                <div class="flex gap-4 mt-1">
+                  <label class="flex items-center gap-2 text-sm text-gray-600"
+                    ><input
+                      type="radio"
+                      name="payDigitalType"
+                      value="phone"
+                      checked
+                      onchange="toggleEditClientDigitalInputs()"
+                      class="text-green-600"
+                    />
+                    Phone</label
+                  >
+                  <label class="flex items-center gap-2 text-sm text-gray-600"
+                    ><input
+                      type="radio"
+                      name="payDigitalType"
+                      value="email"
+                      onchange="toggleEditClientDigitalInputs()"
+                      class="text-green-600"
+                    />
+                    Email</label
+                  >
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label id="ce-payDigitalValueLabel" class="input-label"
+                  >Phone Number</label
+                >
+                <input
+                  type="text"
+                  name="payDigitalValue"
+                  id="ce-payDigitalValue"
+                  class="input-field"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Details -->
+          <div
+            id="ce-cardDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-credit-card text-blue-600"></i> Card Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Name on Card</label>
+                <input
+                  type="text"
+                  name="payCardName"
+                  id="ce-payCardName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Card Number</label>
+                <input
+                  type="text"
+                  name="payCardNumber"
+                  id="ce-payCardNumber"
+                  class="input-field"
+                  placeholder="0000 0000 0000 0000"
+                  maxlength="19"
+                  oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"
+                />
+              </div>
+              <div>
+                <label class="input-label">Exp (MM/YY)</label>
+                <input
+                  type="text"
+                  name="payCardExpiry"
+                  id="ce-payCardExpiry"
+                  class="input-field"
+                  placeholder="MM/YY"
+                  maxlength="5"
+                />
+              </div>
+              <div>
+                <label class="input-label">CVV</label>
+                <input
+                  type="text"
+                  name="payCardCVV"
+                  id="ce-payCardCVV"
+                  class="input-field"
+                  maxlength="4"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Check Details -->
+          <div
+            id="ce-checkDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <div class="bg-blue-50 p-3 rounded-lg text-blue-800 text-sm">
+              Please ensure all check payments are mailed to the official
+              business address.
+            </div>
+          </div>
+
+          <div class="mt-4 border-t pt-4">
+            <h3 class="text-sm font-bold text-gray-800 mb-2">
+              <i class="ph ph-shield-check text-blue-600"></i> Insurance
+              Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Insurance Company</label>
+                <input
+                  type="text"
+                  name="insuranceCompany"
+                  id="ce-insuranceCompany"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Address</label>
+                <input
+                  type="text"
+                  name="insuranceAddress"
+                  id="ce-insuranceAddress"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Apt</label>
+                <input
+                  type="text"
+                  name="insuranceApt"
+                  id="ce-insuranceApt"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">City</label>
+                <input
+                  type="text"
+                  name="insuranceCity"
+                  id="ce-insuranceCity"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">State</label>
+                <input
+                  type="text"
+                  name="insuranceState"
+                  id="ce-insuranceState"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Zip</label>
+                <input
+                  type="text"
+                  name="insuranceZip"
+                  id="ce-insuranceZip"
+                  class="input-field"
+                  maxlength="5"
+                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
+                />
+              </div>
+
+              <div>
+                <label class="input-label">Policy #</label>
+                <input
+                  type="text"
+                  name="insurancePolicy"
+                  id="ce-insurancePolicy"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Member ID</label>
+                <input
+                  type="text"
+                  name="insuranceMemberId"
+                  id="ce-insuranceMemberId"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Case #</label>
+                <input
+                  type="text"
+                  name="insuranceCase"
+                  id="ce-insuranceCase"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Claim #</label>
+                <input
+                  type="text"
+                  name="insuranceClaim"
+                  id="ce-insuranceClaim"
+                  class="input-field"
+                />
+              </div>
+
+              <div>
+                <label class="input-label">Contact Name</label>
+                <input
+                  type="text"
+                  name="insuranceContactName"
+                  id="ce-insuranceContactName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Contact Phone</label>
+                <input
+                  type="text"
+                  name="insuranceContactPhone"
+                  id="ce-insuranceContactPhone"
+                  class="input-field"
+                  oninput="formatPhone(this)"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Add Note</label>
+                <input
+                  type="text"
+                  name="insuranceAddNote"
+                  id="ce-insuranceAddNote"
+                  class="input-field"
+                />
+              </div>
             </div>
           </div>
         </div>
