@@ -1335,6 +1335,40 @@
         >
           <i class="ph ph-briefcase text-blue-600"></i> Administrative & Status
         </h2>
+
+        <!-- Moved Name Fields here for visual alignment with Header -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <div>
+            <label class="input-label">First Name</label>
+            <input
+              type="text"
+              name="firstName"
+              id="ce-firstName"
+              required
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="input-label">Middle Name</label>
+            <input
+              type="text"
+              name="middleName"
+              id="ce-middleName"
+              class="input-field"
+            />
+          </div>
+          <div>
+            <label class="input-label">Last Name</label>
+            <input
+              type="text"
+              name="lastName"
+              id="ce-lastName"
+              required
+              class="input-field"
+            />
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="input-label">Status</label>
@@ -1356,15 +1390,7 @@
               class="input-field"
             />
           </div>
-          <div>
-            <label class="input-label">Referred By</label>
-            <input
-              type="text"
-              name="referredBy"
-              id="ce-referredBy"
-              class="input-field"
-            />
-          </div>
+          <!-- Referred By moved to Contact Information -->
           <div>
             <label class="input-label">Username</label>
             <input
@@ -1402,37 +1428,9 @@
         >
           <i class="ph ph-user text-green-600"></i> Personal Information
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-          <div>
-            <label class="input-label">First Name</label>
-            <input
-              type="text"
-              name="firstName"
-              id="ce-firstName"
-              required
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="input-label">Middle Name</label>
-            <input
-              type="text"
-              name="middleName"
-              id="ce-middleName"
-              class="input-field"
-            />
-          </div>
-          <div>
-            <label class="input-label">Last Name</label>
-            <input
-              type="text"
-              name="lastName"
-              id="ce-lastName"
-              required
-              class="input-field"
-            />
-          </div>
-        </div>
+
+        <!-- Name fields moved to Administrative & Status -->
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label class="input-label">Date of Birth</label>
@@ -1447,29 +1445,7 @@
               <option value="Other">Other</option>
             </select>
           </div>
-          <div>
-            <label class="input-label">Marital Status</label>
-            <select
-              name="maritalStatus"
-              id="ce-maritalStatus"
-              class="input-field"
-            >
-              <option value="">Select...</option>
-              <option value="Single">Single</option>
-              <option value="Married">Married</option>
-              <option value="Widowed">Widowed</option>
-              <option value="Divorced">Divorced</option>
-            </select>
-          </div>
-          <div>
-            <label class="input-label">Spouse Name</label>
-            <input
-              type="text"
-              name="spouseName"
-              id="ce-spouseName"
-              class="input-field"
-            />
-          </div>
+
           <div>
             <label class="input-label flex justify-between items-center">
               SSN
@@ -1543,6 +1519,22 @@
               >
             </div>
           </div>
+
+          <div>
+            <label class="input-label">Marital Status</label>
+            <select
+              name="maritalStatus"
+              id="ce-maritalStatus"
+              class="input-field"
+            >
+              <option value="">Select...</option>
+              <option value="Single">Single</option>
+              <option value="Married">Married</option>
+              <option value="Widowed">Widowed</option>
+              <option value="Divorced">Divorced</option>
+            </select>
+          </div>
+
           <div>
             <label class="input-label">Code Status</label>
             <select name="codeStatus" id="ce-codeStatus" class="input-field">
@@ -1552,6 +1544,7 @@
               <option value="DNR">DNR</option>
             </select>
           </div>
+
           <div class="md:col-span-2">
             <label class="input-label">Languages Spoken</label>
             <div
@@ -1567,6 +1560,7 @@
                 />
                 English
               </label>
+
               <label class="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -1674,6 +1668,786 @@
               class="input-field mt-2 hidden"
               placeholder="Type other languages separated by comma..."
             />
+          </div>
+
+          <div>
+            <label class="input-label">Spouse Name</label>
+            <input
+              type="text"
+              name="spouseName"
+              id="ce-spouseName"
+              class="input-field"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Living Environment -->
+      <div>
+        <h2
+          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+        >
+          <i class="ph ph-house-line text-purple-600"></i> Living Environment
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Live Alone -->
+          <div>
+            <label class="input-label">Lives at home alone</label>
+            <select name="liveAlone" id="ce-liveAlone" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+          <!-- Live Family -->
+          <div>
+            <label class="input-label">Lives with family/friend</label>
+            <select
+              name="liveFamily"
+              id="ce-liveFamily"
+              class="input-field"
+              onchange="toggleDetailInput(this, 'ce-liveFamily-detail', 'Yes')"
+            >
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+            <div id="ce-liveFamily-detail" class="mt-2 hidden">
+              <input
+                type="text"
+                name="liveFamilyName"
+                id="ce-liveFamilyName"
+                placeholder="Name of person"
+                class="input-field"
+              />
+            </div>
+          </div>
+
+          <!-- Senior Residence -->
+          <div class="md:col-span-2">
+            <label class="input-label"
+              >Private Senior’s/ Disabilities Residence</label
+            >
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="liveSenior"
+                id="ce-liveSenior"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div
+                id="ce-liveSenior-detail"
+                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
+              >
+                <input
+                  type="text"
+                  name="liveSeniorName"
+                  id="ce-liveSeniorName"
+                  placeholder="Facility Name"
+                  class="input-field flex-1"
+                />
+                <input
+                  type="text"
+                  name="liveSeniorAddress"
+                  id="ce-liveSeniorAddress"
+                  placeholder="Address"
+                  class="input-field flex-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Rehab -->
+          <div class="md:col-span-2">
+            <label class="input-label">Hospital/ Rehabilitation</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="liveRehab"
+                id="ce-liveRehab"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-liveRehab-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div
+                id="ce-liveRehab-detail"
+                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
+              >
+                <input
+                  type="text"
+                  name="liveRehabName"
+                  id="ce-liveRehabName"
+                  placeholder="Facility Name"
+                  class="input-field flex-1"
+                />
+                <input
+                  type="text"
+                  name="liveRehabAddress"
+                  id="ce-liveRehabAddress"
+                  placeholder="Address"
+                  class="input-field flex-1"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Pets -->
+          <div class="md:col-span-2">
+            <label class="input-label">Pets</label>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+              <select
+                name="pets"
+                id="ce-pets"
+                class="input-field"
+                onchange="toggleDetailInput(this, 'ce-pets-detail', 'Yes')"
+              >
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+              <div id="ce-pets-detail" class="md:col-span-2 hidden space-y-2">
+                <div class="flex flex-wrap gap-2" id="ce-petsList-container">
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Dogs"
+                      class="rounded text-purple-600"
+                    />
+                    Dogs</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Cats"
+                      class="rounded text-purple-600"
+                    />
+                    Cats</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Birds"
+                      class="rounded text-purple-600"
+                    />
+                    Birds</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Fish"
+                      class="rounded text-purple-600"
+                    />
+                    Fish</label
+                  >
+                  <label class="flex items-center gap-2 text-xs text-gray-600"
+                    ><input
+                      type="checkbox"
+                      value="Other"
+                      class="rounded text-purple-600"
+                    />
+                    Other</label
+                  >
+                </div>
+                <input
+                  type="text"
+                  name="petsNote"
+                  id="ce-petsNote"
+                  class="input-field"
+                  placeholder="Pets notes..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Smoke -->
+          <div>
+            <label class="input-label">Smoke</label>
+            <select name="smoke" id="ce-smoke" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+            </select>
+          </div>
+
+          <!-- Drink -->
+          <div>
+            <label class="input-label">Drink</label>
+            <select name="drink" id="ce-drink" class="input-field">
+              <option value="No">No</option>
+              <option value="Yes">Yes</option>
+              <option value="Sober">Sober</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Financials & Insurance -->
+      <div>
+        <h2
+          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
+        >
+          <i class="ph ph-currency-dollar text-green-600"></i> Financials &
+          Insurance
+        </h2>
+        <div class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label class="input-label">Payment Type</label>
+              <select
+                name="paymentType"
+                id="ce-paymentType"
+                class="input-field"
+                onchange="toggleEditClientPaymentOther()"
+              >
+                <option value="">Select Type...</option>
+                <option value="Private pay">Private pay</option>
+                <option value="Lead Insurance">Lead Insurance</option>
+                <option value="Medicaid">Medicaid</option>
+                <option value="VA">VA</option>
+                <option value="Other">Other</option>
+              </select>
+              <div id="ce-paymentTypeOtherContainer" class="hidden mt-2">
+                <input
+                  type="text"
+                  id="ce-paymentTypeOther"
+                  class="input-field"
+                  placeholder="Enter other payment type"
+                />
+              </div>
+            </div>
+
+            <!-- Payment Cost Inputs -->
+            <div>
+              <label class="input-label">Project Hours</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">Hrs</span>
+                </div>
+                <input
+                  type="number"
+                  name="projectHours"
+                  id="ce-projectHours"
+                  class="input-field pl-12"
+                  oninput="calculateEditClientCosts()"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Hourly Rate ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="hourlyRate"
+                  id="ce-hourlyRate"
+                  class="input-field pl-7"
+                  oninput="calculateEditClientCosts()"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Overtime</label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer mt-2"
+              >
+                <input
+                  type="checkbox"
+                  name="overtime"
+                  id="ce-overtime"
+                  class="rounded text-purple-600"
+                />
+                Overtime
+              </label>
+            </div>
+            <div>
+              <label class="input-label">Weekly Cost ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="text"
+                  name="weeklyCost"
+                  id="ce-weeklyCost"
+                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
+                  readonly
+                />
+              </div>
+            </div>
+            <div>
+              <label class="input-label">Monthly Cost ($)</label>
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <span class="text-gray-500 sm:text-sm">$</span>
+                </div>
+                <input
+                  type="text"
+                  name="monthlyCost"
+                  id="ce-monthlyCost"
+                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Options -->
+          <div class="border-t pt-4">
+            <label class="input-label mb-2">Payment Options</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="cash"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Cash
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="check"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Check
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="zelle"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Zelle
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="direct deposit"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Direct Deposit
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="apple pay"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Apple Pay
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="bank deposit"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Bank Deposit
+              </label>
+              <label
+                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
+              >
+                <input
+                  type="radio"
+                  name="paymentOptions"
+                  value="credit/debit card"
+                  class="text-green-600 focus:ring-green-500"
+                  onchange="toggleEditClientPaymentDetails()"
+                />
+                Credit/Debit Card
+              </label>
+            </div>
+          </div>
+
+          <!-- Conditional Payment Details -->
+
+          <!-- Bank Details -->
+          <div
+            id="ce-bankDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-bank text-blue-600"></i> Bank Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Bank Name</label>
+                <input
+                  type="text"
+                  name="payBankName"
+                  id="ce-payBankName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Full Account Holder Name</label>
+                <input
+                  type="text"
+                  name="payHolderName"
+                  id="ce-payHolderName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Account Type</label>
+                <select
+                  name="payAccountType"
+                  id="ce-payAccountType"
+                  class="input-field"
+                >
+                  <option value="Checking">Checking</option>
+                  <option value="Savings">Savings</option>
+                </select>
+              </div>
+              <div>
+                <label class="input-label">Holder Type</label>
+                <select
+                  name="payHolderType"
+                  id="ce-payHolderType"
+                  class="input-field"
+                  onchange="toggleEditClientBusinessName()"
+                >
+                  <option value="Personal">Personal</option>
+                  <option value="Business">Business</option>
+                </select>
+              </div>
+              <div
+                id="ce-payBusinessNameContainer"
+                class="hidden md:col-span-2"
+              >
+                <label class="input-label">Business Name</label>
+                <input
+                  type="text"
+                  name="payBusinessName"
+                  id="ce-payBusinessName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Account Number</label>
+                <input
+                  type="password"
+                  name="payAccountNum"
+                  id="ce-payAccountNum"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Confirm Account Number</label>
+                <input
+                  type="text"
+                  id="ce-payAccountNumConfirm"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Routing Number</label>
+                <input
+                  type="password"
+                  name="payRoutingNum"
+                  id="ce-payRoutingNum"
+                  class="input-field"
+                  maxlength="9"
+                />
+              </div>
+              <div>
+                <label class="input-label">Confirm Routing Number</label>
+                <input
+                  type="text"
+                  id="ce-payRoutingNumConfirm"
+                  class="input-field"
+                  maxlength="9"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Digital Details -->
+          <div
+            id="ce-digitalDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-device-mobile text-blue-600"></i> Digital Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Full Name</label>
+                <input
+                  type="text"
+                  name="payDigitalFullName"
+                  id="ce-payDigitalFullName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Link Account With</label>
+                <div class="flex gap-4 mt-1">
+                  <label class="flex items-center gap-2 text-sm text-gray-600"
+                    ><input
+                      type="radio"
+                      name="payDigitalType"
+                      value="phone"
+                      checked
+                      onchange="toggleEditClientDigitalInputs()"
+                      class="text-green-600"
+                    />
+                    Phone</label
+                  >
+                  <label class="flex items-center gap-2 text-sm text-gray-600"
+                    ><input
+                      type="radio"
+                      name="payDigitalType"
+                      value="email"
+                      onchange="toggleEditClientDigitalInputs()"
+                      class="text-green-600"
+                    />
+                    Email</label
+                  >
+                </div>
+              </div>
+              <div class="md:col-span-2">
+                <label id="ce-payDigitalValueLabel" class="input-label"
+                  >Phone Number</label
+                >
+                <input
+                  type="text"
+                  name="payDigitalValue"
+                  id="ce-payDigitalValue"
+                  class="input-field"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Details -->
+          <div
+            id="ce-cardDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <h3 class="text-sm font-bold text-gray-800">
+              <i class="ph ph-credit-card text-blue-600"></i> Card Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Name on Card</label>
+                <input
+                  type="text"
+                  name="payCardName"
+                  id="ce-payCardName"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Card Number</label>
+                <input
+                  type="text"
+                  name="payCardNumber"
+                  id="ce-payCardNumber"
+                  class="input-field"
+                  placeholder="0000 0000 0000 0000"
+                  maxlength="19"
+                  oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"
+                />
+              </div>
+              <div>
+                <label class="input-label">Exp (MM/YY)</label>
+                <input
+                  type="text"
+                  name="payCardExpiry"
+                  id="ce-payCardExpiry"
+                  class="input-field"
+                  placeholder="MM/YY"
+                  maxlength="5"
+                />
+              </div>
+              <div>
+                <label class="input-label">CVV</label>
+                <input
+                  type="text"
+                  name="payCardCVV"
+                  id="ce-payCardCVV"
+                  class="input-field"
+                  maxlength="4"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Check Details -->
+          <div
+            id="ce-checkDetails"
+            class="hidden space-y-4 border-t border-gray-100 pt-4"
+          >
+            <div class="bg-blue-50 p-3 rounded-lg text-blue-800 text-sm">
+              Please ensure all check payments are mailed to the official
+              business address.
+            </div>
+          </div>
+
+          <div class="mt-4 border-t pt-4">
+            <h3 class="text-sm font-bold text-gray-800 mb-2">
+              <i class="ph ph-shield-check text-blue-600"></i> Insurance
+              Information
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="md:col-span-2">
+                <label class="input-label">Insurance Company</label>
+                <input
+                  type="text"
+                  name="insuranceCompany"
+                  id="ce-insuranceCompany"
+                  class="input-field"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Address</label>
+                <input
+                  type="text"
+                  name="insuranceAddress"
+                  id="ce-insuranceAddress"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Apt</label>
+                <input
+                  type="text"
+                  name="insuranceApt"
+                  id="ce-insuranceApt"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">City</label>
+                <input
+                  type="text"
+                  name="insuranceCity"
+                  id="ce-insuranceCity"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">State</label>
+                <input
+                  type="text"
+                  name="insuranceState"
+                  id="ce-insuranceState"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Zip</label>
+                <input
+                  type="text"
+                  name="insuranceZip"
+                  id="ce-insuranceZip"
+                  class="input-field"
+                  maxlength="5"
+                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
+                />
+              </div>
+
+              <div>
+                <label class="input-label">Policy #</label>
+                <input
+                  type="text"
+                  name="insurancePolicy"
+                  id="ce-insurancePolicy"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Member ID</label>
+                <input
+                  type="text"
+                  name="insuranceMemberId"
+                  id="ce-insuranceMemberId"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Case #</label>
+                <input
+                  type="text"
+                  name="insuranceCase"
+                  id="ce-insuranceCase"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Claim #</label>
+                <input
+                  type="text"
+                  name="insuranceClaim"
+                  id="ce-insuranceClaim"
+                  class="input-field"
+                />
+              </div>
+
+              <div>
+                <label class="input-label">Contact Name</label>
+                <input
+                  type="text"
+                  name="insuranceContactName"
+                  id="ce-insuranceContactName"
+                  class="input-field"
+                />
+              </div>
+              <div>
+                <label class="input-label">Contact Phone</label>
+                <input
+                  type="text"
+                  name="insuranceContactPhone"
+                  id="ce-insuranceContactPhone"
+                  class="input-field"
+                  oninput="formatPhone(this)"
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="input-label">Add Note</label>
+                <input
+                  type="text"
+                  name="insuranceAddNote"
+                  id="ce-insuranceAddNote"
+                  class="input-field"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1809,6 +2583,16 @@
                 name="billingZip"
                 id="ce-billingZip"
                 class="input-field"
+              />
+            </div>
+            <div>
+              <label class="input-label">Referral Source</label>
+              <input
+                type="text"
+                name="referredBy"
+                id="ce-referredBy"
+                class="input-field"
+                placeholder="Name or Organization"
               />
             </div>
           </div>
@@ -2221,6 +3005,45 @@
                 />
               </div>
             </div>
+            <div class="mb-4">
+              <label class="input-label">Sensory Impairments</label>
+              <div class="grid grid-cols-3 gap-2">
+                <div>
+                  <label class="input-label text-xs">Blind</label>
+                  <select
+                    name="blind"
+                    id="ce-blind"
+                    class="input-field text-sm py-1"
+                  >
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="input-label text-xs">Glasses</label>
+                  <select
+                    name="glasses"
+                    id="ce-glasses"
+                    class="input-field text-sm py-1"
+                  >
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="input-label text-xs">Dentures</label>
+                  <select
+                    name="dentures"
+                    id="ce-dentures"
+                    class="input-field text-sm py-1"
+                  >
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
             <div>
               <label class="input-label">Mental Status</label>
               <select
@@ -2250,117 +3073,7 @@
                 />
               </div>
             </div>
-            <div>
-              <label class="input-label">Medical Aids</label>
-              <div
-                class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-                id="ce-medicalAids-container"
-              >
-                <label class="flex items-center gap-1 text-xs text-gray-600"
-                  ><input type="checkbox" value="Ostomy bag" class="rounded" />
-                  Ostomy bag</label
-                >
-                <label class="flex items-center gap-1 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Urinary-catheter"
-                    class="rounded"
-                  />
-                  Urinary-catheter</label
-                >
-                <label class="flex items-center gap-1 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Adult briefs"
-                    class="rounded"
-                  />
-                  Adult briefs</label
-                >
-                <label class="flex items-center gap-1 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Other"
-                    class="rounded"
-                    onchange="toggleOtherInput(this, 'ce-medAid-other-container')"
-                  />
-                  Other</label
-                >
-              </div>
-              <div id="ce-medAid-other-container" class="mt-1 hidden">
-                <input
-                  type="text"
-                  id="ce-medicalAids-other"
-                  placeholder="Specify aid..."
-                  class="input-field text-xs py-1"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Mobility</label>
-              <div
-                class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-                id="ce-mobility-container"
-              >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Cane"
-                    class="rounded text-purple-600"
-                  />
-                  Cane</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Walker"
-                    class="rounded text-purple-600"
-                  />
-                  Walker</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Bedbound"
-                    class="rounded text-purple-600"
-                  />
-                  Bedbound</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Wheelchair"
-                    class="rounded text-purple-600"
-                  />
-                  Wheelchair</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Require lift equipment"
-                    class="rounded text-purple-600"
-                  />
-                  Require lift equipment</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Standby"
-                    class="rounded text-purple-600"
-                  />
-                  Standby</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="pivot"
-                    class="rounded text-purple-600"
-                  />
-                  pivot</label
-                >
-              </div>
-            </div>
-          </div>
-          <div class="space-y-3">
+
             <div>
               <label class="input-label">Medication List</label>
               <textarea
@@ -2443,137 +3156,192 @@
                 />
               </div>
             </div>
-
+          </div>
+          <div class="space-y-3">
+            <!-- Healthcare Providers -->
             <div>
-              <label class="input-label">Dietary Information</label>
-              <div
-                class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-                id="ce-dietaryInfo-container"
-              >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Regular"
-                    class="rounded text-purple-600"
+              <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
+                <i class="ph ph-first-aid-kit text-purple-600"></i> Healthcare
+                Providers
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="input-label">Primary Dr. Name</label>
+                  <input
+                    type="text"
+                    name="primaryDrName"
+                    id="ce-primaryDrName"
+                    class="input-field"
+                    placeholder="Dr. Name"
                   />
-                  Regular</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Chopped/Pureed"
-                    class="rounded text-purple-600"
+                </div>
+                <div>
+                  <label class="input-label">Office Name</label>
+                  <input
+                    type="text"
+                    name="drOfficeName"
+                    id="ce-drOfficeName"
+                    class="input-field"
+                    placeholder="Office Name"
                   />
-                  Chopped/Pureed</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Liquids"
-                    class="rounded text-purple-600"
+                </div>
+                <div>
+                  <label class="input-label">Phone</label>
+                  <input
+                    type="tel"
+                    name="drPhone"
+                    id="ce-drPhone"
+                    class="input-field"
+                    placeholder="(XXX) XXX-XXXX"
+                    oninput="formatPhone(this)"
+                    maxlength="14"
                   />
-                  Liquids</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Low Salt"
-                    class="rounded text-purple-600"
+                </div>
+                <div>
+                  <label class="input-label">Address</label>
+                  <input
+                    type="text"
+                    name="drAddress"
+                    id="ce-drAddress"
+                    class="input-field"
+                    placeholder="Address"
                   />
-                  Low Salt</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Diabetic"
-                    class="rounded text-purple-600"
-                  />
-                  Diabetic</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Tube Feed"
-                    class="rounded text-purple-600"
-                  />
-                  Tube Feed</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Kosher"
-                    class="rounded text-purple-600"
-                  />
-                  Kosher</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Gluten Free"
-                    class="rounded text-purple-600"
-                  />
-                  Gluten Free</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Soft/ firmly chopped"
-                    class="rounded text-purple-600"
-                  />
-                  Soft/ firmly chopped</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="bland"
-                    class="rounded text-purple-600"
-                  />
-                  bland</label
-                >
-                <label class="flex items-center gap-2 text-xs text-gray-600"
-                  ><input
-                    type="checkbox"
-                    value="Vegetarian"
-                    class="rounded text-purple-600"
-                  />
-                  Vegetarian</label
-                >
+                </div>
               </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-2">
-              <div>
-                <label class="input-label text-xs">Blind</label>
-                <select
-                  name="blind"
-                  id="ce-blind"
-                  class="input-field text-sm py-1"
-                >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
+            <!-- Hospital -->
+            <div class="border-t pt-4">
+              <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
+                <i class="ph ph-hospital text-purple-600"></i> Hospital
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="input-label">Hospital Name</label>
+                  <input
+                    type="text"
+                    name="hospitalName"
+                    id="ce-hospitalName"
+                    class="input-field"
+                    placeholder="Hospital Name"
+                  />
+                </div>
+                <div>
+                  <label class="input-label">Phone</label>
+                  <input
+                    type="tel"
+                    name="hospitalPhone"
+                    id="ce-hospitalPhone"
+                    class="input-field"
+                    placeholder="(XXX) XXX-XXXX"
+                    oninput="formatPhone(this)"
+                    maxlength="14"
+                  />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="input-label">Address</label>
+                  <input
+                    type="text"
+                    name="hospitalAddress"
+                    id="ce-hospitalAddress"
+                    class="input-field"
+                    placeholder="Address"
+                  />
+                </div>
               </div>
-              <div>
-                <label class="input-label text-xs">Glasses</label>
-                <select
-                  name="glasses"
-                  id="ce-glasses"
-                  class="input-field text-sm py-1"
-                >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
+            </div>
+
+            <!-- Pharmacy -->
+            <div class="border-t pt-4">
+              <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
+                <i class="ph ph-first-aid text-purple-600"></i> Pharmacy
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="input-label">Pharmacy Name</label>
+                  <input
+                    type="text"
+                    name="pharmacyName"
+                    id="ce-pharmacyName"
+                    class="input-field"
+                    placeholder="Pharmacy Name"
+                  />
+                </div>
+                <div>
+                  <label class="input-label">Phone</label>
+                  <input
+                    type="tel"
+                    name="pharmacyPhone"
+                    id="ce-pharmacyPhone"
+                    class="input-field"
+                    placeholder="(XXX) XXX-XXXX"
+                    oninput="formatPhone(this)"
+                    maxlength="14"
+                  />
+                </div>
+                <div class="md:col-span-2">
+                  <label class="input-label">Address</label>
+                  <input
+                    type="text"
+                    name="pharmacyAddress"
+                    id="ce-pharmacyAddress"
+                    class="input-field"
+                    placeholder="Address"
+                  />
+                </div>
               </div>
-              <div>
-                <label class="input-label text-xs">Dentures</label>
-                <select
-                  name="dentures"
-                  id="ce-dentures"
-                  class="input-field text-sm py-1"
-                >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
+            </div>
+
+            <!-- Vaccination -->
+            <div class="border-t pt-4">
+              <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
+                <i class="ph ph-syringe text-purple-600"></i> Vaccination
+              </h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Covid -->
+                <div>
+                  <label class="input-label">Covid vaccination</label>
+                  <select
+                    name="covidVaccine"
+                    id="ce-covidVaccine"
+                    class="input-field"
+                    onchange="toggleDetailInput(this, 'ce-covidVaccine-detail', 'Yes')"
+                  >
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                  <div id="ce-covidVaccine-detail" class="mt-2 hidden">
+                    <input
+                      type="text"
+                      name="covidVaccineDetail"
+                      id="ce-covidVaccineDetail"
+                      placeholder="Type in answer"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
+                <!-- Flu -->
+                <div>
+                  <label class="input-label">Flu/cold vaccination</label>
+                  <select
+                    name="fluVaccine"
+                    id="ce-fluVaccine"
+                    class="input-field"
+                    onchange="toggleDetailInput(this, 'ce-fluVaccine-detail', 'Yes')"
+                  >
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                  <div id="ce-fluVaccine-detail" class="mt-2 hidden">
+                    <input
+                      type="text"
+                      name="fluVaccineDetail"
+                      id="ce-fluVaccineDetail"
+                      placeholder="Type in answer"
+                      class="input-field"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -2619,191 +3387,49 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div class="space-y-6 mt-6">
-          <!-- Vaccination -->
-          <div class="border-t pt-4">
-            <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
-              <i class="ph ph-syringe text-purple-600"></i> Vaccination
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Covid -->
-              <div>
-                <label class="input-label">Covid vaccination</label>
-                <select
-                  name="covidVaccine"
-                  id="ce-covidVaccine"
-                  class="input-field"
-                  onchange="toggleDetailInput(this, 'ce-covidVaccine-detail', 'Yes')"
+            <div>
+              <label class="input-label">Medical Aids</label>
+              <div
+                class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+                id="ce-medicalAids-container"
+              >
+                <label class="flex items-center gap-1 text-xs text-gray-600"
+                  ><input type="checkbox" value="Ostomy bag" class="rounded" />
+                  Ostomy bag</label
                 >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
-                <div id="ce-covidVaccine-detail" class="mt-2 hidden">
-                  <input
-                    type="text"
-                    name="covidVaccineDetail"
-                    id="ce-covidVaccineDetail"
-                    placeholder="Type in answer"
-                    class="input-field"
+                <label class="flex items-center gap-1 text-xs text-gray-600"
+                  ><input
+                    type="checkbox"
+                    value="Urinary-catheter"
+                    class="rounded"
                   />
-                </div>
-              </div>
-              <!-- Flu -->
-              <div>
-                <label class="input-label">Flu/cold vaccination</label>
-                <select
-                  name="fluVaccine"
-                  id="ce-fluVaccine"
-                  class="input-field"
-                  onchange="toggleDetailInput(this, 'ce-fluVaccine-detail', 'Yes')"
+                  Urinary-catheter</label
                 >
-                  <option value="No">No</option>
-                  <option value="Yes">Yes</option>
-                </select>
-                <div id="ce-fluVaccine-detail" class="mt-2 hidden">
-                  <input
-                    type="text"
-                    name="fluVaccineDetail"
-                    id="ce-fluVaccineDetail"
-                    placeholder="Type in answer"
-                    class="input-field"
+                <label class="flex items-center gap-1 text-xs text-gray-600"
+                  ><input
+                    type="checkbox"
+                    value="Adult briefs"
+                    class="rounded"
                   />
-                </div>
+                  Adult briefs</label
+                >
+                <label class="flex items-center gap-1 text-xs text-gray-600"
+                  ><input
+                    type="checkbox"
+                    value="Other"
+                    class="rounded"
+                    onchange="toggleOtherInput(this, 'ce-medAid-other-container')"
+                  />
+                  Other</label
+                >
               </div>
-            </div>
-          </div>
-
-          <!-- Doctors -->
-          <div class="border-t pt-4">
-            <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
-              <i class="ph ph-stethoscope text-purple-600"></i> Doctors
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="input-label">Primary Dr. Name</label>
+              <div id="ce-medAid-other-container" class="mt-1 hidden">
                 <input
                   type="text"
-                  name="primaryDrName"
-                  id="ce-primaryDrName"
-                  class="input-field"
-                  placeholder="Dr. Name"
-                />
-              </div>
-              <div>
-                <label class="input-label">Office Name</label>
-                <input
-                  type="text"
-                  name="drOfficeName"
-                  id="ce-drOfficeName"
-                  class="input-field"
-                  placeholder="Office Name"
-                />
-              </div>
-              <div>
-                <label class="input-label">Phone</label>
-                <input
-                  type="tel"
-                  name="drPhone"
-                  id="ce-drPhone"
-                  class="input-field"
-                  placeholder="(XXX) XXX-XXXX"
-                  oninput="formatPhone(this)"
-                  maxlength="14"
-                />
-              </div>
-              <div>
-                <label class="input-label">Address</label>
-                <input
-                  type="text"
-                  name="drAddress"
-                  id="ce-drAddress"
-                  class="input-field"
-                  placeholder="Address"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Hospital -->
-          <div class="border-t pt-4">
-            <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
-              <i class="ph ph-hospital text-purple-600"></i> Hospital
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="input-label">Hospital Name</label>
-                <input
-                  type="text"
-                  name="hospitalName"
-                  id="ce-hospitalName"
-                  class="input-field"
-                  placeholder="Hospital Name"
-                />
-              </div>
-              <div>
-                <label class="input-label">Phone</label>
-                <input
-                  type="tel"
-                  name="hospitalPhone"
-                  id="ce-hospitalPhone"
-                  class="input-field"
-                  placeholder="(XXX) XXX-XXXX"
-                  oninput="formatPhone(this)"
-                  maxlength="14"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Address</label>
-                <input
-                  type="text"
-                  name="hospitalAddress"
-                  id="ce-hospitalAddress"
-                  class="input-field"
-                  placeholder="Address"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Pharmacy -->
-          <div class="border-t pt-4">
-            <h4 class="font-bold text-gray-700 mb-2 text-sm uppercase">
-              <i class="ph ph-first-aid text-purple-600"></i> Pharmacy
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="input-label">Pharmacy Name</label>
-                <input
-                  type="text"
-                  name="pharmacyName"
-                  id="ce-pharmacyName"
-                  class="input-field"
-                  placeholder="Pharmacy Name"
-                />
-              </div>
-              <div>
-                <label class="input-label">Phone</label>
-                <input
-                  type="tel"
-                  name="pharmacyPhone"
-                  id="ce-pharmacyPhone"
-                  class="input-field"
-                  placeholder="(XXX) XXX-XXXX"
-                  oninput="formatPhone(this)"
-                  maxlength="14"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Address</label>
-                <input
-                  type="text"
-                  name="pharmacyAddress"
-                  id="ce-pharmacyAddress"
-                  class="input-field"
-                  placeholder="Address"
+                  id="ce-medicalAids-other"
+                  placeholder="Specify aid..."
+                  class="input-field text-xs py-1"
                 />
               </div>
             </div>
@@ -2811,14 +3437,413 @@
         </div>
       </div>
 
-      <!-- 6. Care Plan & Schedule -->
+      <!-- 6. Care & Preferences -->
       <div>
         <h2
           class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
         >
-          <i class="ph ph-calendar-check text-indigo-600"></i> Service & Care
-          Plan
+          <i class="ph ph-hand-heart text-indigo-600"></i> Care & Preferences
         </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="input-label">Mobility</label>
+            <div
+              class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+              id="ce-mobility-container"
+            >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Cane"
+                  class="rounded text-purple-600"
+                />
+                Cane</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Walker"
+                  class="rounded text-purple-600"
+                />
+                Walker</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Bedbound"
+                  class="rounded text-purple-600"
+                />
+                Bedbound</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Wheelchair"
+                  class="rounded text-purple-600"
+                />
+                Wheelchair</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Require lift equipment"
+                  class="rounded text-purple-600"
+                />
+                Require lift equipment</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Standby"
+                  class="rounded text-purple-600"
+                />
+                Standby</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="pivot"
+                  class="rounded text-purple-600"
+                />
+                pivot</label
+              >
+            </div>
+          </div>
+
+          <div>
+            <label class="input-label">Meal Preparation</label>
+            <div
+              id="ce-mealPreparation-container"
+              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+            >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Menu planning"
+                  class="rounded text-purple-600"
+                />
+                Menu planning</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Meal preparation"
+                  class="rounded text-purple-600"
+                />
+                Meal preparation</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Eating Assistance"
+                  class="rounded text-purple-600"
+                />
+                Eating Assistance</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Adapting to dietary restrictions"
+                  class="rounded text-purple-600"
+                />
+                Adapting to dietary restrictions</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Grocery shopping"
+                  class="rounded text-purple-600"
+                />
+                Grocery shopping</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Cleaning and maintenance of the kitchen area"
+                  class="rounded text-purple-600"
+                />
+                Cleaning and maintenance of the kitchen area</label
+              >
+            </div>
+          </div>
+
+          <div>
+            <label class="input-label">Light Housekeeping</label>
+            <div
+              id="ce-lightHousekeeping-container"
+              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+            >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Sweeping and Vacuuming"
+                  class="rounded text-purple-600"
+                />
+                Sweeping and Vacuuming</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Dusting and Tidying rooms (client room only)"
+                  class="rounded text-purple-600"
+                />
+                Dusting and Tidying rooms (client room only)</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Washing and Drying dishes"
+                  class="rounded text-purple-600"
+                />
+                Washing and Drying dishes</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Light cleaning and Laundry"
+                  class="rounded text-purple-600"
+                />
+                Light cleaning and Laundry</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Changing bed linens"
+                  class="rounded text-purple-600"
+                />
+                Changing bed linens</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Maintaining a clean, comfortable and homey atmosphere"
+                  class="rounded text-purple-600"
+                />
+                Maintaining a clean, comfortable and homey atmosphere</label
+              >
+            </div>
+          </div>
+
+          <div>
+            <label class="input-label">Transportation</label>
+            <div
+              id="ce-transportation-container"
+              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+            >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Doctor Appointments"
+                  class="rounded text-purple-600"
+                />
+                Doctor Appointments</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Visiting family and friends"
+                  class="rounded text-purple-600"
+                />
+                Visiting family and friends</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Shopping and Entertainment"
+                  class="rounded text-purple-600"
+                />
+                Shopping and Entertainment</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Personal Appointments"
+                  class="rounded text-purple-600"
+                />
+                Personal Appointments</label
+              >
+              <label class="flex items-center gap-2 text-xs text-gray-600"
+                ><input
+                  type="checkbox"
+                  value="Hair and Beauty salons"
+                  class="rounded text-purple-600"
+                />
+                Hair and Beauty salons</label
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="input-label">Daily Living Skills</label>
+          <div
+            id="ce-dailyLivingSkills-container"
+            class="grid grid-cols-1 md:grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+          >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Companionship and Conversation"
+                class="rounded text-purple-600"
+              />
+              Companionship and Conversation</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="General care and Supervision"
+                class="rounded text-purple-600"
+              />
+              General care and Supervision</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Bathing and Showering"
+                class="rounded text-purple-600"
+              />
+              Bathing and Showering</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Dressing assistance"
+                class="rounded text-purple-600"
+              />
+              Dressing assistance</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Incontinence care and Toileting"
+                class="rounded text-purple-600"
+              />
+              Incontinence care and Toileting</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Walking and Transferring"
+                class="rounded text-purple-600"
+              />
+              Walking and Transferring</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Personal grooming and Skin care"
+                class="rounded text-purple-600"
+              />
+              Personal grooming and Skin care</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Medication reminders"
+                class="rounded text-purple-600"
+              />
+              Medication reminders</label
+            >
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="input-label">Dietary Information</label>
+          <div
+            class="grid grid-cols-2 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
+            id="ce-dietaryInfo-container"
+          >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Regular"
+                class="rounded text-purple-600"
+              />
+              Regular</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Chopped/Pureed"
+                class="rounded text-purple-600"
+              />
+              Chopped/Pureed</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Liquids"
+                class="rounded text-purple-600"
+              />
+              Liquids</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Low Salt"
+                class="rounded text-purple-600"
+              />
+              Low Salt</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Diabetic"
+                class="rounded text-purple-600"
+              />
+              Diabetic</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Tube Feed"
+                class="rounded text-purple-600"
+              />
+              Tube Feed</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Kosher"
+                class="rounded text-purple-600"
+              />
+              Kosher</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Gluten Free"
+                class="rounded text-purple-600"
+              />
+              Gluten Free</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Soft/ firmly chopped"
+                class="rounded text-purple-600"
+              />
+              Soft/ firmly chopped</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="bland"
+                class="rounded text-purple-600"
+              />
+              bland</label
+            >
+            <label class="flex items-center gap-2 text-xs text-gray-600"
+              ><input
+                type="checkbox"
+                value="Vegetarian"
+                class="rounded text-purple-600"
+              />
+              Vegetarian</label
+            >
+          </div>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div>
             <label class="input-label">Level of Care</label>
@@ -3442,244 +4467,6 @@
           </div>
         </div>
 
-        <h4 class="font-bold text-gray-700 mb-2 border-b pb-1 mt-6">
-          Daily Activities & Support
-        </h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label class="input-label">Daily Living Skills</label>
-            <div
-              id="ce-dailyLivingSkills-container"
-              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-            >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Companionship and Conversation"
-                  class="rounded text-purple-600"
-                />
-                Companionship and Conversation</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="General care and Supervision"
-                  class="rounded text-purple-600"
-                />
-                General care and Supervision</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Bathing and Showering"
-                  class="rounded text-purple-600"
-                />
-                Bathing and Showering</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Dressing assistance"
-                  class="rounded text-purple-600"
-                />
-                Dressing assistance</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Incontinence care and Toileting"
-                  class="rounded text-purple-600"
-                />
-                Incontinence care and Toileting</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Walking and Transferring"
-                  class="rounded text-purple-600"
-                />
-                Walking and Transferring</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Personal grooming and Skin care"
-                  class="rounded text-purple-600"
-                />
-                Personal grooming and Skin care</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Medication reminders"
-                  class="rounded text-purple-600"
-                />
-                Medication reminders</label
-              >
-            </div>
-          </div>
-          <div>
-            <label class="input-label">Transportation</label>
-            <div
-              id="ce-transportation-container"
-              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-            >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Doctor Appointments"
-                  class="rounded text-purple-600"
-                />
-                Doctor Appointments</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Visiting family and friends"
-                  class="rounded text-purple-600"
-                />
-                Visiting family and friends</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Shopping and Entertainment"
-                  class="rounded text-purple-600"
-                />
-                Shopping and Entertainment</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Personal Appointments"
-                  class="rounded text-purple-600"
-                />
-                Personal Appointments</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Hair and Beauty salons"
-                  class="rounded text-purple-600"
-                />
-                Hair and Beauty salons</label
-              >
-            </div>
-          </div>
-          <div>
-            <label class="input-label">Meal Preparation</label>
-            <div
-              id="ce-mealPreparation-container"
-              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-            >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Menu planning"
-                  class="rounded text-purple-600"
-                />
-                Menu planning</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Meal preparation"
-                  class="rounded text-purple-600"
-                />
-                Meal preparation</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Eating Assistance"
-                  class="rounded text-purple-600"
-                />
-                Eating Assistance</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Adapting to dietary restrictions"
-                  class="rounded text-purple-600"
-                />
-                Adapting to dietary restrictions</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Grocery shopping"
-                  class="rounded text-purple-600"
-                />
-                Grocery shopping</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Cleaning and maintenance of the kitchen area"
-                  class="rounded text-purple-600"
-                />
-                Cleaning and maintenance of the kitchen area</label
-              >
-            </div>
-          </div>
-          <div>
-            <label class="input-label">Light Housekeeping</label>
-            <div
-              id="ce-lightHousekeeping-container"
-              class="grid grid-cols-1 gap-2 p-2 border border-purple-100 rounded-lg bg-gray-50"
-            >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Sweeping and Vacuuming"
-                  class="rounded text-purple-600"
-                />
-                Sweeping and Vacuuming</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Dusting and Tidying rooms (client room only)"
-                  class="rounded text-purple-600"
-                />
-                Dusting and Tidying rooms (client room only)</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Washing and Drying dishes"
-                  class="rounded text-purple-600"
-                />
-                Washing and Drying dishes</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Light cleaning and Laundry"
-                  class="rounded text-purple-600"
-                />
-                Light cleaning and Laundry</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Changing bed linens"
-                  class="rounded text-purple-600"
-                />
-                Changing bed linens</label
-              >
-              <label class="flex items-center gap-2 text-xs text-gray-600"
-                ><input
-                  type="checkbox"
-                  value="Maintaining a clean, comfortable and homey atmosphere"
-                  class="rounded text-purple-600"
-                />
-                Maintaining a clean, comfortable and homey atmosphere</label
-              >
-            </div>
-          </div>
-        </div>
-
         <!-- Schedule -->
         <div class="bg-indigo-50 p-4 rounded-lg">
           <h4 class="font-bold text-indigo-700 mb-2 text-sm uppercase">
@@ -3748,775 +4535,6 @@
                 id="ce-schSU"
                 class="input-field text-center text-xs px-1"
               />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Living Environment -->
-      <div>
-        <h2
-          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
-        >
-          <i class="ph ph-house-line text-purple-600"></i> Living Environment
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Live Alone -->
-          <div>
-            <label class="input-label">Lives at home alone</label>
-            <select name="liveAlone" id="ce-liveAlone" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-          <!-- Live Family -->
-          <div>
-            <label class="input-label">Lives with family/friend</label>
-            <select
-              name="liveFamily"
-              id="ce-liveFamily"
-              class="input-field"
-              onchange="toggleDetailInput(this, 'ce-liveFamily-detail', 'Yes')"
-            >
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-            <div id="ce-liveFamily-detail" class="mt-2 hidden">
-              <input
-                type="text"
-                name="liveFamilyName"
-                id="ce-liveFamilyName"
-                placeholder="Name of person"
-                class="input-field"
-              />
-            </div>
-          </div>
-
-          <!-- Senior Residence -->
-          <div class="md:col-span-2">
-            <label class="input-label"
-              >Private Senior’s/ Disabilities Residence</label
-            >
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="liveSenior"
-                id="ce-liveSenior"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div
-                id="ce-liveSenior-detail"
-                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
-              >
-                <input
-                  type="text"
-                  name="liveSeniorName"
-                  id="ce-liveSeniorName"
-                  placeholder="Facility Name"
-                  class="input-field flex-1"
-                />
-                <input
-                  type="text"
-                  name="liveSeniorAddress"
-                  id="ce-liveSeniorAddress"
-                  placeholder="Address"
-                  class="input-field flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Rehab -->
-          <div class="md:col-span-2">
-            <label class="input-label">Hospital/ Rehabilitation</label>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="liveRehab"
-                id="ce-liveRehab"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-liveRehab-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div
-                id="ce-liveRehab-detail"
-                class="md:col-span-2 flex flex-col md:flex-row gap-2 hidden"
-              >
-                <input
-                  type="text"
-                  name="liveRehabName"
-                  id="ce-liveRehabName"
-                  placeholder="Facility Name"
-                  class="input-field flex-1"
-                />
-                <input
-                  type="text"
-                  name="liveRehabAddress"
-                  id="ce-liveRehabAddress"
-                  placeholder="Address"
-                  class="input-field flex-1"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Pets -->
-          <div class="md:col-span-2">
-            <label class="input-label">Pets</label>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <select
-                name="pets"
-                id="ce-pets"
-                class="input-field"
-                onchange="toggleDetailInput(this, 'ce-pets-detail', 'Yes')"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-              <div id="ce-pets-detail" class="md:col-span-2 hidden space-y-2">
-                <div class="flex flex-wrap gap-2" id="ce-petsList-container">
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Dogs"
-                      class="rounded text-purple-600"
-                    />
-                    Dogs</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Cats"
-                      class="rounded text-purple-600"
-                    />
-                    Cats</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Birds"
-                      class="rounded text-purple-600"
-                    />
-                    Birds</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Fish"
-                      class="rounded text-purple-600"
-                    />
-                    Fish</label
-                  >
-                  <label class="flex items-center gap-2 text-xs text-gray-600"
-                    ><input
-                      type="checkbox"
-                      value="Other"
-                      class="rounded text-purple-600"
-                    />
-                    Other</label
-                  >
-                </div>
-                <input
-                  type="text"
-                  name="petsNote"
-                  id="ce-petsNote"
-                  class="input-field"
-                  placeholder="Pets notes..."
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Smoke -->
-          <div>
-            <label class="input-label">Smoke</label>
-            <select name="smoke" id="ce-smoke" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-            </select>
-          </div>
-
-          <!-- Drink -->
-          <div>
-            <label class="input-label">Drink</label>
-            <select name="drink" id="ce-drink" class="input-field">
-              <option value="No">No</option>
-              <option value="Yes">Yes</option>
-              <option value="Sober">Sober</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. Financials -->
-      <div>
-        <h2
-          class="text-lg font-bold text-gray-800 mb-4 border-b pb-2 flex items-center gap-2"
-        >
-          <i class="ph ph-currency-dollar text-green-600"></i> Financials
-        </h2>
-        <div class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
-              <label class="input-label">Payment Type</label>
-              <select
-                name="paymentType"
-                id="ce-paymentType"
-                class="input-field"
-                onchange="toggleEditClientPaymentOther()"
-              >
-                <option value="">Select Type...</option>
-                <option value="Private pay">Private pay</option>
-                <option value="Lead Insurance">Lead Insurance</option>
-                <option value="Medicaid">Medicaid</option>
-                <option value="VA">VA</option>
-                <option value="Other">Other</option>
-              </select>
-              <div id="ce-paymentTypeOtherContainer" class="hidden mt-2">
-                <input
-                  type="text"
-                  id="ce-paymentTypeOther"
-                  class="input-field"
-                  placeholder="Enter other payment type"
-                />
-              </div>
-            </div>
-
-            <!-- Payment Cost Inputs -->
-            <div>
-              <label class="input-label">Project Hours</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">Hrs</span>
-                </div>
-                <input
-                  type="number"
-                  name="projectHours"
-                  id="ce-projectHours"
-                  class="input-field pl-12"
-                  oninput="calculateEditClientCosts()"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Hourly Rate ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="number"
-                  step="0.01"
-                  name="hourlyRate"
-                  id="ce-hourlyRate"
-                  class="input-field pl-7"
-                  oninput="calculateEditClientCosts()"
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Overtime</label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer mt-2"
-              >
-                <input
-                  type="checkbox"
-                  name="overtime"
-                  id="ce-overtime"
-                  class="rounded text-purple-600"
-                />
-                Overtime
-              </label>
-            </div>
-            <div>
-              <label class="input-label">Weekly Cost ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="weeklyCost"
-                  id="ce-weeklyCost"
-                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
-                  readonly
-                />
-              </div>
-            </div>
-            <div>
-              <label class="input-label">Monthly Cost ($)</label>
-              <div class="relative">
-                <div
-                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                >
-                  <span class="text-gray-500 sm:text-sm">$</span>
-                </div>
-                <input
-                  type="text"
-                  name="monthlyCost"
-                  id="ce-monthlyCost"
-                  class="input-field pl-7 bg-green-50 text-green-700 font-bold"
-                  readonly
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Payment Options -->
-          <div class="border-t pt-4">
-            <label class="input-label mb-2">Payment Options</label>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="cash"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Cash
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="check"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Check
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="zelle"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Zelle
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="direct deposit"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Direct Deposit
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="apple pay"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Apple Pay
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="bank deposit"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Bank Deposit
-              </label>
-              <label
-                class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer border border-gray-100 p-2 rounded hover:bg-gray-50"
-              >
-                <input
-                  type="radio"
-                  name="paymentOptions"
-                  value="credit/debit card"
-                  class="text-green-600 focus:ring-green-500"
-                  onchange="toggleEditClientPaymentDetails()"
-                />
-                Credit/Debit Card
-              </label>
-            </div>
-          </div>
-
-          <!-- Conditional Payment Details -->
-
-          <!-- Bank Details -->
-          <div
-            id="ce-bankDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-bank text-blue-600"></i> Bank Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Bank Name</label>
-                <input
-                  type="text"
-                  name="payBankName"
-                  id="ce-payBankName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Full Account Holder Name</label>
-                <input
-                  type="text"
-                  name="payHolderName"
-                  id="ce-payHolderName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Account Type</label>
-                <select
-                  name="payAccountType"
-                  id="ce-payAccountType"
-                  class="input-field"
-                >
-                  <option value="Checking">Checking</option>
-                  <option value="Savings">Savings</option>
-                </select>
-              </div>
-              <div>
-                <label class="input-label">Holder Type</label>
-                <select
-                  name="payHolderType"
-                  id="ce-payHolderType"
-                  class="input-field"
-                  onchange="toggleEditClientBusinessName()"
-                >
-                  <option value="Personal">Personal</option>
-                  <option value="Business">Business</option>
-                </select>
-              </div>
-              <div
-                id="ce-payBusinessNameContainer"
-                class="hidden md:col-span-2"
-              >
-                <label class="input-label">Business Name</label>
-                <input
-                  type="text"
-                  name="payBusinessName"
-                  id="ce-payBusinessName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Account Number</label>
-                <input
-                  type="password"
-                  name="payAccountNum"
-                  id="ce-payAccountNum"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Confirm Account Number</label>
-                <input
-                  type="text"
-                  id="ce-payAccountNumConfirm"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Routing Number</label>
-                <input
-                  type="password"
-                  name="payRoutingNum"
-                  id="ce-payRoutingNum"
-                  class="input-field"
-                  maxlength="9"
-                />
-              </div>
-              <div>
-                <label class="input-label">Confirm Routing Number</label>
-                <input
-                  type="text"
-                  id="ce-payRoutingNumConfirm"
-                  class="input-field"
-                  maxlength="9"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Digital Details -->
-          <div
-            id="ce-digitalDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-device-mobile text-blue-600"></i> Digital Details
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Full Name</label>
-                <input
-                  type="text"
-                  name="payDigitalFullName"
-                  id="ce-payDigitalFullName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Link Account With</label>
-                <div class="flex gap-4 mt-1">
-                  <label class="flex items-center gap-2 text-sm text-gray-600"
-                    ><input
-                      type="radio"
-                      name="payDigitalType"
-                      value="phone"
-                      checked
-                      onchange="toggleEditClientDigitalInputs()"
-                      class="text-green-600"
-                    />
-                    Phone</label
-                  >
-                  <label class="flex items-center gap-2 text-sm text-gray-600"
-                    ><input
-                      type="radio"
-                      name="payDigitalType"
-                      value="email"
-                      onchange="toggleEditClientDigitalInputs()"
-                      class="text-green-600"
-                    />
-                    Email</label
-                  >
-                </div>
-              </div>
-              <div class="md:col-span-2">
-                <label id="ce-payDigitalValueLabel" class="input-label"
-                  >Phone Number</label
-                >
-                <input
-                  type="text"
-                  name="payDigitalValue"
-                  id="ce-payDigitalValue"
-                  class="input-field"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Card Details -->
-          <div
-            id="ce-cardDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <h3 class="text-sm font-bold text-gray-800">
-              <i class="ph ph-credit-card text-blue-600"></i> Card Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Name on Card</label>
-                <input
-                  type="text"
-                  name="payCardName"
-                  id="ce-payCardName"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Card Number</label>
-                <input
-                  type="text"
-                  name="payCardNumber"
-                  id="ce-payCardNumber"
-                  class="input-field"
-                  placeholder="0000 0000 0000 0000"
-                  maxlength="19"
-                  oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"
-                />
-              </div>
-              <div>
-                <label class="input-label">Exp (MM/YY)</label>
-                <input
-                  type="text"
-                  name="payCardExpiry"
-                  id="ce-payCardExpiry"
-                  class="input-field"
-                  placeholder="MM/YY"
-                  maxlength="5"
-                />
-              </div>
-              <div>
-                <label class="input-label">CVV</label>
-                <input
-                  type="text"
-                  name="payCardCVV"
-                  id="ce-payCardCVV"
-                  class="input-field"
-                  maxlength="4"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- Check Details -->
-          <div
-            id="ce-checkDetails"
-            class="hidden space-y-4 border-t border-gray-100 pt-4"
-          >
-            <div class="bg-blue-50 p-3 rounded-lg text-blue-800 text-sm">
-              Please ensure all check payments are mailed to the official
-              business address.
-            </div>
-          </div>
-
-          <div class="mt-4 border-t pt-4">
-            <h3 class="text-sm font-bold text-gray-800 mb-2">
-              <i class="ph ph-shield-check text-blue-600"></i> Insurance
-              Information
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div class="md:col-span-2">
-                <label class="input-label">Insurance Company</label>
-                <input
-                  type="text"
-                  name="insuranceCompany"
-                  id="ce-insuranceCompany"
-                  class="input-field"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Address</label>
-                <input
-                  type="text"
-                  name="insuranceAddress"
-                  id="ce-insuranceAddress"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Apt</label>
-                <input
-                  type="text"
-                  name="insuranceApt"
-                  id="ce-insuranceApt"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">City</label>
-                <input
-                  type="text"
-                  name="insuranceCity"
-                  id="ce-insuranceCity"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">State</label>
-                <input
-                  type="text"
-                  name="insuranceState"
-                  id="ce-insuranceState"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Zip</label>
-                <input
-                  type="text"
-                  name="insuranceZip"
-                  id="ce-insuranceZip"
-                  class="input-field"
-                  maxlength="5"
-                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
-                />
-              </div>
-
-              <div>
-                <label class="input-label">Policy #</label>
-                <input
-                  type="text"
-                  name="insurancePolicy"
-                  id="ce-insurancePolicy"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Member ID</label>
-                <input
-                  type="text"
-                  name="insuranceMemberId"
-                  id="ce-insuranceMemberId"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Case #</label>
-                <input
-                  type="text"
-                  name="insuranceCase"
-                  id="ce-insuranceCase"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Claim #</label>
-                <input
-                  type="text"
-                  name="insuranceClaim"
-                  id="ce-insuranceClaim"
-                  class="input-field"
-                />
-              </div>
-
-              <div>
-                <label class="input-label">Contact Name</label>
-                <input
-                  type="text"
-                  name="insuranceContactName"
-                  id="ce-insuranceContactName"
-                  class="input-field"
-                />
-              </div>
-              <div>
-                <label class="input-label">Contact Phone</label>
-                <input
-                  type="text"
-                  name="insuranceContactPhone"
-                  id="ce-insuranceContactPhone"
-                  class="input-field"
-                  oninput="formatPhone(this)"
-                />
-              </div>
-              <div class="md:col-span-2">
-                <label class="input-label">Add Note</label>
-                <input
-                  type="text"
-                  name="insuranceAddNote"
-                  id="ce-insuranceAddNote"
-                  class="input-field"
-                />
-              </div>
             </div>
           </div>
         </div>
