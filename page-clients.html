@@ -1471,15 +1471,28 @@
             />
           </div>
           <div>
-            <label class="input-label">SSN (Last 4)</label>
+            <label class="input-label flex justify-between items-center">
+              SSN
+              <label
+                class="flex items-center gap-1 cursor-pointer text-xs font-normal text-gray-500"
+              >
+                <input
+                  type="checkbox"
+                  id="ce-ssn-mask-toggle"
+                  onchange="toggleSSNMask(this)"
+                  class="accent-green-600"
+                />
+                Show Last 4 Only
+              </label>
+            </label>
+            <input type="hidden" name="ssn" id="ce-ssn-hidden" />
             <input
               type="text"
-              name="ssn"
               id="ce-ssn"
               class="input-field"
-              maxlength="4"
-              oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-              placeholder="XXXX"
+              maxlength="11"
+              oninput="formatSSN(this)"
+              placeholder="XXX-XX-XXXX"
             />
           </div>
           <div>
@@ -1521,7 +1534,7 @@
                 id="ce-weight"
                 class="input-field"
                 placeholder="lbs"
-                oninput="convertWeight(this)"
+                oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); convertWeight(this)"
               />
               <span
                 id="ce-weight-kg"

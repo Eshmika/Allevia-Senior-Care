@@ -881,6 +881,13 @@
       setVal("ce-maritalStatus", d.maritalStatus);
       setVal("ce-spouseName", d.spouseName);
       setVal("ce-ssn", d.ssn);
+      setVal("ce-ssn-hidden", d.ssn); // Sync hidden input
+      // Toggle off by default when loading (Show Full)
+      const ssnToggler = document.getElementById("ce-ssn-mask-toggle");
+      if (ssnToggler) {
+        ssnToggler.checked = false;
+        toggleSSNMask(ssnToggler);
+      }
       setVal("ce-ein", d.ein);
       setVal("ce-height", d.height);
       if (d.height) convertHeight(document.getElementById("ce-height"));
@@ -1673,6 +1680,57 @@
         const kg = parseFloat(val) * 0.453592;
         span.textContent = `${kg.toFixed(1)} kg`;
       }
+    }
+  }
+
+  function formatSSN(input) {
+    let val = input.value.replace(/\D/g, "");
+    if (val.length > 9) val = val.substring(0, 9);
+
+    let formatted = val;
+    if (val.length > 5) {
+      formatted =
+        val.substring(0, 3) +
+        "-" +
+        val.substring(3, 5) +
+        "-" +
+        val.substring(5);
+    } else if (val.length > 3) {
+      formatted = val.substring(0, 3) + "-" + val.substring(3);
+    }
+
+    input.value = formatted;
+
+    const hidden = document.getElementById("ce-ssn-hidden");
+    if (hidden) hidden.value = formatted;
+  }
+
+  function toggleSSNMask(checkbox) {
+    const input = document.getElementById("ce-ssn");
+    const hidden = document.getElementById("ce-ssn-hidden");
+    if (!input || !hidden) return;
+
+    if (checkbox.checked) {
+      const real = hidden.value;
+      // Mask: ***-**-XXXX
+      // Only if it looks like full SSN or close to it?
+      // Let's just mask whatever is there if it fits pattern
+      if (real.match(/^\d{3}-\d{2}-\d{4}$/)) {
+        input.value = "***-**-" + real.substring(7);
+      } else if (real.length >= 7 && real.includes("-")) {
+        // partial mask
+        const parts = real.split("-");
+        if (parts.length === 3) {
+          input.value = `***-**-${parts[2]}`;
+        }
+      }
+      // Make it readonly to prevent editing while masked (which would corrupt hidden value)
+      input.readOnly = true;
+      input.classList.add("bg-gray-50", "text-gray-500");
+    } else {
+      input.value = hidden.value;
+      input.readOnly = false;
+      input.classList.remove("bg-gray-50", "text-gray-500");
     }
   }
 </script>
