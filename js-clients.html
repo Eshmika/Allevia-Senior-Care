@@ -890,9 +890,9 @@
       }
       setVal("ce-ein", d.ein);
       setVal("ce-height", d.height);
-      if (d.height) convertHeight(document.getElementById("ce-height"));
+      if (d.height) convertClientHeight(document.getElementById("ce-height"));
       setVal("ce-weight", d.weight);
-      if (d.weight) convertWeight(document.getElementById("ce-weight"));
+      if (d.weight) convertClientWeight(document.getElementById("ce-weight"));
       setVal("ce-codeStatus", d.codeStatus);
 
       // Handle languages (checkboxes + other input)
@@ -1594,7 +1594,7 @@
     }
   }
 
-  function convertHeight(input) {
+  function convertClientHeight(input) {
     // 1. Enforce allowed characters: digits, -, ', "
     // We allow typing but will aggressively trim invalid formatting
     let val = input.value;
@@ -1669,7 +1669,7 @@
     if (span) span.textContent = metersDisplay;
   }
 
-  function convertWeight(input) {
+  function convertClientWeight(input) {
     const val = input.value;
     const span = document.getElementById(input.id + "-kg");
 

@@ -1516,7 +1516,7 @@
                 id="ce-height"
                 class="input-field"
                 placeholder="e.g. 5'7"
-                oninput="convertHeight(this)"
+                oninput="convertClientHeight(this)"
               />
               <span
                 id="ce-height-m"
@@ -1534,7 +1534,7 @@
                 id="ce-weight"
                 class="input-field"
                 placeholder="lbs"
-                oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); convertWeight(this)"
+                oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); convertClientWeight(this)"
               />
               <span
                 id="ce-weight-kg"
