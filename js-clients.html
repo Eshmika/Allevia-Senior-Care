@@ -885,7 +885,7 @@
       setVal("ce-height", d.height);
       if (d.height) convertHeight(document.getElementById("ce-height"));
       setVal("ce-weight", d.weight);
-      if (d.weight) convertWeight(d.weight);
+      if (d.weight) convertWeight(document.getElementById("ce-weight"));
       setVal("ce-codeStatus", d.codeStatus);
 
       // Handle languages (checkboxes + other input)
@@ -1588,40 +1588,91 @@
   }
 
   function convertHeight(input) {
-    const val = input.value;
+    // 1. Enforce allowed characters: digits, -, ', "
+    // We allow typing but will aggressively trim invalid formatting
+    let val = input.value;
+
+    // Remove any characters that are NOT digits, -, ', or "
+    val = val.replace(/[^0-9\-\'\"]/g, "");
+
+    // Split into feet and inches based on separators
+    // valid separators are -, ', "
+    let parts = val.split(/[\-\'\"]/);
+
+    // Part 0 is feet
+    let feetStr = parts[0] || "";
+    // If feet is more than 1 digit, take only the first digit
+    if (feetStr.length > 1) {
+      // If we have "51", is it 5'1" or just invalid?
+      // Assuming 1 digit constraint for feet:
+      feetStr = feetStr.substring(0, 1);
+    }
+
+    // Part 1 is inches (if exists)
+    let inchesStr = "";
+    let separator = "";
+
+    // Find which separator was used (if any)
+    const sepMatch = input.value.match(/[\-\'\"]/);
+    if (sepMatch) {
+      separator = sepMatch[0];
+      if (parts.length > 1) {
+        inchesStr = parts[1];
+      }
+    } else {
+      // If no separator, but we have feet, we don't assume inches unless user typed separator
+      // Exception: if user just pasted "511", this logic might break, but
+      // with "oninput", they type one by one.
+      // We do NOT support "511" as "5'11"" implicitly because it's ambiguous (5'1" or 5'11").
+    }
+
+    // Enforce max 2 digits for inches
+    if (inchesStr.length > 2) {
+      inchesStr = inchesStr.substring(0, 2);
+    }
+
+    // Reconstruct valid value
+    let newVal = feetStr;
+    if (separator) {
+      newVal += separator + inchesStr;
+    }
+
+    // Update input value if it changed (to enforce masks)
+    if (input.value !== newVal) {
+      input.value = newVal;
+    }
+
+    // 2. Calculate Meters
+    let metersDisplay = "-- m";
+    const feet = parseInt(feetStr);
+    const inches = inchesStr ? parseInt(inchesStr) : 0;
+
+    if (!isNaN(feet)) {
+      const totalInches = feet * 12 + inches; // inches defaults to 0 if empty
+      const meters = totalInches * 0.0254;
+
+      // Format: XmYY
+      // e.g. 1.78m -> 1m78
+      const mPart = Math.floor(meters);
+      const cmPart = Math.round((meters - mPart) * 100);
+      metersDisplay = `${mPart}m${cmPart.toString().padStart(2, "0")}`;
+    }
+
     const span = document.getElementById(input.id + "-m");
-    if (!span) return;
-    if (!val) {
-      span.textContent = "-- m";
-      return;
-    }
-
-    let inches = 0;
-    if (val.includes("'")) {
-      const parts = val.split("'");
-      const ft = parseFloat(parts[0]) || 0;
-      const inc = parseFloat(parts[1]) || 0;
-      inches = ft * 12 + inc;
-    } else {
-      inches = parseFloat(val) || 0;
-    }
-
-    if (inches > 0) {
-      const m = inches * 0.0254;
-      span.textContent = m.toFixed(2) + " m";
-    } else {
-      span.textContent = "-- m";
-    }
+    if (span) span.textContent = metersDisplay;
   }
 
-  function convertWeight(lbs) {
-    const span = document.getElementById("ce-weight-kg");
-    if (!span) return;
-    if (!lbs || isNaN(lbs)) {
-      span.textContent = "-- kg";
-      return;
+  function convertWeight(input) {
+    const val = input.value;
+    const span = document.getElementById(input.id + "-kg");
+
+    if (span) {
+      if (!val || isNaN(val)) {
+        span.textContent = "-- kg";
+      } else {
+        const kg = parseFloat(val) * 0.453592;
+        span.textContent = `${kg.toFixed(1)} kg`;
+      }
     }
-    const kg = parseFloat(lbs) * 0.453592;
-    span.textContent = `${kg.toFixed(1)} kg`;
   }
 </script>
