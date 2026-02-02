@@ -50,6 +50,15 @@ function getShifts(startDateStr, endDateStr) {
   const cgIdx = headers.indexOf("Caregiver ID");
   const startIdx = headers.indexOf("Clock In");
   const endIdx = headers.indexOf("Clock Out");
+  const hoursIdx = headers.indexOf("Hours");
+  const billingTypeIdx = headers.indexOf("Billing Type");
+  const serviceTypeIdx = headers.indexOf("Service Type");
+  const shiftTypeIdx = headers.indexOf("Shift Type");
+  const clientRateIdx = headers.indexOf("Client Rate");
+  const caregiverRateIdx = headers.indexOf("Caregiver Rate");
+  const totalClientPriceIdx = headers.indexOf("Total Client Price");
+  const totalCaregiverPriceIdx = headers.indexOf("Total Caregiver Price");
+  const notesIdx = headers.indexOf("Notes");
 
   if (dateIdx === -1) return [];
   if (data.length <= 1) return []; // No data rows
@@ -103,7 +112,7 @@ function getShifts(startDateStr, endDateStr) {
         endDateOutput = Utilities.formatDate(
           endDateVal,
           timeZone,
-          "yyyy-MM-dd"
+          "yyyy-MM-dd",
         );
       } else if (
         typeof endDateVal === "string" &&
@@ -128,7 +137,15 @@ function getShifts(startDateStr, endDateStr) {
           clockOutVal instanceof Date
             ? Utilities.formatDate(clockOutVal, timeZone, "HH:mm")
             : String(clockOutVal || ""),
-        // Add names if possible, but for now IDs are fine, frontend can map them
+        hours: row[hoursIdx],
+        billingType: row[billingTypeIdx],
+        serviceType: row[serviceTypeIdx],
+        shiftType: row[shiftTypeIdx],
+        clientRate: row[clientRateIdx],
+        caregiverRate: row[caregiverRateIdx],
+        totalClientPrice: row[totalClientPriceIdx],
+        totalCaregiverPrice: row[totalCaregiverPriceIdx],
+        notes: row[notesIdx],
       });
     }
   }
@@ -177,7 +194,7 @@ function saveShift(data) {
     const formattedDate = Utilities.formatDate(
       date,
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd"
+      "yyyy-MM-dd",
     );
 
     // Calculate End Date for this specific shift instance
@@ -185,7 +202,7 @@ function saveShift(data) {
     const originalStart = new Date(
       startParts[0],
       startParts[1] - 1,
-      startParts[2]
+      startParts[2],
     );
 
     const endParts = data.endDate.split("-");
@@ -198,7 +215,7 @@ function saveShift(data) {
     const formattedEndDate = Utilities.formatDate(
       thisEndDate,
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd"
+      "yyyy-MM-dd",
     );
 
     const row = [
