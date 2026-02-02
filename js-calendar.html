@@ -250,7 +250,7 @@
 
   function updateCalendarViewToggle() {
     const buttons = document.querySelectorAll(
-      "#calendarViewToggle .calendar-view-btn",
+      "#calendarViewToggle .calendar-view-btn"
     );
     buttons.forEach((btn) => {
       const isActive = btn.dataset.view === calendarViewMode;
@@ -290,10 +290,9 @@
     card.style.backgroundColor = color;
     card.style.borderColor = "rgba(0,0,0,0.1)";
 
-    // Add click handler to navigate to shifts page with this shift selected
+    // Add click handler to show shift details
     card.onclick = () => {
-      console.log("Shift clicked:", shift);
-      appNavigate("shifts");
+      openShiftDetailsModal(shift);
     };
 
     card.innerHTML = `
@@ -409,8 +408,7 @@
 
     div.onclick = (e) => {
       e.stopPropagation();
-      console.log("Shift clicked:", shift);
-      appNavigate("shifts");
+      openShiftDetailsModal(shift);
     };
     return div;
   }
@@ -442,7 +440,7 @@
     headerRow.innerHTML = `
         <div class="text-xs uppercase text-gray-500 font-bold">${day.toLocaleDateString(
           "en-US",
-          { weekday: "long" },
+          { weekday: "long" }
         )}</div>
         <div class="text-2xl font-bold text-gray-800">${day.getDate()}</div>
     `;
@@ -534,7 +532,7 @@
     const options = { month: "short", day: "numeric" };
     const label = `${startOfWeek.toLocaleDateString(
       "en-US",
-      options,
+      options
     )} - ${endOfWeek.toLocaleDateString("en-US", {
       ...options,
       year: "numeric",
@@ -561,7 +559,7 @@
       th.innerHTML = `
            <div class="text-xs uppercase font-bold text-gray-400">${d.toLocaleDateString(
              "en-US",
-             { weekday: "short" },
+             { weekday: "short" }
            )}</div>
            <div class="text-lg font-bold">${d.getDate()}</div>
         `;
@@ -675,7 +673,7 @@
     const labelOptions = { month: "short", day: "numeric" };
     const label = `${start.toLocaleDateString(
       "en-US",
-      labelOptions,
+      labelOptions
     )} - ${end.toLocaleDateString("en-US", {
       ...labelOptions,
       year: "numeric",
@@ -704,8 +702,8 @@
           const columnHighlight = isToday
             ? "bg-green-50 border-green-300"
             : inCurrentWeek
-              ? "bg-gray-50"
-              : "bg-white";
+            ? "bg-gray-50"
+            : "bg-white";
 
           const col = document.createElement("div");
           col.className = `border border-gray-100 min-h-[320px] flex flex-col ${columnHighlight}`;
@@ -713,7 +711,7 @@
             <div class="p-2 text-center border-b border-gray-100">
               <div class="text-xs font-semibold text-gray-500">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</div>
               <span class="text-lg font-bold block text-gray-800">${currentDay.getDate()}</span>
             </div>
@@ -798,7 +796,7 @@
               const current = new Date(
                 partsStart[0],
                 partsStart[1] - 1,
-                partsStart[2],
+                partsStart[2]
               );
               const end = new Date(partsEnd[0], partsEnd[1] - 1, partsEnd[2]);
 
@@ -847,7 +845,7 @@
               }">${currentDay.getDate()}</span>
               <span class="text-[11px] text-gray-400">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</span>
             </div>
             <div class="flex-1 p-2 space-y-2 overflow-y-auto" id="day-${dateStr}"></div>
@@ -921,8 +919,8 @@
         isToday
           ? "bg-[#65c027] text-white font-bold border border-[#65c027]"
           : inCurrentWeek
-            ? "bg-gray-200 text-gray-800 font-semibold"
-            : "text-gray-700"
+          ? "bg-gray-200 text-gray-800 font-semibold"
+          : "text-gray-700"
       }`;
       cell.textContent = i;
       cell.onclick = () => {
@@ -931,5 +929,130 @@
       };
       grid.appendChild(cell);
     }
+  }
+
+  function openShiftDetailsModal(shift) {
+    const modal = document.getElementById("shiftDetailsModal");
+    const content = document.getElementById("shiftDetailsContent");
+    if (!modal || !content) return;
+
+    const cg = cgData.find((c) => c.id === shift.caregiverId);
+    const cl = clData.find((c) => c.id === shift.clientId);
+    const cgName = cg ? cg.name : shift.caregiverId;
+    const clName = cl
+      ? `${cl.firstName || ""} ${cl.lastName || ""}`.trim()
+      : shift.clientId;
+
+    content.innerHTML = `
+      <div class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">Client</label>
+                <div class="text-sm font-bold text-gray-800">${clName}</div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">Caregiver</label>
+                <div class="text-sm font-bold text-gray-800">${cgName}</div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg border border-gray-100">
+             <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">Start Date</label>
+                <div class="text-sm font-semibold text-gray-700">${
+                  shift.date || "-"
+                }</div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">End Date</label>
+                <div class="text-sm font-semibold text-gray-700">${
+                  shift.endDate || shift.date || "-"
+                }</div>
+            </div>
+             <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">Clock In</label>
+                <div class="text-sm font-semibold text-gray-700">${
+                  shift.clockIn || "-"
+                }</div>
+            </div>
+            <div>
+                <label class="block text-xs font-medium text-gray-500 uppercase">Clock Out</label>
+                <div class="text-sm font-semibold text-gray-700">${
+                  shift.clockOut || "-"
+                }</div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2 text-xs">
+            <div class="bg-blue-50 p-2 rounded border border-blue-100">
+                <div class="text-blue-600 font-bold mb-1">Billing Type</div>
+                <div>${shift.billingType || "-"}</div>
+            </div>
+            <div class="bg-green-50 p-2 rounded border border-green-100">
+                <div class="text-green-600 font-bold mb-1">Service Type</div>
+                <div>${shift.serviceType || "-"}</div>
+            </div>
+            <div class="bg-purple-50 p-2 rounded border border-purple-100">
+                <div class="text-purple-600 font-bold mb-1">Shift Type</div>
+                <div>${shift.shiftType || "-"}</div>
+            </div>
+        </div>
+
+        <div class="border-t pt-3 mt-2">
+            <h4 class="text-xs font-bold text-gray-500 uppercase mb-2">Financials</h4>
+             <div class="grid grid-cols-2 gap-4 text-xs">
+                <div>
+                    <span class="text-gray-500">Rate (Client):</span>
+                    <span class="font-bold text-gray-800">$${
+                      shift.clientRate || "0.00"
+                    }</span>
+                </div>
+                 <div>
+                    <span class="text-gray-500">Total (Client):</span>
+                     <span class="font-bold text-blue-700">${
+                       shift.totalClientPrice || "$0.00"
+                     }</span>
+                </div>
+                <div>
+                    <span class="text-gray-500">Rate (Caregiver):</span>
+                    <span class="font-bold text-gray-800">$${
+                      shift.caregiverRate || "0.00"
+                    }</span>
+                </div>
+                 <div>
+                    <span class="text-gray-500">Total (Caregiver):</span>
+                     <span class="font-bold text-green-700">${
+                       shift.totalCaregiverPrice || "$0.00"
+                     }</span>
+                </div>
+                 <div>
+                    <span class="text-gray-500">Hours:</span>
+                    <span class="font-bold text-gray-800">${
+                      shift.hours || "0"
+                    }</span>
+                </div>
+             </div>
+        </div>
+        
+        ${
+          shift.notes
+            ? `
+        <div class="border-t pt-3 mt-2">
+             <label class="block text-xs font-medium text-gray-500 uppercase">Notes</label>
+             <div class="text-sm text-gray-600 bg-yellow-50 p-2 rounded border border-yellow-100 mt-1">${shift.notes}</div>
+        </div>
+        `
+            : ""
+        }
+
+      </div>
+    `;
+
+    modal.classList.remove("hidden");
+  }
+
+  function closeShiftDetailsModal() {
+    const modal = document.getElementById("shiftDetailsModal");
+    if (modal) modal.classList.add("hidden");
   }
 </script>
