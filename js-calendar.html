@@ -8,6 +8,7 @@
   let caregiverColors = {};
 
   const DAY_MS = 24 * 60 * 60 * 1000;
+  let currentModalShift = null;
 
   function loadCaregiverCalendar() {
     // Ensure caregiver and client data are loaded
@@ -288,7 +289,7 @@
     let displayCgName = cgName;
 
     if (calendarPerspective === "client") {
-      displayClName = `${clName} (Cl)`;
+      displayClName = `${clName} (CL)`;
     } else if (calendarPerspective === "caregiver") {
       displayCgName = `${cgName} (CG)`;
     }
@@ -395,13 +396,12 @@
     const height = Math.max(duration * PIXELS_PER_HOUR, 30); // min 30px
 
     // Add suffixes based on perspective
-    let displayClName = clName;
+    let displayName = clName;
     if (calendarPerspective === "client") {
-      displayClName = `${clName} (Cl)`;
+      displayName = `${clName} (CL)`;
+    } else if (calendarPerspective === "caregiver") {
+      displayName = `${cgName} (CG)`;
     }
-    // Note: Time card only shows Client name currently.
-    // If we wanted to show Caregiver name with (CG) we would need to add it to HTML.
-    // Assuming we stick to existing fields but just modified.
 
     const div = document.createElement("div");
     div.className =
@@ -420,7 +420,7 @@
       : `${shift.date}`;
 
     div.innerHTML = `
-       <div class="font-bold text-xs truncate">${displayClName}</div>
+       <div class="font-bold text-xs truncate">${displayName}</div>
        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
        <div class="text-[8px] truncate opacity-70 mt-0.5">${dateRangeDisplay}</div>
     `;
@@ -985,6 +985,8 @@
       ? `${cl.firstName || ""} ${cl.lastName || ""}`.trim()
       : shift.clientId;
 
+    currentModalShift = shift; // Store for actions
+
     content.innerHTML = `
       <div class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
@@ -1088,9 +1090,73 @@
         }
 
       </div>
+      </div>
+      <div class="p-4 border-t bg-gray-50 flex justify-between items-center">
+        <div class="flex gap-2">
+            <button
+            onclick="deleteShiftFromModal()"
+            class="px-3 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg font-medium flex items-center gap-2 border border-red-200 transition"
+            >
+            <i class="ph ph-trash"></i> Delete
+            </button>
+             <button
+            onclick="editShiftFromModal()"
+            class="px-3 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg font-medium flex items-center gap-2 border border-blue-200 transition"
+            >
+            <i class="ph ph-pencil-simple"></i> Edit
+            </button>
+        </div>
+        <button
+          onclick="closeShiftDetailsModal()"
+          class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium"
+        >
+          Close
+        </button>
+      </div>
     `;
 
     modal.classList.remove("hidden");
+  }
+
+  function editShiftFromModal() {
+    if (!currentModalShift) return;
+    closeShiftDetailsModal();
+    // Assumes loadShiftForEdit is available globally (from js-shifts.html)
+    if (typeof loadShiftForEdit === "function") {
+      loadShiftForEdit(currentModalShift);
+    } else {
+      console.error("loadShiftForEdit not found");
+    }
+  }
+
+  function deleteShiftFromModal() {
+    if (!currentModalShift) return;
+
+    Swal.fire({
+      title: "Delete Shift?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Show loading state?
+        // Simple way for now
+
+        google.script.run
+          .withSuccessHandler(() => {
+            Swal.fire("Deleted!", "The shift has been deleted.", "success");
+            closeShiftDetailsModal();
+            renderActiveCalendar(); // Refresh calendar
+          })
+          .withFailureHandler((err) => {
+            Swal.fire("Error", "Failed to delete: " + err.message, "error");
+          })
+          .deleteShift(currentModalShift.id);
+      }
+    });
   }
 
   function closeShiftDetailsModal() {

@@ -89,6 +89,7 @@ function getShifts(startDateStr, endDateStr) {
     }
     rowDate.setHours(0, 0, 0, 0);
 
+    // Simple range check (could be improved for multi-day overlaps)
     if (rowDate >= start && rowDate <= end) {
       const clockInVal = row[startIdx];
       const clockOutVal = row[endIdx];
@@ -159,10 +160,6 @@ function saveShift(data) {
   // Determine dates to save
   let datesToSave = [];
   // Parse YYYY-MM-DD from input
-  // Note: new Date("2023-01-01") is UTC, but we want local usually.
-  // But since we just want to increment days, it's fine as long as we are consistent.
-  // Better to append T00:00:00 to ensure local time parsing or handle explicitly.
-  // However, HTML date input returns YYYY-MM-DD.
   const parts = data.startDate.split("-");
   const startDate = new Date(parts[0], parts[1] - 1, parts[2]);
 
@@ -245,4 +242,73 @@ function saveShift(data) {
   });
 
   return { success: true };
+}
+
+function updateShift(data) {
+  const sheet = getOrCreateShiftSheet();
+  const range = sheet.getDataRange();
+  const values = range.getValues();
+  const shiftId = data.shiftId; // Ensure ID is passed
+
+  // Find row by ID (Column 1, index 0)
+  let rowIndex = -1;
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][0] === shiftId) {
+      rowIndex = i + 1; // 1-based index
+      break;
+    }
+  }
+
+  if (rowIndex === -1) {
+    throw new Error("Shift not found");
+  }
+
+  // Map headers to find column indices
+  const headers = values[0];
+  const updateMap = {
+    "Client ID": data.clientId,
+    "Caregiver ID": data.caregiverId,
+    "Start Date": data.startDate,
+    "End Date": data.endDate,
+    "Clock In": data.clockIn,
+    "Clock Out": data.clockOut,
+    Hours: data.hours,
+    "Billing Type": data.billingType,
+    "Service Type": data.serviceType,
+    "Shift Type": data.shiftType,
+    "Client Rate": data.clientRate,
+    "Caregiver Rate": data.caregiverRate,
+    "Agency Share": data.agencyShare,
+    "Softcare Share": data.softcareShare,
+    "Total Client Price": data.totalClientPrice,
+    "Total Caregiver Price": data.totalCaregiverPrice,
+    "Total Agency Price": data.totalAgencyPrice,
+    "Total Softcare Price": data.totalSoftcarePrice,
+    Notes: data.notes,
+  };
+
+  // Update cells
+  for (const [header, value] of Object.entries(updateMap)) {
+    const colIdx = headers.indexOf(header);
+    if (colIdx !== -1) {
+      sheet.getRange(rowIndex, colIdx + 1).setValue(value);
+    }
+  }
+
+  return { success: true };
+}
+
+function deleteShift(shiftId) {
+  const sheet = getOrCreateShiftSheet();
+  const data = sheet.getDataRange().getValues();
+
+  // Find row index
+  for (let i = 1; i < data.length; i++) {
+    if (data[i][0] === shiftId) {
+      sheet.deleteRow(i + 1);
+      return { success: true };
+    }
+  }
+
+  throw new Error("Shift not found");
 }

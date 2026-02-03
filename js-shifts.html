@@ -15,6 +15,10 @@
             html += `<option value="${item.id}">${item.name}</option>`;
           });
         clientSelect.innerHTML = html;
+        // If we are editing, we might need to set the value after loading
+        if (window._pendingShiftEdit) {
+          clientSelect.value = window._pendingShiftEdit.clientId;
+        }
       })
       .getClientList();
 
@@ -30,8 +34,73 @@
             html += `<option value="${item.id}">${item.name}</option>`;
           });
         cgSelect.innerHTML = html;
+        if (window._pendingShiftEdit) {
+          cgSelect.value = window._pendingShiftEdit.caregiverId;
+          delete window._pendingShiftEdit; // Clear after use
+        }
       })
       .getCaregiverList();
+
+    // Reset form state slightly
+    resetShiftFormState();
+  }
+
+  function resetShiftFormState() {
+    document.getElementById("shiftForm").reset();
+    document.getElementById("shiftId").value = "";
+    document.getElementById("btnSaveShift").innerHTML =
+      '<i class="ph ph-check-circle text-lg"></i> Save Shift';
+    document.querySelector("h2").textContent = "Add New Shift";
+
+    // Show repeat options again if hid
+    const repeatSection = document
+      .querySelector('input[name="repeat"]')
+      .closest(".mb-6");
+    if (repeatSection) repeatSection.style.display = "block";
+
+    calculateShiftCosts();
+  }
+
+  function loadShiftForEdit(shift) {
+    // Navigate to view
+    appNavigate("shifts");
+
+    // Store for select mapping if data isn't loaded yet
+    window._pendingShiftEdit = shift;
+
+    // Populate fields
+    document.getElementById("shiftId").value = shift.id;
+    document.getElementById("shiftClient").value = shift.clientId;
+    document.getElementById("shiftCaregiver").value = shift.caregiverId;
+    document.querySelector('input[name="startDate"]').value = shift.date;
+    document.querySelector('input[name="endDate"]').value =
+      shift.endDate || shift.date;
+    document.getElementById("clockIn").value = shift.clockIn;
+    document.getElementById("clockOut").value = shift.clockOut;
+
+    document.getElementById("billingType").value = shift.billingType;
+    document.querySelector('select[name="serviceType"]').value =
+      shift.serviceType;
+    document.querySelector('select[name="shiftType"]').value = shift.shiftType;
+
+    document.getElementById("clientRate").value = shift.clientRate;
+    document.getElementById("caregiverRate").value = shift.caregiverRate;
+    document.querySelector('textarea[name="notes"]').value = shift.notes || "";
+
+    // Update UI state
+    document.getElementById("btnSaveShift").innerHTML =
+      '<i class="ph ph-check-circle text-lg"></i> Update Shift';
+    document.querySelector("h2").textContent = "Edit Shift";
+
+    // Hide repeat options for edit mode (simpler MVP)
+    const repeatSection = document
+      .querySelector('input[name="repeat"]')
+      .closest(".mb-6");
+    if (repeatSection) repeatSection.style.display = "none";
+
+    // Recalculate derived
+    calculateShiftHours();
+    calculateShiftCosts();
   }
 
   function calculateShiftHours() {
@@ -125,22 +194,39 @@
     btn.disabled = true;
     btn.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Saving...';
 
+    const isUpdate = !!data.shiftId;
+    const handler = isUpdate ? "updateShift" : "saveShift";
+
     google.script.run
       .withSuccessHandler(() => {
-        Swal.fire("Success", "Shift saved successfully!", "success");
-        form.reset();
-        document.getElementById("totalClientPrice").value = "$0.00";
-        document.getElementById("totalCaregiverPrice").value = "$0.00";
-        document.getElementById("totalAgencyPrice").value = "$0.00";
-        document.getElementById("totalSoftcarePrice").value = "$0.00";
+        Swal.fire(
+          "Success",
+          isUpdate
+            ? "Shift updated successfully!"
+            : "Shift saved successfully!",
+          "success",
+        );
+        if (isUpdate) {
+          // Return to calendar? Or just reset?
+          // Often better to stay or offer to go back.
+          // For now, let's reset to add mode.
+          resetShiftFormState();
+        } else {
+          resetShiftFormState();
+        }
+
         btn.disabled = false;
         btn.innerHTML = originalText;
       })
       .withFailureHandler((err) => {
-        Swal.fire("Error", "Failed to save shift: " + err.message, "error");
+        Swal.fire(
+          "Error",
+          `Failed to ${isUpdate ? "update" : "save"} shift: ` + err.message,
+          "error",
+        );
         btn.disabled = false;
         btn.innerHTML = originalText;
       })
-      .saveShift(data);
+      [handler](data);
   }
 </script>
