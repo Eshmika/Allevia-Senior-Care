@@ -251,7 +251,7 @@
 
   function updateCalendarViewToggle() {
     const buttons = document.querySelectorAll(
-      "#calendarViewToggle .calendar-view-btn",
+      "#calendarViewToggle .calendar-view-btn"
     );
     buttons.forEach((btn) => {
       const isActive = btn.dataset.view === calendarViewMode;
@@ -459,7 +459,7 @@
     headerRow.innerHTML = `
         <div class="text-xs uppercase text-gray-500 font-bold">${day.toLocaleDateString(
           "en-US",
-          { weekday: "long" },
+          { weekday: "long" }
         )}</div>
         <div class="text-2xl font-bold text-gray-800">${day.getDate()}</div>
     `;
@@ -557,7 +557,7 @@
     const options = { month: "short", day: "numeric" };
     const label = `${startOfWeek.toLocaleDateString(
       "en-US",
-      options,
+      options
     )} - ${endOfWeek.toLocaleDateString("en-US", {
       ...options,
       year: "numeric",
@@ -584,7 +584,7 @@
       th.innerHTML = `
            <div class="text-xs uppercase font-bold text-gray-400">${d.toLocaleDateString(
              "en-US",
-             { weekday: "short" },
+             { weekday: "short" }
            )}</div>
            <div class="text-lg font-bold">${d.getDate()}</div>
         `;
@@ -704,7 +704,7 @@
     const labelOptions = { month: "short", day: "numeric" };
     const label = `${start.toLocaleDateString(
       "en-US",
-      labelOptions,
+      labelOptions
     )} - ${end.toLocaleDateString("en-US", {
       ...labelOptions,
       year: "numeric",
@@ -733,8 +733,8 @@
           const columnHighlight = isToday
             ? "bg-green-50 border-green-300"
             : inCurrentWeek
-              ? "bg-gray-50"
-              : "bg-white";
+            ? "bg-gray-50"
+            : "bg-white";
 
           const col = document.createElement("div");
           col.className = `border border-gray-100 min-h-[320px] flex flex-col ${columnHighlight}`;
@@ -742,7 +742,7 @@
             <div class="p-2 text-center border-b border-gray-100">
               <div class="text-xs font-semibold text-gray-500">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</div>
               <span class="text-lg font-bold block text-gray-800">${currentDay.getDate()}</span>
             </div>
@@ -833,7 +833,7 @@
               const current = new Date(
                 partsStart[0],
                 partsStart[1] - 1,
-                partsStart[2],
+                partsStart[2]
               );
               const end = new Date(partsEnd[0], partsEnd[1] - 1, partsEnd[2]);
 
@@ -882,7 +882,7 @@
               }">${currentDay.getDate()}</span>
               <span class="text-[11px] text-gray-400">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</span>
             </div>
             <div class="flex-1 p-2 space-y-2 overflow-y-auto" id="day-${dateStr}"></div>
@@ -961,8 +961,8 @@
         isToday
           ? "bg-[#65c027] text-white font-bold border border-[#65c027]"
           : inCurrentWeek
-            ? "bg-gray-200 text-gray-800 font-semibold"
-            : "text-gray-700"
+          ? "bg-gray-200 text-gray-800 font-semibold"
+          : "text-gray-700"
       }`;
       cell.textContent = i;
       cell.onclick = () => {
@@ -1105,13 +1105,7 @@
             >
             <i class="ph ph-pencil-simple"></i> Edit
             </button>
-        </div>
-        <button
-          onclick="closeShiftDetailsModal()"
-          class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg font-medium"
-        >
-          Close
-        </button>
+        </div>        
       </div>
     `;
 
