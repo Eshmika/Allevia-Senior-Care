@@ -251,7 +251,7 @@
 
   function updateCalendarViewToggle() {
     const buttons = document.querySelectorAll(
-      "#calendarViewToggle .calendar-view-btn"
+      "#calendarViewToggle .calendar-view-btn",
     );
     buttons.forEach((btn) => {
       const isActive = btn.dataset.view === calendarViewMode;
@@ -306,12 +306,17 @@
       openShiftDetailsModal(shift);
     };
 
+    const totalHoursDisplay = calculateTotalHours(
+      shift.clockIn,
+      shift.clockOut,
+    );
+
     card.innerHTML = `
       <div class="font-bold text-gray-800 truncate" title="${displayClName}">${displayClName}</div>
       <div class="text-gray-700 truncate font-medium" title="${displayCgName}">${displayCgName}</div>
       <div class="mt-1 flex flex-col text-[10px] text-gray-600 font-semibold border-t border-black/10 pt-1">
         <span>${timeDisplay}</span>
-        <span class="opacity-80">${dateRangeDisplay}</span>
+        <span class="opacity-80">${totalHoursDisplay}</span>
       </div>
     `;
     return card;
@@ -327,6 +332,16 @@
     const parts = s.split(":");
     if (parts.length < 2) return null;
     return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+  }
+
+  function calculateTotalHours(startStr, endStr) {
+    const start = parseTime(startStr);
+    const end = parseTime(endStr);
+    if (start === null || end === null) return "";
+    let diff = end - start;
+    if (diff < 0) diff += 1440;
+    const hours = diff / 60;
+    return hours.toFixed(2).replace(/\.?0+$/, "") + " hrs";
   }
 
   function layoutShifts(shifts) {
@@ -415,14 +430,15 @@
     div.style.zIndex = shift.zIndex;
     div.style.color = "#1f2937";
 
-    const dateRangeDisplay = shift.endDate
-      ? `${shift.date} to ${shift.endDate}`
-      : `${shift.date}`;
+    const totalHoursDisplay = calculateTotalHours(
+      shift.clockIn,
+      shift.clockOut,
+    );
 
     div.innerHTML = `
        <div class="font-bold text-xs truncate">${displayName}</div>
        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
-       <div class="text-[8px] truncate opacity-70 mt-0.5">${dateRangeDisplay}</div>
+       <div class="text-[8px] truncate opacity-70 mt-0.5">${totalHoursDisplay}</div>
     `;
 
     div.onclick = (e) => {
@@ -459,7 +475,7 @@
     headerRow.innerHTML = `
         <div class="text-xs uppercase text-gray-500 font-bold">${day.toLocaleDateString(
           "en-US",
-          { weekday: "long" }
+          { weekday: "long" },
         )}</div>
         <div class="text-2xl font-bold text-gray-800">${day.getDate()}</div>
     `;
@@ -557,7 +573,7 @@
     const options = { month: "short", day: "numeric" };
     const label = `${startOfWeek.toLocaleDateString(
       "en-US",
-      options
+      options,
     )} - ${endOfWeek.toLocaleDateString("en-US", {
       ...options,
       year: "numeric",
@@ -584,7 +600,7 @@
       th.innerHTML = `
            <div class="text-xs uppercase font-bold text-gray-400">${d.toLocaleDateString(
              "en-US",
-             { weekday: "short" }
+             { weekday: "short" },
            )}</div>
            <div class="text-lg font-bold">${d.getDate()}</div>
         `;
@@ -607,7 +623,7 @@
       line.className =
         "absolute w-full border-t border-gray-100 pointer-events-none";
       line.style.top = `${h * PIXELS_PER_HOUR}px`;
-      line.innerHTML = `<span class="text-[10px] text-gray-300 pl-1 absolute -top-2 pr-1 rounded">${h}:00</span>`;
+      // Removed time labels from side as requested
       bodyFlex.appendChild(line);
     }
 
@@ -704,7 +720,7 @@
     const labelOptions = { month: "short", day: "numeric" };
     const label = `${start.toLocaleDateString(
       "en-US",
-      labelOptions
+      labelOptions,
     )} - ${end.toLocaleDateString("en-US", {
       ...labelOptions,
       year: "numeric",
@@ -733,8 +749,8 @@
           const columnHighlight = isToday
             ? "bg-green-50 border-green-300"
             : inCurrentWeek
-            ? "bg-gray-50"
-            : "bg-white";
+              ? "bg-gray-50"
+              : "bg-white";
 
           const col = document.createElement("div");
           col.className = `border border-gray-100 min-h-[320px] flex flex-col ${columnHighlight}`;
@@ -742,7 +758,7 @@
             <div class="p-2 text-center border-b border-gray-100">
               <div class="text-xs font-semibold text-gray-500">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" }
+                { weekday: "short" },
               )}</div>
               <span class="text-lg font-bold block text-gray-800">${currentDay.getDate()}</span>
             </div>
@@ -833,7 +849,7 @@
               const current = new Date(
                 partsStart[0],
                 partsStart[1] - 1,
-                partsStart[2]
+                partsStart[2],
               );
               const end = new Date(partsEnd[0], partsEnd[1] - 1, partsEnd[2]);
 
@@ -882,7 +898,7 @@
               }">${currentDay.getDate()}</span>
               <span class="text-[11px] text-gray-400">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" }
+                { weekday: "short" },
               )}</span>
             </div>
             <div class="flex-1 p-2 space-y-2 overflow-y-auto" id="day-${dateStr}"></div>
@@ -961,8 +977,8 @@
         isToday
           ? "bg-[#65c027] text-white font-bold border border-[#65c027]"
           : inCurrentWeek
-          ? "bg-gray-200 text-gray-800 font-semibold"
-          : "text-gray-700"
+            ? "bg-gray-200 text-gray-800 font-semibold"
+            : "text-gray-700"
       }`;
       cell.textContent = i;
       cell.onclick = () => {
