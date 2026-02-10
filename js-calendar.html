@@ -411,10 +411,6 @@
     const top = (start / 60) * pph;
     const duration = (end - start) / 60;
 
-    // User wants same size for all shifts in week view
-    // Using a fixed height that matches pph or a minimum
-    const height = isWeek ? Math.max(pph, 32) : Math.max(duration * pph, 30);
-
     // Add suffixes based on perspective
     let displayName = clName;
     if (calendarPerspective === "client") {
@@ -424,37 +420,45 @@
     }
 
     const div = document.createElement("div");
-    div.className =
-      "absolute rounded border-l-4 shadow-sm p-1 cursor-pointer hover:z-50 hover:shadow-md transition-all flex flex-col justify-start overflow-hidden";
 
     if (isWeek) {
-      div.className += " border-l-2 p-0.5 justify-center";
-    }
+      // Flow layout for Week View
+      div.className =
+        "relative rounded border-l-4 shadow-sm p-1.5 cursor-pointer hover:shadow-md transition-all flex flex-col justify-center overflow-hidden w-full shrink-0 mb-1";
+      div.style.height = "52px"; // Increased height as requested
+      div.style.backgroundColor = color;
+      div.style.borderLeftColor = "rgba(0,0,0,0.3)";
+      div.style.color = "#1f2937";
 
-    div.style.top = `${top}px`;
-    div.style.height = `${height}px`;
-    div.style.backgroundColor = color;
-    div.style.borderLeftColor = "rgba(0,0,0,0.3)";
-    div.style.left = `${shift.left}%`;
-    div.style.width = `${shift.width}%`;
-    div.style.zIndex = shift.zIndex;
-    div.style.color = "#1f2937";
-
-    const totalHoursDisplay = calculateTotalHours(
-      shift.clockIn,
-      shift.clockOut,
-    );
-
-    if (isWeek) {
       div.innerHTML = `
-        <div class="font-bold text-[9px] truncate leading-tight">${displayName}</div>
-        <div class="text-[8px] truncate opacity-80 leading-tight">${shift.clockIn} - ${shift.clockOut}</div>
+        <div class="font-bold text-[10px] truncate leading-tight">${displayName}</div>
+        <div class="text-[9px] truncate opacity-80 leading-tight">${shift.clockIn} - ${shift.clockOut}</div>
+        <div class="text-[8px] truncate opacity-60 mt-0.5">${calculateTotalHours(
+          shift.clockIn,
+          shift.clockOut,
+        )}</div>
       `;
     } else {
+      // Absolute positioning for Day View
+      const height = Math.max(duration * pph, 30);
+      div.className =
+        "absolute rounded border-l-4 shadow-sm p-1 cursor-pointer hover:z-50 hover:shadow-md transition-all flex flex-col justify-start overflow-hidden";
+      div.style.top = `${top}px`;
+      div.style.height = `${height}px`;
+      div.style.backgroundColor = color;
+      div.style.borderLeftColor = "rgba(0,0,0,0.3)";
+      div.style.left = `${shift.left}%`;
+      div.style.width = `${shift.width}%`;
+      div.style.zIndex = shift.zIndex;
+      div.style.color = "#1f2937";
+
       div.innerHTML = `
         <div class="font-bold text-xs truncate">${displayName}</div>
         <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
-        <div class="text-[8px] truncate opacity-70 mt-0.5">${totalHoursDisplay}</div>
+        <div class="text-[8px] truncate opacity-70 mt-0.5">${calculateTotalHours(
+          shift.clockIn,
+          shift.clockOut,
+        )}</div>
       `;
     }
 
@@ -631,17 +635,7 @@
     scrollContainer.id = "week-scroll-container";
 
     const bodyFlex = document.createElement("div");
-    bodyFlex.className = "grid grid-cols-7 min-h-full relative";
-    bodyFlex.style.height = `${24 * PIXELS_PER_HOUR_WEEK}px`;
-
-    // Background Grid Lines
-    for (let h = 0; h < 24; h++) {
-      const line = document.createElement("div");
-      line.className =
-        "absolute w-full border-t border-gray-100 pointer-events-none";
-      line.style.top = `${h * PIXELS_PER_HOUR_WEEK}px`;
-      bodyFlex.appendChild(line);
-    }
+    bodyFlex.className = "grid grid-cols-7 min-h-full bg-gray-50/30";
 
     // Columns
     const dayCols = [];
@@ -652,8 +646,8 @@
       const isToday = isSameDate(d, new Date());
 
       const colDiv = document.createElement("div");
-      colDiv.className = `relative h-full border-r border-gray-100 ${
-        isToday ? "bg-green-50/5" : ""
+      colDiv.className = `relative h-full border-r border-gray-100 flex flex-col p-1 gap-1 ${
+        isToday ? "bg-green-50/10" : ""
       }`;
       colDiv.dataset.date = dateStr;
 
@@ -705,7 +699,7 @@
             col.appendChild(card);
           });
         });
-        scrollContainer.scrollTop = 8 * PIXELS_PER_HOUR_WEEK;
+        scrollContainer.scrollTop = 0;
       })
       .withFailureHandler((error) => {
         console.error("Error loading shifts:", error);
