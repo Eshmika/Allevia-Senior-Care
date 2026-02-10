@@ -1181,4 +1181,132 @@
     const modal = document.getElementById("shiftDetailsModal");
     if (modal) modal.classList.add("hidden");
   }
+
+  function downloadPDF() {
+    const calendarView = document.querySelector("#view-caregiver-calendar");
+    if (!calendarView) return;
+
+    // Show loading alert
+    Swal.fire({
+      title: "Preparing PDF...",
+      text: "Please wait while we generate your calendar document.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    // Create a container for the PDF content
+    const element = document.createElement("div");
+    element.className = "bg-white p-8 font-sans";
+    element.style.width = "1100px"; // Fixed width for better A4 landscape scaling
+
+    // Add Logo/Header
+    const labelDate = document.getElementById("currentWeekLabel").textContent;
+    const perspectiveName =
+      calendarPerspective === "caregiver" ? "Caregiver" : "Client";
+    const personName =
+      selectedPersonId === "all"
+        ? `All ${perspectiveName}s`
+        : document.querySelector("#personSelector option:checked")
+            ?.textContent || perspectiveName;
+
+    const header = document.createElement("div");
+    header.className =
+      "flex items-center justify-between mb-8 pb-4 border-b-2 border-[#65c027]";
+    header.innerHTML = `
+      <div class="flex items-center gap-2 text-[#65c027] font-bold text-3xl">
+        <i class="ph ph-heart-beat text-4xl"></i>
+        <div class="flex flex-col">
+          <span>Allevia Senior Care</span>
+          <span class="text-xs text-gray-400 font-normal uppercase tracking-widest">Premium Care Management</span>
+        </div>
+      </div>
+      <div class="text-right">
+        <h2 class="text-2xl font-bold text-gray-800">${labelDate}</h2>
+        <p class="text-lg font-semibold text-[#65c027]">${personName} Schedule</p>
+        <p class="text-xs text-gray-400 mt-1">Generated on: ${new Date().toLocaleString()}</p>
+      </div>
+    `;
+    element.appendChild(header);
+
+    // Clone the main calendar section (weekly grid)
+    const calendarMain = document
+      .querySelector("#view-caregiver-calendar .flex-1.flex.flex-col")
+      .cloneNode(true);
+
+    // Remove the interactive header (selectors, buttons) from the clone
+    const interactiveHeader = calendarMain.querySelector(
+      ".flex.items-center.justify-between.mb-4",
+    );
+    if (interactiveHeader) interactiveHeader.remove();
+
+    // Clean up the grid for print
+    const grid = calendarMain.querySelector("#weekGrid");
+    if (grid) {
+      grid.style.height = "auto";
+      grid.style.overflow = "visible";
+      grid.style.display = "grid";
+      grid.classList.remove("overflow-y-auto");
+
+      // Handle the scroll container if it exists (for Day/Week views)
+      const scrollContainer = grid.querySelector("#week-scroll-container");
+      if (scrollContainer) {
+        scrollContainer.style.height = "auto";
+        scrollContainer.style.overflow = "visible";
+        scrollContainer.classList.remove("overflow-y-auto");
+
+        const bodyFlex = scrollContainer.querySelector(".grid");
+        if (bodyFlex) {
+          bodyFlex.style.minHeight = "auto";
+        }
+      }
+    }
+
+    element.appendChild(calendarMain);
+
+    // Add a footer
+    const footer = document.createElement("div");
+    footer.className =
+      "mt-8 pt-4 border-t border-gray-100 text-center text-xs text-gray-400";
+    footer.innerHTML = `
+      <p>&copy; ${new Date().getFullYear()} Allevia Senior Care. All rights reserved.</p>
+    `;
+    element.appendChild(footer);
+
+    // Add temporary to body to ensure styles apply
+    element.style.position = "absolute";
+    element.style.left = "-9999px";
+    element.style.top = "0";
+    document.body.appendChild(element);
+
+    // Options for html2pdf
+    const opt = {
+      margin: 10,
+      filename: `Allevia_Schedule_${labelDate.replace(/[^a-z0-9]/gi, "_")}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        letterRendering: true,
+        logging: false,
+      },
+      jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+    };
+
+    // Run html2pdf
+    html2pdf()
+      .set(opt)
+      .from(element)
+      .save()
+      .then(() => {
+        document.body.removeChild(element);
+        Swal.close();
+      })
+      .catch((err) => {
+        console.error("PDF Error:", err);
+        document.body.removeChild(element);
+        Swal.fire("Error", "Failed to generate PDF: " + err.message, "error");
+      });
+  }
 </script>
