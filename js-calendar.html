@@ -324,6 +324,7 @@
 
   // --- TIME GRID HELPERS ---
   const PIXELS_PER_HOUR = 60;
+  const PIXELS_PER_HOUR_WEEK = 32;
 
   function parseTime(timeStr) {
     if (!timeStr) return null;
@@ -390,7 +391,7 @@
     }));
   }
 
-  function createTimeShiftCard(shift) {
+  function createTimeShiftCard(shift, pph = PIXELS_PER_HOUR) {
     const cg = cgData.find((c) => c.id === shift.caregiverId);
     const cl = clData.find((c) => c.id === shift.clientId);
     const cgName = cg ? cg.name : `${shift.caregiverId || "CG"}`;
@@ -406,9 +407,13 @@
     // If no valid time, use old card format
     if (start === null || end === null) return createShiftCard(shift);
 
-    const top = (start / 60) * PIXELS_PER_HOUR;
+    const isWeek = calendarViewMode === "week";
+    const top = (start / 60) * pph;
     const duration = (end - start) / 60;
-    const height = Math.max(duration * PIXELS_PER_HOUR, 30); // min 30px
+
+    // User wants same size for all shifts in week view
+    // Using a fixed height that matches pph or a minimum
+    const height = isWeek ? Math.max(pph, 32) : Math.max(duration * pph, 30);
 
     // Add suffixes based on perspective
     let displayName = clName;
@@ -421,6 +426,11 @@
     const div = document.createElement("div");
     div.className =
       "absolute rounded border-l-4 shadow-sm p-1 cursor-pointer hover:z-50 hover:shadow-md transition-all flex flex-col justify-start overflow-hidden";
+
+    if (isWeek) {
+      div.className += " border-l-2 p-0.5 justify-center";
+    }
+
     div.style.top = `${top}px`;
     div.style.height = `${height}px`;
     div.style.backgroundColor = color;
@@ -435,11 +445,18 @@
       shift.clockOut,
     );
 
-    div.innerHTML = `
-       <div class="font-bold text-xs truncate">${displayName}</div>
-       <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
-       <div class="text-[8px] truncate opacity-70 mt-0.5">${totalHoursDisplay}</div>
-    `;
+    if (isWeek) {
+      div.innerHTML = `
+        <div class="font-bold text-[9px] truncate leading-tight">${displayName}</div>
+        <div class="text-[8px] truncate opacity-80 leading-tight">${shift.clockIn} - ${shift.clockOut}</div>
+      `;
+    } else {
+      div.innerHTML = `
+        <div class="font-bold text-xs truncate">${displayName}</div>
+        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
+        <div class="text-[8px] truncate opacity-70 mt-0.5">${totalHoursDisplay}</div>
+      `;
+    }
 
     div.onclick = (e) => {
       e.stopPropagation();
@@ -594,15 +611,15 @@
       const isToday = isSameDate(d, new Date());
 
       const th = document.createElement("div");
-      th.className = `p-2 text-center ${
+      th.className = `p-1 text-center ${
         isToday ? "text-[#65c027] bg-green-50/20" : "text-gray-600"
       }`;
       th.innerHTML = `
-           <div class="text-xs uppercase font-bold text-gray-400">${d.toLocaleDateString(
+           <div class="text-[10px] uppercase font-bold text-gray-400">${d.toLocaleDateString(
              "en-US",
              { weekday: "short" },
            )}</div>
-           <div class="text-lg font-bold">${d.getDate()}</div>
+           <div class="text-sm font-bold">${d.getDate()}</div>
         `;
       headerRow.appendChild(th);
     }
@@ -615,15 +632,14 @@
 
     const bodyFlex = document.createElement("div");
     bodyFlex.className = "grid grid-cols-7 min-h-full relative";
-    bodyFlex.style.height = `${24 * PIXELS_PER_HOUR}px`;
+    bodyFlex.style.height = `${24 * PIXELS_PER_HOUR_WEEK}px`;
 
     // Background Grid Lines
     for (let h = 0; h < 24; h++) {
       const line = document.createElement("div");
       line.className =
         "absolute w-full border-t border-gray-100 pointer-events-none";
-      line.style.top = `${h * PIXELS_PER_HOUR}px`;
-      // Removed time labels from side as requested
+      line.style.top = `${h * PIXELS_PER_HOUR_WEEK}px`;
       bodyFlex.appendChild(line);
     }
 
@@ -637,7 +653,7 @@
 
       const colDiv = document.createElement("div");
       colDiv.className = `relative h-full border-r border-gray-100 ${
-        isToday ? "bg-green-50/10" : ""
+        isToday ? "bg-green-50/5" : ""
       }`;
       colDiv.dataset.date = dateStr;
 
@@ -685,11 +701,11 @@
           });
           const laidOut = layoutShifts(myShifts);
           laidOut.forEach((s) => {
-            const card = createTimeShiftCard(s);
+            const card = createTimeShiftCard(s, PIXELS_PER_HOUR_WEEK);
             col.appendChild(card);
           });
         });
-        scrollContainer.scrollTop = 8 * PIXELS_PER_HOUR;
+        scrollContainer.scrollTop = 8 * PIXELS_PER_HOUR_WEEK;
       })
       .withFailureHandler((error) => {
         console.error("Error loading shifts:", error);
@@ -697,8 +713,6 @@
         if (loader) {
           loader.textContent = "Error loading data";
           loader.classList.add("text-red-500");
-          // Optional: remove after delay? Or keep it to show error?
-          // Better to let user retry or see error.
         }
       })
       .getShifts(startStr, endStr);
