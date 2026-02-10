@@ -251,7 +251,7 @@
 
   function updateCalendarViewToggle() {
     const buttons = document.querySelectorAll(
-      "#calendarViewToggle .calendar-view-btn",
+      "#calendarViewToggle .calendar-view-btn"
     );
     buttons.forEach((btn) => {
       const isActive = btn.dataset.view === calendarViewMode;
@@ -308,7 +308,7 @@
 
     const totalHoursDisplay = calculateTotalHours(
       shift.clockIn,
-      shift.clockOut,
+      shift.clockOut
     );
 
     card.innerHTML = `
@@ -432,10 +432,12 @@
 
       div.innerHTML = `
         <div class="font-bold text-[10px] truncate leading-tight">${displayName}</div>
-        <div class="text-[9px] truncate opacity-80 leading-tight">${shift.clockIn} - ${shift.clockOut}</div>
+        <div class="text-[9px] truncate opacity-80 leading-tight">${
+          shift.clockIn
+        } - ${shift.clockOut}</div>
         <div class="text-[8px] truncate opacity-60 mt-0.5">${calculateTotalHours(
           shift.clockIn,
-          shift.clockOut,
+          shift.clockOut
         )}</div>
       `;
     } else {
@@ -454,10 +456,12 @@
 
       div.innerHTML = `
         <div class="font-bold text-xs truncate">${displayName}</div>
-        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${shift.clockOut}</div>
+        <div class="text-[10px] truncate opacity-80">${shift.clockIn} - ${
+        shift.clockOut
+      }</div>
         <div class="text-[8px] truncate opacity-70 mt-0.5">${calculateTotalHours(
           shift.clockIn,
-          shift.clockOut,
+          shift.clockOut
         )}</div>
       `;
     }
@@ -496,7 +500,7 @@
     headerRow.innerHTML = `
         <div class="text-xs uppercase text-gray-500 font-bold">${day.toLocaleDateString(
           "en-US",
-          { weekday: "long" },
+          { weekday: "long" }
         )}</div>
         <div class="text-2xl font-bold text-gray-800">${day.getDate()}</div>
     `;
@@ -594,7 +598,7 @@
     const options = { month: "short", day: "numeric" };
     const label = `${startOfWeek.toLocaleDateString(
       "en-US",
-      options,
+      options
     )} - ${endOfWeek.toLocaleDateString("en-US", {
       ...options,
       year: "numeric",
@@ -621,7 +625,7 @@
       th.innerHTML = `
            <div class="text-[10px] uppercase font-bold text-gray-400">${d.toLocaleDateString(
              "en-US",
-             { weekday: "short" },
+             { weekday: "short" }
            )}</div>
            <div class="text-sm font-bold">${d.getDate()}</div>
         `;
@@ -728,7 +732,7 @@
     const labelOptions = { month: "short", day: "numeric" };
     const label = `${start.toLocaleDateString(
       "en-US",
-      labelOptions,
+      labelOptions
     )} - ${end.toLocaleDateString("en-US", {
       ...labelOptions,
       year: "numeric",
@@ -757,8 +761,8 @@
           const columnHighlight = isToday
             ? "bg-green-50 border-green-300"
             : inCurrentWeek
-              ? "bg-gray-50"
-              : "bg-white";
+            ? "bg-gray-50"
+            : "bg-white";
 
           const col = document.createElement("div");
           col.className = `border border-gray-100 min-h-[320px] flex flex-col ${columnHighlight}`;
@@ -766,7 +770,7 @@
             <div class="p-2 text-center border-b border-gray-100">
               <div class="text-xs font-semibold text-gray-500">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</div>
               <span class="text-lg font-bold block text-gray-800">${currentDay.getDate()}</span>
             </div>
@@ -857,7 +861,7 @@
               const current = new Date(
                 partsStart[0],
                 partsStart[1] - 1,
-                partsStart[2],
+                partsStart[2]
               );
               const end = new Date(partsEnd[0], partsEnd[1] - 1, partsEnd[2]);
 
@@ -906,7 +910,7 @@
               }">${currentDay.getDate()}</span>
               <span class="text-[11px] text-gray-400">${currentDay.toLocaleDateString(
                 "en-US",
-                { weekday: "short" },
+                { weekday: "short" }
               )}</span>
             </div>
             <div class="flex-1 p-2 space-y-2 overflow-y-auto" id="day-${dateStr}"></div>
@@ -985,8 +989,8 @@
         isToday
           ? "bg-[#65c027] text-white font-bold border border-[#65c027]"
           : inCurrentWeek
-            ? "bg-gray-200 text-gray-800 font-semibold"
-            : "text-gray-700"
+          ? "bg-gray-200 text-gray-800 font-semibold"
+          : "text-gray-700"
       }`;
       cell.textContent = i;
       cell.onclick = () => {
@@ -1231,34 +1235,75 @@
     element.appendChild(header);
 
     // Clone the main calendar section (weekly grid)
-    const calendarMain = document
-      .querySelector("#view-caregiver-calendar .flex-1.flex.flex-col")
-      .cloneNode(true);
+    const originalMain = document.querySelector(
+      "#view-caregiver-calendar .flex-1.flex.flex-col"
+    );
+    if (!originalMain) {
+      Swal.close();
+      return;
+    }
+    const calendarMain = originalMain.cloneNode(true);
+
+    // FIX: Remove restrictive layout classes that cause 0 height in PDF
+    calendarMain.classList.remove(
+      "h-full",
+      "min-h-[600px]",
+      "lg:min-h-0",
+      "flex-1",
+      "flex",
+      "flex-col",
+      "overflow-hidden"
+    );
+    calendarMain.className += " block w-full"; // Ensure block layout
+    calendarMain.style.height = "auto";
+    calendarMain.style.minHeight = "600px"; // Force visual height
 
     // Remove the interactive header (selectors, buttons) from the clone
     const interactiveHeader = calendarMain.querySelector(
-      ".flex.items-center.justify-between.mb-4",
+      ".flex.items-center.justify-between.mb-4"
     );
     if (interactiveHeader) interactiveHeader.remove();
+
+    // Fix the inner container (the white box)
+    const gridContainer = calendarMain.querySelector(
+      ".bg-white.rounded-xl.shadow-sm.border"
+    );
+    if (gridContainer) {
+      gridContainer.classList.remove(
+        "flex-1",
+        "overflow-hidden",
+        "flex",
+        "flex-col",
+        "h-full"
+      );
+      gridContainer.style.height = "auto";
+      gridContainer.style.minHeight = "600px"; // Pass down min-height
+      gridContainer.style.overflow = "visible";
+      gridContainer.style.display = "block";
+    }
 
     // Clean up the grid for print
     const grid = calendarMain.querySelector("#weekGrid");
     if (grid) {
+      grid.classList.remove("flex-1", "overflow-y-auto", "h-full");
       grid.style.height = "auto";
+      grid.style.minHeight = "100%"; // Fill container
       grid.style.overflow = "visible";
       grid.style.display = "grid";
-      grid.classList.remove("overflow-y-auto");
 
-      // Handle the scroll container if it exists (for Day/Week views)
+      // Handle the scroll container - often present in Day/Week views
       const scrollContainer = grid.querySelector("#week-scroll-container");
       if (scrollContainer) {
         scrollContainer.style.height = "auto";
+        scrollContainer.style.minHeight = "600px";
         scrollContainer.style.overflow = "visible";
-        scrollContainer.classList.remove("overflow-y-auto");
-
+        scrollContainer.classList.remove("overflow-y-auto", "h-full", "flex-1");
+        // Also remove relative if it traps absolute positioning, but Dayview needs relative.
+        // WeekView bodyFlex:
         const bodyFlex = scrollContainer.querySelector(".grid");
         if (bodyFlex) {
-          bodyFlex.style.minHeight = "auto";
+          bodyFlex.style.minHeight = "600px";
+          bodyFlex.style.height = "auto";
         }
       }
     }
@@ -1290,6 +1335,7 @@
         useCORS: true,
         letterRendering: true,
         logging: false,
+        windowWidth: 1200, // Hint to html2canvas about viewport size
       },
       jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
     };
@@ -1305,7 +1351,7 @@
       })
       .catch((err) => {
         console.error("PDF Error:", err);
-        document.body.removeChild(element);
+        if (element.parentNode) document.body.removeChild(element);
         Swal.fire("Error", "Failed to generate PDF: " + err.message, "error");
       });
   }
