@@ -199,7 +199,7 @@ function getOrCreateClientSheet() {
       !currentHeaders.includes("Agreement Link")
     ) {
       const missingHeaders = additionalHeaders.filter(
-        (h) => !currentHeaders.includes(h)
+        (h) => !currentHeaders.includes(h),
       );
       if (missingHeaders.length > 0) {
         const startCol = currentHeaders.length + 1;
@@ -1197,5 +1197,59 @@ function processClientConversion(clientId) {
       success: true,
       message: "Client passed, but email failed: " + emailRes.message,
     };
+  }
+}
+
+function bypassClientAgreements(clientId, note) {
+  try {
+    const sheet = getOrCreateClientSheet();
+    const lastRow = sheet.getLastRow();
+    if (lastRow <= 1) return { success: false, message: "No clients found." };
+
+    const headers = sheet
+      .getRange(1, 1, 1, sheet.getLastColumn())
+      .getValues()[0];
+    const ids = sheet
+      .getRange(2, 1, lastRow - 1, 1)
+      .getValues()
+      .flat();
+    const rowIndex = ids.indexOf(clientId);
+    if (rowIndex === -1)
+      return { success: false, message: "Client not found." };
+
+    const bypassNoteText =
+      note && note.trim() ? note.trim() : "Paper one agreement signed.";
+
+    // Agreement columns (FF to FK):
+    // Agreement Link, Exhibit A Link, Exhibit B Link, Bill of Rights Link, HIPAA Link, Privacy Link
+    const agreementHeaders = [
+      "Agreement Link",
+      "Exhibit A Link",
+      "Exhibit B Link",
+      "Bill of Rights Link",
+      "HIPAA Link",
+      "Privacy Link",
+    ];
+
+    const rowNum = rowIndex + 2;
+    agreementHeaders.forEach((colName) => {
+      const colIdx = headers.indexOf(colName);
+      if (colIdx > -1) {
+        sheet.getRange(rowNum, colIdx + 1).setValue(bypassNoteText);
+      }
+    });
+
+    // Move to Stage 5: Convert Clients
+    const stageRes = updateClientStage(clientId, "Convert Clients");
+    if (!stageRes.success) {
+      return stageRes;
+    }
+
+    return {
+      success: true,
+      message: "Client agreements bypassed and moved to Convert Clients stage.",
+    };
+  } catch (err) {
+    return { success: false, message: err.toString() };
   }
 }

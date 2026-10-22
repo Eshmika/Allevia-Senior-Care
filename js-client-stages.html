@@ -204,25 +204,46 @@
           },
         ];
 
-        let docButtons = docs
-          .filter((doc) => doc.link)
-          .map(
-            (doc) => `
-            <a href="${doc.link}" target="_blank" title="View ${doc.name}" 
-               class="flex items-center justify-center w-8 h-8 rounded-lg bg-${doc.color}-50 text-${doc.color}-600 border border-${doc.color}-100 hover:bg-${doc.color}-100 hover:scale-105 transition-all shadow-sm">
-                <i class="ph-bold ph-${doc.icon}"></i>
-            </a>
-            `
-          )
-          .join("");
+        const isHttpUrl = (str) =>
+          typeof str === "string" && /^https?:\/\//i.test(str.trim());
 
-        if (!docButtons) {
-          docButtons = `<span class="text-xs text-gray-400 italic">No docs signed</span>`;
+        const hasBypassNote = docs.some(
+          (doc) => doc.link && !isHttpUrl(doc.link),
+        );
+
+        let docButtons = "";
+        if (hasBypassNote) {
+          const bypassText = (client.agreementLink || "Bypassed").replace(
+            /"/g,
+            "&quot;",
+          );
+          docButtons = `
+            <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-50 text-amber-700 border border-amber-200 text-xs font-semibold" title="${bypassText}">
+              <i class="ph-bold ph-note-pencil text-amber-600"></i>
+              <span>Bypassed: <span class="font-normal italic">${bypassText.length > 20 ? bypassText.substring(0, 20) + "..." : bypassText}</span></span>
+            </div>
+          `;
+        } else {
+          docButtons = docs
+            .filter((doc) => doc.link && isHttpUrl(doc.link))
+            .map(
+              (doc) => `
+              <a href="${doc.link}" target="_blank" title="View ${doc.name}" 
+                 class="flex items-center justify-center w-8 h-8 rounded-lg bg-${doc.color}-50 text-${doc.color}-600 border border-${doc.color}-100 hover:bg-${doc.color}-100 hover:scale-105 transition-all shadow-sm">
+                  <i class="ph-bold ph-${doc.icon}"></i>
+              </a>
+              `,
+            )
+            .join("");
+
+          if (!docButtons) {
+            docButtons = `<span class="text-xs text-gray-400 italic">No docs signed</span>`;
+          }
         }
 
         // Check if all documents are signed (have a link)
         const signedCount = docs.filter(
-          (doc) => doc.link && doc.link.trim() !== ""
+          (doc) => doc.link && isHttpUrl(doc.link),
         ).length;
         const allSigned = signedCount === 6;
 
@@ -241,6 +262,9 @@
                     ${docButtons}
                 </div>
                 ${passFailButtons}
+                <button onclick="bypassClientAgreement('${client.id}', '${(client.name || "").replace(/'/g, "\\'")}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 shadow-sm transition-all" style="background-color: #F39C12;" title="Bypass agreement signing with custom note">
+                    <i class="ph-bold ph-fast-forward"></i> Bypass
+                </button>
                 <div class="h-6 w-px bg-gray-300"></div>
                 <button onclick="resendIntakeEmail('${client.id}')" title="Resend Intake Email" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90" style="background-color: #607D8B;">
                     <i class="ph-bold ph-envelope-simple"></i>
@@ -405,7 +429,7 @@
               Swal.fire(
                 "Archived",
                 "Lead has been moved to archives.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -470,7 +494,7 @@
               Swal.fire(
                 "Archived",
                 "Assessment has been moved to archives.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -543,7 +567,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         const reason = document.querySelector(
-          'input[name="pendingReason"]:checked'
+          'input[name="pendingReason"]:checked',
         )?.value;
         const note = document.getElementById("pendingNote").value;
 
@@ -558,7 +582,7 @@
               Swal.fire(
                 "Pending",
                 `Status updated to Pending - ${reason}`,
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -613,7 +637,7 @@
     }).then((result) => {
       if (result.isConfirmed) {
         const reason = document.querySelector(
-          'input[name="denialReason"]:checked'
+          'input[name="denialReason"]:checked',
         )?.value;
         const note = document.getElementById("denialNote").value;
 
@@ -626,7 +650,7 @@
           Swal.fire(
             "Error",
             "Please add a note explaining the denial",
-            "error"
+            "error",
           );
           return;
         }
@@ -637,7 +661,7 @@
               Swal.fire(
                 "Denied",
                 "Client has been marked as Denied and archived.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -688,7 +712,7 @@
                       (emailRes.success
                         ? "Email sent!"
                         : "Warning: Email failed to send."),
-                    "success"
+                    "success",
                   );
                   loadClientStages();
                 })
@@ -718,7 +742,7 @@
           Swal.fire(
             "Sent!",
             "Intake packet email has been re-sent.",
-            "success"
+            "success",
           );
         } else {
           Swal.fire("Error", res.message, "error");
@@ -743,7 +767,7 @@
               Swal.fire(
                 "Restored",
                 "Client moved back to New Leads.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -771,7 +795,7 @@
               Swal.fire(
                 "Restored",
                 "Client moved back to Assessment.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -799,7 +823,7 @@
               Swal.fire(
                 "Restored",
                 "Client moved back to Insurance Verification.",
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -836,7 +860,7 @@
               Swal.fire(
                 "Restored",
                 `Client has been restored to ${targetStage}.`,
-                "success"
+                "success",
               );
               loadClientStages();
             } else {
@@ -925,7 +949,7 @@
               Swal.fire(
                 "Archived",
                 "Client failed agreements and archived.",
-                "info"
+                "info",
               );
               loadClientStages();
             } else {
@@ -933,6 +957,78 @@
             }
           })
           .archiveClient(clientId, note);
+      }
+    });
+  }
+
+  function bypassClientAgreement(clientId, clientName) {
+    Swal.fire({
+      title: `<div class="flex items-center justify-center gap-2 text-amber-600 font-bold text-lg"><i class="ph-bold ph-fast-forward text-2xl"></i> Bypass Client Agreements</div>`,
+      html: `
+        <div class="text-left text-sm text-gray-600 mb-3">
+          <p class="mb-2">Bypass agreement documents for <strong class="text-gray-800">${clientName || clientId}</strong> and move directly to <strong>Stage 5 (Convert Clients)</strong>.</p>
+          <p class="text-xs text-amber-700 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+            <i class="ph-bold ph-info"></i> Enter a note below (e.g., paper copy received, signed offline). This note will be recorded across the client's agreement columns.
+          </p>
+        </div>
+      `,
+      input: "textarea",
+      inputValue: "Paper one agreement signed.",
+      inputPlaceholder:
+        "e.g., Paper one agreement signed, signed in office, etc.",
+      inputAttributes: {
+        "aria-label": "Bypass agreement note",
+        style: "min-height: 85px; font-size: 13px;",
+      },
+      showCancelButton: true,
+      confirmButtonColor: "#F39C12",
+      cancelButtonColor: "#9E9E9E",
+      confirmButtonText:
+        '<i class="ph-bold ph-check-circle"></i> Submit & Move to Stage 5',
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return "Please enter a short note for the bypass record.";
+        }
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const note = result.value.trim();
+        Swal.fire({
+          title: "Bypassing Agreements...",
+          text: "Saving note and updating stage to Convert Clients",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        google.script.run
+          .withSuccessHandler((res) => {
+            if (res && res.success) {
+              Swal.fire({
+                icon: "success",
+                title: "Bypassed Successfully!",
+                text: res.message || "Moved to Stage 5.",
+                confirmButtonColor: "#1ABC9C",
+              });
+              loadClientStages();
+            } else {
+              Swal.fire(
+                "Error",
+                (res && res.message) || "Failed to bypass agreements.",
+                "error",
+              );
+            }
+          })
+          .withFailureHandler((err) => {
+            Swal.fire(
+              "Error",
+              err.message || "Server error occurred.",
+              "error",
+            );
+          })
+          .bypassClientAgreements(clientId, note);
       }
     });
   }

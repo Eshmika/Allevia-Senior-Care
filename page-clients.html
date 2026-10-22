@@ -1197,6 +1197,42 @@
             </a>
           </div>
           <div
+            id="cp-bypassNotice"
+            class="hidden mt-3 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl flex items-start gap-3 shadow-sm"
+          >
+            <div
+              class="w-9 h-9 rounded-lg bg-amber-500 text-white flex items-center justify-center flex-shrink-0 shadow-sm mt-0.5"
+            >
+              <i class="ph-bold ph-note-pencil text-lg"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <span
+                  class="text-xs font-bold text-amber-900 uppercase tracking-wide"
+                  >Agreement Bypassed / Offline Submission</span
+                >
+                <span
+                  class="text-[10px] font-semibold bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full"
+                  >Manual Note</span
+                >
+              </div>
+              <p class="text-xs text-amber-800 mt-1 leading-relaxed">
+                Agreements were confirmed offline (not submitted via online
+                Google Drive generation).
+              </p>
+              <div
+                class="mt-2 text-xs font-medium text-gray-700 bg-white/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-amber-200/60 inline-flex items-center gap-2 max-w-full"
+              >
+                <i class="ph-bold ph-chat-centered-text text-amber-600"></i>
+                <span class="text-gray-500 text-[11px]">Recorded Note:</span>
+                <span
+                  id="cp-bypassNoteText"
+                  class="text-amber-950 font-semibold break-all"
+                ></span>
+              </div>
+            </div>
+          </div>
+          <div
             id="cp-noDocuments"
             class="text-center text-gray-400 text-sm py-4"
           >
@@ -1510,7 +1546,11 @@
                 id="ce-weight"
                 class="input-field"
                 placeholder="lbs"
-                oninput="if(this.value.length > 3) this.value = this.value.slice(0,3); convertClientWeight(this)"
+                oninput="
+                  if (this.value.length > 3)
+                    this.value = this.value.slice(0, 3);
+                  convertClientWeight(this);
+                "
               />
               <span
                 id="ce-weight-kg"
@@ -2220,7 +2260,9 @@
                   ><input
                     type="checkbox"
                     value="Other"
-                    onchange="toggleOtherInput(this, 'ce-medHistory-other-container')"
+                    onchange="
+                      toggleOtherInput(this, 'ce-medHistory-other-container')
+                    "
                     class="rounded text-purple-600"
                   />
                   Other</label
@@ -2371,7 +2413,9 @@
                 name="assistDirections"
                 id="ce-assistDirections"
                 class="input-field"
-                onchange="toggleDetailInput(this, 'ce-assistDirections-detail', 'Yes')"
+                onchange="
+                  toggleDetailInput(this, 'ce-assistDirections-detail', 'Yes')
+                "
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
@@ -2535,7 +2579,9 @@
                     name="covidVaccine"
                     id="ce-covidVaccine"
                     class="input-field"
-                    onchange="toggleDetailInput(this, 'ce-covidVaccine-detail', 'Yes')"
+                    onchange="
+                      toggleDetailInput(this, 'ce-covidVaccine-detail', 'Yes')
+                    "
                   >
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -2557,7 +2603,9 @@
                     name="fluVaccine"
                     id="ce-fluVaccine"
                     class="input-field"
-                    onchange="toggleDetailInput(this, 'ce-fluVaccine-detail', 'Yes')"
+                    onchange="
+                      toggleDetailInput(this, 'ce-fluVaccine-detail', 'Yes')
+                    "
                   >
                     <option value="No">No</option>
                     <option value="Yes">Yes</option>
@@ -2649,7 +2697,9 @@
                     type="checkbox"
                     value="Other"
                     class="rounded"
-                    onchange="toggleOtherInput(this, 'ce-medAid-other-container')"
+                    onchange="
+                      toggleOtherInput(this, 'ce-medAid-other-container')
+                    "
                   />
                   Other</label
                 >
@@ -3677,7 +3727,13 @@
                     value="Other"
                     id="ce-careAccommodation-other-cb"
                     class="rounded text-purple-600"
-                    onchange="toggleDetailInput(this, 'ce-careAccommodation-other-container', 'Other')"
+                    onchange="
+                      toggleDetailInput(
+                        this,
+                        'ce-careAccommodation-other-container',
+                        'Other',
+                      )
+                    "
                   />
                   <span>Other:</span>
                 </label>
@@ -3819,7 +3875,9 @@
                 name="liveSenior"
                 id="ce-liveSenior"
                 class="input-field"
-                onchange="toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')"
+                onchange="
+                  toggleDetailInput(this, 'ce-liveSenior-detail', 'Yes')
+                "
               >
                 <option value="No">No</option>
                 <option value="Yes">Yes</option>
@@ -4369,7 +4427,12 @@
                   class="input-field"
                   placeholder="0000 0000 0000 0000"
                   maxlength="19"
-                  oninput="this.value = this.value.replace(/\D/g, '').replace(/(.{4})/g, '$1 ').trim()"
+                  oninput="
+                    this.value = this.value
+                      .replace(/\D/g, '')
+                      .replace(/(.{4})/g, '$1 ')
+                      .trim()
+                  "
                 />
               </div>
               <div>
@@ -4466,7 +4529,9 @@
                   id="ce-insuranceZip"
                   class="input-field"
                   maxlength="5"
-                  oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)"
+                  oninput="
+                    this.value = this.value.replace(/[^0-9]/g, '').slice(0, 5)
+                  "
                 />
               </div>
 

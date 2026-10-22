@@ -204,12 +204,12 @@
           </td>
           <td class="p-4">
             <span class="${codeStatusClass}" style="${codeStatusStyle}">${
-          row.codeStatus || "--"
-        }</span>
+              row.codeStatus || "--"
+            }</span>
           </td>
           <td class="p-4"><span class="px-2 py-1 rounded text-xs font-bold ${statusColor}" style="${statusStyle}">${
-          row.status
-        }</span></td>
+            row.status
+          }</span></td>
           <td class="p-4 text-right">
              <button onclick="loadClientProfile('${
                row.id
@@ -391,8 +391,8 @@
         data.clientApt,
         data.clientCity,
         data.clientState,
-        data.clientZip
-      )
+        data.clientZip,
+      ),
     );
     set(
       "cp-billingAddressFull",
@@ -401,8 +401,8 @@
         data.billingApt,
         data.billingCity,
         data.billingState,
-        data.billingZip
-      )
+        data.billingZip,
+      ),
     );
 
     // 4. Key Contacts
@@ -423,8 +423,8 @@
         data.emergencyApt,
         data.emergencyCity,
         data.emergencyState,
-        data.emergencyZip
-      )
+        data.emergencyZip,
+      ),
     );
 
     // Authorization
@@ -439,8 +439,8 @@
         data.authApt,
         data.authCity,
         data.authState,
-        data.authZip
-      )
+        data.authZip,
+      ),
     );
 
     // 5. Medical Status
@@ -451,17 +451,17 @@
     set(
       "cp-allergies",
       data.allergies +
-        (data.allergiesDetail ? ` (${data.allergiesDetail})` : "")
+        (data.allergiesDetail ? ` (${data.allergiesDetail})` : ""),
     );
     set(
       "cp-covidVaccine",
       data.covidVaccine +
-        (data.covidVaccineDetail ? ` (${data.covidVaccineDetail})` : "")
+        (data.covidVaccineDetail ? ` (${data.covidVaccineDetail})` : ""),
     );
     set(
       "cp-fluVaccine",
       data.fluVaccine +
-        (data.fluVaccineDetail ? ` (${data.fluVaccineDetail})` : "")
+        (data.fluVaccineDetail ? ` (${data.fluVaccineDetail})` : ""),
     );
 
     // Aids
@@ -491,7 +491,7 @@
       data.assistDirections +
         (data.assistDirectionsDetail
           ? `\nDetails: ${data.assistDirectionsDetail}`
-          : "")
+          : ""),
     );
 
     // Healthcare Providers
@@ -524,12 +524,12 @@
     set(
       "cp-careSmokePremises",
       data.careSmokePremises +
-        (data.careSmokeNote ? ` (${data.careSmokeNote})` : "")
+        (data.careSmokeNote ? ` (${data.careSmokeNote})` : ""),
     );
     set(
       "cp-careLiveIn",
       data.careLiveIn +
-        (data.careAccommodation ? ` - Accom: ${data.careAccommodation}` : "")
+        (data.careAccommodation ? ` - Accom: ${data.careAccommodation}` : ""),
     );
     set("cp-careSkills", data.careSkills);
 
@@ -565,11 +565,11 @@
       livingDetails.push(`Family: ${data.liveFamilyName}`);
     if (data.liveSenior === "Yes")
       livingDetails.push(
-        `Senior Housing: ${data.liveSeniorName} - ${data.liveSeniorAddress}`
+        `Senior Housing: ${data.liveSeniorName} - ${data.liveSeniorAddress}`,
       );
     if (data.liveRehab === "Yes")
       livingDetails.push(
-        `Rehab: ${data.liveRehabName} - ${data.liveRehabAddress}`
+        `Rehab: ${data.liveRehabName} - ${data.liveRehabAddress}`,
       );
     set("cp-liveDetails", livingDetails.join(" | "));
 
@@ -602,11 +602,11 @@
       set("cp-payBusinessName", data.payBusinessName);
       set(
         "cp-payAccountNum",
-        data.payAccountNum ? `****${data.payAccountNum.slice(-4)}` : "****"
+        data.payAccountNum ? `****${data.payAccountNum.slice(-4)}` : "****",
       );
       set(
         "cp-payRoutingNum",
-        data.payRoutingNum ? `****${data.payRoutingNum.slice(-4)}` : "****"
+        data.payRoutingNum ? `****${data.payRoutingNum.slice(-4)}` : "****",
       );
 
       // Show business name row if holder type is Business
@@ -632,7 +632,7 @@
         "cp-payCardNumber",
         data.payCardNumber
           ? `**** **** **** ${data.payCardNumber.slice(-4)}`
-          : "****"
+          : "****",
       );
       set("cp-payCardExpiry", data.payCardExpiry);
     } else if (payOpt.includes("cash") || payOpt.includes("check")) {
@@ -652,8 +652,8 @@
         data.insuranceApt,
         data.insuranceCity,
         data.insuranceState,
-        data.insuranceZip
-      )
+        data.insuranceZip,
+      ),
     );
     set("cp-insurancePolicy", data.insurancePolicy);
     set("cp-insuranceMemberId", data.insuranceMemberId);
@@ -663,7 +663,25 @@
     set("cp-insuranceContactPhone", data.insuranceContactPhone);
     set("cp-insuranceNote", data.insuranceAddNote);
 
-    // Document Links
+    // Document Links & Bypass Status Check
+    const rawLinks = [
+      data.agreementLink,
+      data.exhibitALink,
+      data.exhibitBLink,
+      data.billOfRightsLink,
+      data.hipaaLink,
+      data.privacyLink,
+    ];
+
+    const isHttpLink = (val) =>
+      typeof val === "string" && /^https?:\/\//i.test(val.trim());
+
+    // Check if any agreement field has content that is not a web link (e.g. bypass note)
+    const bypassNote = rawLinks.find(
+      (val) =>
+        val && typeof val === "string" && val.trim() !== "" && !isHttpLink(val),
+    );
+
     const docLinks = [
       { id: "cp-agreementLink", url: data.agreementLink },
       { id: "cp-exhibitALink", url: data.exhibitALink },
@@ -677,7 +695,7 @@
     docLinks.forEach((doc) => {
       const linkEl = document.getElementById(doc.id);
       if (linkEl) {
-        if (doc.url && doc.url.trim() !== "") {
+        if (doc.url && doc.url.trim() !== "" && isHttpLink(doc.url)) {
           linkEl.href = doc.url;
           linkEl.classList.remove("hidden");
           hasDocuments = true;
@@ -687,10 +705,24 @@
       }
     });
 
-    // Show/hide "no documents" message
+    // Handle bypass notice display
+    const bypassNoticeEl = document.getElementById("cp-bypassNotice");
+    const bypassNoteTextEl = document.getElementById("cp-bypassNoteText");
+    if (bypassNoticeEl) {
+      if (bypassNote) {
+        if (bypassNoteTextEl) {
+          bypassNoteTextEl.textContent = bypassNote;
+        }
+        bypassNoticeEl.classList.remove("hidden");
+      } else {
+        bypassNoticeEl.classList.add("hidden");
+      }
+    }
+
+    // Show/hide "no documents" message (only if neither Drive docs nor bypass note exist)
     const noDocsEl = document.getElementById("cp-noDocuments");
     if (noDocsEl) {
-      if (hasDocuments) {
+      if (hasDocuments || bypassNote) {
         noDocsEl.classList.add("hidden");
       } else {
         noDocsEl.classList.remove("hidden");
@@ -766,7 +798,7 @@
 
   function toggleEditClientDigitalInputs() {
     const type = document.querySelector(
-      'input[name="payDigitalType"]:checked'
+      'input[name="payDigitalType"]:checked',
     )?.value;
     const lbl = document.getElementById("ce-payDigitalValueLabel");
     if (lbl) {
@@ -899,7 +931,7 @@
       const langContainer = document.getElementById("ce-languages-container");
       if (langContainer) {
         const checkboxes = langContainer.querySelectorAll(
-          'input[type="checkbox"]'
+          'input[type="checkbox"]',
         );
         checkboxes.forEach((cb) => (cb.checked = false)); // Reset
 
@@ -983,7 +1015,7 @@
         toggleDetailInput(
           document.getElementById("ce-allergies"),
           "ce-allergies-detail",
-          "Yes"
+          "Yes",
         );
       }
 
@@ -998,7 +1030,7 @@
       const mentalSelect = document.getElementById("ce-mentalStatus");
       const mentalOtherInput = document.getElementById("ce-mentalStatus-other");
       const mentalOtherContainer = document.getElementById(
-        "ce-mental-other-container"
+        "ce-mental-other-container",
       );
       if (mentalSelect) {
         const mOpts = Array.from(mentalSelect.options).map((o) => o.value);
@@ -1030,7 +1062,7 @@
         toggleDetailInput(
           document.getElementById("ce-assistDirections"),
           "ce-assistDirections-detail",
-          "Yes"
+          "Yes",
         );
       }
 
@@ -1100,7 +1132,7 @@
         toggleDetailInput(
           document.getElementById("ce-covidVaccine"),
           "ce-covidVaccine-detail",
-          "Yes"
+          "Yes",
         );
       }
 
@@ -1110,7 +1142,7 @@
         toggleDetailInput(
           document.getElementById("ce-fluVaccine"),
           "ce-fluVaccine-detail",
-          "Yes"
+          "Yes",
         );
       }
 
@@ -1157,16 +1189,16 @@
 
         // Let's refine how we handle "Other" for accommodation if it mimics the mentalStatus pattern
         const accContainer = document.getElementById(
-          "ce-careAccommodation-container"
+          "ce-careAccommodation-container",
         );
         if (accContainer) {
           const otherCb = accContainer.querySelector('input[value="Other"]');
           if (otherCb && otherCb.checked) {
             const detailContainer = document.getElementById(
-              "ce-careAccommodation-other-container"
+              "ce-careAccommodation-other-container",
             );
             const detailInput = document.getElementById(
-              "ce-careAccommodation-other"
+              "ce-careAccommodation-other",
             );
             if (detailContainer) detailContainer.classList.remove("hidden");
             // Extract text: "Other: details" -> "details"
@@ -1382,7 +1414,7 @@
     ) {
       data.medicalHistory = data.medicalHistory.replace(
         "Other",
-        "Other: " + mhOther.value.trim()
+        "Other: " + mhOther.value.trim(),
       );
     }
 
@@ -1391,7 +1423,7 @@
     if (maOther && data.medicalAids.includes("Other") && maOther.value.trim()) {
       data.medicalAids = data.medicalAids.replace(
         "Other",
-        "Other: " + maOther.value.trim()
+        "Other: " + maOther.value.trim(),
       );
     }
 
@@ -1421,7 +1453,7 @@
     ) {
       data.careAccommodation = data.careAccommodation.replace(
         "Other",
-        "Other: " + accOther.value.trim()
+        "Other: " + accOther.value.trim(),
       );
     }
 
@@ -1429,7 +1461,7 @@
     const langContainer = document.getElementById("ce-languages-container");
     if (langContainer) {
       const checked = Array.from(
-        langContainer.querySelectorAll('input[type="checkbox"]:checked')
+        langContainer.querySelectorAll('input[type="checkbox"]:checked'),
       ).map((cb) => cb.value);
       // Check if 'Other' is checked
       if (checked.includes("Other")) {
@@ -1511,7 +1543,7 @@
         Swal.fire(
           "Error",
           "Please provide a note for 'Other' reason.",
-          "error"
+          "error",
         );
         return;
       }
@@ -1541,7 +1573,7 @@
           Swal.fire(
             "Success",
             "Client moved to archive successfully.",
-            "success"
+            "success",
           ).then(() => {
             switchClView("list");
             loadClientList();
@@ -1550,7 +1582,7 @@
           Swal.fire(
             "Error",
             res.message || "Failed to archive client.",
-            "error"
+            "error",
           );
         }
       })
@@ -1561,7 +1593,7 @@
         Swal.fire(
           "Error",
           "An unexpected error occurred: " + err.message,
-          "error"
+          "error",
         );
       })
       .archiveClient(clientId, finalReason);

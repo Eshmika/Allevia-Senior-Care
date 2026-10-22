@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <base target="_top" />
@@ -364,7 +364,8 @@
             >
             <? if (isPdf) { ?>
             <div class="w-full border-b border-gray-400 py-2 mb-4">
-              <?= [clientData.firstName, clientData.middleName, clientData.lastName].filter(Boolean).join(' ') ?>
+              <?= [clientData.firstName, clientData.middleName,
+              clientData.lastName].filter(Boolean).join(' ') ?>
             </div>
             <? } else { ?>
             <input
@@ -387,7 +388,7 @@
             <? if (isPdf) { ?>
             <div
               class="w-full border-b border-gray-400 py-2 mb-4"
-              style="font-family: 'Courier New', Courier, monospace"
+              style="font-family: &quot;Courier New&quot;, Courier, monospace"
             >
               <?= clientData.Signature || '' ?>
             </div>
@@ -461,7 +462,10 @@
                   src="https://drive.google.com/uc?export=download&id=11Oxbip4bK0lI_uZMtuKj3_pa7f3YZknW"
                   alt="Allevia Senior Care Signature"
                   class="w-full h-auto"
-                  onerror="this.src='https://lh3.googleusercontent.com/d/11Oxbip4bK0lI_uZMtuKj3_pa7f3YZknW'"
+                  onerror="
+                    this.src =
+                      'https://lh3.googleusercontent.com/d/11Oxbip4bK0lI_uZMtuKj3_pa7f3YZknW'
+                  "
                 />
               </div>
               <? } ?>
@@ -507,7 +511,7 @@
             .replace(/\s+/g, " ")
             .toLowerCase();
           const signatureInput = document.querySelector(
-            'input[name="signature"]'
+            'input[name="signature"]',
           );
           const signatureRaw = signatureInput.value.trim().replace(/\s+/g, " "); // Keep original case
           const signatureLower = signatureRaw.toLowerCase();
@@ -524,7 +528,7 @@
 
           // Build Sign Date string in Eastern Time (New York) for storage/display
           const dtLocalInput = document.querySelector(
-            'input[name="signDateLocal"]'
+            'input[name="signDateLocal"]',
           );
           let signDateEt = "";
           if (dtLocalInput && dtLocalInput.value) {
@@ -552,7 +556,7 @@
 
           // Store ET string in hidden field `signDate`
           const hiddenSignDate = document.querySelector(
-            'input[name="signDate"]'
+            'input[name="signDate"]',
           );
           if (hiddenSignDate) hiddenSignDate.value = signDateEt;
 
@@ -567,7 +571,7 @@
             .withSuccessHandler(function (response) {
               if (response.success) {
                 const clientId = document.querySelector(
-                  'input[name="clientId"]'
+                  'input[name="clientId"]',
                 ).value;
                 const targetUrl =
                   "<?= scriptUrl ?>?page=client-intake-steps&id=" + clientId;
