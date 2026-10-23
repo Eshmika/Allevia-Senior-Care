@@ -204,8 +204,11 @@
           },
         ];
 
-        const isHttpUrl = (str) =>
-          typeof str === "string" && (str.trim().toLowerCase().startsWith("http://") || str.trim().toLowerCase().startsWith("https://"));
+        const isHttpUrl = (str) => {
+          if (typeof str !== "string") return false;
+          const clean = str.trim().toLowerCase();
+          return clean.indexOf("http:") === 0 || clean.indexOf("https:") === 0;
+        };
 
         const hasBypassNote = docs.some(
           (doc) => doc.link && !isHttpUrl(doc.link),
@@ -262,7 +265,7 @@
                     ${docButtons}
                 </div>
                 ${passFailButtons}
-                <button onclick="bypassClientAgreement('${client.id}', '${(client.name || "").replace(/'/g, "\\'")}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 shadow-sm transition-all" style="background-color: #F39C12;" title="Bypass agreement signing with custom note">
+                <button onclick="bypassClientAgreement('${client.id}')" class="px-2 py-1 text-white rounded text-xs font-bold hover:opacity-90 flex items-center gap-1 shadow-sm transition-all" style="background-color: #F39C12;" title="Bypass agreement signing with custom note">
                     <i class="ph-bold ph-fast-forward"></i> Bypass
                 </button>
                 <div class="h-6 w-px bg-gray-300"></div>
@@ -965,6 +968,10 @@
   }
 
   function bypassClientAgreement(clientId, clientName) {
+    if (!clientName && typeof allClientsData !== "undefined") {
+      const found = allClientsData.find(c => c.id === clientId);
+      if (found) clientName = found.name;
+    }
     Swal.fire({
       title: `<div class="flex items-center justify-center gap-2 text-amber-600 font-bold text-lg"><i class="ph-bold ph-fast-forward text-2xl"></i> Bypass Client Agreements</div>`,
       html: `
