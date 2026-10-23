@@ -621,7 +621,9 @@ function getCaregiverList() {
     .filter((row) => row[0] !== "") // Filter ghosts
     .map((row) => ({
       id: row[0].trim(), // Exact text ID
-      name: row[1] + " " + row[2],
+      firstName: row[1] || "",
+      lastName: row[2] || "",
+      name: (row[1] + " " + row[2]).trim(),
       phone: row[3],
       email: row[4],
       title: row[5],
@@ -1041,4 +1043,67 @@ function archiveCaregiver(id, reason) {
   }
 
   return { success: true };
+}
+
+/**
+ * Updates First Name, Last Name, and Email for an Applicant / Caregiver in Stage 1.
+ */
+function updateCaregiverBasicApplicant(id, firstName, lastName, email) {
+  try {
+    if (!id) return { success: false, message: 'Caregiver ID is required.' };
+    var cleanFirst = String(firstName || '').trim();
+    var cleanLast = String(lastName || '').trim();
+    var cleanEmail = String(email || '').trim().toLowerCase();
+
+    if (!cleanFirst || !cleanLast) {
+      return { success: false, message: 'First Name and Last Name are required.' };
+    }
+    if (!cleanEmail || cleanEmail.indexOf('@') === -1) {
+      return { success: false, message: 'Please provide a valid email address.' };
+    }
+
+    var sheet = getOrCreateSheet();
+    var lastRow = sheet.getLastRow();
+    if (lastRow <= 1) return { success: false, message: 'No caregiver data found.' };
+
+    var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    var idIdx = headers.indexOf('Caregiver ID');
+    var firstIdx = headers.indexOf('First Name');
+    var lastIdx = headers.indexOf('Last Name');
+    var emailIdx = headers.indexOf('Email');
+    var reviewIdx = headers.indexOf('Last Reviewed');
+
+    if (idIdx === -1 || firstIdx === -1 || lastIdx === -1 || emailIdx === -1) {
+      return { success: false, message: 'Required columns not found in database.' };
+    }
+
+    var data = sheet.getRange(2, 1, lastRow - 1, sheet.getLastColumn()).getDisplayValues();
+    var searchId = String(id).trim().toUpperCase();
+    var targetRow = -1;
+
+    for (var i = 0; i < data.length; i++) {
+      var currentId = String(data[i][idIdx]).trim().toUpperCase();
+      var currentEmail = String(data[i][emailIdx]).trim().toLowerCase();
+      if (currentId === searchId) {
+        targetRow = i + 2;
+      } else if (currentEmail && currentEmail === cleanEmail) {
+        return { success: false, message: 'This email is already registered to caregiver ' + currentId + '.' };
+      }
+    }
+
+    if (targetRow === -1) {
+      return { success: false, message: 'Caregiver ID not found.' };
+    }
+
+    sheet.getRange(targetRow, firstIdx + 1).setValue(cleanFirst);
+    sheet.getRange(targetRow, lastIdx + 1).setValue(cleanLast);
+    sheet.getRange(targetRow, emailIdx + 1).setValue(cleanEmail);
+    if (reviewIdx > -1) {
+      sheet.getRange(targetRow, reviewIdx + 1).setValue(new Date());
+    }
+
+    return { success: true, message: 'Caregiver details updated successfully!' };
+  } catch (err) {
+    return { success: false, message: err.toString() };
+  }
 }
