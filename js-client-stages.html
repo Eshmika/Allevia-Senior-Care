@@ -1,5 +1,5 @@
 <script>
-  function toggleClientStage(stageId) {
+  window.toggleClientStage = function toggleClientStage(stageId) {
     const content = document.getElementById(`content-${stageId}`);
     const icon = document.getElementById(`icon-${stageId}`);
     if (content) {
@@ -13,7 +13,7 @@
 
   let allClientsData = [];
 
-  function loadClientStages() {
+  window.loadClientStages = function loadClientStages() {
     google.script.run
       .withSuccessHandler((clients) => {
         allClientsData = clients;
@@ -205,7 +205,7 @@
         ];
 
         const isHttpUrl = (str) =>
-          typeof str === "string" && /^https?:\/\//i.test(str.trim());
+          typeof str === "string" && (str.trim().toLowerCase().startsWith("http://") || str.trim().toLowerCase().startsWith("https://"));
 
         const hasBypassNote = docs.some(
           (doc) => doc.link && !isHttpUrl(doc.link),
@@ -356,18 +356,21 @@
       stages[stage].appendChild(row);
     });
 
-    document.getElementById("count-stage-new-leads").textContent =
-      counts["New leads"];
-    document.getElementById("count-stage-assessment").textContent =
-      counts["Assessment"];
-    document.getElementById("count-stage-insurance").textContent =
-      counts["Insurance Verification"];
-    document.getElementById("count-stage-agreements").textContent =
-      counts["Client Agreements"];
-    document.getElementById("count-stage-converted").textContent =
-      counts["Convert Clients"];
-    document.getElementById("count-stage-archives").textContent =
-      counts["Archived"];
+    const countNewLeads = document.getElementById("count-stage-new-leads");
+    const countAssessment = document.getElementById("count-stage-assessment");
+    const countInsurance = document.getElementById("count-stage-insurance");
+    const countAgreements = document.getElementById("count-stage-agreements");
+    const countConverted = document.getElementById("count-stage-converted");
+    const countArchives = document.getElementById("count-stage-archives");
+
+    if (countNewLeads) countNewLeads.textContent = counts["New leads"];
+    if (countAssessment) countAssessment.textContent = counts["Assessment"];
+    if (countInsurance)
+      countInsurance.textContent = counts["Insurance Verification"];
+    if (countAgreements)
+      countAgreements.textContent = counts["Client Agreements"];
+    if (countConverted) countConverted.textContent = counts["Convert Clients"];
+    if (countArchives) countArchives.textContent = counts["Archived"];
 
     // Handle empty search results for archives
     if (
