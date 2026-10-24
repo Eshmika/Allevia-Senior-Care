@@ -49,7 +49,7 @@ const SHIFT_HISTORY_COLUMNS = [
 function ensureShiftSheetHeaders(sheet) {
   const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
   const missingHeaders = SHIFT_HISTORY_COLUMNS.filter(
-    (header) => !headers.includes(header)
+    (header) => !headers.includes(header),
   );
 
   if (missingHeaders.length > 0) {
@@ -78,7 +78,7 @@ function saveShiftHistoryPayPeriodSetting(mode) {
 
   PropertiesService.getScriptProperties().setProperty(
     SHIFT_HISTORY_SETTING_KEY,
-    normalized
+    normalized,
   );
 
   return { payPeriodMode: normalized };
@@ -152,7 +152,7 @@ function pad2(value) {
 function toDateKey(dateValue) {
   if (!(dateValue instanceof Date)) return "";
   return `${dateValue.getFullYear()}-${pad2(dateValue.getMonth() + 1)}-${pad2(
-    dateValue.getDate()
+    dateValue.getDate(),
   )}`;
 }
 
@@ -205,11 +205,11 @@ function getShiftHistoryPeriod(anchorDate, payPeriodMode) {
     label: `${Utilities.formatDate(
       periodStart,
       Session.getScriptTimeZone(),
-      "MMM d, yyyy"
+      "MMM d, yyyy",
     )} - ${Utilities.formatDate(
       periodEnd,
       Session.getScriptTimeZone(),
-      "MMM d, yyyy"
+      "MMM d, yyyy",
     )}`,
   };
 }
@@ -259,7 +259,7 @@ function buildShiftHistoryRows(
   clientMap,
   caregiverMap,
   settings,
-  filters
+  filters,
 ) {
   const timeZone = Session.getScriptTimeZone();
   const searchTerm = String(filters.search || "")
@@ -271,7 +271,7 @@ function buildShiftHistoryRows(
 
   const filterCurrentPeriod = getShiftHistoryPeriod(
     new Date(),
-    settings.payPeriodMode
+    settings.payPeriodMode,
   );
 
   let filterPeriod;
@@ -303,7 +303,7 @@ function buildShiftHistoryRows(
       Number(startParts[0]) || 0,
       Number(startParts[1]) || 0,
       0,
-      0
+      0,
     );
     let endTime = new Date(originalEndDate || originalStartDate);
     endTime.setHours(Number(endParts[0]) || 0, Number(endParts[1]) || 0, 0, 0);
@@ -351,7 +351,7 @@ function buildShiftHistoryRows(
       };
       const hours = Math.max(
         0,
-        (segment.segmentEnd - segment.segmentStart) / (1000 * 60 * 60)
+        (segment.segmentEnd - segment.segmentStart) / (1000 * 60 * 60),
       );
       const invoiceTotal = (Number(shift.totalClientPrice) || 0).toFixed(2);
       const systemCheck = buildSystemCheckLabel({
@@ -364,11 +364,11 @@ function buildShiftHistoryRows(
       // Always fix the Invoice ID to the biweekly pay period boundary of the shift
       const trueBiweeklyPeriod = getShiftHistoryPeriod(
         segment.segmentStart,
-        "Biweekly"
+        "Biweekly",
       );
       const generatedInvoiceId = buildInvoiceId(
         trueBiweeklyPeriod.start,
-        trueBiweeklyPeriod.end
+        trueBiweeklyPeriod.end,
       );
 
       rows.push({
@@ -382,12 +382,12 @@ function buildShiftHistoryRows(
         payPeriodStart: Utilities.formatDate(
           trueBiweeklyPeriod.start,
           timeZone,
-          "yyyy-MM-dd"
+          "yyyy-MM-dd",
         ),
         payPeriodEnd: Utilities.formatDate(
           trueBiweeklyPeriod.end,
           timeZone,
-          "yyyy-MM-dd"
+          "yyyy-MM-dd",
         ),
         segmentNumber: segment.segmentNumber,
         errorFlag,
@@ -492,7 +492,7 @@ function buildShiftHistoryRows(
   const periodLabel = `${Utilities.formatDate(
     filterPeriod.start,
     timeZone,
-    "MMM d, yyyy"
+    "MMM d, yyyy",
   )} - ${Utilities.formatDate(filterPeriod.end, timeZone, "MMM d, yyyy")}`;
   const currentPeriod = getCurrentBiweeklyPeriod(new Date());
 
@@ -532,7 +532,7 @@ function buildShiftHistoryRows(
           totalSoftcare: 0,
           totalMileage: 0,
           hours: 0,
-        }
+        },
       );
     })(),
   };
@@ -561,7 +561,7 @@ function getShiftHistory(data) {
         start: Utilities.formatDate(
           currentPeriod.start,
           timeZone,
-          "yyyy-MM-dd"
+          "yyyy-MM-dd",
         ),
         end: Utilities.formatDate(currentPeriod.end, timeZone, "yyyy-MM-dd"),
         label: currentPeriod.label,
@@ -609,7 +609,7 @@ function getShiftHistory(data) {
           ? Utilities.formatDate(
               record["Start Date"],
               Session.getScriptTimeZone(),
-              "yyyy-MM-dd"
+              "yyyy-MM-dd",
             )
           : String(record["Start Date"] || ""),
       endDate:
@@ -617,32 +617,32 @@ function getShiftHistory(data) {
           ? Utilities.formatDate(
               record["End Date"],
               Session.getScriptTimeZone(),
-              "yyyy-MM-dd"
+              "yyyy-MM-dd",
             )
           : String(record["End Date"] || ""),
       schedIn: parseTo24HourTime(
-        displayRecord["Schedule In"] || record["Schedule In"] || ""
+        displayRecord["Schedule In"] || record["Schedule In"] || "",
       ),
       schedOut: parseTo24HourTime(
-        displayRecord["Schedule Out"] || record["Schedule Out"] || ""
+        displayRecord["Schedule Out"] || record["Schedule Out"] || "",
       ),
       payableTimeIn: parseTo24HourTime(
-        displayRecord["Payable In"] || record["Payable In"]
+        displayRecord["Payable In"] || record["Payable In"],
       ),
       payableTimeOut: parseTo24HourTime(
-        displayRecord["Payable Out"] || record["Payable Out"]
+        displayRecord["Payable Out"] || record["Payable Out"],
       ),
       billableTimeIn: parseTo24HourTime(
-        displayRecord["Billable In"] || record["Billable In"]
+        displayRecord["Billable In"] || record["Billable In"],
       ),
       billableTimeOut: parseTo24HourTime(
-        displayRecord["Billable Out"] || record["Billable Out"]
+        displayRecord["Billable Out"] || record["Billable Out"],
       ),
       clockIn: parseTo24HourTime(
-        displayRecord["Clock In"] || record["Clock In"]
+        displayRecord["Clock In"] || record["Clock In"],
       ),
       clockOut: parseTo24HourTime(
-        displayRecord["Clock Out"] || record["Clock Out"]
+        displayRecord["Clock Out"] || record["Clock Out"],
       ),
       billingType: record["Billing Type"],
       serviceType: record["Service Type"],
@@ -683,7 +683,7 @@ function getShiftHistory(data) {
     {
       payPeriodMode: getShiftHistoryPayPeriodSetting(),
     },
-    data || {}
+    data || {},
   );
 }
 
@@ -747,7 +747,7 @@ function getOrCreateShiftSheet() {
       .getValues()[0];
 
     const missingHeaders = additionalHeaders.filter(
-      (h) => !currentHeaders.includes(h)
+      (h) => !currentHeaders.includes(h),
     );
     if (missingHeaders.length > 0) {
       const startCol = currentHeaders.length + 1;
@@ -837,7 +837,7 @@ function getShifts(startDateStr, endDateStr) {
         endDateOutput = Utilities.formatDate(
           endDateVal,
           timeZone,
-          "yyyy-MM-dd"
+          "yyyy-MM-dd",
         );
       } else if (
         typeof endDateVal === "string" &&
@@ -913,7 +913,7 @@ function saveShift(data) {
     const formattedDate = Utilities.formatDate(
       date,
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd"
+      "yyyy-MM-dd",
     );
 
     // Calculate End Date for this specific shift instance
@@ -921,7 +921,7 @@ function saveShift(data) {
     const originalStart = new Date(
       startParts[0],
       startParts[1] - 1,
-      startParts[2]
+      startParts[2],
     );
 
     const endParts = data.endDate.split("-");
@@ -934,7 +934,7 @@ function saveShift(data) {
     const formattedEndDate = Utilities.formatDate(
       thisEndDate,
       Session.getScriptTimeZone(),
-      "yyyy-MM-dd"
+      "yyyy-MM-dd",
     );
 
     const row = [
@@ -970,7 +970,7 @@ function saveShift(data) {
     const invoicePeriod = getShiftHistoryPeriod(date, "Biweekly");
     const generatedInvoiceId = buildInvoiceId(
       invoicePeriod.start,
-      invoicePeriod.end
+      invoicePeriod.end,
     );
 
     const metaUpdates = {
@@ -1151,6 +1151,8 @@ function updateVisitDetails(payload) {
   }
 
   const updateMap = {
+    "Start Date": payload.startDate,
+    "End Date": payload.endDate,
     "Schedule In": payload.schedIn,
     "Schedule Out": payload.schedOut,
     "Payable In": payload.payableIn,
@@ -1197,7 +1199,7 @@ function processShiftAction(
   personType,
   action,
   specificShiftId,
-  actionInvoiceId
+  actionInvoiceId,
 ) {
   if (action === "Review") {
     // Return a message that directs them to the web app login

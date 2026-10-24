@@ -9,7 +9,7 @@
         data
           .filter(
             (item) =>
-              item.stage === "Convert Clients" && item.status === "Active"
+              item.stage === "Convert Clients" && item.status === "Active",
           )
           .forEach((item) => {
             html += `<option value="${item.id}">${item.name}</option>`;
@@ -44,12 +44,7 @@
     // Reset form state slightly
     resetShiftFormState();
 
-    // Default start date to today to prevent past dates and set min
-    const todayStr = new Date().toISOString().split("T")[0];
-    const startDateInput = document.querySelector('input[name="startDate"]');
-    const endDateInput = document.querySelector('input[name="endDate"]');
-    if (startDateInput) startDateInput.setAttribute("min", todayStr);
-    if (endDateInput) endDateInput.setAttribute("min", todayStr);
+    // Start and End dates can be selected for past, present, or future days
   }
 
   function resetShiftFormState() {
@@ -93,22 +88,22 @@
     if (clientLabel)
       clientLabel.innerHTML = clientLabel.innerHTML.replace(
         / <i class="ph ph-lock.*"><\/i>/g,
-        ""
+        "",
       );
     if (cgLabel)
       cgLabel.innerHTML = cgLabel.innerHTML.replace(
         / <i class="ph ph-lock.*"><\/i>/g,
-        ""
+        "",
       );
     if (clockInLabel)
       clockInLabel.innerHTML = clockInLabel.innerHTML.replace(
         / <i class="ph ph-lock.*"><\/i>/g,
-        ""
+        "",
       );
     if (clockOutLabel)
       clockOutLabel.innerHTML = clockOutLabel.innerHTML.replace(
         / <i class="ph ph-lock.*"><\/i>/g,
-        ""
+        "",
       );
 
     // Show repeat options again if hid
@@ -270,7 +265,7 @@
   function submitShift(
     e,
     confirmedOverlap = false,
-    secondCaregiverPolicy = null
+    secondCaregiverPolicy = null,
   ) {
     if (e) e.preventDefault();
     const btn = document.getElementById("btnSaveShift");
@@ -286,26 +281,10 @@
     if (!data.caregiverId)
       data.caregiverId = document.getElementById("shiftCaregiver").value;
 
-    // Validate past dates for new shifts
     const isUpdate = !!data.shiftId;
-    if (!isUpdate) {
-      if (!data.startDate) {
-        Swal.fire("Warning", "Start date is required.", "warning");
-        return;
-      }
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      const parts = data.startDate.split("-");
-      const sDate = new Date(parts[0], parts[1] - 1, parts[2]);
-      if (sDate < today) {
-        Swal.fire({
-          icon: "warning",
-          title: "Past Date Error",
-          text: "You cannot schedule a new shift in the past. Please select today or a future date.",
-          confirmButtonColor: "#3b82f6",
-        });
-        return;
-      }
+    if (!data.startDate) {
+      Swal.fire("Warning", "Start date is required.", "warning");
+      return;
     }
 
     // Add calculated values
@@ -362,7 +341,7 @@
               confirmButtonColor: "#f97316",
               preConfirm: () => {
                 const choice = document.querySelector(
-                  'input[name="overlapCharge"]:checked'
+                  'input[name="overlapCharge"]:checked',
                 ).value;
                 return choice;
               },
@@ -392,7 +371,7 @@
           data.clientId,
           data.startDate,
           data.clockIn,
-          data.clockOut
+          data.clockOut,
         );
       return;
     }
@@ -412,7 +391,7 @@
           isUpdate
             ? "Shift updated successfully!"
             : "Shift saved to history and sent for admin approval.",
-          "success"
+          "success",
         );
         resetShiftFormState();
         btn.disabled = false;
@@ -422,7 +401,7 @@
         Swal.fire(
           "Error",
           `Failed to ${isUpdate ? "update" : "save"} shift: ` + err.message,
-          "error"
+          "error",
         );
         btn.disabled = false;
         btn.innerHTML = originalText;

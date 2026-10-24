@@ -122,7 +122,7 @@
         Swal.fire(
           "Error",
           error?.message || "Unable to update pay period mode.",
-          "error"
+          "error",
         );
       })
       .saveShiftHistoryPayPeriodSetting(normalizedMode);
@@ -130,7 +130,7 @@
 
   function loadShiftHistoryLists() {
     const caregiverFilter = document.getElementById(
-      "shiftHistoryCaregiverFilter"
+      "shiftHistoryCaregiverFilter",
     );
     const clientFilter = document.getElementById("shiftHistoryClientFilter");
 
@@ -147,13 +147,13 @@
         const options = (caregivers || [])
           .filter((item) => item && item.id)
           .sort((a, b) =>
-            String(a.name || "").localeCompare(String(b.name || ""))
+            String(a.name || "").localeCompare(String(b.name || "")),
           )
           .map(
             (item) =>
               `<option value="${escapeHtml(item.id)}">${escapeHtml(
-                item.name || item.id
-              )}</option>`
+                item.name || item.id,
+              )}</option>`,
           )
           .join("");
 
@@ -168,13 +168,13 @@
         const options = (clients || [])
           .filter((item) => item && item.id)
           .sort((a, b) =>
-            String(a.name || "").localeCompare(String(b.name || ""))
+            String(a.name || "").localeCompare(String(b.name || "")),
           )
           .map(
             (item) =>
               `<option value="${escapeHtml(item.id)}">${escapeHtml(
-                item.name || item.id
-              )}</option>`
+                item.name || item.id,
+              )}</option>`,
           )
           .join("");
 
@@ -217,7 +217,7 @@
       .withSuccessHandler((payload) => {
         if (!payload) {
           throw new Error(
-            "Server returned null payload. Check if sheet data contains invalid types like unstringified Date objects."
+            "Server returned null payload. Check if sheet data contains invalid types like unstringified Date objects.",
           );
         }
         shiftHistoryState.loading = false;
@@ -247,7 +247,7 @@
 
   function resetShiftHistoryFilters() {
     const caregiverFilter = document.getElementById(
-      "shiftHistoryCaregiverFilter"
+      "shiftHistoryCaregiverFilter",
     );
     const clientFilter = document.getElementById("shiftHistoryClientFilter");
     const systemFilter = document.getElementById("shiftHistorySystemFilter");
@@ -281,17 +281,17 @@
       invoiceLabel.textContent = payload.rows?.[0]?.invoiceId || "Auto";
 
     document.getElementById("summaryTotalClient").textContent = formatCurrency(
-      payload.summary?.totalClient || 0
+      payload.summary?.totalClient || 0,
     );
     document.getElementById("summaryTotalCaregiver").textContent =
       formatCurrency(payload.summary?.totalCaregiver || 0);
     document.getElementById("summaryTotalAgency").textContent = formatCurrency(
-      payload.summary?.totalAgency || 0
+      payload.summary?.totalAgency || 0,
     );
     document.getElementById("summaryTotalSoftcare").textContent =
       formatCurrency(payload.summary?.totalSoftcare || 0);
     document.getElementById("summaryTotalMileage").textContent = formatCurrency(
-      payload.summary?.totalMileage || 0
+      payload.summary?.totalMileage || 0,
     );
     document.getElementById("summaryTotalHours").textContent = (
       payload.summary?.hours || 0
@@ -300,9 +300,9 @@
     thead.innerHTML = `
       <tr>${SHIFT_HISTORY_COLUMNS.map(
         (column) =>
-          `<th class="px-4 py-4 font-bold whitespace-nowrap">${column.label}</th>`
+          `<th class="px-4 py-4 font-bold whitespace-nowrap">${column.label}</th>`,
       ).join(
-        ""
+        "",
       )}<th class="px-4 py-4 font-bold whitespace-nowrap text-right">Actions</th></tr>
     `;
 
@@ -328,16 +328,16 @@
         return `
           <tr class="group hover:bg-gray-50/80 transition-colors">
             ${SHIFT_HISTORY_COLUMNS.map((column) =>
-              renderHistoryCell(column.key, row)
+              renderHistoryCell(column.key, row),
             ).join("")}
             <td class="px-4 py-4 whitespace-nowrap text-right">
               <div class="flex items-center justify-end gap-1.5 opacity-90 group-hover:opacity-100 transition-opacity">
                 <!-- Edit Action -->
                 <button type="button" title="Edit Shift Info" onclick='openShiftHistoryAction("edit", ${JSON.stringify(
-                  row
+                  row,
                 ).replace(
                   /'/g,
-                  "&#39;"
+                  "&#39;",
                 )})' class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-md transition-all text-xs font-bold uppercase tracking-wider">
                   <i class="ph ph-pencil-simple text-sm"></i>
                   <span class="hidden 2xl:inline">Edit</span>
@@ -346,8 +346,8 @@
                 <button type="button" title="Admin Approve For Invoice" onclick="toggleConfirmation(this, '${
                   row.shiftId
                 }', '${
-          approved ? "Confirmed" : "Unconfirmed"
-        }')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md ${approveBtnClass} hover:shadow-md transition-all text-xs font-bold uppercase tracking-wider">
+                  approved ? "Confirmed" : "Unconfirmed"
+                }')" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md ${approveBtnClass} hover:shadow-md transition-all text-xs font-bold uppercase tracking-wider">
                   <i class="ph ${approveIcon} text-sm"></i>
                   <span class="hidden 2xl:inline">${approveLabel}</span>
                 </button>
@@ -356,20 +356,20 @@
 
                 <!-- Resend Client -->
                 <button type="button" title="Resend Client Confirm" onclick='openShiftHistoryAction("resend_client", ${JSON.stringify(
-                  row
+                  row,
                 ).replace(
                   /'/g,
-                  "&#39;"
+                  "&#39;",
                 )})' class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-50 text-orange-600 hover:bg-orange-500 hover:text-white hover:shadow-md transition-all">
                   <i class="ph ph-user text-sm"></i>
                 </button>
 
                 <!-- Resend CG -->
                 <button type="button" title="Resend Caregiver Confirm" onclick='openShiftHistoryAction("resend_cg", ${JSON.stringify(
-                  row
+                  row,
                 ).replace(
                   /'/g,
-                  "&#39;"
+                  "&#39;",
                 )})' class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 hover:bg-purple-500 hover:text-white hover:shadow-md transition-all">
                   <i class="ph ph-stethoscope text-sm"></i>
                 </button>
@@ -378,19 +378,19 @@
 
                 <!-- PDF -->
                 <button type="button" title="Download PDF" onclick='openShiftHistoryAction("pdf", ${JSON.stringify(
-                  row
+                  row,
                 ).replace(
                   /'/g,
-                  "&#39;"
+                  "&#39;",
                 )})' class="flex items-center justify-center w-8 h-8 rounded-full bg-rose-50 text-rose-600 hover:bg-rose-500 hover:text-white hover:shadow-md transition-all">
                   <i class="ph ph-file-pdf text-sm"></i>
                 </button>
 
                 <button type="button" title="Delete Shift" onclick='openShiftHistoryAction("delete", ${JSON.stringify(
-                  row
+                  row,
                 ).replace(
                   /'/g,
-                  "&#39;"
+                  "&#39;",
                 )})' class="flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-600 hover:bg-red-600 hover:text-white hover:shadow-md transition-all">
                   <i class="ph ph-trash text-sm"></i>
                 </button>
@@ -408,7 +408,7 @@
     if (key === "errorFlag") {
       return `<td class="${base}">${renderBadge(
         value || "OK",
-        value ? "red" : "green"
+        value ? "red" : "green",
       )}</td>`;
     }
 
@@ -421,7 +421,7 @@
         value === "OK" ? "green" : value.includes("Missing") ? "red" : "amber";
       return `<td class="${base} whitespace-normal min-w-[180px]">${renderBadge(
         value || "OK",
-        tone
+        tone,
       )}</td>`;
     }
 
@@ -436,14 +436,14 @@
         </td>`;
       } else {
         return `<td class="${base} whitespace-normal min-w-[180px] max-w-[260px]"><div class="text-sm font-bold text-black">${escapeHtml(
-          value
+          value,
         )}</div></td>`;
       }
     }
 
     if (["scheduleNote", "adminNote"].includes(key)) {
       return `<td class="${base} whitespace-normal min-w-[180px] max-w-[260px]"><div class="text-sm text-gray-700">${escapeHtml(
-        value
+        value,
       )}</div></td>`;
     }
 
@@ -458,7 +458,7 @@
       ].includes(key)
     ) {
       return `<td class="${base} font-semibold text-gray-900">${formatCurrency(
-        value
+        value,
       )}</td>`;
     }
 
@@ -483,13 +483,13 @@
         displayTime = `${h12}:${parts[1]} ${ampm}`;
       }
       return `<td class="${base} font-medium text-gray-900">${escapeHtml(
-        displayTime
+        displayTime,
       )}</td>`;
     }
 
     if (["hours", "billableHours", "payableHours"].includes(key)) {
       return `<td class="${base} font-semibold text-gray-900">${escapeHtml(
-        String(value || "0.00")
+        String(value || "0.00"),
       )}</td>`;
     }
 
@@ -505,7 +505,7 @@
           <div class="inline-flex items-center gap-1.5 border-b-[2px] border-yellow-400 pb-0.5 group-hover:-translate-y-0.5 transition-all">
             <i class="ph-fill ph-clock text-yellow-500 text-[13px]"></i>
             <span class="text-yellow-700 font-bold text-[11px] uppercase tracking-wider">${escapeHtml(
-              vStr
+              vStr,
             )}</span>
           </div>`;
       } else if (lowerValue === "approved") {
@@ -513,7 +513,7 @@
           <div class="inline-flex items-center gap-1.5 border-b-[2px] border-emerald-400 pb-0.5 group-hover:-translate-y-0.5 transition-all">
             <i class="ph-fill ph-seal-check text-emerald-500 text-[13px]"></i>
             <span class="text-emerald-700 font-bold text-[11px] uppercase tracking-wider">${escapeHtml(
-              vStr
+              vStr,
             )}</span>
           </div>`;
       } else if (lowerValue === "confirm" || lowerValue === "confirmed") {
@@ -521,7 +521,7 @@
           <div class="inline-flex items-center gap-1.5 border-b-[2px] border-emerald-400 pb-0.5 group-hover:-translate-y-0.5 transition-all">
             <i class="ph-fill ph-check-circle text-emerald-500 text-[13px]"></i>
             <span class="text-emerald-700 font-bold text-[11px] uppercase tracking-wider">${escapeHtml(
-              vStr
+              vStr,
             )}</span>
           </div>`;
       } else if (lowerValue === "decline" || lowerValue === "declined") {
@@ -529,7 +529,7 @@
           <div class="inline-flex items-center gap-1.5 border-b-[2px] border-rose-400 pb-0.5 group-hover:-translate-y-0.5 transition-all">
             <i class="ph-fill ph-x-circle text-rose-500 text-[13px]"></i>
             <span class="text-rose-700 font-bold text-[11px] uppercase tracking-wider">${escapeHtml(
-              vStr
+              vStr,
             )}</span>
           </div>`;
       } else {
@@ -540,7 +540,7 @@
     }
 
     return `<td class="${base} text-gray-700">${escapeHtml(
-      String(value || "")
+      String(value || ""),
     )}</td>`;
   }
 
@@ -562,10 +562,10 @@
       text === "Paid"
         ? "green"
         : text === "Partially"
-        ? "amber"
-        : text === "Voided"
-        ? "gray"
-        : "orange";
+          ? "amber"
+          : text === "Voided"
+            ? "gray"
+            : "orange";
     return renderBadge(text || "Unpaid", tone);
   }
 
@@ -627,7 +627,7 @@
               Swal.fire(
                 "Sent!",
                 "Approval email has been resent to the client.",
-                "success"
+                "success",
               );
             })
             .withFailureHandler((err) => {
@@ -669,7 +669,7 @@
               Swal.fire(
                 "Sent!",
                 "Approval email has been resent to the caregiver.",
-                "success"
+                "success",
               );
             })
             .withFailureHandler((err) => {
@@ -691,8 +691,8 @@
         <div>Client: ${escapeHtml(row.clientName)}</div>
         <div>Caregiver: ${escapeHtml(row.caregiverName)}</div>
         <div>Period: ${escapeHtml(row.payPeriodStart)} to ${escapeHtml(
-        row.payPeriodEnd
-      )}</div>
+          row.payPeriodEnd,
+        )}</div>
         <div>Hours: ${escapeHtml(row.hours)}</div>
         <div>Invoice: ${escapeHtml(row.invoiceTotal)}</div>
       `;
@@ -734,7 +734,7 @@
             Swal.fire(
               "Error",
               err.message || "Unable to delete shift.",
-              "error"
+              "error",
             );
           })
           .deleteShift(row.shiftId);
@@ -755,7 +755,7 @@
         .map(
           (r) =>
             r.caregiverId ||
-            (r.caregiverName ? r.caregiverName.split(" / ")[1] : null)
+            (r.caregiverName ? r.caregiverName.split(" / ")[1] : null),
         )
         .filter(Boolean);
       ids = [...new Set(caregiverList)];
@@ -763,7 +763,7 @@
       const clientList = shiftHistoryState.rows
         .map(
           (r) =>
-            r.clientId || (r.clientName ? r.clientName.split(" / ")[1] : null)
+            r.clientId || (r.clientName ? r.clientName.split(" / ")[1] : null),
         )
         .filter(Boolean);
       ids = [...new Set(clientList)];
@@ -773,7 +773,7 @@
       Swal.fire(
         "No Data",
         `No valid ${type}s found in the current view.`,
-        "info"
+        "info",
       );
       return;
     }
@@ -816,7 +816,7 @@
               Swal.fire(
                 "Error",
                 res?.message || "Failed to send emails.",
-                "error"
+                "error",
               );
             }
           })
@@ -877,13 +877,13 @@
                 if (caregiverId) {
                   google.script.run.sendCaregiverShiftApprovals(
                     [caregiverId],
-                    row.shiftId
+                    row.shiftId,
                   );
                 }
                 if (clientId) {
                   google.script.run.sendClientShiftApprovals(
                     [clientId],
-                    row.shiftId
+                    row.shiftId,
                   );
                 }
 
@@ -926,7 +926,7 @@
               // Update the onclick handler to pass the new status
               buttonEl.setAttribute(
                 "onclick",
-                `toggleConfirmation(this, '${shiftId}', '${res.newStatus}')`
+                `toggleConfirmation(this, '${shiftId}', '${res.newStatus}')`,
               );
 
               // Update local state
@@ -944,7 +944,7 @@
               Swal.fire(
                 "Error",
                 res?.message || "Failed to update confirmation status.",
-                "error"
+                "error",
               );
             }
           })
@@ -1205,7 +1205,7 @@
       Swal.fire(
         "Required",
         "Schedule Reason is required when modifying payable or billable hours.",
-        "warning"
+        "warning",
       );
       document.getElementById("evScheduleReason").focus();
       return;
@@ -1214,6 +1214,10 @@
     // Prepare payload
     const payload = {
       shiftId: document.getElementById("evShiftId").value,
+      startDate: document.getElementById("evStartDate").value,
+      endDate:
+        document.getElementById("evEndDate").value ||
+        document.getElementById("evStartDate").value,
       payableIn: pIn,
       payableOut: pOut,
       billableIn: bIn,
@@ -1295,7 +1299,7 @@
         Swal.fire(
           "Saved",
           "Visit details updated successfully (Mock)",
-          "success"
+          "success",
         );
         appNavigate("shift-history");
       }, 1000);
