@@ -64,6 +64,31 @@
       </div>
     </div>
 
+    <!-- Mode (Weekly / Biweekly) -->
+    <div class="w-full md:col-span-2 xl:col-span-1">
+      <label class="block text-xs font-semibold text-gray-500 uppercase mb-1"
+        >Mode</label
+      >
+      <div class="flex items-center bg-gray-100 p-1 rounded-lg h-[38px]">
+        <button
+          id="invoiceModeWeeklyBtn"
+          onclick="setInvoicePayPeriodMode('Weekly')"
+          type="button"
+          class="px-2 py-1.5 text-[12px] font-bold rounded-md flex-1 bg-white shadow-sm text-[#65c027] transition-all flex items-center justify-center gap-1.5"
+        >
+          <span>Weekly</span>
+        </button>
+        <button
+          id="invoiceModeBiweeklyBtn"
+          onclick="setInvoicePayPeriodMode('Biweekly')"
+          type="button"
+          class="px-2 py-1.5 text-[12px] font-semibold rounded-md flex-1 text-gray-500 hover:text-gray-800 transition-all flex items-center justify-center gap-1.5"
+        >
+          <span>Biweekly</span>
+        </button>
+      </div>
+    </div>
+
     <!-- Payment Method -->
     <div class="w-full md:col-span-2 xl:col-span-1">
       <label class="block text-xs font-semibold text-gray-500 uppercase mb-1"
