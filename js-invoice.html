@@ -1,6 +1,6 @@
 <script>
   const invoiceState = {
-    payPeriodMode: "Weekly",
+    payPeriodMode: "Biweekly",
     period: null,
     rows: [],
     loading: false,
@@ -11,7 +11,7 @@
 
     google.script.run
       .withSuccessHandler((settings) => {
-        invoiceState.payPeriodMode = settings.payPeriodMode || "Weekly";
+        invoiceState.payPeriodMode = settings.payPeriodMode || "Biweekly";
         updateInvoicePayPeriodToggleUI(invoiceState.payPeriodMode);
         loadInvoiceLists();
         refreshInvoiceView();

@@ -41,7 +41,7 @@
   ];
 
   const shiftHistoryState = {
-    payPeriodMode: "Weekly",
+    payPeriodMode: "Biweekly",
     period: null,
     rows: [],
     summary: null,
@@ -51,7 +51,7 @@
   function loadShiftHistoryView() {
     google.script.run
       .withSuccessHandler((settings) => {
-        shiftHistoryState.payPeriodMode = settings.payPeriodMode || "Weekly";
+        shiftHistoryState.payPeriodMode = settings.payPeriodMode || "Biweekly";
         updatePayPeriodToggleUI(shiftHistoryState.payPeriodMode);
         loadShiftHistoryLists();
         refreshShiftHistory();

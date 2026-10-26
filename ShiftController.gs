@@ -67,7 +67,7 @@ function ensureShiftSheetHeaders(sheet) {
 function getShiftHistoryPayPeriodSetting() {
   const properties = PropertiesService.getScriptProperties();
   const savedMode = properties.getProperty(SHIFT_HISTORY_SETTING_KEY);
-  return savedMode === "Biweekly" ? "Biweekly" : "Weekly";
+  return savedMode === "Weekly" ? "Weekly" : "Biweekly";
 }
 
 function saveShiftHistoryPayPeriodSetting(mode) {
