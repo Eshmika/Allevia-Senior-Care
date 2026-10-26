@@ -326,7 +326,7 @@
         const approveLabel = approved ? "Approved" : "Approve";
 
         return `
-          <tr class="group hover:bg-gray-50/80 transition-colors">
+          <tr onclick="toggleShiftRowHighlight(this, event)" class="shift-history-row group hover:bg-gray-50/80 transition-colors cursor-pointer">
             ${SHIFT_HISTORY_COLUMNS.map((column) =>
               renderHistoryCell(column.key, row),
             ).join("")}
@@ -1304,5 +1304,17 @@
         appNavigate("shift-history");
       }, 1000);
     }
+  }
+
+  function toggleShiftRowHighlight(tr, event) {
+    // Do not toggle if the user clicked on a button, link, input or inside an action button
+    if (
+      event &&
+      event.target &&
+      event.target.closest("button, a, input, select, textarea")
+    ) {
+      return;
+    }
+    tr.classList.toggle("highlighted-shift-row");
   }
 </script>
