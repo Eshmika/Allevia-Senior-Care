@@ -576,6 +576,136 @@
     return String(status || "");
   }
 
+  function sendConfirmationEmailsFromInvoice() {
+    const rows = getVisibleInvoiceRows();
+    if (!rows.length) {
+      Swal.fire(
+        "No Data",
+        "There are no invoices in the current pay period to email.",
+        "info",
+      );
+      return;
+    }
+
+    const clientIds = [
+      ...new Set(
+        rows
+          .map((row) => row.clientId || splitInvoiceNameId(row.clientName)[1])
+          .filter((v) => v && v !== "--"),
+      ),
+    ];
+
+    const caregiverIds = [
+      ...new Set(
+        rows
+          .map(
+            (row) =>
+              row.caregiverId || splitInvoiceNameId(row.caregiverName)[1],
+          )
+          .filter((v) => v && v !== "--"),
+      ),
+    ];
+
+    if (!clientIds.length && !caregiverIds.length) {
+      Swal.fire(
+        "No Recipients",
+        "No clients or caregivers found in this pay period.",
+        "warning",
+      );
+      return;
+    }
+
+    const currentInvoiceId = rows.length ? rows[0].invoiceId : null;
+    const start = rows.length ? rows[0].payPeriodStart : null;
+    const end = rows.length ? rows[0].payPeriodEnd : null;
+
+    Swal.fire({
+      title: "Send Confirmation Emails?",
+      html: `<div class="text-left text-sm text-gray-600 space-y-2">
+        <p>This will send timesheet & invoice confirmation emails with invoice attachments for the current pay period to:</p>
+        <ul class="list-disc list-inside font-semibold text-gray-800 space-y-1 pl-2">
+          <li><strong>${clientIds.length}</strong> Client(s)</li>
+          <li><strong>${caregiverIds.length}</strong> Caregiver(s)</li>
+        </ul>
+        <p class="text-xs text-gray-500 pt-1">Any approval or action taken through the confirmation email will automatically apply to all shifts within each recipient invoice.</p>
+      </div>`,
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Yes, Send Confirmation Emails",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#65c027",
+    }).then((result) => {
+      if (!result.isConfirmed) return;
+
+      Swal.fire({
+        title: "Sending Confirmations...",
+        text: "Generating PDF invoices and sending emails. Please wait...",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      let clientSent = false;
+      let cgSent = false;
+      let errors = [];
+
+      const checkFinished = () => {
+        if (clientSent && cgSent) {
+          if (errors.length) {
+            Swal.fire("Notice", errors.join("<br>"), "warning");
+          } else {
+            Swal.fire(
+              "Sent!",
+              "Confirmation emails with invoice attachments sent to all clients and caregivers.",
+              "success",
+            );
+          }
+        }
+      };
+
+      // 1. Send Caregivers
+      if (caregiverIds.length) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            cgSent = true;
+            if (!res || !res.success)
+              errors.push(res?.message || "Caregivers send failed");
+            checkFinished();
+          })
+          .withFailureHandler((err) => {
+            cgSent = true;
+            errors.push("Caregivers error: " + err.message);
+            checkFinished();
+          })
+          .sendCaregiverShiftApprovals(
+            caregiverIds,
+            currentInvoiceId,
+            start,
+            end,
+          );
+      } else {
+        cgSent = true;
+      }
+
+      // 2. Send Clients
+      if (clientIds.length) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            clientSent = true;
+            if (!res || !res.success)
+              errors.push(res?.message || "Clients send failed");
+            checkFinished();
+          })
+          .withFailureHandler((err) => {
+            clientSent = true;
+            errors.push("Clients error: " + err.message);
+            checkFinished();
+          })
+          .sendClientShiftApprovals(clientIds, currentInvoiceId, start, end);
+      } else {
+        clientSent = true;
+      }
+    });
+  }
   function sendInvoiceEmails(type) {
     const rows = getVisibleInvoiceRows();
     if (!rows.length) {

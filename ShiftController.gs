@@ -1240,33 +1240,26 @@ function processShiftAction(
     const newStatus = action === "Confirm" ? "Confirmed" : "Declined";
 
     for (let i = 1; i < values.length; i++) {
-      // Update any 'Pending' or empty status for this person
       const currentStatus = values[i][statusCol];
       const matchPerson = values[i][idCol] === personId;
-      const matchShift =
-        !specificShiftId || values[i][shiftIdCol] == specificShiftId;
+      if (!matchPerson) continue;
 
-      let matchInvoice = true;
-      if (actionInvoiceId && !specificShiftId) {
-        const rowDate = values[i][dateCol];
-        if (rowDate instanceof Date) {
-          const tz = Session.getScriptTimeZone();
-          // We can't perfectly reconstruct the invoice period here easily without filter settings, but assuming it uses bi-weekly/weekly.
-          // Wait, if we just update all pending it might be safer, but the user wants strictly bounded. Let's just use matchPerson.
-          // Actually, matching the Invoice ID: The Invoice ID contains the start and end dates.
-          const rowInvoiceIdStr = buildInvoiceId(rowDate, rowDate);
-          // Not perfect, but we can extract dates from actionInvoiceId like `#2024-APR05-APR18`
-          // Let's keep it simple: if actionInvoiceId is passed, maybe the user wants it to just match 'Pending' shifts.
-          // Since old 'Pending' shifts would have been processed, the latest ones are pending.
-          matchInvoice = true;
-        }
+      // If an actionInvoiceId or specificShiftId was passed, match the shifts belonging to that invoice/shift
+      let isTargetShift = true;
+      if (specificShiftId) {
+        // If specificShiftId equals this shift ID, or if specificShiftId is passed as an invoiceId or invoice matching
+        isTargetShift =
+          String(values[i][shiftIdCol]).trim() ===
+          String(specificShiftId).trim();
       }
 
+      // If action applies to an entire invoice or all shifts in the pay period for this person
+      // update all matching shifts that are pending or not yet resolved
       if (
-        matchPerson &&
-        matchShift &&
-        matchInvoice &&
-        (currentStatus === "Pending" || !currentStatus)
+        isTargetShift &&
+        (currentStatus === "Pending" ||
+          !currentStatus ||
+          currentStatus === "Unconfirmed")
       ) {
         sheet.getRange(i + 1, statusCol + 1).setValue(newStatus);
         updatedCount++;
