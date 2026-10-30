@@ -23,7 +23,7 @@ function getInvoiceHistory(filters) {
   });
 
   const approvedRows = (history.rows || []).filter((row) =>
-    isShiftApprovedForInvoice(row)
+    isShiftApprovedForInvoice(row),
   );
 
   return {
@@ -68,7 +68,7 @@ function generateCaregiverInvoicePDF(startDate, endDate, caregiverId) {
     });
 
     const shiftRows = (history.rows || []).filter((row) =>
-      isShiftApprovedForInvoice(row)
+      isShiftApprovedForInvoice(row),
     );
     const shiftsData = [];
     let totalEarnings = 0;
@@ -110,7 +110,7 @@ function generateCaregiverInvoicePDF(startDate, endDate, caregiverId) {
     };
 
     const template = HtmlService.createTemplateFromFile(
-      "view-caregiver-invoice-pdf"
+      "view-caregiver-invoice-pdf",
     );
     template.data = templateData;
     const html = template.evaluate().getContent();
@@ -119,8 +119,8 @@ function generateCaregiverInvoicePDF(startDate, endDate, caregiverId) {
     blob.setName(
       `Earning_Statement_${cg.name.replace(
         /[^a-zA-Z0-9]/g,
-        "_"
-      )}_${startDate}.pdf`
+        "_",
+      )}_${startDate}.pdf`,
     );
 
     return {
@@ -168,10 +168,11 @@ function generateClientInvoicePDF(startDate, endDate, clientId) {
     });
 
     const shiftRows = (history.rows || []).filter((row) =>
-      isShiftApprovedForInvoice(row)
+      isShiftApprovedForInvoice(row),
     );
     const shiftsData = [];
     let totalDue = 0;
+    const invoiceId = shiftRows[0]?.invoiceId || "N/A";
 
     shiftRows.forEach((row) => {
       const rate = parseFloat(row.clientRate) || 0;
@@ -193,6 +194,7 @@ function generateClientInvoicePDF(startDate, endDate, clientId) {
     });
 
     const templateData = {
+      invoiceId: invoiceId,
       clientName: cl.name || "",
       clientId: cl.id || "",
       payPeriod: `${startDate} to ${endDate}`,
@@ -202,7 +204,7 @@ function generateClientInvoicePDF(startDate, endDate, clientId) {
     };
 
     const template = HtmlService.createTemplateFromFile(
-      "view-client-invoice-pdf"
+      "view-client-invoice-pdf",
     );
     template.data = templateData;
     const html = template.evaluate().getContent();
@@ -211,8 +213,8 @@ function generateClientInvoicePDF(startDate, endDate, clientId) {
     blob.setName(
       `Invoice_Receipt_${cl.name.replace(
         /[^a-zA-Z0-9]/g,
-        "_"
-      )}_${startDate}.pdf`
+        "_",
+      )}_${startDate}.pdf`,
     );
 
     return {
