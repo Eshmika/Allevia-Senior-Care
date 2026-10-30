@@ -361,14 +361,14 @@ function buildShiftHistoryRows(
       });
       const errorFlag = systemCheck === "OK" ? "" : systemCheck;
 
-      // Always fix the Invoice ID to the biweekly pay period boundary of the shift
-      const trueBiweeklyPeriod = getShiftHistoryPeriod(
+      // Determine pay period boundary according to current mode (Weekly / Biweekly)
+      const shiftPayPeriod = getShiftHistoryPeriod(
         segment.segmentStart,
-        "Biweekly",
+        settings.payPeriodMode,
       );
       const generatedInvoiceId = buildInvoiceId(
-        trueBiweeklyPeriod.start,
-        trueBiweeklyPeriod.end,
+        shiftPayPeriod.start,
+        shiftPayPeriod.end,
       );
 
       rows.push({
@@ -380,12 +380,12 @@ function buildShiftHistoryRows(
         invoiceStatus: shift.invoiceStatus || "Unpaid",
         payPeriodType: settings.payPeriodMode,
         payPeriodStart: Utilities.formatDate(
-          trueBiweeklyPeriod.start,
+          shiftPayPeriod.start,
           timeZone,
           "yyyy-MM-dd",
         ),
         payPeriodEnd: Utilities.formatDate(
-          trueBiweeklyPeriod.end,
+          shiftPayPeriod.end,
           timeZone,
           "yyyy-MM-dd",
         ),

@@ -2,6 +2,7 @@
   const invoiceState = {
     payPeriodMode: "Biweekly",
     period: null,
+    currentPeriod: null,
     rows: [],
     loading: false,
   };
@@ -214,6 +215,7 @@
         }
 
         invoiceState.period = payload.period || null;
+        invoiceState.currentPeriod = payload.currentPeriod || null;
         invoiceState.rows = payload.rows || [];
 
         const sDate = document.getElementById("invoiceStartDate");
@@ -478,6 +480,10 @@
           allowOutsideClick: false,
           didOpen: () => Swal.showLoading(),
         });
+        const periodDates = getCurrentInvoicePayPeriodDates(row);
+        const start = periodDates.start || row.payPeriodStart;
+        const end = periodDates.end || row.payPeriodEnd;
+
         google.script.run
           .withSuccessHandler(() =>
             Swal.fire(
@@ -489,15 +495,14 @@
           .withFailureHandler((err) =>
             Swal.fire("Error", err.message || "Unable to send email.", "error"),
           )
-          .sendClientShiftApprovals(
-            [clientId],
-            row.shiftId || "",
-            row.payPeriodStart,
-            row.payPeriodEnd,
-          );
+          .sendClientShiftApprovals([clientId], row.shiftId || "", start, end);
       } else if (result.isDenied) {
         if (!caregiverId || caregiverId === "--")
           return Swal.fire("Error", "No caregiver ID available.", "error");
+
+        const periodDates = getCurrentInvoicePayPeriodDates(row);
+        const start = periodDates.start || row.payPeriodStart;
+        const end = periodDates.end || row.payPeriodEnd;
 
         Swal.fire({
           title: "Sending to Caregiver...",
@@ -519,8 +524,8 @@
           .sendCaregiverShiftApprovals(
             [caregiverId],
             row.shiftId || "",
-            row.payPeriodStart,
-            row.payPeriodEnd,
+            start,
+            end,
           );
       }
     });
@@ -576,6 +581,30 @@
     return String(status || "");
   }
 
+  function getCurrentInvoicePayPeriodDates(fallbackRow) {
+    const sInput = document.getElementById("invoiceStartDate")?.value;
+    const eInput = document.getElementById("invoiceEndDate")?.value;
+    if (sInput && eInput) {
+      return { start: sInput, end: eInput };
+    }
+    if (invoiceState.period?.start && invoiceState.period?.end) {
+      return { start: invoiceState.period.start, end: invoiceState.period.end };
+    }
+    if (invoiceState.currentPeriod?.start && invoiceState.currentPeriod?.end) {
+      return {
+        start: invoiceState.currentPeriod.start,
+        end: invoiceState.currentPeriod.end,
+      };
+    }
+    if (fallbackRow?.payPeriodStart && fallbackRow?.payPeriodEnd) {
+      return {
+        start: fallbackRow.payPeriodStart,
+        end: fallbackRow.payPeriodEnd,
+      };
+    }
+    return { start: null, end: null };
+  }
+
   function sendConfirmationEmailsFromInvoice() {
     const rows = getVisibleInvoiceRows();
     if (!rows.length) {
@@ -616,8 +645,9 @@
     }
 
     const currentInvoiceId = rows.length ? rows[0].invoiceId : null;
-    const start = rows.length ? rows[0].payPeriodStart : null;
-    const end = rows.length ? rows[0].payPeriodEnd : null;
+    const periodDates = getCurrentInvoicePayPeriodDates(rows[0]);
+    const start = periodDates.start;
+    const end = periodDates.end;
 
     Swal.fire({
       title: "Send Confirmation Emails?",
@@ -762,8 +792,9 @@
           : "sendClientShiftApprovals";
 
       const currentInvoiceId = rows.length ? rows[0].invoiceId : null;
-      const start = rows.length ? rows[0].payPeriodStart : null;
-      const end = rows.length ? rows[0].payPeriodEnd : null;
+      const periodDates = getCurrentInvoicePayPeriodDates(rows[0]);
+      const start = periodDates.start;
+      const end = periodDates.end;
 
       google.script.run
         .withSuccessHandler((res) => {
@@ -786,6 +817,10 @@
 
   function downloadCaregiverPdfRow(row) {
     const cgId = row.caregiverId || splitInvoiceNameId(row.caregiverName)[1];
+    const periodDates = getCurrentInvoicePayPeriodDates(row);
+    const start = periodDates.start || row.payPeriodStart;
+    const end = periodDates.end || row.payPeriodEnd;
+
     Swal.fire({
       title: "Downloading Caregiver Statement...",
       allowOutsideClick: false,
@@ -802,11 +837,15 @@
         link.click();
       })
       .withFailureHandler((err) => Swal.fire("Error", err.message, "error"))
-      .generateCaregiverInvoicePDF(row.payPeriodStart, row.payPeriodEnd, cgId);
+      .generateCaregiverInvoicePDF(start, end, cgId);
   }
 
   function downloadClientPdfRow(row) {
     const clId = row.clientId || splitInvoiceNameId(row.clientName)[1];
+    const periodDates = getCurrentInvoicePayPeriodDates(row);
+    const start = periodDates.start || row.payPeriodStart;
+    const end = periodDates.end || row.payPeriodEnd;
+
     Swal.fire({
       title: "Downloading Client Invoice...",
       allowOutsideClick: false,
@@ -823,7 +862,7 @@
         link.click();
       })
       .withFailureHandler((err) => Swal.fire("Error", err.message, "error"))
-      .generateClientInvoicePDF(row.payPeriodStart, row.payPeriodEnd, clId);
+      .generateClientInvoicePDF(start, end, clId);
   }
 
   function invoiceRenderBadge(text, tone) {
