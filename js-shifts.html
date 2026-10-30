@@ -1,4 +1,63 @@
 <script>
+  function determineServiceType(
+    startDateStr,
+    endDateStr,
+    clockInStr,
+    clockOutStr,
+  ) {
+    if (!startDateStr) return null;
+
+    // Parse YYYY-MM-DD reliably without UTC offset issues
+    const [sY, sM, sD] = startDateStr.split("-").map(Number);
+    const startObj = new Date(sY, sM - 1, sD);
+    const startDay = startObj.getDay(); // 0 = Sunday, 6 = Saturday
+
+    const endStr = endDateStr || startDateStr;
+    const [eY, eM, eD] = endStr.split("-").map(Number);
+    const endObj = new Date(eY, eM - 1, eD);
+    const endDay = endObj.getDay();
+
+    // Check if shift starts on Sunday and extends into Monday
+    // Case 1: Start date is Sunday (0) and End date is Monday (1) or later
+    // Case 2: Start date is Sunday (0), End date is Sunday (0) or omitted, but clockOut < clockIn (spans past midnight to Monday morning)
+    const isSundayStart = startDay === 0;
+    const crossesToMonday =
+      (endDay === 1 && endObj.getTime() > startObj.getTime()) ||
+      (clockInStr &&
+        clockOutStr &&
+        clockOutStr < clockInStr &&
+        endObj.getTime() >= startObj.getTime());
+
+    if (isSundayStart && crossesToMonday) {
+      return "Weekday/Weekend";
+    }
+
+    // Normal weekend check: Saturday (6) or Sunday (0)
+    if (startDay === 0 || startDay === 6) {
+      return "Weekend";
+    }
+
+    // Otherwise Weekday (Monday 1 to Friday 5)
+    return "Weekday";
+  }
+
+  function autoSelectServiceType() {
+    const startDate = document.querySelector('input[name="startDate"]')?.value;
+    const endDate = document.querySelector('input[name="endDate"]')?.value;
+    const clockIn = document.getElementById("clockIn")?.value;
+    const clockOut = document.getElementById("clockOut")?.value;
+
+    const service = determineServiceType(startDate, endDate, clockIn, clockOut);
+    if (service) {
+      const serviceSelect = document.querySelector(
+        'select[name="serviceType"]',
+      );
+      if (serviceSelect) {
+        serviceSelect.value = service;
+      }
+    }
+  }
+
   function loadShiftView() {
     // Load Clients
     const clientSelect = document.getElementById("shiftClient");

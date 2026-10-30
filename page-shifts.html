@@ -50,6 +50,7 @@
             name="startDate"
             id="startDate"
             class="input-field"
+            onchange="autoSelectServiceType()"
             required
           />
         </div>
@@ -64,6 +65,7 @@
             name="endDate"
             id="endDate"
             class="input-field"
+            onchange="autoSelectServiceType()"
             required
           />
         </div>
@@ -76,7 +78,10 @@
             name="clockIn"
             id="clockIn"
             class="input-field"
-            onchange="calculateShiftHours()"
+            onchange="
+              calculateShiftHours();
+              autoSelectServiceType();
+            "
             required
           />
         </div>
@@ -89,7 +94,10 @@
             name="clockOut"
             id="clockOut"
             class="input-field"
-            onchange="calculateShiftHours()"
+            onchange="
+              calculateShiftHours();
+              autoSelectServiceType();
+            "
             required
           />
         </div>
@@ -123,6 +131,7 @@
             <select name="serviceType" class="input-field bg-white">
               <option value="Weekday">Weekday</option>
               <option value="Weekend">Weekend</option>
+              <option value="Weekday/Weekend">Weekday/Weekend</option>
             </select>
           </div>
           <div>

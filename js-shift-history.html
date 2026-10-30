@@ -914,6 +914,68 @@
 
   window._currentEditRow = null;
 
+  function determineShiftServiceType(
+    startDateStr,
+    endDateStr,
+    clockInStr,
+    clockOutStr,
+  ) {
+    if (!startDateStr) return null;
+
+    const [sY, sM, sD] = startDateStr.split("-").map(Number);
+    const startObj = new Date(sY, sM - 1, sD);
+    const startDay = startObj.getDay(); // 0 = Sun, 6 = Sat
+
+    const endStr = endDateStr || startDateStr;
+    const [eY, eM, eD] = endStr.split("-").map(Number);
+    const endObj = new Date(eY, eM - 1, eD);
+    const endDay = endObj.getDay();
+
+    const isSundayStart = startDay === 0;
+    const crossesToMonday =
+      (endDay === 1 && endObj.getTime() > startObj.getTime()) ||
+      (clockInStr &&
+        clockOutStr &&
+        clockOutStr < clockInStr &&
+        endObj.getTime() >= startObj.getTime());
+
+    if (isSundayStart && crossesToMonday) {
+      return "Weekday/Weekend";
+    }
+
+    if (startDay === 0 || startDay === 6) {
+      return "Weekend";
+    }
+
+    return "Weekday";
+  }
+
+  function autoSelectEditVisitServiceType() {
+    const startDate = document.getElementById("evStartDate")?.value;
+    const endDate = document.getElementById("evEndDate")?.value;
+    const clockIn =
+      document.getElementById("evPayableIn")?.value ||
+      document.getElementById("evClockIn")?.value ||
+      document.getElementById("evSchedIn")?.value;
+    const clockOut =
+      document.getElementById("evPayableOut")?.value ||
+      document.getElementById("evClockOut")?.value ||
+      document.getElementById("evSchedOut")?.value;
+
+    const service = determineShiftServiceType(
+      startDate,
+      endDate,
+      clockIn,
+      clockOut,
+    );
+    if (service) {
+      const select = document.getElementById("evService");
+      if (select) {
+        select.value = service;
+      }
+    }
+  }
+
   function populateEditShiftHistoryView(row) {
     if (!row) return;
     window._currentEditRow = row;
