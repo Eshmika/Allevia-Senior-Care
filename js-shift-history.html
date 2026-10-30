@@ -423,6 +423,26 @@
       )}</div></td>`;
     }
 
+    if (key === "startDate" || key === "endDate") {
+      let displayDate = value;
+      if (value && typeof value === "string") {
+        const parts = value.split("-");
+        if (parts.length === 3) {
+          const y = parseInt(parts[0], 10);
+          const m = parseInt(parts[1], 10) - 1;
+          const d = parseInt(parts[2], 10);
+          const dt = new Date(y, m, d);
+          if (!isNaN(dt.getTime())) {
+            const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+            displayDate = `${days[dt.getDay()]}, ${value}`;
+          }
+        }
+      }
+      return `<td class="${base} font-medium text-gray-900">${escapeHtml(
+        displayDate,
+      )}</td>`;
+    }
+
     if (
       [
         "clientRate",
