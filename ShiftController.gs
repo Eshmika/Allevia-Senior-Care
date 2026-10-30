@@ -216,10 +216,11 @@ function getShiftHistoryPeriod(anchorDate, payPeriodMode) {
 
 function buildInvoiceId(periodStart, periodEnd) {
   const tz = Session.getScriptTimeZone();
-  const startStr = Utilities.formatDate(periodStart, tz, "MMMdd").toUpperCase();
-  const endStr = Utilities.formatDate(periodEnd, tz, "MMMdd").toUpperCase();
-  const yearStr = Utilities.formatDate(periodStart, tz, "yyyy");
-  return `#${yearStr}-${startStr}-${endStr}`;
+  const yearStr = periodStart
+    ? Utilities.formatDate(periodStart, tz, "yyyy")
+    : String(new Date().getFullYear());
+  const random6 = Math.floor(100000 + Math.random() * 900000);
+  return `#${yearStr}-${random6}`;
 }
 
 function isShiftApprovedForInvoice(row) {
@@ -353,7 +354,38 @@ function buildShiftHistoryRows(
         0,
         (segment.segmentEnd - segment.segmentStart) / (1000 * 60 * 60),
       );
-      const invoiceTotal = (Number(shift.totalClientPrice) || 0).toFixed(2);
+
+      // Prorate pricing amounts for the specific segment hours
+      const cRate = Number(shift.clientRate) || 0;
+      const cgRate = Number(shift.caregiverRate) || 0;
+      const isFixed = String(shift.billingType || "").toLowerCase() === "fixed";
+
+      let segClient = 0;
+      let segCaregiver = 0;
+      let segAgency = 0;
+      let segSoftcare = 0;
+
+      if (isFixed) {
+        // If fixed rate, divide evenly across segments or use full price for segment 1
+        const totalDurationHours = Math.max(
+          0.01,
+          (endTime - startTime) / (1000 * 60 * 60),
+        );
+        const fraction = hours / totalDurationHours;
+        segClient = (Number(shift.totalClientPrice) || 0) * fraction;
+        segCaregiver = (Number(shift.totalCaregiverPrice) || 0) * fraction;
+        segAgency = (Number(shift.totalAgencyPrice) || 0) * fraction;
+        segSoftcare = (Number(shift.totalSoftcarePrice) || 0) * fraction;
+      } else {
+        // Hourly rate billing
+        segClient = cRate * hours;
+        segCaregiver = cgRate * hours;
+        const margin = Math.max(0, cRate - cgRate);
+        segAgency = margin * 0.8 * hours;
+        segSoftcare = margin * 0.2 * hours;
+      }
+
+      const invoiceTotal = segClient.toFixed(2);
       const systemCheck = buildSystemCheckLabel({
         clockIn: shift.clockIn,
         clockOut: shift.clockOut,
@@ -369,6 +401,13 @@ function buildShiftHistoryRows(
       const generatedInvoiceId = buildInvoiceId(
         shiftPayPeriod.start,
         shiftPayPeriod.end,
+      );
+
+      // Display date for the segment corresponds to the actual calendar day of that segment
+      const segmentDateStr = Utilities.formatDate(
+        segment.segmentStart,
+        timeZone,
+        "yyyy-MM-dd",
       );
 
       rows.push({
@@ -401,9 +440,9 @@ function buildShiftHistoryRows(
           shift.schedIn && shift.schedOut
             ? `${shift.schedIn} - ${shift.schedOut}`
             : "",
-        date: formatShiftDate(shift.date, timeZone),
-        startDate: formatShiftDate(shift.date, timeZone),
-        endDate: formatShiftDate(shift.endDate || shift.date, timeZone),
+        date: segmentDateStr,
+        startDate: segmentDateStr,
+        endDate: segmentDateStr,
         clockIn:
           formatShiftTime(segment.segmentStart, timeZone) ||
           String(shift.clockIn || ""),
@@ -413,22 +452,23 @@ function buildShiftHistoryRows(
         hours: hours.toFixed(2),
         inMethod: shift.inMethod || "GPS",
         outMethod: shift.outMethod || "GPS",
-        billableHours: shift.billableHours || hours.toFixed(2),
-        payableHours: shift.payableHours || hours.toFixed(2),
+        billableHours: hours.toFixed(2),
+        payableHours: hours.toFixed(2),
         billingType: shift.billingType || "Hourly",
         serviceType: shift.serviceType || "",
         shiftType: shift.shiftType || "",
         authorizationCode: shift.authorizationCode || "",
         clientRate: shift.clientRate || "",
         caregiverRate: shift.caregiverRate || "",
-        softcareShare: shift.totalSoftcarePrice || "",
-        agencyShare: shift.totalAgencyPrice || "",
-        totalClientPrice: shift.totalClientPrice || "",
-        totalCaregiverPrice: shift.totalCaregiverPrice || "",
-        totalAgencyPrice: shift.totalAgencyPrice || "",
-        totalSoftcarePrice: shift.totalSoftcarePrice || "",
-        mileageKm: shift.mileageKm || "",
-        mileagePrice: shift.mileagePrice || "",
+        softcareShare: segSoftcare.toFixed(2),
+        agencyShare: segAgency.toFixed(2),
+        totalClientPrice: segClient.toFixed(2),
+        totalCaregiverPrice: segCaregiver.toFixed(2),
+        totalAgencyPrice: segAgency.toFixed(2),
+        totalSoftcarePrice: segSoftcare.toFixed(2),
+        mileageKm: segment.segmentNumber === 1 ? shift.mileageKm || "" : "",
+        mileagePrice:
+          segment.segmentNumber === 1 ? shift.mileagePrice || "" : "",
         confirmationIndicator:
           shift.confirmationIndicator ||
           (segment.segmentNumber > 1 ? "Split" : "Unconfirmed"),
@@ -514,18 +554,15 @@ function buildShiftHistoryRows(
     },
     rows: filteredRows,
     summary: (() => {
-      const seenShiftIds = new Set();
       return filteredRows.reduce(
         (acc, row) => {
           acc.hours += Number(row.hours) || 0;
-          if (!seenShiftIds.has(row.shiftId)) {
-            seenShiftIds.add(row.shiftId);
-            acc.totalClient += Number(row.invoiceTotal) || 0;
-            acc.totalCaregiver += Number(row.totalCaregiverPrice) || 0;
-            acc.totalAgency += Number(row.totalAgencyPrice) || 0;
-            acc.totalSoftcare += Number(row.totalSoftcarePrice) || 0;
-            acc.totalMileage += Number(row.mileagePrice) || 0;
-          }
+          acc.totalClient +=
+            Number(row.invoiceTotal || row.totalClientPrice) || 0;
+          acc.totalCaregiver += Number(row.totalCaregiverPrice) || 0;
+          acc.totalAgency += Number(row.totalAgencyPrice) || 0;
+          acc.totalSoftcare += Number(row.totalSoftcarePrice) || 0;
+          acc.totalMileage += Number(row.mileagePrice) || 0;
           return acc;
         },
         {
